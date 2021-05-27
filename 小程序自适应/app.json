@@ -1,0 +1,17 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/lottery-9/index",
+    "pages/lottery-17/index",
+    "pages/lottery-18/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle":"black",
+    "navigationBarBackgroundColor": "#1577FF"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

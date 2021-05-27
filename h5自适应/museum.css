@@ -1,0 +1,142 @@
+.museum {
+    margin-top: 0.22rem;
+}
+
+.museum .icon {
+    display: inline-block;
+    height: 0.4rem;
+    width: 0.4rem;
+    background-image: url(./image/iPhone12Pro/博物馆_museum-one.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    top: 0.26rem;
+    z-index: 2;
+    left: 0.2rem;
+}
+
+.museum p {
+    width: 3rem;
+    height: 0.45rem;
+    opacity: 1;
+    font-size: 0.32rem;
+    font-family: PingFang SC, PingFang SC-Bold;
+    font-weight: 700;
+    text-align: left;
+    color: #333333;
+    letter-spacing: 0px;
+    margin-top: 0.26rem;
+    margin-left: 0.7rem;
+}
+
+.museum-1 {
+    margin: 0 auto;
+    overflow: hidden;
+    width: 7.16rem;
+    height: 0.88rem;
+    opacity: 1;
+    background: #ffffff;
+    border-radius: 0.24rem;
+    position: relative;
+    margin-top: 0.26rem;
+}
+
+.show {
+    display: none;
+}
+
+.museum-detail>span:nth-child(1) {
+    width: 1.13rem;
+    height: 0.4rem;
+    opacity: 1;
+    font-size: 0.28rem;
+    font-family: PingFang SC, PingFang SC-Bold;
+    font-weight: 700;
+    text-align: left;
+    color: #333333;
+    letter-spacing: 0px;
+    margin: 0 0.2rem 0.3rem;
+}
+
+.museum-detail>span:nth-child(2) {
+    width: 4.45rem;
+    height: 0.37rem;
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: PingFang SC, PingFang SC-Regular;
+    font-weight: 400;
+    text-align: left;
+    color: #787878;
+    letter-spacing: 0px;
+}
+
+hr {
+    margin: 0.28rem 0.2rem;
+    /* width: 673px; */
+    height: 1px;
+    opacity: 1;
+    border: 1px solid #f2f2f2;
+}
+
+.museum-detail {
+    margin-top: 0.3rem;
+}
+
+.button-1 {
+    float: left;
+    width: 2.51rem;
+    height: 0.69rem;
+    opacity: 1;
+    background: #d1f9de;
+    border: 3px solid #5dcca9;
+    border-radius: 0.38rem;
+    margin: 0 0.7rem 0.77rem;
+    margin-top: 0.2rem;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 0.7rem;
+
+    font-size: 0.27rem;
+    font-family: PingFang SC, PingFang SC-Bold;
+    font-weight: 700;
+
+    color: #5dcca9;
+    letter-spacing: 0px;
+}
+
+.button-2 {
+    float: left;
+    width: 2.51rem;
+    height: 0.69rem;
+    opacity: 1;
+    background: #d1f9de;
+    border: 3px solid #5dcca9;
+    border-radius: 0.38rem;
+    margin-top: 0.2rem;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 0.7rem;
+
+
+    font-size: 0.27rem;
+    font-family: PingFang SC, PingFang SC-Bold;
+    font-weight: 700;
+
+    color: #5dcca9;
+    letter-spacing: 0px;
+}
+
+.clickMore {
+    width: 2.10rem;
+    height: 0.37rem;
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: PingFang SC, PingFang SC-Regular;
+    font-weight: 400;
+    text-align: left;
+    color: #787878;
+    letter-spacing: 0rem;
+    margin: 0 auto;
+    /* margin: 0.1rem 0; */
+    padding: 0.1rem 0;
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./search.css" />
+    <link rel="stylesheet" href="./select.css" />
+    <link rel="stylesheet" href="./museum.css" />
+    <link rel="stylesheet" href="./footer.css" />
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <div class="search">
+        <img src="./image/iPhone12Pro/333.png" alt="" />
+        <input type="text" placeholder="博物馆" />
+        <i class="icon"></i>
+      </div>
+      <div class="select">
+        <p>选择</p>
+        <div style="width: 100%; float: left; margin-bottom: 0.27rem">
+          <div class="model-select-box">
+            <div class="model-select-text" value="">请选择:</div>
+            <b class="bg1"></b>
+            <ul class="model-select-option">
+              <li data-option="1" class="selected">省份</li>
+              <li data-option="2">四川</li>
+            </ul>
+          </div>
+          <div class="model-select-box">
+            <div class="model-select-text" value="">请选择:</div>
+            <b class="bg1"></b>
+            <ul class="model-select-option">
+              <li data-option="1" class="selected">城市</li>
+              <li data-option="2">成都</li>
+              <li data-option="3">遂宁</li>
+            </ul>
+          </div>
+          <div class="model-select-box">
+            <div class="model-select-text" value="">区域</div>
+            <b class="bg1"></b>
+            <ul class="model-select-option">
+              <li data-option="1" class="selected">区域</li>
+              <li data-option="2">高新</li>
+            </ul>
+          </div>
+        </div>
+        <p>类别</p>
+        <div class="all-category">
+          <div class="line">
+            <p>全部</p>
+            <p>公园</p>
+            <p>全部</p>
+            <p>公园</p>
+            <p>全部</p>
+            <p>公园</p>
+          </div>
+          <div class="line">
+            <p>动物园</p>
+            <p>展览馆</p>
+            <p>度假村</p>
+            <p>山脉</p>
+            <p>森林</p>
+            <p>湖泊</p>
+          </div>
+          <div class="line">
+            <p>湖泊</p>
+            <p>湿地</p>
+            <p>峡谷</p>
+            <p>人文</p>
+            <p>地质</p>
+            <p>自然</p>
+          </div>
+        </div>
+      </div>
+      <div class="museum">
+        <div class="museum-1" status="false">
+          <i class="icon"></i>
+          <p>首都博物馆</p>
+          <div class="show">
+            <hr />
+            <div class="museum-detail">
+              <span>景点地址</span>
+              <span>北京市西城区复兴门外大街16号[地图]</span>
+            </div>
+            <div class="museum-detail">
+              <span>门票价格</span>
+              <span>免费</span>
+            </div>
+            <div class="museum-detail">
+              <span>预约方式</span>
+              <span>实名制预约</span>
+            </div>
+            <div class="museum-detail">
+              <span>实名制预约</span>
+            </div>
+            <div class="museum-detail">
+              <span style="display: inline-block; vertical-align: top"
+                >预约说明</span
+              >
+              <span style="display: inline-block"
+                >①每位观众均须提前在首都博物馆微信公众号 上实名制预约参观。
+                ②开放期间每日预约1000人(包括老人、学生、
+                幼儿、军人等，预约分上下午，每半天各</span
+              >
+            </div>
+            <div class="museum-detail">
+              <span>预约入口</span>
+              <span>点击进入预约</span>
+            </div>
+            <div class="museum-detail">
+              <span>人数限制</span>
+              <span>1000人</span>
+            </div>
+            <div class="museum-detail">
+              <span style="display: inline-block; vertical-align: top"
+                >开放时间</span
+              >
+              <span style="display: inline-block"
+                >周二 至周日: 10:00--16:00(15:00停止入馆。
+                “五一”假日期间，5月4日(周一)正常开放。周
+                一闭馆，暂不安排,周六延时开放。</span
+              >
+            </div>
+            <div class="museum-detail">
+              <span>咨询电话</span>
+              <span>010-63370491.63370492</span>
+            </div>
+            <div class="museum-detail">
+              <span>交通指南</span>
+              <span>点击查看</span>
+            </div>
+            <div class="button-1">预约攻略</div>
+            <div class="button-2">游玩攻略</div>
+          </div>
+        </div>
+
+        <div class="museum-1" status="false">
+          <i class="icon"></i>
+          <p>中国国家博物馆</p>
+          <div class="show"></div>
+        </div>
+        <div class="museum-1" status="false">
+          <i class="icon"></i>
+          <p>中国航空博物馆</p>
+          <div class="show"></div>
+        </div>
+        <div class="museum-1" status="false">
+          <i class="icon"></i>
+          <p>北京人艺戏剧博物馆</p>
+          <div class="show"></div>
+        </div>
+        <div class="museum-1" status="false">
+          <i class="icon"></i>
+          <p>中国航空博物馆</p>
+          <div class="show"></div>
+        </div>
+      </div>
+      <div class="clickMore">点击查看更多景区</div>
+
+      <div class="tool">
+        <p style="display: block">出行工具箱</p>
+        <div class="all-tool">
+          <div class="tool-">
+            <img src="./image/iPhone12Pro/出租车_taxi.png" alt="" />
+            <p>乘车码</p>
+          </div>
+          <div class="tool-">
+            <img src="./image/iPhone12Pro/地铁_subway.png" alt="" />
+
+            <p>地铁查询</p>
+          </div>
+          <div class="tool-">
+            <img src="./image/iPhone12Pro/公交车_bus-two.png" alt="" />
+
+            <p>公交查询</p>
+          </div>
+          <div class="tool-">
+            <img src="./image/iPhone12Pro/多云_cloudy.png" alt="" />
+
+            <p>天气查询</p>
+          </div>
+        </div>
+
+        <p style="display: block">出行工具箱</p>
+        <div class="all-tool">
+          <div class="tool-">
+            <img
+              src="./image/iPhone12Pro/二维码_two-dimensional-code.png"
+              alt=""
+            />
+            <p>健康码</p>
+          </div>
+          <div class="tool-">
+            <img src="./image/iPhone12Pro/报错_caution.png" alt="" />
+
+            <p>风险等级查询</p>
+          </div>
+          <div class="tool-">
+            <img src="./image/iPhone12Pro/人身安全_people-safe.png" alt="" />
+
+            <p>全国隔离查询</p>
+          </div>
+          <div class="tool-">
+            <img src="./image/iPhone12Pro/银行卡_bank-card-two.png" alt="" />
+
+            <p>行程卡</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <!-- <script src="./node_modules/amfe-flexible/index.js"></script> -->
+  <script src="./demo.js"></script>
+</html>
