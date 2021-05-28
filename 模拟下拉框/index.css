@@ -1,3 +1,4 @@
+/* 下拉框 */
 .mod-select{
     position: absolute;
     left: 5.8rem;
@@ -27,6 +28,13 @@ font-family: PingFang SC, PingFang SC-Regular;
 font-weight: 400;
 
 color: #9a9a9a;
+}
+.select-2{
+    top: 3rem;
+    left: 0.6rem;
+}
+.select-2 .select_label{
+    background-color: #fff0;
 }
 .show{
     display: block;
