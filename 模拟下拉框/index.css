@@ -1,0 +1,36 @@
+.mod-select{
+    position: absolute;
+    left: 5.8rem;
+    top: 0.38rem;
+    border-left: 1px solid #9a9a9a;
+    padding-left: 0.12rem;
+}
+.mod-select ul{
+    padding:0;
+    border: #5296df solid 0.01rem;
+    border-radius: 0.05rem;
+    background-color: #5296df;
+}
+.mod-select li {
+	list-style-type:none;
+	height:0.6rem;
+    font-size: 0.28rem;
+    font-family: PingFang SC, PingFang SC-Regular;
+    font-weight: 400;
+    color: #fff;
+} 
+
+.select_label{
+    width: 1rem;
+    font-size: 0.28rem;
+font-family: PingFang SC, PingFang SC-Regular;
+font-weight: 400;
+
+color: #9a9a9a;
+}
+.show{
+    display: block;
+}
+.hidden{
+    display: none;
+}

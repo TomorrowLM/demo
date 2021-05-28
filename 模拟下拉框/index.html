@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="mod-select">
+        <div class="select_label"">深圳</div>
+        <ul  class="select-list hidden" style="display: none;">
+            <li>成都</li>
+            <li>广州</li>
+            <li>武汉</li>
+        </ul>
+    </div>
+</body>
+<script>
+    $(".select_label").click(function(e) {
+  e.stopPropagation();
+  //  if( ! $(".mod-select ul").hasClass("show") ) {
+  //   $(".mod-select ul").removeClass("hidden")
+  //   $(".mod-select ul").addClass("show").slideDown("slow");
+
+  //  }else {
+  //   $(".mod-select ul").removeClass("show")
+  //   $(".mod-select ul").addClass("hidden")
+  //  }
+  $(".mod-select ul").slideToggle(300);
+
+})
+$(".select-list").click(function(e) {
+  var target=$(e.target);
+  console.log(target)
+  var selectText=target.text()
+  $(".select_label").text(selectText)
+  $(".mod-select ul").removeClass("show")
+  $(".mod-select ul").addClass("hidden")
+})
+</script>
+</html>
