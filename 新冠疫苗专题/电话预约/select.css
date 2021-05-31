@@ -1,0 +1,25 @@
+.ui{
+    margin: 0.54rem 0.3rem;
+}
+.text-province{
+    margin:0 !important;
+    padding:0
+}
+.ui{
+    /* width: 2.5rem !important;
+    height: 0.5rem !important; */
+    width: 2.2rem;
+    height: 0.4rem;
+    min-width: auto;
+}
+.ui.selection.dropdown .menu > .item{
+    font-size: 0.28rem !important;
+    height: 0.64rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+}
+.ui.selection.dropdown{
+    min-width: 0 !important; 
+    min-height: 0 !important; 
+}

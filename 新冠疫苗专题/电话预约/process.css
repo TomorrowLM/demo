@@ -1,0 +1,99 @@
+.process{
+    width: 100%;
+    display: flex;
+    width: 100% !important;
+    line-height: 0.4rem;
+}
+.process img{
+    width: 0.54rem;
+}
+.process-detail{
+    margin-left: 0.4rem;
+}
+.bg4{
+    position: absolute;
+    left: 6.5rem;
+    /* top: 5px; */
+    margin-top: -0.64rem;
+   }
+   .bg4:before,.bg4:after{
+    position: absolute;
+    content: '';
+    border-top: 10px transparent dashed;
+    border-left: 10px transparent dashed;
+    border-right: 10px transparent dashed;
+    border-bottom: 10px #fff solid;
+   }
+   .bg4:before{
+    border-bottom: 10px #0099CC solid;
+   }
+   .bg4:after{
+    top: 1px; /*覆盖并错开1px*/
+    border-bottom: 10px #fff solid;
+   }
+   .question{
+       display: none;
+       margin-bottom: 0 !important;
+       padding-left: 0.3rem !important;
+   }
+   .question>ul{
+    padding: 0 !important;
+    padding-left: 0.3rem !important;
+    margin-bottom: 0;
+   }
+   .question li{
+    width: 5rem;
+    line-height: 0.5rem;
+   }
+   .question hr{
+    width: 6rem;
+    margin-left: -0.3rem;
+
+   }
+   .question img{
+    border-style: none;
+    display: inline-block;
+    float: left;
+    margin: 0.1rem -0.3rem;
+    width: 0.16rem;
+    height: 0.28rem;
+   }
+   .level{
+    float: left;
+    margin-left: -0.3rem;
+    margin-top: 0.08rem;
+   }
+.show-1-footer{
+    width: 2.18rem;
+    height: 0.29rem;
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: PingFang SC, PingFang SC-Medium;
+    font-weight: 500;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0.34rem 0;
+}
+.footer{
+    display:flex;
+    width:100%;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+.footer>div{
+    justify-content: space-around;
+    width: 2.5rem;
+    height: 0.8rem;
+    opacity: 1;
+    background: #4bc8c0;
+    text-align: center;
+    line-height: 0.8rem;
+    border-radius: 0.4rem;
+}
+.footer>div:last-of-type{
+    width: 4.08rem;
+height: 0.8rem;
+opacity: 1;
+background: #4bc8c0;
+border-radius: 0.4rem;
+}

@@ -1,0 +1,125 @@
+.search {
+    width: 7.13rem;
+    height: 2.79rem;
+    opacity: 1;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 1px 1px 6px 0px rgba(82, 82, 84, 0.17);
+    margin: 0 auto;
+
+    margin-top: -1rem;
+
+
+}
+
+.search>input {
+    width: 2.5rem;
+    height: 0.64rem;
+    opacity: 1;
+    background: #eeeeee;
+    border-radius: 0.32rem;
+    border: 1px solid #fff;
+    margin-left: 0.34rem;
+    margin-top: 0.5rem;
+    float: left;
+    /* padding-left: 1.8rem; */
+    box-sizing: border-box;
+    outline: none;
+}
+
+.search img {
+    margin-left: 0.2rem;
+}
+
+.select-2 {
+    top: 2.96rem;
+    left: 0.5rem;
+    width: 1.5rem;
+    height: 0.4rem;
+    z-index: 2;
+}
+
+.select-2 .select_label {
+    background-color: #fff0;
+    
+}
+
+.select-2 .bg1 {
+    top: 0.1rem;
+    left: 2rem;
+}
+
+input::-webkit-input-placeholder {
+    color: #bababa;
+    padding-left: 0.8rem;
+}
+
+input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #bababa;
+}
+
+input::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #bababa;
+    font-size: 14px;
+}
+
+input:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #bababa;
+    font-size: 14px;
+}
+.new-button{
+    font-size: 0.22rem;
+    width: 1.66rem;
+    height: 0.4rem;
+    line-height: 0.4rem;
+    opacity: 1;
+    background: #2f54be;
+    border-radius: 0.1rem;
+    position: absolute;
+    left: 0.5rem;
+    text-align: center;
+    color: #fff;
+    font-size: 0.26rem;
+    font-family: PingFang SC, PingFang SC-Medium;
+    font-weight: 500;
+    top: 3.6rem;
+}
+
+   #demo{
+    overflow:hidden;
+    height:0.70rem;
+    width:5.80rem;
+    font-size: 0.28rem;
+    /* margin:0.90rem auto;
+    position:relative; */
+   }
+   #demo li{
+       list-style: none;
+   }
+   #demo1{
+    height:auto;
+    text-align:left;
+    padding: 0;
+    margin: 0;
+   }
+   #demo2{
+    height:auto;
+    text-align:left;
+   }
+   .newDetail{
+    width: 5.56rem;
+    height: 0.27rem;
+    opacity: 1;
+    font-size: 0.28rem;
+    font-family: PingFang SC, PingFang SC-Medium;
+    font-weight: 500;
+    text-align: left;
+    color: #2f54be;
+    line-height: 0.5rem;
+    position: absolute;
+    top: 4.1rem;
+    left: 0.5rem;
+}

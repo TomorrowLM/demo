@@ -1,0 +1,11 @@
+.header-img>img{
+    width: 100%;
+}
+.search{
+    opacity: 1;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 1px 1px 6px 0px rgb(82 82 84 / 17%);
+    margin: 0 auto;
+    margin-top: -1rem;
+}
