@@ -1,44 +1,41 @@
 /* 下拉框 */
-.mod-select{
-    position: absolute;
-    left: 5.8rem;
-    top: 0.38rem;
+.mod-select {
     border-left: 1px solid #9a9a9a;
-    padding-left: 0.12rem;
 }
-.mod-select ul{
-    padding:0;
+
+.mod-select ul {
+    padding: 0;
     border: #5296df solid 0.01rem;
     border-radius: 0.05rem;
     background-color: #5296df;
 }
+
 .mod-select li {
-	list-style-type:none;
-	height:0.6rem;
+    list-style-type: none;
     font-size: 0.28rem;
     font-family: PingFang SC, PingFang SC-Regular;
     font-weight: 400;
     color: #fff;
-} 
+}
 
-.select_label{
-    width: 1rem;
+.select_label {
     font-size: 0.28rem;
-font-family: PingFang SC, PingFang SC-Regular;
-font-weight: 400;
+    font-family: PingFang SC, PingFang SC-Regular;
+    font-weight: 400;
+    color: #9a9a9a;
+}
 
-color: #9a9a9a;
+.select-2 {
 }
-.select-2{
-    top: 3rem;
-    left: 0.6rem;
-}
-.select-2 .select_label{
+
+.select-2 .select_label {
     background-color: #fff0;
 }
-.show{
+
+.show {
     display: block;
 }
-.hidden{
+
+.hidden {
     display: none;
 }

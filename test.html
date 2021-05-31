@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Foundation 实例</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://static.php.cn/assets/foundation-5.5.3/foundation.min.css">
+  <script src="http://static.php.cn/assets/jquery/2.0.3/jquery.min.js"></script>
+  <script src="http://static.php.cn/assets/foundation-5.5.3/js/foundation.min.js"></script>
+  <script src="http://static.php.cn/assets/foundation-5.5.3/js/vendor/modernizr.js"></script>
+</head>
+<body style="padding:20px">
+
+<!-- Tiny Dropdown: max-width is 200px -->
+<a href="#" data-dropdown="id01" class="button dropdown">Tiny</a>
+<ul id="id01" data-dropdown-content class="f-dropdown tiny">
+  <li><a href="#">Link 1</a></li>
+  <li><a href="#">Link 2</a></li>
+  <li><a href="#">Link 3</a></li>
+</ul>
+<br>
+
+<!-- Small Dropdown: max-width is 300px  -->
+<a href="#" data-dropdown="id02" class="button dropdown">Small</a>
+<ul id="id02" data-dropdown-content class="f-dropdown small">
+  <li><a href="#">Link 1</a></li>
+  <li><a href="#">Link 2</a></li>
+  <li><a href="#">Link 3</a></li>
+</ul>
+<br>
+
+<!-- Medium Dropdown: max-width is 500px  -->
+<a href="#" data-dropdown="id03" class="button dropdown">Medium</a>
+<ul id="id03" data-dropdown-content class="f-dropdown medium">
+  <li><a href="#">Link 1</a></li>
+  <li><a href="#">Link 2</a></li>
+  <li><a href="#">Link 3</a></li>
+</ul>
+<br>
+
+<!-- Large Dropdown: max-width is 800px  -->
+<a href="#" data-dropdown="id04" class="button dropdown">Large</a>
+<ul id="id04" data-dropdown-content class="f-dropdown large">
+  <li><a href="#">Link 1</a></li>
+  <li><a href="#">Link 2</a></li>
+  <li><a href="#">Link 3</a></li>
+</ul>
+<br>
+
+<!-- Mega Dropdown: 100% width -->
+<a href="#" data-dropdown="id05" class="button dropdown">Mega</a>
+<ul id="id05" data-dropdown-content class="f-dropdown mega">
+  <li><a href="#">Link 1</a></li>
+  <li><a href="#">Link 2</a></li>
+  <li><a href="#">Link 3</a></li>
+</ul>
+
+<!-- Initialize Foundation JS -->
+<script>
+$(document).ready(function() {
+    $(document).foundation();
+})
+</script>
+
+</body>
+</html>

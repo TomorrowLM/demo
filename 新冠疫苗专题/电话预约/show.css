@@ -6,7 +6,8 @@
     box-shadow: 1px 1px 6px 0px rgba(82, 82, 84, 0.17);
     margin: 0 auto;
     margin-top: 0.29rem;
-    padding-bottom: 0.54rem;
+    
+    /* padding-bottom: 0.54rem; */
 }
 
 
@@ -67,6 +68,9 @@
     padding-bottom: 0;
     padding-top: 0.54rem;
  }
+ .show-3{
+   padding-bottom: 0.32rem !important;
+ }
  .show-button{
     width: 100% !important;
     padding: 0 !important;
@@ -75,6 +79,7 @@
     justify-content: space-around;
     margin: 0;
     margin-top: 0.5rem !important;
+    padding-bottom: 0.32rem !important;
  }
  .show-button>div{
     width: 1.7rem;

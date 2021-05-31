@@ -1,34 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="./../component/bootstrap-4.6.0-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./../component/bootstrap-4.6.0-dist/js/bootstrap.min.js">
-    <link rel="stylesheet" href="./header.css">
+    <link
+      rel="stylesheet"
+      href="./../component/bootstrap-4.6.0-dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="./../component/bootstrap-4.6.0-dist/js/bootstrap.min.js"
+    />
+    <link rel="stylesheet" href="./header.css" />
+    <link rel="stylesheet" href="./show.css">
+    <link rel="stylesheet" href="./slider-panel.css">
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-    
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="./index.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="header-img">
-        <img src="../image/hearder.png" alt="" />
+      <img src="../image/hearder.png" alt="" />
     </div>
     <div class="search">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-              Dropdown button
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+      <div style="display: flex; justify-content: space-around">
+        <div class="mod-select select-1">
+          <div class="select_label"></div>
+          <b class="bg1"></b>
+          <span>省</span>
+          <ul
+            class="select-list hidden"
+            style="display: none; position: absolute"
+          >
+            <li>成都</li>
+            <li>广州</li>
+            <li>武汉</li>
+          </ul>
+        </div>
+        <div class="mod-select select-2">
+          <div class="select_label"></div>
+          <b class="bg2"></b>
+          <span>省</span>
+          <ul
+            class="select-list hidden"
+            style="display: none; position: absolute"
+          >
+            <li>成都</li>
+            <li>广州</li>
+            <li>武汉</li>
+          </ul>
+        </div>
+      </div>
+      <div>最新进展</div>
+      <div id="demo" class="newDetail">
+        <ul id="demo1">
+          <li>深圳市新冠疫苗到苗汇总（滚动效果）1</li>
+          <li>深圳市新冠疫苗到苗汇总（滚动效果）2</li>
+        </ul>
+        <div id="demo2"></div>
+      </div>
+    </div>
+    <div class="show">
+      <div class="show-1">
+        <div>全国接种剂次</div>
+        <div class="slider-panel">
+          <!--slider-box表示整个滑条的颜色  -->
+          <div class="slider-box">
+            <!--slider-value表示滑条划过后的部分用一个颜色显示覆盖slider-box的颜色达到进度作用  -->
+            <p class="slider-value" style="width: 31%;"></p>
+            <!-- 滑条的背景颜色透明只有-->
+          </div>
+        </div>
+        </div>
+        <div class="show-1">
+          <div>全国接种剂次</div>
+          <div class="slider-panel">
+            <!--slider-box表示整个滑条的颜色  -->
+            <div class="slider-box">
+              <!--slider-value表示滑条划过后的部分用一个颜色显示覆盖slider-box的颜色达到进度作用  -->
+              <p class="slider-value" style="width: 31%;"></p>
+              <!-- 滑条的背景颜色透明只有-->
             </div>
           </div>
+          </div>
+      </div>    
     </div>
-        
-</body>
+  </body>
 </html>

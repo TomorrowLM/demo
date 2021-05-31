@@ -37,6 +37,7 @@
     border-right: 1px solid #aaa;
     width: 1.5rem;
     height: 0.4rem;
+    z-index: 1;
 }
 
 .select-2 .select_label {
