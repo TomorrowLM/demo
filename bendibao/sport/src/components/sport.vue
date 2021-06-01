@@ -39,19 +39,33 @@
 
       <div class="show-detail">
         <div class="tab">
-          <div>奖牌榜</div>
-          <div>全运会</div>
-          <div>赛程安排</div>
-          <div>西安指南</div>
-        </div>
-        <div class="total">
-          <img src="../static/铜牌.png" />
-          <div class="total" v-for="(v, i) in iconText" :key="i">
-            <img v-bind:src="icon[i]" />
-            <span>{{ v }}</span>
+          <div
+            @click="showTotal($event, 0)"
+            :class="{ 'tab-select': 0 == tabIndex }"
+          >
+            奖牌榜
+          </div>
+          <div
+            @click="showTotal($event, 1)"
+            :class="{ 'tab-select': 1 == tabIndex }"
+          >
+            全运会
+          </div>
+          <div
+            @click="showTotal($event, 2)"
+            :class="{ 'tab-select': 2 == tabIndex }"
+          >
+            赛程安排
+          </div>
+          <div
+            @click="showTotal($event, 3)"
+            :class="{ 'tab-select': 3 == tabIndex }"
+          >
+            西安指南
           </div>
         </div>
       </div>
+      <medalTable v-show="tabIndex==0"></medalTable>
     </div>
   </div>
 </template>
@@ -59,19 +73,19 @@
 <script>
 import "../css/sport.css";
 import "./../common/rem.js";
+import medalTable from "./medal-table.vue";
 export default {
   data: function () {
     return {
-      iconText: ["省份", "金牌", "银牌", "铜牌", "总计"],
-      url: "../static/铜牌.png",
-      icon: [
-        "../static/省份.png",
-        "../static/金牌.png",
-        "../static/银牌.png",
-        "../static牌.png",
-      ],
+      tabIndex: 0,
     };
   },
-  components: {},
+  components: { medalTable },
+  methods: {
+    showTotal(e, index) {
+      this.tabIndex = index;
+
+    },
+  },
 };
 </script>

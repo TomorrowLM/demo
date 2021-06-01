@@ -1,0 +1,22 @@
+.total{
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+.list{
+    background: #fff;
+}
+.list>div{
+    width: 100%;
+    line-height: 0.8rem;
+    height: 0.8rem;
+    display: flex;
+    background: #F6F5F5;
+    justify-content: space-around;
+    margin: 0.2rem 0;
+}
+.list>div:nth-child(1){
+    margin-top: 0;
+}
