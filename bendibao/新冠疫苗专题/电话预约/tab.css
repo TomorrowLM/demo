@@ -26,3 +26,6 @@
 .tab>div:nth-of-type(1)>div{
     height: 0.5rem;
 }
+.tab>div:nth-of-type(1)>div{
+    color: #FFFFFF;
+}

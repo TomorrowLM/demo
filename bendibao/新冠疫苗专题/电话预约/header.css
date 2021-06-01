@@ -1,8 +1,14 @@
 body {
     margin: 0;
     padding: 0;
+    background-position: 9rem 0;
+    background-image: url("../image/bgc.png");
 }
-
+.page{
+    background-position:15rem 0;
+    background-image: url("./../image/bgc.png");
+    height:22rem;
+}
 .header {
     width: 100%;
     position: relative;
@@ -93,3 +99,5 @@ body {
     border-right: 0.07rem solid transparent;
     border-top: 0.1rem solid #000000;
 }
+
+

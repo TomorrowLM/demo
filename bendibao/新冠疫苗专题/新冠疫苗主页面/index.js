@@ -18,7 +18,7 @@
 document.getElementsByClassName(".select_label").onclick = function () {
   console.log(1);
 };
-
+//下拉框
 $(function () {
   console.log($(".select_label")[0]);
 
@@ -29,7 +29,6 @@ $(function () {
   });
   $(".bg1").click(function (e) {
     e.stopPropagation();
-    //   $(".mod-select ul").slideToggle(300);
     $(this).siblings(".select-list").slideToggle(300);
   });
   $(".select-list").click(function (e) {
@@ -39,6 +38,24 @@ $(function () {
     $(this).slideUp();
     300;
   });
+});
+
+//渐变
+$(function () {
+  //绑定鼠标滑动事件
+  $(" .slider-panel input").on(
+    "mousemove touchmove touchend click",
+    moveSlider
+  );
+
+  function moveSlider() {
+    // 获取当前滑条的动态值
+    let sliderValue = parseInt($(this).val());
+    // 将滑条的值赋值给滑条划过后p标签的宽度
+    $(".slider-value").css("width", sliderValue + "%");
+    // 显示当前滑条的动态值
+    $(".slider-percentage").text(sliderValue);
+  }
 });
 
 // 文字滚动
@@ -63,33 +80,31 @@ demo.onmouseout = function () {
   MyMar = setInterval(Marquee, speed);
 };
 
-//Tab
-$(".show").hide();
-$(".footer").hide();
-$(".show-1-footer").hide();
-$(".tab>div").on("click", "div", function () {
-  $(".more").show();
-  $(".show").hide();
-  $(".show-1-footer").hide();
-  $(".footer").hide();
-  $(".tab").children().children().children("b").removeClass("bg3");
-  $(this).children("b").addClass("bg3");
+//tab
+$(".tab>div>div").hide();
+$(".tab>div").eq(0).children().show();
+$(".tab-show").hide();
+$(".tab-show").eq(0).show();
+
+$(".tab>div").click(function () {
+  $(".tab>div>div").hide();
+  $(this).children("div").show();
+
+  $(".tab-show").hide();
   var status = $(this).index() + 1;
-  console.log(".show-" + status);
-  if ($(this).index() == 0) {
-    console.log(1);
-    $(".more").hide();
-    $(".show-1-footer").show();
-    $(".footer").show();
-  }
-  $(".show-" + status).show();
+  $(".tab-" + status).show();
 });
 
-//
-$(".ui.dropdown").dropdown();
+//展示问号信息
+$(".show-info").click(function (e) {
 
-//
+  if (e.target == $(".show-info")[0]) {
+    $(".show-info").eq(1).siblings(".o-u").hide();
+    $(".show-info").eq(0).siblings(".out").toggle();
+  }
+  if (e.target == $(".show-info")[1]) {
+    $(".show-info").eq(0).siblings(".out").hide();
+    $(".show-info").eq(1).siblings(".o-u").toggle();
+  }
 
-$(".show-1").click(function () {
-  $(this).children(".question").toggle();
 });

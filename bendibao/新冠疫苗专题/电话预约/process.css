@@ -49,6 +49,10 @@
     margin-bottom: 0 !important;
     padding-left: 0.3rem !important;
     padding-bottom: 0.32rem;
+    padding: 0;
+    padding-right: 0 !important;
+    margin: 0 !important;
+    padding-bottom: 0.4rem !important;
 }
 
 .question>ul {
@@ -60,6 +64,7 @@
 .question li {
     width: 5rem;
     line-height: 0.5rem;
+    margin-bottom: 0.1rem;
 }
 
 .question hr {
@@ -99,6 +104,13 @@
     width: 100%;
     justify-content: space-around;
     margin-top: 1rem;
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: PingFang SC, PingFang SC-Medium;
+    font-weight: 500;
+    /* text-align: center; */
+    color: #ffffff;
+    padding-bottom: 0.5rem;
 }
 
 .footer>div {

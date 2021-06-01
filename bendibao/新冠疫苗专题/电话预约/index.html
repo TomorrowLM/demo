@@ -20,22 +20,13 @@
     <link rel="stylesheet" href="./process.css" />
   </head>
   <body>
-    <div class="page">
+
       <div class="header">
         <img src="../image/hearder.png" alt="" />
       </div>
-
+      <div class="page">
       <div class="search">
-        <div class="ui selection dropdown">
-          <input type="hidden" name="gender" />
-          <i class="dropdown icon"></i>
-          <div class="default text">性别</div>
-          <div class="menu">
-            <div class="item" data-value="1">男性</div>
-            <div class="item" data-value="0">女性</div>
-          </div>
-        </div>
-        <span class="text-province">省</span>
+
 
         <div class="ui selection dropdown">
           <input type="hidden" name="gender" />
@@ -47,6 +38,18 @@
           </div>
         </div>
         <span class="text-province">省</span>
+      
+        <div class="ui selection dropdown">
+          <input type="hidden" name="gender" />
+          <i class="dropdown icon"></i>
+          <div class="default text">性别</div>
+          <div class="menu">
+            <div class="item" data-value="1">男性</div>
+            <div class="item" data-value="0">女性</div>
+          </div>
+        </div>
+        <span class="text-province">省</span>
+        
 
         <div style="font-size: 0.22rem" class="new-button">最新进展</div>
         <div id="demo" class="newDetail">
@@ -89,11 +92,12 @@
           </div>
         </div>
 
-        <div class="show show-1">
+        <div class="show show-1" style="">
           <div>常见问题</div>
           <b class="bg4"></b>
           <div class="question">
-            <ul>
+            <ul style="    height: 2rem !important;
+            overflow-x: hidden;">
               <li>病毒变异后，新冠疫苗还有效吗？</li>
               <hr />
               <li>病毒变异后，新冠疫苗还有效吗？</li>
@@ -109,7 +113,9 @@
           <div>大家都在关注</div>
           <b class="bg4"></b>
           <div class="question">
-            <ul style="list-style: none">
+            <ul style="list-style: none;   
+            height: 3rem;
+            overflow-x: hidden;">
               <img src="./../image/接种须知/1.png" alt="" />
               <li>病毒变异后，新冠疫苗还有效吗？</li>
               <hr />
@@ -130,7 +136,6 @@
               <hr />
             </ul>
           </div>
-
         </div>
         <div class="show show-2">
           <div>健康东西湖</div>
@@ -213,8 +218,8 @@
       </div>
       <div class="more">查看更多</div>
       <div class="show-1-footer">划到底了哟~</div>
-      <div class=footer>
-        <div >分享</div>
+      <div class="footer">
+        <div>分享</div>
         <div>跳转到核酸检测专题页</div>
       </div>
     </div>
