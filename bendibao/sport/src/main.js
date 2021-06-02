@@ -15,6 +15,10 @@ moment().format();
 Vue.config.productionTip = false;
 
 import router from "./router/index";
+
+//
+import animate from 'animate.css'
+Vue.use(animate)
 new Vue({
   router: router,
   render: (h) => h(App),

@@ -31,6 +31,7 @@
 </template>
 
 <script>
+
 import "./../css/modal-table.css";
 import { List, Swipe, SwipeItem } from "vant";
 
