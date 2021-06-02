@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <img src="../assets/画板 2.png" alt="" class="header-img" />
+      <img src="../static/1.png" alt="" class="header-img" />
     </div>
     <div class="page">
       <div class="show-time">
@@ -10,13 +10,13 @@
           <hr />
         </div>
         <div class="countdown">
-          <div class="day">17</div>
+          <div class="day">{{ day }}</div>
           <div>天</div>
-          <div class="time">14</div>
+          <div class="time">{{ time }}</div>
           <div>时</div>
-          <div class="minute">03</div>
+          <div class="minute">{{ minute }}</div>
           <div>分</div>
-          <div class="second">00</div>
+          <div class="second">{{ second }}</div>
           <div>秒</div>
         </div>
 
@@ -30,6 +30,8 @@
         <div>
           <div>最新消息</div>
           <span>截止2021-03-29</span>
+          <span style="    margin-left: 2.3rem;">更多</span>
+          <van-icon name="arrow" />
         </div>
         <div>
           3月28日0-24时，31省区市新增确诊15例，均为境外输入病例（广东8例
@@ -65,7 +67,7 @@
           </div>
         </div>
       </div>
-      <medalTable v-show="tabIndex==0"></medalTable>
+      <medalTable v-show="tabIndex == 0"></medalTable>
     </div>
   </div>
 </template>
@@ -74,17 +76,45 @@
 import "../css/sport.css";
 import "./../common/rem.js";
 import medalTable from "./medal-table.vue";
+import { Icon } from "vant";
+let moment = require("moment");
 export default {
   data: function () {
     return {
       tabIndex: 0,
+      day: 0,
+      time: 0,
+      minute: 0,
+      second: 0,
+      now: moment().locale("zh-cn").format("YYYY-MM-DD HH:mm:ss"),
     };
   },
-  components: { medalTable },
+  beforeMount() {
+    let _this = this;
+    setInterval(function () {
+      let t1 = moment().locale("zh-cn").format("YYYY-MM-DD HH:mm:ss");
+      let t2 = moment("2021-07-02 14:33:33");
+      let t3 = t2.diff(t1, "second"); //计算相差的秒
+      let d = Math.floor(Math.floor(Math.floor(t3 / 60) / 60) / 24); //相差的天
+      //时
+      let t = t3 - d * 24 * 60 * 60;
+      t = Math.floor(Math.floor(t / 60) / 60);
+      //分
+      let m = t3 - d * 24 * 60 * 60 - t * 60 * 60;
+      m = Math.floor(m / 60);
+      //秒
+      let s = t3 - d * 24 * 60 * 60 - t * 60 * 60 - m * 60;
+      _this.day = d;
+      _this.time = t;
+      _this.second = s;
+      _this.minute = m;
+    }, 1000);
+  },
+  components: { medalTable, [Icon.name]: Icon },
+  computed: {},
   methods: {
     showTotal(e, index) {
       this.tabIndex = index;
-
     },
   },
 };

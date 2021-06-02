@@ -1,5 +1,5 @@
 .page{
-    background-color: #F6F5F5;
+    /* background-color: #F6F5F5; */
 }
 .header-img {
     width: 100%;
@@ -161,7 +161,8 @@
     /* opacity: 1; */
     /* background: #5b92d3; */
     border-radius: 0.3rem 0.3rem 0rem 0rem;
-    margin-top: 0.7rem;
+    padding-top: 0.7rem;
+    background-color: #F6F5F5;
 }
 .tab{
     display: flex;
@@ -190,4 +191,9 @@
     height: 100% !important;
     margin-top: -0.15rem;
     color: #5b92d3;
+}
+.van-icon-arrow{
+    float: right;
+    margin-top: 0.427rem;
+    margin-right: 0.4rem;
 }
