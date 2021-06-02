@@ -91,3 +91,13 @@
 .row-2 .van-cell {
     background-color: #4a96ec;
 }
+::v-deep .van-tabs__line {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    z-index: 1;
+    width: 40px;
+    height: 3px;
+    background-color: #629cdb;
+    border-radius: 3px;
+}

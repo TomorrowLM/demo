@@ -7,7 +7,7 @@
         <div>志愿者专区</div>
       </div>
       <div class="tab">
-        <van-tabs v-model="active">
+        <van-tabs v-model="active1">
           <van-tab title="办事指南">
             <div class="row-1 row">
               <van-field
@@ -53,7 +53,7 @@
         <div>志愿者专区</div>
       </div>
       <div class="tab">
-        <van-tabs v-model="active">
+        <van-tabs v-model="active2">
           <van-tab title="办事指南">
             <div class="row-1 row">
               <van-field
@@ -99,7 +99,7 @@
         <div>志愿者专区</div>
       </div>
       <div class="tab">
-        <van-tabs v-model="active">
+        <van-tabs v-model="active3">
           <van-tab title="办事指南">
             <div class="row-1 row">
               <van-field
@@ -153,7 +153,9 @@ import { Tab, Tabs, Cascader, Swipe, SwipeItem } from "vant";
 export default {
   data: function () {
     return {
-      active: 0,
+      active1: 0,
+      active2: 0,
+      active3: 0,
       images: [require("../static/1.png"), require("../static/1.png")],
     };
   },
