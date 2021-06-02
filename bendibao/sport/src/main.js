@@ -1,6 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-
+import "./css/reset.css"
 //vant
 import Vant from "vant";
 import { Lazyload, Icon } from "vant";
@@ -13,10 +13,9 @@ Vue.use(Icon);
 var moment = require("moment");
 moment().format();
 Vue.config.productionTip = false;
-//
-import VueRouter from "vue-router";
-Vue.use(VueRouter);
 
+import router from "./router/index";
 new Vue({
+  router: router,
   render: (h) => h(App),
 }).$mount("#app");

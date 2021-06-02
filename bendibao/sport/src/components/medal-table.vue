@@ -21,7 +21,7 @@
       <div class="more" v-if="finished">没有更多了</div>
     </div>
     <div class="swiper">
-      <van-swipe :autoplay="3000">
+      <van-swipe :autoplay="3000" width="100%" height="20px">
         <van-swipe-item v-for="(image, index) in images" :key="index">
           <img v-lazy="image" />
         </van-swipe-item>

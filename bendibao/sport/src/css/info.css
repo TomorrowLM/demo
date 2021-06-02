@@ -1,0 +1,102 @@
+.page {
+    background: #dcdee0;
+    overflow: hidden;
+}
+
+.info {
+    background: #fff;
+    margin: 0.5rem 0.3rem;
+    /* height: 10rem; */
+    border-radius: 0.5rem;
+}
+
+.o-u {
+    width: 2rem;
+    height: 0.7rem;
+    border-radius: 0.4rem;
+    position: absolute;
+    width: 1.86rem;
+    height: 0.66rem;
+    opacity: 1;
+    background: #629cdb;
+    border-radius: 0.2rem;
+    margin: 0.5rem 0.2rem;
+    text-align: center;
+    line-height: 0.66rem;
+    z-index: 2;
+}
+
+.ou-1 {
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #629cdb;
+    transform: rotate(45deg);
+    left: 9%;
+    top: 1.3rem;
+}
+.icon{
+    height: 1.6rem;
+}
+.info-detail{
+    height: 84%;
+    /* background: blue; */
+    margin: 0.0.3rem 0 0.6rem;
+    border-left: 0.1rem solid #DAE8F8;
+    margin-bottom: 0.3rem;
+}
+.info-show{
+    margin-left: 0.3rem;
+}
+.row-1{
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: Source Han Sans CN, Source Han Sans CN-Medium;
+    font-weight: 500;
+    text-align: left;
+    color: #629cdb;
+    margin-bottom: 0.2rem;
+}
+.row-2{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #dcdee0;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+}
+.row-2>div:nth-child(1){
+
+opacity: 1;
+font-size: 0.34rem;
+font-family: Source Han Sans CN, Source Han Sans CN-Medium;
+font-weight: 500;
+text-align: left;
+color: #00000f;
+}
+.row-2>div:nth-child(2){
+    opacity: 1;
+    font-size: 0.28rem;
+    font-family: Source Han Sans CN, Source Han Sans CN-Medium;
+    font-weight: 500;
+    text-align: justifyLeft;
+    color: #686868;
+    line-height: 0.4rem;
+    margin-bottom: 0.2rem;
+    }
+    .row-2>div:nth-child(3){
+        opacity: 1;
+        font-size: 0.24rem;
+        font-family: Source Han Sans CN, Source Han Sans CN-Medium;
+        font-weight: 500;
+        text-align: justifyLeft;
+        color: #9c9c9d;
+        line-height: 0.4rem;
+        }
+        .icon-1{
+            border-style: none;
+            position: absolute;
+            width: 0.3rem;
+            height: 0.3rem;
+            left: 0.8rem;
+        }

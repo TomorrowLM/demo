@@ -1,0 +1,59 @@
+.van-swipe-item img {
+    height: 2.5rem;
+    width: 100%;
+}
+
+.van-tab__text {
+
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: Source Han Sans CN, Source Han Sans CN-Medium;
+    font-weight: 500;
+    color: #676767;
+}
+
+.van-tab.van-tab--active .van-tab__text {
+
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: Source Han Sans CN, Source Han Sans CN-Medium;
+    font-weight: 500;
+    color: #00000f;
+
+}
+
+.van-tabs__line {
+    transform: translateX(56px) translateX(-50%);
+    transition-duration: 0.3s;
+}
+
+.tab .van-tabs--line .van-tabs__wrap {
+
+    width: 50%;
+    margin-bottom: 0.5rem;
+
+}
+
+.row-2 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: white ;
+
+  }
+  
+.row-2  input:-moz-placeholder, textarea:-moz-placeholder {
+    color: white;
+
+  }
+  
+ .row-2 input::-moz-placeholder, textarea::-moz-placeholder {
+    color: white;
+
+  }
+  
+.row-2  input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: white;
+
+  }
+  .row-2   .van-icon.van-icon-arrow.van-cell__right-icon {
+    margin-left: 4px;
+    color: #fff;
+}

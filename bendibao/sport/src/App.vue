@@ -1,17 +1,14 @@
 <template>
   <div id="app">
-    <sport></sport>
+    <router-link to="/"></router-link>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import "./common/normalize.css";
-import Sport from "./components/sport.vue";
 
 export default {
   name: "App",
-  components: {
-    Sport,
-  },
 };
 </script>

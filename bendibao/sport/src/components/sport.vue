@@ -19,7 +19,6 @@
           <div class="second">{{ second }}</div>
           <div>秒</div>
         </div>
-
         <div class="whether">
           <div>2021-03-11</div>
           <div>晴天 5-15°C</div>
@@ -30,7 +29,9 @@
         <div>
           <div>最新消息</div>
           <span>截止2021-03-29</span>
-          <span style="    margin-left: 2.3rem;">更多</span>
+          <router-link :to="{ path: '/info' }" replace class="more">
+            更多
+          </router-link>
           <van-icon name="arrow" />
         </div>
         <div>
@@ -68,14 +69,21 @@
         </div>
       </div>
       <medalTable v-show="tabIndex == 0"></medalTable>
+      <nationalGames v-show="tabIndex == 1"></nationalGames>
+      <plan v-show="tabIndex == 2"> </plan>
+      <xian v-show="tabIndex == 3"></xian>
     </div>
   </div>
 </template>
 
 <script>
-import "../css/sport.css";
+// import "../css/sport.css";
+
 import "./../common/rem.js";
 import medalTable from "./medal-table.vue";
+import nationalGames from "./nationalGames";
+import plan from "./plan";
+import xian from "./xian"
 import { Icon } from "vant";
 let moment = require("moment");
 export default {
@@ -110,7 +118,7 @@ export default {
       _this.minute = m;
     }, 1000);
   },
-  components: { medalTable, [Icon.name]: Icon },
+  components: { medalTable, [Icon.name]: Icon, nationalGames,plan ,xian},
   computed: {},
   methods: {
     showTotal(e, index) {
@@ -119,3 +127,5 @@ export default {
   },
 };
 </script>
+<style scoped src="../css/sport.css"></style>
+;
