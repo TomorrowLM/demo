@@ -71,5 +71,5 @@ export default {
   },
 };
 </script>
-<style scoped src="../css/info.css"></style>
+
 ;
