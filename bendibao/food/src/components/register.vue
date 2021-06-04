@@ -1,37 +1,44 @@
 <template>
   <div class="page">
-    <div class="signtext">Sign In</div>
+    <div class="signtext">Sign Up</div>
     <div class="login-verify">
       <div>
+        <div class="username style-verify">
+          <input type="text" :placeholder="username" v-model="usernameText" />
+          <hr />
+        </div>
         <div class="email style-verify">
-          <input type="text" :placeholder="email" v-model="emailText" v-focus />
-          <div
-            class="fail-text"
-            v-if="!isEmail"
-            @click="clearEmail"
-            ref="email"
-          >
+          <input
+            type="text"
+            :placeholder="email"
+            v-model="emailText"
+            @keydown="clearEmail"
+          />
+          <div class="fail-text" v-if="!isEmail" ref="email">
             不是正确的Email
           </div>
           <hr />
         </div>
         <div class="password style-verify">
-          <input type="text" :placeholder="password" />
+          <input type="text" :placeholder="password" v-model="passwordText" />
           <hr />
         </div>
-        <div class="forget style-verify">
-          <input type="text" :placeholder="forgetText" />
+        <div class="confirePassword style-verify">
+          <input type="text" :placeholder="confirePasswordText" />
           <hr />
         </div>
       </div>
     </div>
-    <div class="sign-button" @click="sign">
-      <span>Sign In</span>
+    <div class="sign-button">
+      <router-link to="/"> <span>Sign Up</span></router-link>
     </div>
+
+    <van-Toast></van-Toast>
   </div>
 </template>
 
 <script>
+import { Toast } from "vant";
 export default {
   data: () => {
     return {
@@ -39,38 +46,29 @@ export default {
       email: "email",
       emailText: "",
       password: "password",
-      forgetText: "Forgot password?",
+      passwordText: "",
+      confirePasswordText: "Confirm password",
+      username: "username",
+      usernameText: "",
     };
   },
+  components: { [Toast.name]: Toast },
   props: {},
   methods: {
-    sign() {
-      let reg = /^\w+@\w+\.\w+$/;
-      // console.log(reg.test(this.emailText));
-      if (!reg.test(this.emailText)) {
-        this.isEmail = false;
-      }
+    signUP() {
+      
     },
     clearEmail() {
-      console.log(12);
-      this.dialogVisibleTwo = true;
-      this.$nextTick(() => {
-        this.$refs.email.focus();
-      });
-    },
-  },
-  directives: {
-    focus: {
-      // 指令的定义
-      inserted: function (el) {
-        el.focus();
-      },
+      let reg = /^\w+@\w+\.\w+$/;
+      if (!reg.test(this.emailText) || this.emailText == "") {
+        this.isEmail = false;
+      } else this.isEmail = true;
     },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-@import url("./../css/register.css");
+<style scoped src="./../css/register.css">
+/* @import url("./../css/login.css"); */
 </style>

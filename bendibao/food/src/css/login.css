@@ -1,0 +1,85 @@
+.page{
+    background: url("./../assets/Bitmap.png") no-repeat 0 0 ;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-size: cover;
+
+}
+.logintext{
+    margin-top: 20vh;
+    margin-top: 20vh;
+    height: 0.68rem;
+    opacity: 1;
+    font-size: 0.68rem;
+    font-family: SFProDisplay-Bold;
+    text-align: left;
+    color: #ffffff;
+    letter-spacing: 0.008rem;
+    margin-left: 6vw;
+}
+.signtext{
+    font-size: 0.68rem;
+    font-family: SFProDisplay-Bold;
+    /* text-align: left; */
+    color: #ffffff;
+    letter-spacing: 0.008rem;
+    margin-left: 7vw;
+    margin-top: 16vh;
+
+}
+.login-verify{
+    background: #fff;
+    width: 92vw;
+    height: 30vh;
+    margin-top: 12vh;
+    border-radius: 0 0.4rem 0.4rem 0;
+    overflow: hidden;
+}
+.login-verify>div{
+    margin-left: 6vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 65%;
+    margin-top: 7%;
+}
+
+input{
+    outline: none;
+    border:0;
+}
+hr{
+    height: 0.3vh !important;
+    background-color: #c3c0c06b;
+    border: none;
+}
+.email>input{
+    border-width: 0;
+}
+.forget div{
+    color: #616161;
+}
+.sign-button{
+    width: 73vw;
+    height: 8vh;
+    background: #ff5858;
+    border-radius: 0 1.3rem 1.3rem 0;
+    margin-top: -4vh;
+    line-height: 8vh;
+}
+.sign-button span{
+    margin-left: 6vw;
+    color: #fff;
+    font-weight: 300;
+    font-size: 0.4rem;
+}
+.fail-text{
+    position: absolute;
+    left: 64%;
+    top: 2%;
+    color: #f00;
+}
+.style-verify{
+    position: relative;
+}

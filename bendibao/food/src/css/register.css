@@ -31,7 +31,7 @@
 .login-verify{
     background: #fff;
     width: 92vw;
-    height: 30vh;
+    height: 36vh;
     margin-top: 12vh;
     border-radius: 0 0.4rem 0.4rem 0;
     overflow: hidden;
@@ -41,9 +41,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 65%;
+    height: 72%;
     margin-top: 7%;
 }
+
 input{
     outline: none;
     border:0;
@@ -55,6 +56,9 @@ hr{
 }
 .email>input{
     border-width: 0;
+}
+.forget div{
+    color: #616161;
 }
 .sign-button{
     width: 73vw;
@@ -72,7 +76,10 @@ hr{
 }
 .fail-text{
     position: absolute;
-    top: 38.5vh;
-    left: 61vw;
+    left: 64%;
+    top: 2%;
     color: #f00;
+}
+.style-verify{
+    position: relative;
 }

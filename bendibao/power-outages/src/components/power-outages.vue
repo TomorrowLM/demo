@@ -15,12 +15,19 @@
           <option value="">1</option>
                     <option value="">1</option>
         </select> -->
+
         <div class="divInput">
           <div class="input" @click="openValue">
-            <input v-model="value" type="text" placeholder="杭州" />
+            <span>{{ value }}</span>
+            <img
+              src="../assets/箭头 (4).png"
+              alt=""
+              :class="{ 'img-rotate': rotate }"
+            />
+            <!-- <input v-model="value" type="text" placeholder="杭州" /> -->
             <!-- <img src="../assets/arrow.png" alt="" /> -->
           </div>
-          <div class="list" v-show="show">
+          <div v-bind:class="{ 'list-show': show, 'list-hidden': !show }">
             <ul>
               <li
                 @click="getvalue(index, item)"
@@ -43,7 +50,17 @@
         <div class="info-detail" v-for="(v, i) in info" :key="i">
           <div class="info-detail-page">
             <div class="icon">
+              <img
+                src="../assets/停水、停电、停气切图(1)/停水、停电、停气切图/00.png"
+                alt=""
+                class="icon-img"
+              />
               <div>{{ v[0] }}</div>
+              <img
+                src="../assets/停水、停电、停气切图(1)/停水、停电、停气切图/01.png"
+                alt=""
+                class="icon-img"
+              />
               <div>
                 <div v-bind:class="text" ref="more" class="text">
                   {{ v[1] }}
@@ -63,8 +80,10 @@
         </div>
       </div>
       <div class="footer">
-        <div>分享</div>
-        <div>返回</div>
+        <div>
+          分享<img src="../assets/分 享.png" alt="" class="icon-share" />
+        </div>
+        <div>返回杭州本地宝首页</div>
       </div>
     </div>
   </div>
@@ -95,17 +114,18 @@ export default {
     text: "text-1",
     tableData: [
       {
-        name: 111,
+        name: "成都",
       },
       {
-        name: 222,
+        name: "北京",
       },
       {
-        name: 333,
+        name: "上海",
       },
     ],
     show: false,
-    value: "",
+    value: "杭州",
+    rotate: false,
   }),
   methods: {
     more(i) {
@@ -116,9 +136,16 @@ export default {
       }
     },
     openValue() {
+      if (!this.rotate) {
+        this.rotate = true;
+      } else this.rotate = false;
+
       this.show = !this.show;
     },
     getvalue(index, item) {
+      if (!this.rotate) {
+        this.rotate = true;
+      } else this.rotate = false;
       this.value = item.name;
       this.show = false;
     },
