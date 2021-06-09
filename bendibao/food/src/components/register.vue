@@ -55,9 +55,7 @@ export default {
   components: { [Toast.name]: Toast },
   props: {},
   methods: {
-    signUP() {
-      
-    },
+    signUP() {},
     clearEmail() {
       let reg = /^\w+@\w+\.\w+$/;
       if (!reg.test(this.emailText) || this.emailText == "") {

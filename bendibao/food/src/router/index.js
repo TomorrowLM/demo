@@ -3,7 +3,9 @@ import VueRouter from "vue-router";
 import login from "../components/login.vue";
 import register from "../components/register.vue";
 import HomePage from "../components/homepage.vue";
-import Mine from "../components/mine.vue"
+import Mine from "../components/mine.vue";
+import Distribution from "../components/distribution-list.vue";
+import FoodDetail from "../components/food-detail.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -22,6 +24,14 @@ const routes = [
   {
     path: "/Mine",
     component: Mine,
+  },
+  {
+    path: "/Distribution",
+    component: Distribution,
+  },
+  {
+    path: "/FoodDetail",
+    component: FoodDetail,
   },
 ];
 

@@ -16,8 +16,8 @@
                 <mu-list-item-title>我的</mu-list-item-title>
               </mu-list-item-title>
             </mu-list-item>
-            <mu-list-item button>
-              <mu-list-item-title>Menu Item 2</mu-list-item-title>
+            <mu-list-item button @click="goToDistribution">
+              <mu-list-item-title>配送</mu-list-item-title>
             </mu-list-item>
             <mu-list-item @click="open = false" button>
               <mu-list-item-title>Close</mu-list-item-title>
@@ -115,9 +115,10 @@ export default {
   props: {},
   methods: {
     goToMine() {
-      console.log(21);
-
       this.$router.push("/Mine");
+    },
+    goToDistribution() {
+      this.$router.push("/Distribution");
     },
   },
   mounted() {
@@ -138,6 +139,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped src="./../css/mine.css">
+<style scoped src="./../css/homepage.css">
 /* @import url("./../css/login.css"); */
 </style>

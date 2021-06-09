@@ -1,0 +1,240 @@
+.header {
+    width: 7.5rem;
+    height: 6rem;
+    opacity: 1;
+}
+
+.header>img {
+    /* width: 100%; */
+    width: 7.5rem;
+    height: 6rem;
+    opacity: 1;
+}
+
+.delivery {
+    margin: auto;
+    width: 6.8rem;
+    height: 4.04rem;
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0.16rem;
+    box-shadow: 0rem 0.2rem 0.4rem 0rem rgb(0 0 0 / 10%);
+    backdrop-filter: blur(0.2rem);
+    /* float: left; */
+    margin-top: -1.7rem;
+    overflow: hidden;
+}
+
+.content {
+    margin: 0.5rem 0.46rem;
+}
+
+.content-1 {
+    display: flex;
+}
+
+.content-1 {
+    opacity: 1;
+    font-size: 0.44rem;
+    font-family: SFProText-Semibold;
+    text-align: left;
+    color: #1b2749;
+    line-height: 0.52rem;
+    letter-spacing: -0.011rem;
+}
+
+.content-1>div:nth-child(2) {
+    width: 0.8rem;
+    height: 0.8rem;
+    opacity: 1;
+    background: #fa7268;
+    border-radius: 0.5rem;
+    background-image: url("../assets/Icon-Line-Eat.png");
+    background-size: 0.5rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    float: left;
+    margin-top: -3%;
+    margin-left: 55%;
+}
+
+.content-2 {
+    display: flex;
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: SFProText-Medium;
+    text-align: center;
+    color: #7f8592;
+    /* line-height: 0.36rem; */
+    letter-spacing: -0.002rem;
+}
+
+.content-2>div {
+    margin-right: 0.2rem;
+    padding: 0 0.3rem;
+    opacity: 1;
+    background: rgba(223, 224, 229, 0.50);
+    border-radius: 0.24rem;
+}
+
+.content-3 {
+
+    display: flex;
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: SFProText-Medium;
+    text-align: left;
+    color: #7f8592;
+    letter-spacing: -0.002rem;
+    margin: 0 0.1rem;
+    margin-top: 0.3rem;
+}
+
+.content-3 img {
+    margin-left: 0.1rem;
+}
+
+.content-3 img:nth-of-type(1) {
+    margin-left: 0;
+}
+
+.content-4 {
+    display: flex;
+    margin-top: 0.4rem;
+}
+
+.content-4>div:nth-of-type(1) {
+    width: 2rem;
+}
+
+.content-4 img {
+    width: 0.6rem;
+    height: 0.6rem;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.00);
+    border: 0.02rem solid #ffffff;
+    border-radius: 50%;
+    position: relative;
+}
+
+.content-4>div:nth-of-type(2) {
+    width: 2.5rem;
+    height: 0.52rem;
+    opacity: 1;
+    font-size: 0.22rem;
+    font-family: SFProText-Medium;
+    text-align: left;
+    color: #7f8592;
+    line-height: 0.26rem;
+    letter-spacing: 0.001rem;
+}
+
+.content-4>div:nth-of-type(3) {
+    width: 1.22rem;
+    height: 0.48rem;
+    opacity: 1;
+    background: rgba(223, 224, 229, 0.50);
+    border-radius: 0.24rem;
+    text-align: center;
+    line-height: 0.48rem;
+}
+
+.popular {
+    margin: 0.46rem 0.34rem;
+}
+
+.popular-text {
+    margin: 0.46rem 0.34rem;
+    width: 5rem;
+    height: 0.4rem;
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: SFProText-Bold;
+    text-align: left;
+    color: #1b2749;
+    line-height: 0.4rem;
+    letter-spacing: -0.005rem;
+}
+
+.popular-content {
+    width: 6.8rem;
+    height: 2.4rem;
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0.16rem;
+    box-shadow: 0rem 0.2rem 0.4rem 0rem rgba(0, 0, 0, 0.10);
+    backdrop-filter: blur(0.2rem);
+    overflow: hidden;
+    display: flex;
+}
+
+.popular-content-1 {
+    margin: 0.3rem;
+}
+
+.popular-content-1>img {
+    width: 1.8rem;
+    height: 1.8rem;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.00);
+    border-radius: 0.2rem;
+}
+
+.popular-content-2 {
+    margin: 0.3rem 0.2rem;
+}
+
+.popular-content-2>div:nth-of-type(1) {
+    width: 4.06rem;
+    height: 0.4rem;
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: SFProText-Bold;
+    text-align: left;
+    color: #1b2749;
+    line-height: 0.4rem;
+    letter-spacing: -0.005rem;
+}
+
+.popular-content-2>div:nth-of-type(2) {
+    width: 4.06rem;
+    height: 0.68rem;
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: SFProText-Medium;
+    text-align: left;
+    color: #7f8592;
+    line-height: 0.36rem;
+    letter-spacing: -0.002rem;
+    margin-top: 0.2rem;
+}
+
+.popular-content-bottom {
+    display: flex;
+    margin-top: 0.2rem;
+}
+
+.popular-content-bottom>div>img {
+    float: left;
+}
+
+.popular-content-bottom>div>div {
+    float: left;
+    margin-left: 0.1rem;
+}
+
+.popular-content-bottom>div>div:nth-of-type(2) {
+    width: 0.7rem;
+    height: 0.3rem;
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: SFProText-Medium;
+    text-align: left;
+    color: #7f8592;
+    line-height: 0.36rem;
+    letter-spacing: -0.002rem;
+}
+
+.popular-content-bottom>div {
+    margin-right: 0.3rem;
+}

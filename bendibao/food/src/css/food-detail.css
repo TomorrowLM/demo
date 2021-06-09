@@ -1,0 +1,229 @@
+.page {
+    margin: 0 0.3rem;
+}
+
+.header {
+    position: relative;
+    height: 1rem;
+}
+
+.title {
+    height: 1rem;
+    opacity: 1;
+    font-size: 0.36rem;
+    font-family: SFProText-Semibold;
+    text-align: center;
+    color: #1b2749;
+    line-height: 1rem;
+    letter-spacing: -0.009rem;
+}
+
+.share {
+    position: absolute;
+    /* left: 0; */
+    right: 13%;
+    top: 0.35rem;
+}
+
+.img-detail {
+    text-align: center;
+}
+
+.img-detail>img {
+    width: 6.8rem;
+    height: 4.8rem;
+    opacity: 1;
+}
+
+.detail-list {
+    display: flex;
+    margin-top: 0.4rem;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+}
+
+.detail-list>div:nth-of-type(1) {
+    display: flex;
+}
+
+.detail-list>div:nth-of-type(1)>img {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.detail-list>div:nth-of-type(1)>div:nth-of-type(1) {
+    width: 3.94rem;
+    height: 0.4rem;
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: SFProText-Bold;
+    text-align: left;
+    color: #1b2749;
+    line-height: 0.4rem;
+    letter-spacing: -0.005rem;
+    margin-left: 0.2rem;
+}
+
+.detail-list>div:nth-of-type(1)>div:nth-of-type(1)>div:nth-of-type(2) {
+    width: 3.94rem;
+    height: 0.36rem;
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: SFProText-Medium;
+    text-align: left;
+    color: #7f8592;
+    line-height: 0.36rem;
+    letter-spacing: -0.002rem;
+
+}
+
+.like {
+    line-height: 1rem;
+    height: 1rem;
+    margin-top: -0.2rem;
+}
+
+.like>span {
+    vertical-align: super;
+    margin-right: 0.1rem;
+}
+
+.page-1 {
+    margin: 0 0.3rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.page-1>div:nth-of-type(1)>span {
+    width: 4.76rem;
+    height: 1.08rem;
+    opacity: 1;
+    font-size: 0.34rem;
+    font-family: SFProText-Semibold;
+    text-align: left;
+    color: #1b2749;
+    line-height: 0.44rem;
+    letter-spacing: -0.008rem;
+}
+
+.level {
+    display: flex;
+
+}
+
+.food-title>div:nth-of-type(1) {
+    width: 4.76rem;
+    height: 1.08rem;
+    opacity: 1;
+    font-size: 0.34rem;
+    font-family: SFProText-Semibold;
+    text-align: left;
+    color: #1b2749;
+    line-height: 0.44rem;
+    letter-spacing: -0.008rem;
+}
+
+.level img {
+    margin-right: 0.1rem;
+}
+
+.level div {
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: SFProText-Medium;
+    text-align: left;
+    color: #7f8592;
+    letter-spacing: -0.002rem;
+}
+
+.price {
+    width: 1.1rem;
+    height: 0.58rem;
+    line-height: 1.58rem;
+    opacity: 1;
+    font-size: 0.48rem;
+    font-family: SFProText-Semibold;
+    text-align: right;
+    color: #fa7268;
+    letter-spacing: -0.012rem;
+}
+
+
+table {
+    width: 7.5rem;
+    border-top: 1px solid #DFE0E5;
+    border-spacing: 0;
+    margin-top: 0.5rem;
+}
+
+table td {
+    border-bottom: 1px solid #DFE0E5;
+    border-right: 1px solid #DFE0E5;
+    text-align: center;
+}
+
+td>div:nth-of-type(1) {
+
+    opacity: 1;
+    font-size: 0.34rem;
+    font-family: SFProText-Semibold;
+
+    color: #1b2749;
+    letter-spacing: -0.008rem;
+}
+
+td>div:nth-of-type(2) {
+
+    opacity: 1;
+    font-size: 0.26rem;
+    font-family: SFProText-Medium;
+    color: #7f8592;
+    letter-spacing: -0.002rem;
+}
+
+table tr>td:last-of-type {
+    border-right: 0;
+}
+
+.present {
+    width: 2.64rem;
+    height: 0.4rem;
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: SFProText-Bold;
+    text-align: left;
+    color: #1b2749;
+    line-height: 0.4rem;
+    letter-spacing: -0.005rem;
+    margin: 0.3rem;
+}
+
+.present-detail {
+    width: 6.64rem;
+    height: 1.48rem;
+    opacity: 1;
+    font-size: 0.3rem;
+    font-family: SFProText-Medium;
+    text-align: left;
+    color: #7f8592;
+    line-height: 0.48rem;
+    letter-spacing: -0.005rem;
+    overflow: hidden;
+    margin: 0.3rem;
+}
+
+.order-button {
+    width: 6.86rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    opacity: 1;
+    background: #fa7268;
+    border-radius: 0.5rem;
+    box-shadow: 0rem 0.2rem 0.4rem 0rem rgba(0, 0, 0, 0.10);
+    font-size: 0.34rem;
+    font-family: SFProText-Semibold;
+    color: #ffffff;
+    letter-spacing: -0.008rem;
+    margin-left: 0.3rem;
+}

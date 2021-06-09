@@ -54,7 +54,7 @@ export default {
   methods: {
     sign() {
       if (this.passwordText != "") {
-        console.log(1)
+        console.log(1);
         Toast("密码错误");
       } else {
         this.$router.push("/HomePage");
