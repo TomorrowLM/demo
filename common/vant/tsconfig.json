@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "esModuleInterop": true,
+    "target": "es6",
+    "declaration": true,
+    "noImplicitAny": false,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "strict": true,
+    "lib": ["ESNext"],
+    "types": ["miniprogram-api-typings"],
+    "paths": {
+      "definitions/*": ["./packages/definitions/*"]
+    },
+    "skipLibCheck": true
+  },
+  "include": ["packages/**/*"]
+}
