@@ -15,17 +15,12 @@
 			</div>
 		</div>
 
-		<div class="menu">
-			<div class="container">
-				<div @click="allMenu()" :class="[menuAllActive?'menu-all-actice':'']">全部</div>
-				<div class="menu-list">
-					<div v-for="(item,index) in menuList" class="menu-item" @click="selectMenu(index)" :class="[index==menuActice?'menu-actice':'']">
-						{{item}}
-					</div>
-				</div>
-			</div>
-		</div>
+		
 		<div class="main">
+			<div class="main-title">
+				<img src="@/static/组 174.png" alt="">
+				<span>暑假活动</span>
+			</div>
 			<div class="active" v-for="(item,index) in activeList" :key="index" >
 				<div @click="showActive(index)">
 					<img src="@/static/矩形 127.png" alt="">
@@ -139,6 +134,9 @@
 				menuAllActive:true,
 				menuActice: -1,
 				activeList: [
+					["活动一", "时间", "2020-07-29", "13：00", "地点", "111111武汉东湖生态旅游风景区欢乐大道196 号", "门票", "武汉东湖生态旅游风景区欢乐大道",
+						false
+					],
 					["活动二", "时间", "2020-07-29", "13：00", "地点", "111111武汉东湖生态旅游风景区欢乐大道196 号", "门票", "武汉东湖生态旅游风景区欢乐大道",
 						true
 					],
@@ -187,4 +185,5 @@
 
 <style>
 	@import url("@/css/vacation-1.css");
+	@import url("@/css/vacation-2.css");
 </style>
