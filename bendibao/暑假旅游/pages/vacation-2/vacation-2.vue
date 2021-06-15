@@ -25,7 +25,7 @@
 				<div @click="showActive(index)">
 					<img src="@/static/矩形 127.png" alt="">
 					<span>{{item[0]}}</span>
-					<img src="@/static/路径 10@2x.png" alt="">
+					<img src="@/static/路径 10@2x.png" alt=""  ref="triangle" :class="triangleActive==index?'triangle-active':''">
 				</div>
 				<div :ref="index" v-show="item[8]" style="display: block;">
 					<div class="active-info" >
@@ -133,6 +133,7 @@
 				menuList: ["景区", "景区", "景区", "景区", "景区", "景区"],
 				menuAllActive:true,
 				menuActice: -1,
+				triangleActive: 1,
 				activeList: [
 					["活动一", "时间", "2020-07-29", "13：00", "地点", "111111武汉东湖生态旅游风景区欢乐大道196 号", "门票", "武汉东湖生态旅游风景区欢乐大道",
 						false
@@ -167,14 +168,19 @@
 				this.vacationCul = item
 			},
 			showActive(index) {
-				console.log(this.$refs[index][0].style.display)
-				if (this.$refs[index][0].style.display == "none") {
-					console.log(index)
-					this.$refs[index][0].style.display = "block"
-				} else if (this.$refs[index][0].style.display == "block") {
-						console.log(index)
-					this.$refs[index][0].style.display = "none"
-				}
+			this.triangleActive = -1;
+			console.log(this.$refs[index][0].style.display)
+			if (this.$refs[index][0].style.display == "none") {
+				console.log(index)
+				this.$refs[index][0].style.display = "block"
+				this.$refs.triangle[index].classList.add("triangle-animation")
+				// this.triangle = true
+			} else if (this.$refs[index][0].style.display == "block") {
+				console.log(index)
+				this.$refs[index][0].style.display = "none"
+				// this.triangle = false
+				this.$refs.triangle[index].classList.remove("triangle-animation")
+			}
 			},
 			tabclick(index){
 				this.tabCul = index;

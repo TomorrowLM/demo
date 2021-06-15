@@ -51,7 +51,8 @@
 				<div @click="showActive(index)">
 					<span>{{item[0]}}</span>
 					<span>{{item[1]}}</span>
-					<img src="@/static/路径 10@2x.png" alt="">
+					<img src="@/static/路径 10@2x.png" alt="" ref="triangle"
+						:class="triangleActive==index?'triangle-active':''">
 				</div>
 				<div :ref="index" v-show="item[9]" style="display: block;">
 					<div class="active-info">
@@ -160,27 +161,29 @@
 			return {
 				vacationCul: "全部",
 				vacationList: [1, 2, 3],
-								vacationIsDrop: false,
+				vacationIsDrop: false,
 				provinceCul: "江苏",
 				provinceList: [1, 2, 3],
-
 				provinceIsDrop: false,
 				cityCul: "苏州",
 				cityList: [1, 2, 3],
-				
 				cityIsDrop: false,
+				triangleActive: 0,
 				activeList: [
-					["活动名称","欢乐谷电音节", "时间", "提前3日（自然日）", "", "地点", "武汉东湖生态旅游风景区欢乐大道196 号", "门票", "http://www.bendibao.com/index.htm",
+					["活动名称", "欢乐谷电音节", "时间", "提前3日（自然日）", "", "地点", "武汉东湖生态旅游风景区欢乐大道196 号", "门票",
+						"http://www.bendibao.com/index.htm",
 						true
 					],
-					["活动名称","玛雅水上乐园", "时间", "提前3日（自然日）", "", "地点", "武汉东湖生态旅游风景区欢乐大道196 号", "门票", "http://www.bendibao.com/index.htm",
+					["活动名称", "玛雅水上乐园", "时间", "提前3日（自然日）", "", "地点", "武汉东湖生态旅游风景区欢乐大道196 号", "门票",
+						"http://www.bendibao.com/index.htm",
 						false
 					],
-					["活动名称","欢乐谷电音节", "时间", "提前3日（自然日）", "", "地点", "武汉东湖生态旅游风景区欢乐大道196 号", "门票", "http://www.bendibao.com/index.htm",
+					["活动名称", "欢乐谷电音节", "时间", "提前3日（自然日）", "", "地点", "武汉东湖生态旅游风景区欢乐大道196 号", "门票",
+						"http://www.bendibao.com/index.htm",
 						false
 					],
 				],
-				localList: ["水上乐园", "沙滩", "游泳馆","水上乐园","水上乐园","水上乐园","水上乐园"],
+				localList: ["水上乐园", "沙滩", "游泳馆", "水上乐园", "水上乐园", "水上乐园", "水上乐园"],
 			}
 		},
 		methods: {
@@ -218,13 +221,18 @@
 				this.menuActice = index;
 			},
 			showActive(index) {
+				this.triangleActive = -1;
 				console.log(this.$refs[index][0].style.display)
 				if (this.$refs[index][0].style.display == "none") {
 					console.log(index)
 					this.$refs[index][0].style.display = "block"
+					this.$refs.triangle[index].classList.add("triangle-animation")
+					// this.triangle = true
 				} else if (this.$refs[index][0].style.display == "block") {
 					console.log(index)
 					this.$refs[index][0].style.display = "none"
+					// this.triangle = false
+					this.$refs.triangle[index].classList.remove("triangle-animation")
 				}
 			},
 			tabclick(index) {

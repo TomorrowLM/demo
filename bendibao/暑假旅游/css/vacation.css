@@ -170,7 +170,21 @@
     margin-left: 2.5rem;
     opacity: 1;
 }
-
+.active>div>img:nth-of-type(1) {
+	width: 0.18rem;
+	height: 0.1rem;
+	opacity: 1;
+	float: right;
+	margin-top: 0.15rem;
+	transition: 1s linear;
+	transform: rotate(180deg);
+}
+.triangle-active{
+	transform: rotate(0deg) !important;
+}
+.triangle-animation{
+	transform: rotate(0deg) !important;
+}
 .active span {
 	opacity: 1;
 	font-size: 0.26rem;
@@ -221,6 +235,8 @@ margin-left: 0.5rem;
 	margin-top: 0.15rem;
 	transform: rotate(180deg);
 }
+
+
 
 .active-info>div {
 	margin: 0.4rem 0;

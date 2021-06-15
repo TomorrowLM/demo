@@ -53,6 +53,7 @@
 
 .show {
 	height: 1.5rem;
+	    overflow-y: auto;
 }
 
 .menu {
@@ -189,9 +190,15 @@
 	opacity: 1;
 	float: right;
 	margin-top: 0.15rem;
+	transition: 1s linear;
 	transform: rotate(180deg);
 }
-
+.triangle-active{
+	transform: rotate(0deg) !important;
+}
+.triangle-animation{
+	transform: rotate(0deg) !important;
+}
 .active-info>div {
 	margin: 0.4rem 0;
 	display: flex;
@@ -362,3 +369,4 @@
 	height: 0.78rem;
 	opacity: 1;
 }
+

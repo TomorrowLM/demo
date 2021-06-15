@@ -7,33 +7,34 @@
 					{{vacationCul}}
 					<img src="@/static/路径 10.png" alt="">
 				</div>
-				<div class="vacation-list" :class="{show:vacationIsDrop}">
-					<div v-for="(item,index) in vacationList" @click="vacationRise(item)">
+<!-- 				<div class="vacation-list" :class="{show:vacationIsDrop}">
+					<div v-for="(item,index) in vacationList" @click="vacationRise(item,index)">
 						{{item}}
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 
-		<div class="menu">
+		<div class="menu" v-show="showMenu">
 			<div class="container">
 				<div @click="allMenu()" :class="[menuAllActive?'menu-all-actice':'']">全部</div>
 				<div class="menu-list">
-					<div v-for="(item,index) in menuList" class="menu-item" @click="selectMenu(index)" :class="[index==menuActice?'menu-actice':'']">
+					<div v-for="(item,index) in menuList" class="menu-item" @click="selectMenu(index)"
+						:class="[index==menuActice?'menu-actice':'']">
 						{{item}}
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="main">
-			<div class="active" v-for="(item,index) in activeList" :key="index" >
+			<div class="active" v-for="(item,index) in activeList" :key="index">
 				<div @click="showActive(index)">
 					<img src="@/static/矩形 127.png" alt="">
 					<span>{{item[0]}}</span>
-					<img src="@/static/路径 10@2x.png" alt="">
+					<img src="@/static/路径 10@2x.png" alt="" ref="triangle" :class="triangleActive==index?'triangle-active':''">
 				</div>
 				<div :ref="index" v-show="item[8]" style="display: block;">
-					<div class="active-info" >
+					<div class="active-info">
 						<div>
 							<span>{{item[1]}}</span>
 							<span>{{item[2]}} &nbsp; &nbsp; {{item[3]}}</span>
@@ -57,9 +58,10 @@
 		<div class="line-1"></div>
 		<div class="tab">
 			<div class="tab-list">
-				<div v-for="(item,index) in tabList" @click="tabclick(index)" :class="{'tab-active':tabCul==index}">{{item}}</div>
+				<div v-for="(item,index) in tabList" @click="tabclick(index)" :class="{'tab-active':tabCul==index}">
+					{{item}}</div>
 			</div>
-			<div v-show="tabCul==0" class="tab-detail">		
+			<div v-show="tabCul==0" class="tab-detail">
 				1
 			</div>
 			<div v-show="tabCul==1" class="tab-detail">
@@ -80,7 +82,7 @@
 					<span>水上乐园</span>
 				</div>
 			</div>
-			<div v-show="tabCul==2" class="tab-detail">		
+			<div v-show="tabCul==2" class="tab-detail">
 				1
 			</div>
 		</div>
@@ -130,14 +132,18 @@
 
 <script>
 	export default {
+		mounted() {
+			
+		},
 		data() {
 			return {
 				vacationCul: "全部",
-				vacationList: [1, 2, 3],
+				vacationList: ["景区", "景区", "景区", "景区", "景区", "景区"],
 				vacationIsDrop: false,
-				menuList: ["景区", "景区", "景区", "景区", "景区", "景区"],
-				menuAllActive:true,
+				menuList: ["景区1", "景区2", "景区3", "景区4", "景区5", "景区6"],
+				menuAllActive: true,
 				menuActice: -1,
+				triangleActive: 0,
 				activeList: [
 					["活动二", "时间", "2020-07-29", "13：00", "地点", "111111武汉东湖生态旅游风景区欢乐大道196 号", "门票", "武汉东湖生态旅游风景区欢乐大道",
 						true
@@ -146,39 +152,53 @@
 						false
 					]
 				],
-				tabList:["暑假本地游","暑假周边游","暑假国内游"],
-				tabCul:1,
+				tabList: ["暑假本地游", "暑假周边游", "暑假国内游"],
+				tabCul: 1,
+				showMenu: false
 			}
 		},
 		methods: {
 			vacationDrop() {
-
+				this.showMenu = true
 				this.vacationIsDrop = !this.vacationIsDrop
 			},
-			allMenu(){
+			allMenu() {
 				this.menuActice = -1;
 				this.menuAllActive = true;
+				this.showMenu = false;
 			},
 			selectMenu(index) {
 				this.menuAllActive = false;
 				this.menuActice = index;
+				this.vacationCul = this.menuList[index];
+				this.showMenu = false;
+				console.log(this.showMenu)
+				
 			},
-			vacationRise(item) {
+			vacationRise(item, index) {
 				this.vacationIsDrop = false
 				let old = this.vacationCul
 				this.vacationCul = item
+
+				this.menuAllActive = false;
+				this.menuActice = index;
 			},
 			showActive(index) {
+				this.triangleActive = -1;
 				console.log(this.$refs[index][0].style.display)
 				if (this.$refs[index][0].style.display == "none") {
 					console.log(index)
 					this.$refs[index][0].style.display = "block"
+					this.$refs.triangle[index].classList.add("triangle-animation")
+					// this.triangle = true
 				} else if (this.$refs[index][0].style.display == "block") {
-						console.log(index)
+					console.log(index)
 					this.$refs[index][0].style.display = "none"
+					// this.triangle = false
+					this.$refs.triangle[index].classList.remove("triangle-animation")
 				}
 			},
-			tabclick(index){
+			tabclick(index) {
 				this.tabCul = index;
 			}
 		}
