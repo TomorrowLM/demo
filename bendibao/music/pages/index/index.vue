@@ -178,12 +178,12 @@
 						{{item}}
 						
 					</div>
-					<div class="progress"></div>
+					<div class="progress animated fadeInLeft" ref="progress"></div>
 				</div>
 				<div class="line-2">
 					
 				</div>
-				<div class="music-news">
+				<div class="music-news" v-show="recommendCul== 0">
 					<div v-for="(item,index) in musicNewsList">
 						<div>
 							<img src="../../static/椭圆 1.png" alt="">
@@ -192,8 +192,9 @@
 						<div>{{item[1]}}</div>
 						<div class="line-2"></div>
 					</div>
-					<div class="news-btn">查看更多</div>
+					<div class="news-btn" @click="showMoreNews()">{{newsBtn}}</div>
 				</div>
+				<div v-show="recommendCul==1">1</div>
 			</div>
 		</div>
 		<uni-popup ref="popup" type="center" background-color="#333">不在购票时间内</uni-popup>
@@ -238,6 +239,7 @@
 					["寄存说明","以现场为准"]
 				],
 				questionBarList:["购票需要登记身份证吗？","购票需要登记身份证吗？","有没有现场电话号码？","没有大陆身份证怎么订票？","有座位图可以查看吗？","上门取票地址在哪里？"],
+				recommendCul:0,
 				recommendList:["音乐节","赏花咨讯","踏青资讯","春游资讯","疫情资讯"],
 				musicNewsList:[
 					["武汉音乐节2021时间表（持续更新）","2021-04-08 13:56"],
@@ -245,7 +247,8 @@
 					["2021武汉MDSK音乐节嘉宾阵容名单一览","2021-05-13 13:41"],
 					["2021武汉MDSK音乐节嘉宾阵容名单一览","2021-05-13 13:41"],
 					["2021武汉MDSK音乐节嘉宾阵容名单一览","2021-05-13 13:41"],
-				]
+				],
+				newsBtn:"查看更多"
 			}
 		},
 		mounted() {
@@ -283,6 +286,27 @@
 					this.$refs.tabList.classList.remove("fixed");
 				}
 			},
+			recommendSwitch(index){
+				this.$refs.progress.style.left= index*1.5+"rem"
+				if(index==0){
+				this.$refs.progress.style.left= 0.3+"rem"
+				}
+				this.recommendCul=index;
+			},
+			showMoreNews(){
+			
+				setTimeout(()=>{
+					if(this.musicNewsList.length<10){
+							console.log(1)
+						let old = this.musicNewsList
+						old.forEach((val)=>{
+							this.musicNewsList.push(val)
+						})
+					}else
+						this.newsBtn = "没有了"
+					
+				},1000)
+			}
 		}
 	}
 </script>

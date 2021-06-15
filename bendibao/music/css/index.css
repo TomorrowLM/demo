@@ -443,10 +443,10 @@
 }
 .line{
 
-/* height: 0.02rem; */
-opacity: 0.1;
-border: 0.02rem solid #000000;
-margin:auto;
+    /* height: 0.02rem; */
+    opacity: 0.1;
+    border: 0.01rem solid #000000;
+    margin: auto;
 }
 .whole-team{
 	margin:0.2rem;
@@ -470,8 +470,8 @@ margin:auto;
 
 /* notice */
 .notice{
-	width: 7.21rem;
-	height: 10rem;
+/* 	width: 7.21rem; */
+	height: 10.4rem;
 	opacity: 1;
 	background: #ffffff;
 	border-radius: 0.2rem;
@@ -536,7 +536,7 @@ opacity: 1;
 	    text-align: center;
 	    margin-left: 0.2rem;
 }
-.questionBar div{
+.questionBar>div{
     height: 0.62rem;
     line-height: 0.62rem;
     opacity: 1;
@@ -548,6 +548,7 @@ opacity: 1;
     font-weight: 500;
     color: #666666;
     margin-bottom: 0.3rem;
+	padding: 0 0.2rem;
 }
 .line-1{
     opacity: 0.1;
@@ -627,12 +628,12 @@ opacity: 1;
 .progress{
     background: #ffffff;
     background-color: #FF6600;
-    border: 0.02rem solid #ff6600;
+    border: 0.015rem solid #ff6600;
     position: absolute;
     width: 0.5rem;
     top: 1.1rem;
-    left: 0;
-	
+    left: 0.3rem;
+	transition: left .3s linear;
 }
 .music-news{
 	margin:0.3rem;
