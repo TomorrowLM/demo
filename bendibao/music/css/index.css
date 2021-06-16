@@ -54,7 +54,7 @@
 }
 
 .show {
-	height: 1.5rem;
+	height: 1.5rem !important;
 }
 
 /* main */
@@ -113,6 +113,20 @@
 	margin-left: 0.1rem;
 }
 
+.card-address {
+	position: absolute;
+	z-index: 1;
+	background-color: #fff;
+	height: 0rem;
+	-webkit-transition: all 0.5s linear;
+	transition: all 0.5s linear;
+	overflow: hidden;
+	border-radius: 0.1rem 0.1rem 0.2rem 0.2rem;
+	font-size: 0.26rem;
+	list-style: none;
+	padding: 0;
+}
+
 .card-body {
 	margin-top: 0.4rem;
 	justify-content: space-between;
@@ -150,7 +164,7 @@
 	margin: 0.2rem 0;
 	padding-bottom: 0.1rem;
 	border-bottom: 1px solid #bbbbbb87;
-	width: 6.76rem;
+	width: 6.35rem;
 }
 
 .card-position {
@@ -186,8 +200,8 @@
 
 /* tab */
 .tab {
-    margin-top: 0.3rem;
-    margin-bottom: 0.3rem;
+	margin-top: 0.3rem;
+	margin-bottom: 0.3rem;
 }
 
 .tab-list {
@@ -205,19 +219,22 @@
 	/* position: fixed; */
 	/* margin-left: 0.3rem; */
 }
-.fixed{
-    position: fixed;
-    top: 0;
-    background: #fff;
-    height: 1rem;
-    margin: auto;
-    line-height: 1rem;
-	justify-content: space-around !important;
 
+.fixed {
+	position: fixed;
+	top: 0;
+	background: #fff;
+	height: 1rem;
+	margin: auto;
+	line-height: 1rem;
+	justify-content: space-around !important;
+	z-index: 1;
 }
-.fixed{
-	    justify-content: space-around;
+
+.fixed {
+	justify-content: space-around;
 }
+
 /* .tab-list-1{
 	width: 85%;
 	height: 1rem !important;
@@ -430,9 +447,13 @@
 	text-align: justifyLeft;
 	color: #666666;
 	line-height: 0.4rem;
-	margin:0 0.3rem 0.33rem 0.53rem;
+	margin: 0 0.3rem 0.33rem 0.53rem;
 }
-.introduce-btn{
+
+/* .introduce-info>div{
+	transition:height 0.3s linear;
+} */
+.introduce-btn {
 	opacity: 1;
 	font-size: 0.3rem;
 	font-family: PingFang SC, PingFang SC-Medium;
@@ -441,17 +462,20 @@
 	color: #ff6600;
 	margin-bottom: 0.4rem;
 }
-.line{
 
-    /* height: 0.02rem; */
-    opacity: 0.1;
-    border: 0.01rem solid #000000;
-    margin: auto;
+.line {
+
+	/* height: 0.02rem; */
+	opacity: 0.1;
+	border: 0.01rem solid #000000;
+	margin: auto;
 }
-.whole-team{
-	margin:0.2rem;
+
+.whole-team {
+	margin: 0.2rem;
 }
-.whole-team .title{
+
+.whole-team .title {
 	opacity: 1;
 	font-size: 0.24rem;
 	font-family: PingFang SC, PingFang SC-Medium;
@@ -460,7 +484,8 @@
 	color: #999999;
 	line-height: 0.5rem;
 }
-.whole-team-detail{
+
+.whole-team-detail {
 	width: 6.54rem;
 	height: 8.04rem;
 	opacity: 1;
@@ -469,18 +494,18 @@
 }
 
 /* notice */
-.notice{
-/* 	width: 7.21rem; */
-	height: 10.4rem;
+.notice {
 	opacity: 1;
 	background: #ffffff;
 	border-radius: 0.2rem;
-	box-shadow: 0rem 0rem 0.071rem 0.009rem rgba(194,194,196,0.45); 
+	box-shadow: 0rem 0rem 0.071rem 0.009rem rgb(194 194 196 / 45%);
 	overflow: hidden;
 	margin: 0.3rem 0;
-	
+	padding-bottom: 0.3rem;
+
 }
-.notice-title{
+
+.notice-title {
 	opacity: 1;
 	font-size: 0.3rem;
 	/* font-family: PingFang SC, PingFang SC-Semibold; */
@@ -488,17 +513,20 @@
 	text-align: left;
 	color: #333333;
 	line-height: 0.5rem;
-	margin:0.3rem 0.2rem;
+	margin: 0.3rem 0.2rem;
 }
-.notice-body{
+
+.notice-body {
 	margin: 0 0.3rem;
 }
-.notice-body-container img{
+
+.notice-body-container img {
 	width: 0.21rem;
 	height: 0.21rem;
 	opacity: 1;
 }
-.notice-body-container div{
+
+.notice-body-container div {
 	opacity: 1;
 	font-size: 0.24rem;
 	font-family: PingFang SC, PingFang SC-Medium;
@@ -507,56 +535,62 @@
 	color: #333333;
 	line-height: 0.5rem;
 }
-.notice-body-container div div:last-child{
+
+.notice-body-container div div:last-child {
 	opacity: 1;
-	font-size: 0.22rem; 
+	font-size: 0.22rem;
 	font-family: PingFang SC, PingFang SC-Medium;
 	font-weight: 500;
 	text-align: justifyLeft;
 	color: #999999;
 	line-height: 0.36rem;
-	    margin-left: 0.2rem;
+	margin-left: 0.2rem;
 }
-.question-title{
-opacity: 1;
-    font-size: 0.3rem;
-    /* font-family: PingFang SC, PingFang SC-Semibold; */
-    font-weight: 700;
-    text-align: left;
-    color: #333333;
-    line-height: 0.5rem;
-    margin: 0.3rem 0.2rem;
+
+.question-title {
+	opacity: 1;
+	font-size: 0.3rem;
+	/* font-family: PingFang SC, PingFang SC-Semibold; */
+	font-weight: 700;
+	text-align: left;
+	color: #333333;
+	line-height: 0.5rem;
+	margin: 0.3rem 0.2rem;
 }
-.questionBar{
+
+.questionBar {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	    width: 91%;
-	    margin: auto;
-	    text-align: center;
-	    margin-left: 0.2rem;
+	width: 91%;
+	margin: auto;
+	text-align: center;
+	margin-left: 0.2rem;
 }
-.questionBar>div{
-    height: 0.62rem;
-    line-height: 0.62rem;
-    opacity: 1;
-    background: #ffffff;
-    border: 0.02rem solid #eeeeee;
-    border-radius: 0.32rem;
-    font-size: 0.24rem;
-    font-family: PingFang SC, PingFang SC-Medium;
-    font-weight: 500;
-    color: #666666;
-    margin-bottom: 0.3rem;
+
+.questionBar>div {
+	height: 0.62rem;
+	line-height: 0.62rem;
+	opacity: 1;
+	background: #ffffff;
+	border: 0.02rem solid #eeeeee;
+	border-radius: 0.32rem;
+	font-size: 0.24rem;
+	font-family: PingFang SC, PingFang SC-Medium;
+	font-weight: 500;
+	color: #666666;
+	margin-bottom: 0.3rem;
 	padding: 0 0.2rem;
 }
-.line-1{
-    opacity: 0.1;
-    border: 0.02rem solid #000000;
-    /* margin: auto; */
-    margin: 0 0.5rem 0 0.3rem;
+
+.line-1 {
+	opacity: 0.1;
+	border: 0.02rem solid #000000;
+	/* margin: auto; */
+	margin: 0 0.5rem 0 0.3rem;
 }
-.show-question{
+
+.show-question {
 	opacity: 1;
 	font-size: 0.3rem;
 	font-family: PingFang SC, PingFang SC-Medium;
@@ -566,18 +600,20 @@ opacity: 1;
 	line-height: 0.5rem;
 	margin-top: 0.3rem;
 }
+
 /* volunteer */
-.volunteer{
-    height: 4.15rem;
-    opacity: 1;
-    background: #ffffff;
-    border-radius: 0.2rem;
-    box-shadow: 0rem 0rem 0.071rem 0.009rem rgb(194 194 196 / 45%);
-    overflow: hidden;
-    margin: auto;
+.volunteer {
+	height: 4.15rem;
+	opacity: 1;
+	background: #ffffff;
+	border-radius: 0.2rem;
+	box-shadow: 0rem 0rem 0.071rem 0.009rem rgb(194 194 196 / 45%);
+	overflow: hidden;
+	margin: auto;
 	margin-bottom: 0.3rem;
 }
-.volunteer-title{
+
+.volunteer-title {
 	opacity: 1;
 	font-size: 0.3rem;
 	font-family: PingFang SC, PingFang SC-Semibold;
@@ -585,33 +621,36 @@ opacity: 1;
 	text-align: left;
 	color: #333333;
 	line-height: 0.5rem;
-	margin:0.3rem 0.2rem;
+	margin: 0.3rem 0.2rem;
 }
-.volunteer-btn{
+
+.volunteer-btn {
 	width: 6.54rem;
 	height: 0.7rem;
 	line-height: 0.7rem;
 	opacity: 1;
 	background: #fdeee3;
 	border-radius: 0.35rem;
-	margin:auto;
+	margin: auto;
 	font-size: 0.28rem;
 	font-family: PingFang SC, PingFang SC-Medium;
 	font-weight: 500;
 	color: #3d1f09;
 	text-align: center;
 }
+
 /* recommend */
-.recommend{
+.recommend {
 	/* height: 11.4rem; */
 	opacity: 1;
 	background: #ffffff;
 	border-radius: 0.2rem;
 	/* margin:0.3rem 0.2rem; */
-	padding:0.3rem 0.2rem; 
+	padding: 0.3rem 0.2rem;
 	position: relative;
 }
-.tab-recommend{
+
+.tab-recommend {
 	opacity: 1;
 	font-size: 0.28rem;
 	font-family: PingFang SC, PingFang SC-Semibold;
@@ -620,25 +659,29 @@ opacity: 1;
 	color: #141414;
 	line-height: 0.5rem;
 }
-.line-2{
+
+.line-2 {
 	opacity: 0.1;
 	background: #5195dd;
 	border: 0.02rem solid #000000;
 }
-.progress{
-    background: #ffffff;
-    background-color: #FF6600;
-    border: 0.015rem solid #ff6600;
-    position: absolute;
-    width: 0.5rem;
-    top: 1.1rem;
-    left: 0.3rem;
+
+.progress {
+	background: #ffffff;
+	background-color: #FF6600;
+	border: 0.015rem solid #ff6600;
+	position: absolute;
+	width: 0.5rem;
+	top: 1.1rem;
+	left: 0.3rem;
 	transition: left .3s linear;
 }
-.music-news{
-	margin:0.3rem;
+
+.music-news {
+	margin: 0.3rem;
 }
-.music-news div div:nth-of-type(1){
+
+.music-news div div:nth-of-type(1) {
 	opacity: 1;
 	font-size: 0.28rem;
 	font-family: PingFang SC, PingFang SC-Semibold;
@@ -647,7 +690,8 @@ opacity: 1;
 	color: #282828;
 	line-height: 0.5rem;
 }
-.music-news div div:nth-of-type(2){
+
+.music-news div div:nth-of-type(2) {
 	opacity: 1;
 	font-size: 0.24rem;
 	font-family: PingFang SC, PingFang SC-Medium;
@@ -656,29 +700,32 @@ opacity: 1;
 	color: #5b5b5b;
 	line-height: 0.5rem;
 }
-.line-2{
-	margin:0.3rem 0;
+
+.line-2 {
+	margin: 0.3rem 0;
 	background-color: #333;
 }
-.music-news img{
+
+.music-news img {
 	width: 0.34rem;
 	height: 0.2rem;
 	opacity: 1;
 }
-.news-btn{
+
+.news-btn {
 	width: 3rem;
 	height: 0.8rem;
 	line-height: 0.8rem;
 	opacity: 1;
 	background: #eeeeee;
 	border-radius: 0.2rem;
-	
+
 	opacity: 1;
 	font-size: 0.28rem;
 	font-family: PingFang SC, PingFang SC-Medium;
 	font-weight: 500;
 	text-align: center;
 	color: #282828;
-	margin:auto;
-	margin-top:0.5rem;
+	margin: auto;
+	margin-top: 0.5rem;
 }
