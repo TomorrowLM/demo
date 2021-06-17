@@ -1,0 +1,165 @@
+.search {
+	margin: auto;
+	margin: 0.3rem 0;
+	position: relative;
+}
+
+.search input {
+	border: 0.02rem solid #ffffff;
+	border-radius: 0.34rem;
+	font-size: 0.28rem;
+	position: relative;
+	z-index: 2;
+	width: 6rem;
+	height: 0.73rem;
+	opacity: 1;
+	background: #f4f4f4;
+	border-radius: 0.37rem;
+	margin-left: 1.2rem;
+}
+
+.uni-input-placeholder {
+	opacity: 1;
+	font-size: 0.28rem;
+	font-family: PingFang SC, PingFang SC-Medium;
+	font-weight: 500;
+	color: #999999;
+	margin-left: 0.5rem;
+}
+
+::v-deep .uni-input-input {
+	padding-left: 0.5rem !important;
+	color: #999999;
+}
+
+.search-btn {
+	width: 1.92rem;
+	height: 0.54rem;
+	opacity: 1;
+	background: #ffffff;
+	border-radius: 0.27rem;
+	position: absolute;
+	left: 1.4rem;
+	z-index: 11;
+	top: 0.11rem;
+	text-align: center;
+	line-height: 0.54rem;
+}
+
+.search-btn img {
+	width: 0.15rem;
+	height: 0.16rem;
+	opacity: 1;
+	margin-left: 0.1rem;
+
+}
+
+.search>img:first-of-type {
+	width: 0.19rem;
+	height: 0.33rem;
+	opacity: 1;
+	position: absolute;
+	top: 0.2rem;
+	left: 0.3rem
+}
+
+.search>img:last-of-type {
+	width: 0.33rem;
+	height: 0.33rem;
+	opacity: 1;
+	position: absolute;
+	top: 0.2rem;
+	right: 0.7rem;
+	z-index: 3;
+}
+
+/* main */
+.main {
+	width: 7.5rem;
+	height: 18.58rem;
+	opacity: 1;
+	background: #f6f6f6;
+	margin: auto;
+	overflow: hidden;
+}
+
+.card {
+	width: 6.9rem;
+	height: 5.28rem;
+	opacity: 1;
+	background: #ffffff;
+	border-radius: 0.16rem;
+	margin: auto;
+	margin-top: 0.5rem;
+}
+
+.card img {
+	width: 6.9rem;
+	height: 3.15rem;
+	opacity: 1;
+}
+
+.card-info {
+	width: 6.05rem;
+	opacity: 1;
+	font-size: 0.3rem;
+	font-family: PingFang SC, PingFang SC-Medium;
+	font-weight: 500;
+	text-align: left;
+	color: #333333;
+	margin: 0.2rem;
+}
+
+.card-info>div:first-of-type {
+	height: 0.77rem;
+	overflow: hidden;
+}
+
+.card-price {
+	margin: 0.3rem 0.2rem;
+}
+
+.card-price span:nth-of-type(1) {
+	width: 0.18rem;
+	height: 0.22rem;
+	opacity: 1;
+	font-size: 0.3rem;
+	font-family: PingFang SC, PingFang SC-Bold;
+	font-weight: 700;
+	text-align: left;
+	color: #ff6600;
+	line-height: 0.06rem;
+}
+
+.card-price span:nth-of-type(2) {
+	width: 0.74rem;
+	height: 0.33rem;
+	opacity: 1;
+	font-size: 0.44rem;
+	font-family: PingFang SC, PingFang SC-Bold;
+	font-weight: 700;
+	text-align: left;
+	color: #ff6600;
+	line-height: 0.06rem;
+}
+
+.card-price span:nth-of-type(3) {
+	width: 0.73rem;
+	height: 0.2rem;
+	opacity: 1;
+	font-size: 0.26rem;
+	font-family: PingFang SC, PingFang SC-Medium;
+	font-weight: 500;
+	text-decoration: line-through;
+	text-align: left;
+	color: #999999;
+	line-height: 0.06rem;
+	margin-left: 0.2rem;
+}
+
+::v-deep .preference-tab-container {
+	display: block;
+	height: 24rem;
+}
+
+

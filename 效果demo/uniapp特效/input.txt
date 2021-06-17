@@ -1,0 +1,80 @@
+<div class="page">
+		<div class="search">
+			<img src="../../static/矢量智能对象_1.png" alt="">
+			<input type="text" placeholder="周末去哪儿玩"
+				placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,">
+			<img src="../../static/X.png" alt="">
+			<span>取消</span>
+		</div>
+		
+	</div>
+
+
+.search {
+	margin: auto;
+	margin: 0.3rem 0;
+	position: relative;
+}
+
+.search input {
+	border: 0.02rem solid #ffffff;
+	border-radius: 0.34rem;
+	font-size: 0.28rem;
+	position: relative;
+	z-index: 2;
+	width: 6rem;
+	height: 0.73rem;
+	opacity: 1;
+	background: #f4f4f4;
+	border-radius: 0.37rem;
+	margin-left: 0.3rem;
+}
+
+.uni-input-placeholder {
+	opacity: 1;
+	font-size: 0.28rem;
+	font-family: PingFang SC, PingFang SC-Medium;
+	font-weight: 500;
+	color: #999999;
+	margin-left: 1rem;
+}
+
+::v-deep .uni-input-input {
+	padding-left: 1rem !important;
+	color: #999999;
+}
+
+.search img {
+	width: 0.27rem;
+	height: 0.29rem;
+	opacity: 1;
+	position: absolute;
+}
+
+.search img:first-of-type {
+	left: 0.7rem;
+	top: 0.24rem;
+	z-index: 3;
+}
+
+.search img:last-of-type {
+	left: 5.5rem;
+	top: 0.3rem;
+	z-index: 3;
+	width: 0.19rem;
+	height: 0.2rem;
+	opacity: 1;
+}
+.search span{
+	position: absolute;
+	left: 6.5rem;
+	top: 0.18rem;
+	z-index: 3;
+
+	opacity: 1;
+	font-size: 0.32rem;
+	font-family: PingFang SC, PingFang SC-Medium;
+	font-weight: 500;
+	text-align: left;
+	color: #ff6600;
+}
