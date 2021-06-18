@@ -1,4 +1,7 @@
 /* header */
+.page{
+	/* height: 30rem; */
+}
 .header {
 	height: 0.77rem;
 	opacity: 1;
@@ -33,7 +36,7 @@
 }
 
 .header-address span {
-	width: 0.7rem;
+	margin-left:0.1rem;
 	height: rem;
 	height: 1rem;
 	line-height: 0.29rem;

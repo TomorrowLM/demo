@@ -1,13 +1,14 @@
 <template>
 	<div class="page">
 		<div class="search">
-			<img src="../../static/形状 1_2.png" alt="">
+			<img src="../../static/形状 1_2.png" alt="" @click="goBack()">
 			<input type="text" placeholder="周末去哪儿玩"
 				placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,">
 			<img src="../../static/矢量智能对象_1.png" alt="">
 		</div>
 		<div class="main">
-			<wuc-tab :tab-list="tabList" :tabCur.sync="TabCur" @change="tabChange" tab-class="text-center text-black bg-white text-font" select-class="text-black text-xl"></wuc-tab>
+			<wuc-tab :tab-list="tabList" :tabCur.sync="TabCur" @change="tabChange"
+				tab-class="text-center text-black bg-white text-font" select-class="text-black text-xl"></wuc-tab>
 			<swiper :current="TabCur" duration="300" class="preference-tab-container">
 				<swiper-item v-for="(item,index) in allList" :key="index">
 					<div>
@@ -28,9 +29,9 @@
 							</div>
 						</div>
 					</div>
-			
+
 				</swiper-item>
-				
+
 			</swiper>
 
 		</div>
@@ -45,7 +46,9 @@
 		},
 		data() {
 			return {
+				//当前选项卡index
 				TabCur: 0,
+				//tab列表
 				tabList: [{
 					name: '城市公园'
 				}, {
@@ -57,6 +60,7 @@
 				}, {
 					name: '网红打开'
 				}],
+				//所有tab列表的数据
 				allList: [
 					[
 						[
@@ -104,8 +108,9 @@
 							"￥228"
 						]
 					],
-					
+
 				],
+				//卡片数据
 				cardList: [
 					[
 						"../../static/图层 549.png",
@@ -132,8 +137,15 @@
 			}
 		},
 		methods: {
+			//选项卡index切换
 			tabChange(index) {
 				this.TabCur = index;
+			},
+			//返回首页
+			goBack() {
+				uni.navigateBack({
+					url: "../index/index"
+				});
 			}
 		}
 	}

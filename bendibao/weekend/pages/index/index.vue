@@ -1,16 +1,16 @@
 <template>
-	<div class="page">
+	<div class="page" @scroll="onScroll()">
 		<div class="header">
 			<div class="search">
 				<div class="header-address" @click="switchCity()">
 					<img src="@/static/形状 1358.png" alt="">
-					<span>深圳</span>
+					<span>{{cityCul}}</span>
 					<div>
 						<img src="@/static/矢量智能对象.png" alt="">
 					</div>
 				</div>
 				<input type="text" placeholder="周末去哪儿玩"
-					placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,">
+					placeholder-style="color:#999999,font-size:0.28rem,font-weight:500," @click="goToSearch()">
 			</div>
 			<div>
 				<img src="@/static/形状 2.png" alt="">
@@ -32,7 +32,7 @@
 			<div class="scenic-spot">
 				<div class="scenic-title">
 					<div>人气景点</div>
-					<div>
+					<div @click="goToScenic()">
 						查看全部
 						<img src="@/static/形状 13.png" alt="">
 					</div>
@@ -108,13 +108,21 @@
 			WucTab
 		},
 		mounted() {
-
+			window.addEventListener('scroll', this.onScroll, true)
+			// this.boxTop = this.$refs.tabList.offsetTop;
 		},
-		onLoad(option){
-		        console.log(option.city)
-},
+		// 从当前页面实例中获取定位城市
+		onLoad(option) {
+			let pages = getCurrentPages();
+			let currPage = pages[pages.length - 1]; // 当前页的实例
+			console.log(currPage)
+			this.cityCul = currPage.$vm.cityCul
+		},
 		data() {
 			return {
+				//当前城市
+				cityCul: "深圳",
+				//导航列表
 				navList: [
 					["../../static/组 4.png", "景点门票"],
 					["../../static/组 6.png", "亲子活动"],
@@ -125,24 +133,30 @@
 					["../../static/形状 12.png", "跟团旅游"],
 					["../../static/矢量智能对象2.png", "展馆展览"],
 				],
+				//景点列表
 				scenicList: [
 					["../../static/图层 548.png", "深圳欢乐谷", "￥", "198", "起"],
 					["../../static/图层 549.png", "深圳欢乐谷", "￥", "198", "起"],
 					["../../static/图层 548.png", "深圳欢乐谷", "￥", "198", "起"],
 				],
+				//swiper动画效果
 				indicatorDots: false,
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
+				//城市列表
 				cityList: [
 					["../../static/图层 31.png", "广州"],
 					["../../static/图层 32.png", "惠州"],
 					["../../static/图层 36.png", "东莞"],
 				],
+				//其他 城市列表
 				otherCityList: [
 					"东莞", "佛山", "肇庆", "河源", "潮汕", "梅州"
 				],
+				//当前tab的index
 				TabCur: 0,
+				//选项卡列表
 				tabList: [{
 					name: '全部'
 				}, {
@@ -154,6 +168,7 @@
 				}, {
 					name: '玩乐'
 				}],
+				//选项卡所有数据
 				allList: [
 					[
 						["../../static/图层 43.png",
@@ -182,13 +197,33 @@
 			}
 		},
 		methods: {
+			// onScroll() {
+			// 	console.log(1)
+			// },
+			//tab切换
 			tabChange(index) {
 				this.TabCur = index;
 			},
+			//跳转到切换城市
 			switchCity() {
 				console.log(1)
 				uni.navigateTo({
-				    url: '../switchCity/switchCity'
+					url: '../switchCity/switchCity',
+					animationType: 'pop-in',
+					animationDuration: 700
+				});
+			},
+			//跳转到搜索页面
+			goToSearch() {
+				uni.navigateTo({
+					url: '../search/search'
+				});
+			},
+			//跳转到景点页面
+			goToScenic() {
+				console.log(1)
+				uni.navigateTo({
+					url: '../weekend-list/weekend-list'
 				});
 			}
 		}

@@ -1,0 +1,43 @@
+.header {
+  position: relative; }
+
+.header-select .select-drop {
+  position: absolute;
+  right: 4%;
+  top: 7%; }
+
+.header-select .selected {
+  opacity: 1;
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0rem 0.06rem 0.12rem 0rem rgba(0, 0, 0, 0.16);
+  text-align: center;
+  opacity: 1;
+  font-size: 0.26rem;
+  font-weight: 500;
+  color: #313131;
+  padding: 0.1rem 0.2rem; }
+
+.header-select .selected img {
+  width: 0.14rem;
+  height: 0.1rem;
+  opacity: 1;
+  /* float: left; */
+  padding-left: 0.1rem; }
+
+.header-select .vacation-list {
+  text-align: center;
+  height: 0rem;
+  transition: all 0.5s linear;
+  overflow: hidden;
+  margin-top: 0.1rem;
+  background: #fff;
+  border-radius: 0.1rem 0.1rem 0.2rem 0.2rem;
+  font-size: 0.26rem;
+  overflow-y: auto; }
+
+.header-select .vacation-list > div {
+  margin-top: 0.1rem; }
+
+.header-select .show {
+  height: 1.5rem; }

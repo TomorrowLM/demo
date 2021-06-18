@@ -1,13 +1,12 @@
 <template>
 	<div class="page">
 		<div class="search">
-			<img src="../../static/形状 1_2.png" alt="">
+			<img src="../../static/形状 1_2.png" alt="" @click="goBack()">
 			<div class="search-btn">
-				水上乐园
+				{{searchVal}}
 				<img src="../../static/X.png" alt="">
 			</div>
-			<input type="text" placeholder=""
-				placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,">
+			<input type="text" placeholder="" placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,">
 			<img src="../../static/矢量智能对象_1.png" alt="">
 		</div>
 		<div class="main">
@@ -28,35 +27,46 @@
 
 <script>
 	export default {
+		onLoad(option) {
+			console.log(option)
+			this.searchVal = option.searchVal
+		},
 		data() {
 			return {
-				cardList:[
+				cardList: [
 					[
-					"../../static/图层 549.png",
-					"【湾区之光摩天轮】128米亲海全景太空,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅 湾区之光摩天轮】128米亲海全景太空舱,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅",
-					"￥",
-					"118",
-					"￥228"
+						"../../static/图层 549.png",
+						"【湾区之光摩天轮】128米亲海全景太空,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅 湾区之光摩天轮】128米亲海全景太空舱,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅",
+						"￥",
+						"118",
+						"￥228"
 					],
 					[
-					"../../static/图层 549.png",
-					"【湾区之光摩天轮】128米亲海全景太空,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅 湾区之光摩天轮】128米亲海全景太空舱,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅",
-					"￥",
-					"118",
-					"￥228"
+						"../../static/图层 549.png",
+						"【湾区之光摩天轮】128米亲海全景太空,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅 湾区之光摩天轮】128米亲海全景太空舱,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅",
+						"￥",
+						"118",
+						"￥228"
 					],
 					[
-					"../../static/图层 549.png",
-					"【湾区之光摩天轮】128米亲海全景太空,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅 湾区之光摩天轮】128米亲海全景太空舱,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅",
-					"￥",
-					"118",
-					"￥228"
+						"../../static/图层 549.png",
+						"【湾区之光摩天轮】128米亲海全景太空,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅 湾区之光摩天轮】128米亲海全景太空舱,360°通透玻璃浪漫天际与梦幻海湾尽收眼底,开启寻光之旅",
+						"￥",
+						"118",
+						"￥228"
 					]
-				]
+				],
+				//input框的value值
+				searchVal: ""
 			}
 		},
 		methods: {
-
+			goBack() {
+				//跳转到搜索页面
+				uni.navigateBack({
+					url: "../search/search"
+				});
+			}
 		}
 	}
 </script>

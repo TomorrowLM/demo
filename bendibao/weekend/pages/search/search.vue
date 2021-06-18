@@ -1,8 +1,10 @@
 <template>
 	<div class="page">
-		<div class="search">		
-				<img src="../../static/矢量智能对象_1.png" alt="">
-			<input type="text" placeholder="周末去哪儿玩" placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,">			
+		<div class="search">
+			<img src="../../static/矢量智能对象_1.png" alt="">
+			<input type="text" placeholder="周末去哪儿玩" placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,"
+				v-model:value ="searchVal"
+				@confirm="goToDetail()">
 			<img src="../../static/X.png" alt="">
 			<span>取消</span>
 		</div>
@@ -24,15 +26,22 @@
 	export default {
 		data() {
 			return {
-recommendList:["Boss直播推荐 大牌酒店钜惠","火车票","酒店","汽车票","特价机票","民宿","一日游","一日游","自由行","邮轮"]
+				//推荐列表
+				recommendList: ["Boss直播推荐 大牌酒店钜惠", "火车票", "酒店", "汽车票", "特价机票", "民宿", "一日游", "一日游", "自由行", "邮轮"],
+				searchVal: ""
 			}
 		},
 		methods: {
-
+			//跳转到搜索详情页面
+			goToDetail() {
+				uni.navigateTo({	
+				    url: '../list/list?searchVal='+this.searchVal
+				});
+			}
 		}
 	}
 </script>
 
 <style>
-@import url("@/css/search.css");
+	@import url("@/css/search.css");
 </style>

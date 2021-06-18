@@ -4,4 +4,8 @@ img {
 
   .flex {
   	display: flex;
+	justify-content: space-between;
+  }
+  html,body,div,span,p{
+  	font-size: 0.26rem;
   }

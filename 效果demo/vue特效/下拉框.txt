@@ -1,15 +1,14 @@
 <div class="select-drop">
-	<div class="selected" v-model="vacationCul" @click="vacationDrop">
-		{{vacationCul}}
-		<img src="@/static/路径 10.png" alt="">
-	</div>
-	<div class="vacation-list" :class="{show:vacationIsDrop}">
-		<div v-for="(item,index) in vacationList" @click="vacationRise(item)">
-			{{item}}
-		</div>
-	</div>
-</div>
-
+				<div class="selected" v-model="vacationCul" @click="vacationDrop">
+					{{vacationCul}}
+					<img src="@/static/形状 1 拷贝.png" alt="">
+				</div>
+				<div class="vacation-list" :class="{show:vacationIsDrop}">
+					<div v-for="(item,index) in vacationList" @click="vacationRise(item)">
+						{{item}}
+					</div>
+				</div>
+			</div>
 
 <script>
 	export default {
@@ -38,25 +37,24 @@
 	.header {
 	position: relative;
 }
-
+.select-drop {
+	position: absolute;
+	right: 4%;
+	top: 7%;
+}
 .selected {
-	width: 1.2rem;
-	height: 0.46rem;
 	opacity: 1;
 	background: #ffffff;
-	border-radius: 0.24rem;
+	border-radius: 0.5rem;
 	box-shadow: 0rem 0.06rem 0.12rem 0rem rgba(0, 0, 0, 0.16);
 	text-align: center;
-	line-height: 0.46rem;
-
 	opacity: 1;
 	font-size: 0.26rem;
 	font-family: .PingFang SC, .PingFang SC-Medium;
 	font-weight: 500;
-	/* text-align: left; */
 	color: #313131;
+	padding:0.1rem 0.2rem; 
 }
-
 .selected img {
 	width: 0.14rem;
 	height: 0.1rem;
@@ -64,14 +62,6 @@
 	/* float: left; */
 	padding-left: 0.1rem;
 }
-
-.select-drop {
-	position: absolute;
-	right: 4%;
-	top: 7%;
-	height: 2rem;
-}
-
 .vacation-list {
 	text-align: center;
 	height: 0rem;
@@ -83,12 +73,9 @@
 	font-size: 0.26rem;
 	overflow-y: auto;
 }
-
 .vacation-list>div {
-
 	margin-top: 0.1rem;
 }
-
 .show {
 	height: 1.5rem;
 }
