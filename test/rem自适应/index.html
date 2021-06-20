@@ -1,47 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        /* body{
-            font-size: 10px;
-        } */
-
-        div{
-            width: 0.2rem;
-            height: 0.2rem;
-            background-color: aqua;
-        }
-        span{
-            font-size: 0.32rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .header{
+      color: red;
+    }
+  </style>
 </head>
-<body>
-    <div>
-        <span>rem自适应</span>
-    </div>
-</body>
- <script type="text/javascript">
-     　　(function (doc, win) {
-  var docEl = doc.documentElement,
-    resizeEvt = "orientationchange" in window ? "orientationchange" : "resize",
-    recalc = function () {
-      var clientWidth = docEl.clientWidth;
-      if (!clientWidth) return;
-      if (clientWidth >= 750) {
-        docEl.style.fontSize = 100 * (clientWidth / 750) + "px";
-      } else {
-        docEl.style.fontSize = 100 * (clientWidth / 750) + "px";
-      }
-    };
+<link rel="stylesheet" href="../index.css">
 
-  if (!doc.addEventListener) return;
-  win.addEventListener(resizeEvt, recalc, false);
-  doc.addEventListener("DOMContentLoaded", recalc, false);
-})(document, window);
-   </script>
+<body>
+    <span class="header">rem自适应</span>
+</body>
+<script type="text/javascript">
+  // TODO
+  var a = /a{1,2}/g;
+  console.log(a.test("1,2"))
+    (function (doc, win) {
+      var docEl = doc.documentElement,
+        resizeEvt = "orientationchange" in window ? "orientationchange" : "resize",
+        recalc = function () {
+          var clientWidth = docEl.clientWidth;
+          if (!clientWidth) return;
+          if (clientWidth >= 750) {
+            docEl.style.fontSize = 100 * (clientWidth / 750) + "px";
+          } else {
+            docEl.style.fontSize = 100 * (clientWidth / 750) + "px";
+          }
+        };
+
+      if (!doc.addEventListener) return;
+      win.addEventListener(resizeEvt, recalc, false);
+      doc.addEventListener("DOMContentLoaded", recalc, false);
+    })(document, window);
+</script>
+
 </html>

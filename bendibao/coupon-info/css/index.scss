@@ -96,7 +96,7 @@
 		.province-list {
 			text-align: center;
 			height: 0rem;
-			transition: all 0.5s linear;
+			transition: all 0.3s linear;
 			overflow: hidden;
 			margin-top: 0.1rem;
 			background: #fff;
@@ -228,7 +228,13 @@
 	color: #5095dd;
 }
 ::v-deep uni-swiper{
-	height: 30rem;
+	// height: auto;
+}
+::v-deep uni-swiper-item{
+	overflow: initial;
+}
+::v-deep uni-swiper .uni-swiper-wrapper{
+	overflow: initial;
 }
 // subsidy
 	.rotate{
@@ -347,4 +353,105 @@
 		background: #e1e6f3;
 		margin-bottom: 0.5rem;
 	}
+}
+.subsidy-2{
+	.header{
+		margin:0.3rem 0;
+		display: flex;
+		img{
+			width: 0.22rem;
+			height: 0.32rem;
+			opacity: 1;
+		}
+		p{
+			opacity: 1;
+			font-size: 0.36rem;
+			font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+			font-weight: 700;
+			color: #000000;
+			float: left;
+			margin: -0.1rem 0.2rem;
+		}
+	}
+	.nav-btn{
+		display: flex;
+		justify-content: space-around;
+		flex-wrap: wrap;
+		div{
+			width: 3.06rem;
+			height: 0.78rem;
+			line-height: 0.78rem;
+			text-align: center;
+			opacity: 1;
+			background: #dae5f7;
+			border-radius: 0.39rem;
+			margin-bottom: 0.3rem;
+		}
+	}
+}
+.subsidy-3{
+		@extend .subsidy-1;
+}
+
+// score
+.score{
+	.header{
+		margin:0.3rem 0;
+		display: flex;
+		img{
+			width: 0.22rem;
+			height: 0.32rem;
+			opacity: 1;
+		}
+		p{
+			opacity: 1;
+			font-size: 0.36rem;
+			font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+			font-weight: 700;
+			color: #000000;
+			float: left;
+			margin: -0.1rem 0.2rem;
+		}
+	}
+	.score-table{		
+		opacity: 1;
+		background: #f5f3fe;
+		border-radius: 0.2rem;
+		padding-bottom: 0.4rem;
+		overflow: hidden;
+		table{
+			margin-top: 0.4rem;
+			width: 100%;
+			border-collapse: collapse;
+			th{
+				padding-bottom: 0.1rem;
+				opacity: 1;
+				font-size: 0.26rem;
+				font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+				font-weight: 500;
+				color: #999999;
+				// border: 1px solid #000;
+			}
+			td{
+				text-align: center;
+				margin-top:0.2rem;
+				padding: 0.1rem 0;
+				// border: 1px solid;
+			}
+			tr{
+			}
+			tr>td:last-of-type{
+				opacity: 1;
+				font-size: 0.28rem;
+				font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+				font-weight: 500;
+				text-align: center;
+				color: #5095dd;
+			}
+		}
+	}
+}
+// .subsidy-3
+.subsidy-4{
+		@extend .subsidy-3;
 }

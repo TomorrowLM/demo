@@ -1,0 +1,16 @@
+body {
+    font-size: 10px;
+  }
+
+  div {
+    width: 0.2rem;
+    height: 0.2rem;
+    background-color: aqua;
+  }
+
+  span {
+    font-size: 0.32rem;
+  }
+  .header{
+    font-size: 13px;
+  }

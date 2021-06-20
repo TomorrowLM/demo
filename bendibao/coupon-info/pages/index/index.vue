@@ -73,7 +73,7 @@
 										</div>
 										<img src="@/static/形状 2.png" alt=""  :class="[SubsidyCul1[index]?'rotate':'']">
 									</div>
-									<div class="body animated fadeInDown" v-show="SubsidyCul1[index]" :class="[!SubsidyCul1[index]?'fadeOutDown':'']">
+									<div class="body animated" v-show="SubsidyCul1[index]" :class="[!SubsidyCul1[index]?'fadeOutDown':'fadeInDown']">
 										<div>{{item[1]}}</div>
 										<div>{{item[2]}}</div>	
 										<div>{{item[3]}}</div>
@@ -94,9 +94,101 @@
 									</div>
 								</div>
 							</div>
+							<div class="subsidy-2">
+								<div class="header">
+										<img src="@/static/矩形 5 拷贝.png" alt="">
+										<p>应届毕业生生活补贴</p>
+								</div>
+								<div class="nav-btn">
+									<div v-for="(item,index) in navList">
+										{{item}}
+									</div>
+								</div>
+							</div>
+							<div class="subsidy-3">
+								<div v-for="(item,index) in subsidyList2">
+									<div class="header"  @click="selectList2(index)">
+										<div>
+											<img src="@/static/矩形 5 拷贝.png" alt="">
+											<p>{{item[0]}}</p>
+										</div>
+										<img src="@/static/形状 2.png" alt=""  :class="[SubsidyCul2[index]?'rotate':'']">
+									</div>
+									<div class="body animated" v-show="SubsidyCul2[index]" :class="[!SubsidyCul2[index]?'fadeOutDown':'fadeInDown']">
+										<div>{{item[1]}}</div>
+										<div>{{item[2]}}</div>	
+										<div>{{item[3]}}</div>
+										<div>{{item[4]}}</div>
+										<div class="footer">
+											<div>
+												<img src="@/static/时 间.png" alt="">
+												{{item[5]}}
+											</div>
+											<div>
+												<img src="@/static/纸业.png" alt="">
+												{{item[6]}}
+											</div>
+										</div>
+										<div class="line"></div>
+									</div>
+								</div>
+							</div>
+							<div class="score">
+								<div class="header">
+									<img src="@/static/矩形 5 拷贝.png" alt="">
+									<p>高考分数线</p>
+								</div>
+								<div class="score-table">
+									<table>
+										<tr>
+											<th v-for="(item,index) in scoreHeaderList">{{item}}</th>
+										</tr>
+										<tr v-for="(item,index) in scoreDeatilList">
+											<td>{{item[0]}}</td>
+											<td>{{item[1]}}</td>
+											<td>{{item[2]}}</td>
+											<td>{{item[3]}}</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="subsidy-4">
+								<div v-for="(item,index) in subsidyList3">
+									<div class="header"  @click="selectList3(index)">
+										<div>
+											<img src="@/static/矩形 5 拷贝.png" alt="">
+											<p>{{item[0]}}</p>
+										</div>
+										<img src="@/static/形状 2.png" alt=""  :class="[SubsidyCul3[index]?'rotate':'']">
+									</div>
+									<div class="body animated" v-show="SubsidyCul3[index]" :class="[!SubsidyCul3[index]?'fadeOutDown':'fadeInDown']">
+										<div>{{item[1]}}</div>
+										<div>{{item[2]}}</div>	
+										<div>{{item[3]}}</div>
+										<div>{{item[4]}}</div>
+										<div class="footer">
+											<div>
+												<img src="@/static/时 间.png" alt="">
+												{{item[5]}}
+											</div>
+											<div>
+												<img src="@/static/纸业.png" alt="">
+												{{item[6]}}
+											</div>
+										</div>
+										<div class="line"></div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</swiper-item>
 				</swiper>
+			</div>
+			<div class="footer">
+				<div>分享</div>
+				<div>
+					进入专题了解实时动态
+				</div>
 			</div>
 		</div>
 	</div>
@@ -145,6 +237,52 @@
 					]
 				],
 				SubsidyCul1: [true,false,false],
+				navList: ["南山工备案平台","南山案平台","南山复案平台","南山备案平台"],
+				subsidyList2: [
+					[
+						"应届毕业生生活补贴","人员范围：","北京中高风险地区来深人员","隔离要求：",
+						"1.对近14天内有高风险地区旅居史的来粤返粤人 员实施14天集中隔离医学观察，加大对5月30日 以来有北京新发地批发市场活动史的高风险人员 及其密切接触者的协查追踪力度。",
+						"领取入口","常见问题"
+					],
+					[
+						"应届毕业生生活补贴","人员范围：","北京中高风险地区来深人员","隔离要求：",
+						"1.对近14天内有高风险地区旅居史的来粤返粤人 员实施14天集中隔离医学观察，加大对5月30日 以来有北京新发地批发市场活动史的高风险人员 及其密切接触者的协查追踪力度。",
+						"领取入口","常见问题"
+					],
+					[
+						"应届毕业生生活补贴","人员范围：","北京中高风险地区来深人员","隔离要求：",
+						"1.对近14天内有高风险地区旅居史的来粤返粤人 员实施14天集中隔离医学观察，加大对5月30日 以来有北京新发地批发市场活动史的高风险人员 及其密切接触者的协查追踪力度。",
+						"领取入口","常见问题"
+					]
+				],
+				SubsidyCul2: [true,false,false],
+				scoreHeaderList: ["地区","年份","文科","详情"],
+				scoreDeatilList: [
+					["广东",2019,652,"详情"],
+					["湖北",2019,652,"详情"],
+					["广东",2019,652,"详情"],
+					["湖南",2019,652,"详情"],
+					["广东",2019,652,"详情"],
+				],
+				subsidyList3: [
+					[
+						"应届毕业生生活补贴","人员范围：","北京中高风险地区来深人员","隔离要求：",
+						"1.对近14天内有高风险地区旅居史的来粤返粤人 员实施14天集中隔离医学观察，加大对5月30日 以来有北京新发地批发市场活动史的高风险人员 及其密切接触者的协查追踪力度。",
+						"领取入口","常见问题"
+					],
+					[
+						"应届毕业生生活补贴","人员范围：","北京中高风险地区来深人员","隔离要求：",
+						"1.对近14天内有高风险地区旅居史的来粤返粤人 员实施14天集中隔离医学观察，加大对5月30日 以来有北京新发地批发市场活动史的高风险人员 及其密切接触者的协查追踪力度。",
+						"领取入口","常见问题"
+					],
+					[
+						"应届毕业生生活补贴","人员范围：","北京中高风险地区来深人员","隔离要求：",
+						"1.对近14天内有高风险地区旅居史的来粤返粤人 员实施14天集中隔离医学观察，加大对5月30日 以来有北京新发地批发市场活动史的高风险人员 及其密切接触者的协查追踪力度。",
+						"领取入口","常见问题"
+					]
+				],
+				SubsidyCul3: [true,false,false],
+			
 			}
 		},
 		methods: {
@@ -212,6 +350,12 @@
 			selectList1(index){
 				this.$set(this.SubsidyCul1,index,!this.SubsidyCul1[index]);
 				//第一个参数为数组，第二个参数为数组下标，第三个参数为设置的值，
+			},
+			selectList2(index){
+				this.$set(this.SubsidyCul2,index,!this.SubsidyCul2[index]);
+			},
+			selectList3(index){
+				this.$set(this.SubsidyCul3,index,!this.SubsidyCul3[index]);
 			}
 		}
 	}
