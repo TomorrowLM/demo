@@ -32,15 +32,27 @@
 
 .nav .nav-container > div:nth-of-type(1) {
   width: 40%;
+  font-size: 0.31rem;
+  font-family: PingFang SC, PingFang SC-Medium;
+  font-weight: 800;
+  color: #000000;
 }
 
 .nav .nav-container > div:nth-of-type(2) {
   width: 25%;
+  font-size: 0.31rem;
+  font-family: PingFang SC, PingFang SC-Medium;
+  font-weight: 800;
+  color: #000000;
 }
 
 .nav .nav-container > div:nth-of-type(3) {
   width: 25%;
   margin-left: 10%;
+  font-size: 0.31rem;
+  font-family: PingFang SC, PingFang SC-Medium;
+  font-weight: 800;
+  color: #000000;
 }
 
 .nav .nav-container img {
@@ -70,11 +82,7 @@
 
 .nav .select_label {
   font-size: 0.28rem;
-  font-family: PingFang SC, PingFang SC-Regular;
-  font-weight: 400;
-  color: #9a9a9a;
   float: left;
-  margin-top: 0.05rem;
 }
 
 .nav .select-2 .select_label {
@@ -244,6 +252,31 @@
   margin: 0.3rem;
 }
 
+.active-3 .body-1,
+.active-3 .body-2,
+.active-3 .body-3 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.active-3 .body-1 div,
+.active-3 .body-2 div,
+.active-3 .body-3 div {
+  margin: 0.3rem 0;
+}
+
+.active-3 .body-1 div:nth-of-type(2),
+.active-3 .body-2 div:nth-of-type(2),
+.active-3 .body-3 div:nth-of-type(2) {
+  font-size: 0.28rem;
+  font-family: PingFang SC, PingFang SC-Medium;
+  font-weight: 500;
+  text-align: left;
+  color: #666666;
+  margin-left: 0.8rem !important;
+}
+
 .active-4 {
   width: 7.5rem;
   opacity: 1;
@@ -411,6 +444,11 @@
   border-radius: 0.22rem;
   padding-left: 0.5rem;
   margin: 0.2rem 0;
+  font-size: 0.3rem;
+  font-family: PingFang SC, PingFang SC-Bold;
+  font-weight: 700;
+  text-align: left;
+  color: #333333;
 }
 
 .active-7 {
@@ -530,7 +568,7 @@
 }
 
 .active-7 .info .info-body div {
-  height: 1.2rem;
+  height: 1rem;
   overflow: hidden;
 }
 
@@ -685,7 +723,7 @@
 }
 
 .active-8 .info .info-body div {
-  height: 1.2rem;
+  height: 1rem;
   overflow: hidden;
 }
 
@@ -747,6 +785,7 @@
   font-family: PingFang SC, PingFang SC-Medium;
   font-weight: 500;
   color: #3b9639;
+  margin-bottom: 0.3rem;
 }
 
 .key img {

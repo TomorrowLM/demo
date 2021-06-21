@@ -1,26 +1,29 @@
-<wuc-tab :tab-list="tabList" :tabCur.sync="TabCur" @change="tabChange"></wuc-tab>
-				<swiper :current="TabCur" duration="300">
-					<swiper-item v-for="(item,index) in tabList" :key="index" @touchstart="touchStart($event,index)"
-						@touchend="touchEnd($event,index)">
-						<div>{{item.name}}</div>
-					</swiper-item>
-				</swiper>
+https://ask.dcloud.net.cn/article/38074
+
+
+<template>
+    <wuc-tab :tab-list="tabList" :tabCur.sync="TabCur" @change="tabChange"></wuc-tab>
+    <swiper :current="TabCur" duration="300">
+	<swiper-item v-for="(item,index) in tabList" :key="index" @touchstart="touchStart($event,index)"
+	@touchend="touchEnd($event,index)">
+		<div>{{item.name}}</div>
+	</swiper-item>
+</swiper>	
+</template>
 
 data{
 	touchStartX: 0, // 触屏起始点x  
 	touchStartY: 0, // 触屏起始点y 
-}
+}	
 
 method{
-
 	touchStart(e,index) {
 				console.log("触摸开始")
 				this.touchStartX = e.touches[0].clientX;
 				this.touchStartY = e.touches[0].clientY;
-			},
+	},
 	touchEnd(e,index) {
 				console.log("触摸结束")
-			
 				let deltaX = e.changedTouches[0].clientX - this.touchStartX;
 				let deltaY = e.changedTouches[0].clientY - this.touchStartY;
 				if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
@@ -45,5 +48,5 @@ method{
 				if(this.TabCur==-1){
 					this.TabCur=0
 				}
-			},
+	},
 }

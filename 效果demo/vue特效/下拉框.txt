@@ -1,40 +1,39 @@
-<div class="select-drop">
-				<div class="selected" v-model="vacationCul" @click="vacationDrop">
-					{{vacationCul}}
-					<img src="@/static/形状 1 拷贝.png" alt="">
-				</div>
-				<div class="vacation-list" :class="{show:vacationIsDrop}">
-					<div v-for="(item,index) in vacationList" @click="vacationRise(item)">
-						{{item}}
-					</div>
-				</div>
-			</div>
+    <div class="select-drop">
+      <div class="selected" v-model="vacationCul" @click="vacationDrop">
+        {{ vacationCul }}
+        <img src="@/static/形状 1 拷贝.png" alt="" />
+      </div>
+      <div class="vacation-list" :class="{ show: vacationIsDrop }">
+        <div v-for="(item, index) in vacationList" @click="vacationRise(item)">
+          {{ item }}
+        </div>
+      </div>
+    </div>
 
 <script>
-	export default {
-		data() {
-			return {
-				vacationCul:"全部",
-				vacationList:[1,2,3],
-				vacationIsDrop:false
-			}
-		},
-		methods: {
-			vacationDrop() {
-			
-				this.vacationIsDrop = !this.vacationIsDrop
-			},
-			vacationRise(item) {
-				this.vacationIsDrop = false
-				let old = this.vacationCul
-				this.vacationCul = item
-			},
-		}
-	}
+export default {
+  data() {
+    return {
+      vacationCul: "全部",
+      vacationList: [1, 2, 3],
+      vacationIsDrop: false,
+    };
+  },
+  methods: {
+    vacationDrop() {
+      this.vacationIsDrop = !this.vacationIsDrop;
+    },
+    vacationRise(item) {
+      this.vacationIsDrop = false;
+      let old = this.vacationCul;
+      this.vacationCul = item;
+    },
+  },
+};
 </script>
 
 <style>
-	.header {
+.header {
 	position: relative;
 }
 .select-drop {

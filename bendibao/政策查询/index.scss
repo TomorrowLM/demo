@@ -26,15 +26,27 @@
 
         >div:nth-of-type(1) {
             width: 40%;
+            font-size: 0.31rem;
+            font-family: PingFang SC, PingFang SC-Medium;
+            font-weight: 800;
+            color: #000000;
         }
 
         >div:nth-of-type(2) {
             width: 25%;
+            font-size: 0.31rem;
+            font-family: PingFang SC, PingFang SC-Medium;
+            font-weight: 800;
+            color: #000000;
         }
 
         >div:nth-of-type(3) {
             width: 25%;
             margin-left: 10%;
+            font-size: 0.31rem;
+            font-family: PingFang SC, PingFang SC-Medium;
+            font-weight: 800;
+            color: #000000;
         }
 
         img {
@@ -67,11 +79,8 @@
 
     .select_label {
         font-size: 0.28rem;
-        font-family: PingFang SC, PingFang SC-Regular;
-        font-weight: 400;
-        color: #9a9a9a;
         float: left;
-        margin-top: 0.05rem;
+        // margin-top: 0.05rem;
     }
 
     .select-2 .select_label {
@@ -250,6 +259,25 @@
     .active-3-body {
         @extend .active-1-body;
     }
+
+    .body-1,
+    .body-2,
+    .body-3 {
+        display: flex;
+
+        div {
+            margin: 0.3rem 0;
+        }
+
+        div:nth-of-type(2) {
+            font-size: 0.28rem;
+            font-family: PingFang SC, PingFang SC-Medium;
+            font-weight: 500;
+            text-align: left;
+            color: #666666;
+            margin-left: 0.8rem !important;
+        }
+    }
 }
 
 .active-4 {
@@ -412,6 +440,11 @@
             border-radius: 0.22rem;
             padding-left: 0.5rem;
             margin: 0.2rem 0;
+            font-size: 0.3rem;
+            font-family: PingFang SC, PingFang SC-Bold;
+            font-weight: 700;
+            text-align: left;
+            color: #333333;
         }
     }
 }
@@ -522,7 +555,7 @@
             padding-bottom: 0.3rem;
 
             div {
-                height: 1.2rem;
+                height: 1rem;
                 overflow: hidden;
             }
         }
@@ -663,7 +696,7 @@
             padding-bottom: 0.3rem;
 
             div {
-                height: 1.2rem;
+                height: 1rem;
                 overflow: hidden;
             }
         }
@@ -729,14 +762,16 @@
     font-family: PingFang SC, PingFang SC-Medium;
     font-weight: 500;
     color: #3b9639;
-    img{
+    margin-bottom: 0.3rem;
+    img {
         width: 0.14rem;
         height: 0.08rem;
         opacity: 1;
         margin-left: 0.3rem;
     }
 }
-.key1{
-        display: flex;
-        justify-content: space-around;
+
+.key1 {
+    display: flex;
+    justify-content: space-around;
 }

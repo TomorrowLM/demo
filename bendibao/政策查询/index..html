@@ -148,21 +148,21 @@
                         <div class="body">
                             <div class="body-1">
                                 <div>
-                                    <span>1</span>
+
                                     <span>活动时间</span>
                                 </div>
                                 <div>7月3日-8月30日</div>
                             </div>
                             <div class="body-2">
                                 <div>
-                                    <span>2</span>
+
                                     <span>活动地点</span>
                                 </div>
                                 <div>深圳市南山区</div>
                             </div>
                             <div class="body-3">
                                 <div>
-                                    <span>3</span>
+
                                     <span>活动门票</span>
                                 </div>
                                 <div>全天票成人220元</div>
@@ -417,7 +417,16 @@
             300;
         });
     });
-
+    //
+    $(".page").on('click',function(){
+        $(".select-list").slideUp();
+    })
+    //
+    $(".header").on('click',function(){
+        console.log($("this").siblings('.body'))
+        $(this).next('.body').slideToggle();
+    })
+    //
     $(".active-1-btn").on("click", function (e) {
         console.log(e.target);
         $(".active-1-btn>div").removeClass("active-btn");
@@ -426,10 +435,26 @@
     // active-tab
     $(".active-tab").on("click", function (e) {
         var index = $(".active-tab>div").index($(e.target))
-        $(".active-tab>div").addClass("active-tab-initial")
-        $(e.target).removeClass("active-tab-initial")
-        $(".active-tab-detail>div").addClass("hidden-tab")
-        $(".active-tab-detail>div").eq(index).removeClass("hidden-tab")
+        // var index1 = $(".active-tab").eq(0).children("div").index($(e.target))
+        // var index2 = $(".active-tab").eq(1).children("div").index($(e.target))
+        console.log(index)
+        if(index>2){
+            $(".active-tab").eq(1).children("div").addClass("active-tab-initial")   
+            console.log($(".active-tab").eq(1).children("div").eq(index-2))
+            $(".active-tab").eq(1).children("div").eq(index-3).removeClass("active-tab-initial") 
+
+            $(".active-tab-detail").eq(1).children("div").addClass("hidden-tab")
+            $(".active-tab-detail").eq(1).children("div").eq(index-3).removeClass("hidden-tab")
+        }
+        else{        
+            $(".active-tab").eq(0).children("div").addClass("active-tab-initial")   
+            console.log($(".active-tab").eq(1).children("div").eq(index-2))
+            $(".active-tab").eq(0).children("div").eq(index-3).removeClass("active-tab-initial") 
+
+            $(".active-tab-detail").eq(0).children("div").addClass("hidden-tab")
+            $(".active-tab-detail").eq(0).children("div").eq(index).removeClass("hidden-tab")
+        }
+
     })
     // more-info
     $(".loading").hide()
@@ -444,6 +469,7 @@
             $(".loading").hide()
         }, 1000)
     })
+
 </script>
 
 </html>

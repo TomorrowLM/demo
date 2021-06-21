@@ -1,0 +1,331 @@
+@charset "UTF-8";
+.page {
+  background-color: #F6F5F5;
+}
+
+.header {
+  opacity: 1;
+}
+
+.active-title img {
+  width: 0.27rem;
+  height: 0.4rem;
+  opacity: 1;
+  /* margin-top: 0.5rem; */
+  vertical-align: text-bottom;
+}
+
+.active-title span {
+  width: 1.48rem;
+  height: 0.37rem;
+  opacity: 1;
+  font-size: 0.38rem;
+  font-family: PingFang SC, PingFang SC-Bold;
+  font-weight: 700;
+  text-align: left;
+  color: #629cdb;
+  line-height: 0.92rem;
+  margin-left: 0.1rem;
+}
+
+.active-4 {
+  width: 7.5rem;
+  opacity: 1;
+  background: #ffffff;
+  border-radius: 0.22rem;
+  margin-top: 0.3rem;
+  overflow: hidden;
+}
+
+.active-4 .active-title {
+  margin-left: 0.3rem;
+}
+
+.active-4 .active-body {
+  margin-left: 0.3rem;
+}
+
+.active-4 .active-body img {
+  width: 0.1rem;
+  height: 0.18rem;
+  opacity: 1;
+}
+
+.active-4 .active-body > div:nth-of-type(1) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 0.3rem;
+}
+
+.active-4 .active-body > div:nth-of-type(1) div {
+  width: 25%;
+}
+
+.active-4 .active-body > div:nth-of-type(2) > div:nth-of-type(1) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.active-4 .active-body > div:nth-of-type(2) > div:nth-of-type(1) div {
+  width: 44%;
+  height: 0.81rem;
+  line-height: 0.81rem;
+  opacity: 1;
+  background: rgba(218, 229, 247, 0);
+  border: 0.02rem solid #85b5e6;
+  border-radius: 0.12rem;
+  text-align: center;
+  margin-bottom: 0.3rem;
+  margin-right: 0.3rem;
+  opacity: 1;
+  font-size: 0.26rem;
+  font-family: PingFang SC, PingFang SC-Medium;
+  font-weight: 500;
+  color: #629cdb;
+}
+
+.active-4 .active-body > div:nth-of-type(2) > div:nth-of-type(1) div img {
+  margin-left: 6%;
+}
+
+.active-4 .active-tab {
+  font-size: 0.3rem;
+  font-family: PingFang SC, PingFang SC-Bold;
+  font-weight: 700;
+  color: #000000;
+}
+
+.active-4 .active-tab-detail > div {
+  overflow: hidden;
+  -webkit-transform: translate(0%);
+          transform: translate(0%);
+  -webkit-transition: -webkit-transform 0.3s linear;
+  transition: -webkit-transform 0.3s linear;
+  transition: transform 0.3s linear;
+  transition: transform 0.3s linear, -webkit-transform 0.3s linear;
+  opacity: 1;
+}
+
+.active-4 .active-tab-initial {
+  opacity: 1;
+  font-size: 0.3rem;
+  font-family: PingFang SC, PingFang SC-Medium;
+  font-weight: 500;
+  color: #666666;
+}
+
+.active-4 .hidden-tab {
+  height: 0;
+  overflow: hidden;
+  -webkit-transform: translate(100%) !important;
+          transform: translate(100%) !important;
+}
+
+.active-7 {
+  overflow: hidden;
+}
+
+.active-7 .active-title {
+  margin: 0.3rem;
+}
+
+.active-7 .active-body {
+  width: 7.03rem;
+  opacity: 1;
+  background: #ffffff;
+  border-radius: 0.22rem;
+  margin: auto;
+  padding: 0.3rem;
+}
+
+.active-7 .active-tab {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.active-7 .active-tab div {
+  width: 25%;
+  height: 1.2rem;
+  line-height: 1rem;
+  text-align: center;
+  background: url("./static/矩形 4.png") no-repeat;
+  background-size: contain;
+  color: #ffffff;
+}
+
+.active-7 .active-tab-detail > div {
+  overflow: hidden;
+  -webkit-transform: translate(0%);
+          transform: translate(0%);
+  -webkit-transition: -webkit-transform 0.3s linear;
+  transition: -webkit-transform 0.3s linear;
+  transition: transform 0.3s linear;
+  transition: transform 0.3s linear, -webkit-transform 0.3s linear;
+  opacity: 1;
+}
+
+.active-7 .active-tab-initial {
+  opacity: 1;
+  font-size: 0.3rem;
+  font-family: PingFang SC, PingFang SC-Bold;
+  font-weight: 900;
+  color: #333333 !important;
+  background: initial !important;
+}
+
+.active-7 .hidden-tab {
+  height: 0;
+  overflow: hidden;
+  -webkit-transform: translate(100%) !important;
+          transform: translate(100%) !important;
+}
+
+.active-7 .info {
+  margin-bottom: 0.4rem;
+}
+
+.active-7 .info .info-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.active-7 .info .question-icon {
+  width: 0.38rem;
+  height: 0.38rem;
+  opacity: 1;
+  background: linear-gradient(-37deg, #14c5d1 0%, #4fe5aa 100%);
+  border-radius: 0.06rem;
+  opacity: 1;
+  font-size: 0.27rem;
+  font-family: PingFang SC, PingFang SC-Bold;
+  font-weight: 700;
+  text-align: center;
+  color: #ffffff;
+  margin-top: 0.05rem;
+  margin-right: 0.2rem;
+}
+
+.active-7 .info .querstion-title span {
+  width: 3.71rem;
+  height: 0.33rem;
+  opacity: 1;
+  font-size: 0.34rem;
+  font-family: PingFang SC, PingFang SC-Bold;
+  font-weight: 700;
+  text-align: left;
+  color: #333333;
+}
+
+.active-7 .info .info-body {
+  opacity: 1;
+  background: #f9fbfc;
+  border-radius: 0.18rem;
+  opacity: 1;
+  font-size: 0.28rem;
+  font-family: PingFang SC, PingFang SC-Medium;
+  font-weight: 500;
+  text-align: left;
+  color: #333333;
+  word-wrap: break-word;
+  padding: 0.3rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-bottom: 0.3rem;
+}
+
+.active-7 .info .info-body div {
+  height: 1rem;
+  overflow: hidden;
+}
+
+.active-7 .more-info {
+  width: 4.92rem;
+  height: 0.66rem;
+  line-height: 0.66rem;
+  text-align: center;
+  margin: auto;
+  opacity: 1;
+  background: #f0eff2;
+  border-radius: 0.33rem;
+}
+
+.active-7 .more-info img {
+  width: 0.23rem;
+  height: 0.23rem;
+  margin-left: 0.3rem;
+}
+
+.loading {
+  width: 2rem;
+  height: 0.5rem;
+  margin: 0 auto;
+  margin-bottom: 0.2rem;
+}
+
+.loading span {
+  display: inline-block;
+  width: 0.2rem;
+  height: 0.4rem;
+  border-radius: 0.1rem;
+  background: lightgreen;
+  -webkit-animation: load 1s ease infinite;
+          animation: load 1s ease infinite;
+}
+
+@-webkit-keyframes load {
+  0%,
+  100% {
+    height: 0.3rem;
+    background: lightgreen;
+  }
+  50% {
+    height: 0.3rem;
+    margin: -0.1rem 0;
+    background: lightblue;
+  }
+}
+
+@keyframes load {
+  0%,
+  100% {
+    height: 0.3rem;
+    background: lightgreen;
+  }
+  50% {
+    height: 0.3rem;
+    margin: -0.1rem 0;
+    background: lightblue;
+  }
+}
+
+.loading span:nth-child(2) {
+  -webkit-animation-delay: 0.2s;
+          animation-delay: 0.2s;
+}
+
+.loading span:nth-child(3) {
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+}
+
+.loading span:nth-child(4) {
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+
+.loading span:nth-child(5) {
+  -webkit-animation-delay: 0.8s;
+          animation-delay: 0.8s;
+}
+/*# sourceMappingURL=index.css.map */

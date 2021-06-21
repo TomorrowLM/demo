@@ -1,32 +1,39 @@
 https://blog.csdn.net/weixin_34320159/article/details/91378613
 https://blog.csdn.net/CodingNoob/article/details/69227600
 
-<div class="page"  ref="page">
-		<div class="tab-list flex" ref="tabList">
-						<div v-for="(item,index) in tabList">
-							<div @click="tabSwitch(index,item[1])">
-								{{item[0]}}
-								<div class="tab-bar animated bounceInLeft" v-show="index==tabCul"></div>
-							</div>
-						</div>
-					</div>
-</div>
+<template>
+  <div class="page" ref="page">
+    <div class="tab-list flex" ref="tabList">
+      <div v-for="(item, index) in tabList">
+        <div @click="tabSwitch(index, item[1])">
+          {{ item[0] }}
+          <div
+            class="tab-bar animated bounceInLeft"
+            v-show="index == tabCul"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 
 <script>
-		mounted() {
-			window.addEventListener('scroll', this.handleScroll, true)
-			this.boxTop = this.$refs.tabList.offsetTop;
-		},
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll, true);
+    this.boxTop = this.$refs.tabList.offsetTop;
+  },
 
-			handleScroll(e) {
-				var scrollTop = e.target.documentElement.scrollTop || e.target.body.scrollTop; // 执行代码
-				var boxTop = this.boxTop
-					if (scrollTop > boxTop) {
-						this.$refs.tabList.classList.add("fixed");
-					} else {
-						this.$refs.tabList.classList.remove("fixed");
-					}
-			},
+  handleScroll(e) {
+    var scrollTop =
+      e.target.documentElement.scrollTop || e.target.body.scrollTop; // 执行代码
+    var boxTop = this.boxTop;
+    if (scrollTop > boxTop) {
+      this.$refs.tabList.classList.add("fixed");
+    } else {
+      this.$refs.tabList.classList.remove("fixed");
+    }
+  },
 </script>
 
 

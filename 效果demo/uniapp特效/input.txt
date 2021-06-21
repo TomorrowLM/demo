@@ -1,13 +1,15 @@
-<div class="page">
-		<div class="search">
-			<img src="../../static/矢量智能对象_1.png" alt="">
-			<input type="text" placeholder="周末去哪儿玩"
-				placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,">
-			<img src="../../static/X.png" alt="">
-			<span>取消</span>
-		</div>
-		
-	</div>
+    <div class="page">
+      <div class="search">
+        <img src="../../static/矢量智能对象_1.png" alt="" />
+        <input
+          type="text"
+          placeholder="周末去哪儿玩"
+          placeholder-style="color:#999999,font-size:0.28rem,font-weight:500,"
+        />
+        <img src="../../static/X.png" alt="" />
+        <span>取消</span>
+      </div>
+    </div>
 
 
 .search {

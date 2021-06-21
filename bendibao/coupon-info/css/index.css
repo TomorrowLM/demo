@@ -1,43 +1,539 @@
 .header {
-  position: relative; }
+  position: relative;
+}
 
 .header-select .select-drop {
   position: absolute;
   right: 4%;
-  top: 7%; }
+  top: 7%;
+}
 
 .header-select .selected {
   opacity: 1;
   background: #ffffff;
   border-radius: 0.5rem;
-  box-shadow: 0rem 0.06rem 0.12rem 0rem rgba(0, 0, 0, 0.16);
+  -webkit-box-shadow: 0rem 0.06rem 0.12rem 0rem rgba(0, 0, 0, 0.16);
+          box-shadow: 0rem 0.06rem 0.12rem 0rem rgba(0, 0, 0, 0.16);
   text-align: center;
   opacity: 1;
   font-size: 0.26rem;
   font-weight: 500;
   color: #313131;
-  padding: 0.1rem 0.2rem; }
+  padding: 0.1rem 0.2rem;
+}
 
 .header-select .selected img {
   width: 0.14rem;
   height: 0.1rem;
   opacity: 1;
   /* float: left; */
-  padding-left: 0.1rem; }
+  padding-left: 0.1rem;
+}
 
-.header-select .vacation-list {
+.header-select .headerSelect-list {
   text-align: center;
   height: 0rem;
+  -webkit-transition: all 0.5s linear;
   transition: all 0.5s linear;
   overflow: hidden;
   margin-top: 0.1rem;
   background: #fff;
   border-radius: 0.1rem 0.1rem 0.2rem 0.2rem;
   font-size: 0.26rem;
-  overflow-y: auto; }
+  overflow-y: auto;
+}
 
-.header-select .vacation-list > div {
-  margin-top: 0.1rem; }
+.header-select .headerSelect-list > div {
+  margin-top: 0.1rem;
+}
 
 .header-select .show {
-  height: 1.5rem; }
+  height: 1.5rem;
+}
+
+.select-card {
+  width: 7rem;
+  height: 1rem;
+  background-color: #fff;
+  border-radius: 0.3rem;
+  margin: auto;
+  margin-top: -0.5rem;
+  -webkit-box-shadow: 2px 2px 0.2rem #33333359;
+          box-shadow: 2px 2px 0.2rem #33333359;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  z-index: 1;
+  line-height: 1rem;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  padding: 0 1rem;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.select-card .select-province .select-drop {
+  right: 4%;
+  top: 7%;
+}
+
+.select-card .select-province .selected {
+  text-align: center;
+  opacity: 1;
+  font-size: 0.26rem;
+  font-weight: 500;
+  color: #313131;
+  width: 1rem;
+}
+
+.select-card .select-province .selected img {
+  width: 0.14rem;
+  height: 0.1rem;
+  opacity: 1;
+  padding-left: 0.3rem;
+}
+
+.select-card .select-province .province-list {
+  text-align: center;
+  height: 0rem;
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+  overflow: hidden;
+  margin-top: 0.1rem;
+  background: #fff;
+  border-radius: 0.1rem 0.1rem 0.1rem 0.1rem;
+  font-size: 0.26rem;
+  overflow-y: auto;
+}
+
+.select-card .select-province .province-list > div {
+  height: 0.5rem;
+}
+
+.select-card .select-province .show {
+  height: 1.5rem;
+}
+
+.select-card .select-city .select-drop {
+  right: 4%;
+  top: 7%;
+}
+
+.select-card .select-city .selected {
+  text-align: center;
+  opacity: 1;
+  font-size: 0.26rem;
+  font-weight: 500;
+  color: #313131;
+  width: 1rem;
+}
+
+.select-card .select-city .selected img {
+  width: 0.14rem;
+  height: 0.1rem;
+  opacity: 1;
+  padding-left: 0.3rem;
+}
+
+.select-card .select-city .city-list {
+  text-align: center;
+  height: 0rem;
+  -webkit-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+  overflow: hidden;
+  margin-top: 0.1rem;
+  background: #fff;
+  border-radius: 0.1rem 0.1rem 0.1rem 0.1rem;
+  font-size: 0.26rem;
+  overflow-y: auto;
+}
+
+.select-card .select-city .city-list > div {
+  height: 0.5rem;
+}
+
+.select-card .select-city .show {
+  height: 1.5rem;
+}
+
+.main {
+  margin: 0.3rem;
+}
+
+.news .title img {
+  width: 0.22rem;
+  height: 0.32rem;
+  opacity: 1;
+}
+
+.news .title span {
+  width: 1.42rem;
+  height: 0.34rem;
+  opacity: 1;
+  font-size: 0.36rem;
+  font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+  font-weight: 700;
+  text-align: left;
+  color: #000000;
+  line-height: 0.77rem;
+  margin-left: 0.1rem;
+}
+
+.news .info {
+  background-color: #fff;
+  border-radius: 0.3rem;
+  margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  padding: 0 0.3rem;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 6.74rem;
+  opacity: 1;
+  background: #f5f3fe;
+  border-radius: 0.2rem;
+  padding: 0.1rem 0;
+}
+
+.news .info img {
+  width: 0.35rem;
+  height: 0.42rem;
+  opacity: 1;
+  margin-top: 0.15rem;
+}
+
+.news .info span {
+  opacity: 1;
+  font-size: 0.28rem;
+  font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+  font-weight: 700;
+  text-align: left;
+  color: #5095dd;
+  line-height: 0.77rem;
+  margin-left: -0.6rem;
+}
+
+.wuc-tab {
+  text-align: center;
+}
+
+::v-deep .wuc-tab-item {
+  padding: 0;
+  margin: 0 56px;
+  opacity: 1;
+  font-size: 0.3rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  color: #000000;
+}
+
+::v-deep .wuc-tab-item.cur {
+  opacity: 1;
+  font-size: 0.3rem;
+  font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+  font-weight: 700;
+  color: #5095dd;
+}
+
+.rotate {
+  -webkit-transform: rotate(90deg) !important;
+          transform: rotate(90deg) !important;
+}
+
+.subsidy-1, .subsidy-3, .subsidy-4 {
+  opacity: 1;
+  background: #f5f3fe;
+  border-radius: 0.2rem;
+  margin-top: 0.3rem;
+  padding: 0.3rem 0.4rem 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  overflow: hidden;
+}
+
+.subsidy-1 .header, .subsidy-3 .header, .subsidy-4 .header {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 0.3rem;
+}
+
+.subsidy-1 .header > img:last-of-type, .subsidy-3 .header > img:last-of-type, .subsidy-4 .header > img:last-of-type {
+  width: 0.22rem;
+  height: 0.32rem;
+  opacity: 1;
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+  width: 0.15rem;
+  height: 0.25rem;
+  -webkit-transition: -webkit-transform 1s ease-in;
+  transition: -webkit-transform 1s ease-in;
+  transition: transform 1s ease-in;
+  transition: transform 1s ease-in, -webkit-transform 1s ease-in;
+}
+
+.subsidy-1 .header div img, .subsidy-3 .header div img, .subsidy-4 .header div img {
+  width: 0.22rem;
+  height: 0.32rem;
+  opacity: 1;
+  margin-right: 0.2rem;
+}
+
+.subsidy-1 .header div p, .subsidy-3 .header div p, .subsidy-4 .header div p {
+  display: inline-block;
+  float: right;
+  opacity: 1;
+  font-size: 0.32rem;
+  font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+  font-weight: 700;
+  color: #000000;
+  margin-top: -0.06rem;
+}
+
+.subsidy-1 .body > div:nth-of-type(1), .subsidy-3 .body > div:nth-of-type(1), .subsidy-4 .body > div:nth-of-type(1) {
+  opacity: 1;
+  font-size: 0.3rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  text-align: left;
+  margin: 0.2rem 0 0.1rem 0;
+}
+
+.subsidy-1 .body > div:nth-of-type(2), .subsidy-3 .body > div:nth-of-type(2), .subsidy-4 .body > div:nth-of-type(2) {
+  font-size: 0.28rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  color: #555555;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px #E1E6F3 solid;
+}
+
+.subsidy-1 .body > div:nth-of-type(3), .subsidy-3 .body > div:nth-of-type(3), .subsidy-4 .body > div:nth-of-type(3) {
+  opacity: 1;
+  font-size: 0.3rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  color: #000000;
+  margin: 0.3rem 0 0.1rem 0;
+}
+
+.subsidy-1 .body > div:nth-of-type(4), .subsidy-3 .body > div:nth-of-type(4), .subsidy-4 .body > div:nth-of-type(4) {
+  font-size: 0.28rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  color: #555555;
+  padding-bottom: 0.3rem;
+}
+
+.subsidy-1 .body > div:nth-of-type(5), .subsidy-3 .body > div:nth-of-type(5), .subsidy-4 .body > div:nth-of-type(5) {
+  font-size: 0.28rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  color: #555555;
+  padding-bottom: 0.3rem;
+}
+
+.subsidy-1 .footer, .subsidy-3 .footer, .subsidy-4 .footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.subsidy-1 .footer > div, .subsidy-3 .footer > div, .subsidy-4 .footer > div {
+  width: 1.92rem;
+  height: 0.7rem;
+  line-height: 0.7rem;
+  text-align: center;
+  opacity: 1;
+  background: #dae5f7;
+  border-radius: 0.35rem;
+  opacity: 1;
+  font-size: 0.26rem;
+  font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+  font-weight: 700;
+  color: #5095dd;
+  margin-right: 0.3rem;
+}
+
+.subsidy-1 .footer > div img, .subsidy-3 .footer > div img, .subsidy-4 .footer > div img {
+  width: 0.25rem;
+  height: 0.25rem;
+  opacity: 1;
+  margin-right: 0.1rem;
+}
+
+.subsidy-1 .line, .subsidy-3 .line, .subsidy-4 .line {
+  width: 6.14rem;
+  height: 0.02rem;
+  opacity: 1;
+  background: #e1e6f3;
+  margin-bottom: 0.5rem;
+}
+
+.subsidy-2 .header {
+  margin: 0.3rem 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.subsidy-2 .header img {
+  width: 0.22rem;
+  height: 0.32rem;
+  opacity: 1;
+}
+
+.subsidy-2 .header p {
+  opacity: 1;
+  font-size: 0.36rem;
+  font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+  font-weight: 700;
+  color: #000000;
+  float: left;
+  margin: -0.1rem 0.2rem;
+}
+
+.subsidy-2 .nav-btn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.subsidy-2 .nav-btn div {
+  width: 3.06rem;
+  height: 0.78rem;
+  line-height: 0.78rem;
+  text-align: center;
+  opacity: 1;
+  background: #dae5f7;
+  border-radius: 0.39rem;
+  margin-bottom: 0.3rem;
+  color: #5095dd;
+}
+
+.score .header {
+  margin: 0.3rem 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.score .header img {
+  width: 0.22rem;
+  height: 0.32rem;
+  opacity: 1;
+}
+
+.score .header p {
+  opacity: 1;
+  font-size: 0.36rem;
+  font-family: PingFang SC Bold, PingFang SC Bold-Bold;
+  font-weight: 700;
+  color: #000000;
+  float: left;
+  margin: -0.1rem 0.2rem;
+}
+
+.score .score-table {
+  opacity: 1;
+  background: #f5f3fe;
+  border-radius: 0.2rem;
+  padding-bottom: 0.4rem;
+  overflow: hidden;
+}
+
+.score .score-table table {
+  margin-top: 0.4rem;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.score .score-table table th {
+  padding-bottom: 0.1rem;
+  opacity: 1;
+  font-size: 0.26rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  color: #999999;
+}
+
+.score .score-table table td {
+  text-align: center;
+  margin-top: 0.2rem;
+  padding: 0.1rem 0;
+}
+
+.score .score-table table tr > td:last-of-type {
+  opacity: 1;
+  font-size: 0.28rem;
+  font-family: PingFang SC Medium, PingFang SC Medium-Medium;
+  font-weight: 500;
+  text-align: center;
+  color: #5095dd;
+}
+
+.subsidy-4 {
+  background-color: white;
+  padding: 0.3rem 0;
+}
+
+.subsidy-4 .body {
+  background-color: #F5F3FE;
+  /* box-sizing: border-box; */
+  border-radius: 0.2rem;
+  padding: 0.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.subsidy-4 .header > img:last-of-type {
+  margin-right: 0.3rem;
+}
+
+.footer-btn {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 100%;
+  position: relative;
+}
+
+.footer-btn div {
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.7rem;
+  background-color: #5395de;
+  color: white;
+  font-size: 0.32rem;
+}
+
+.footer-btn div:first-of-type {
+  padding: 0.2rem 1rem;
+}
+
+.footer-btn img {
+  width: 0.3rem;
+  height: 0.3rem;
+  position: absolute;
+  top: 36%;
+  left: 18%;
+}
+
+.footer-btn span {
+  position: absolute;
+  top: 31%;
+  left: 9%;
+}
+/*# sourceMappingURL=index.css.map */
