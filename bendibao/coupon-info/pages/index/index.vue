@@ -4,7 +4,7 @@
 			<img src="@/static/1.png" alt="">
 			<div class="header-select">
 				<div class="select-drop">
-					<div class="selected" v-model="headerSelectCul" @click="headerSelectDrop()">
+					<div class="selected" v-model="headerSelectCul" @click.stop="headerSelectDrop()">
 						{{headerSelectCul}}
 						<img src="@/static/形状 1 拷贝.png" alt="">
 					</div>
@@ -22,7 +22,7 @@
 			</div>
 			<div class="select-province">
 				<div class="select-drop">
-					<div class="selected" v-model="provinceCul" @click="provinceDrop">
+					<div class="selected" v-model="provinceCul" @click.stop="provinceDrop">
 						{{provinceCul}}
 						<img src="@/static/形状 1 拷贝.png" alt="">
 					</div>
@@ -35,7 +35,7 @@
 			</div>
 			<div class="select-city">
 				<div class="select-drop">
-					<div class="selected" v-model="cityCul" @click="cityDrop">
+					<div class="selected" v-model="cityCul" @click.stop="cityDrop">
 						{{cityCul}}
 						<img src="@/static/形状 1 拷贝.png" alt="">
 					</div>
@@ -60,7 +60,7 @@
 			</div>
 			<div class="tab">
 				<wuc-tab :tab-list="tabList" :tabCur.sync="TabCur" @change="tabChange"></wuc-tab>
-				<swiper :current="TabCur" duration="300">
+				<swiper :current="TabCur" duration="300"  ref="main" @change="tabSwiperChange" :style="{height:swiperHeight+'rem'}">
 					<swiper-item v-for="(item,index) in tabList" :key="index" @touchstart="touchStart($event,index)"
 						@touchend="touchEnd($event,index)">
 						<div v-show="index==0">
@@ -166,7 +166,7 @@
 										<div>{{item[2]}}</div>	
 										<div>{{item[3]}}</div>
 										<div>{{item[4]}}</div>
-										<div class="footer">
+<!-- 										<div class="footer">
 											<div>
 												<img src="@/static/时 间.png" alt="">
 												{{item[5]}}
@@ -175,21 +175,22 @@
 												<img src="@/static/纸业.png" alt="">
 												{{item[6]}}
 											</div>
-										</div>
-										<div class="line"></div>
+										</div> -->
+										<!-- <div class="line"></div> -->
 									</div>
+								</div>
+							</div>
+							<div class="footer-btn">
+								<div><span>分享</span><img src="@/static/分 享 (1).png" alt=""></div>
+								<div>
+									进入专题了解实时动态
 								</div>
 							</div>
 						</div>
 					</swiper-item>
 				</swiper>
 			</div>
-			<div class="footer">
-				<div>分享</div>
-				<div>
-					进入专题了解实时动态
-				</div>
-			</div>
+
 		</div>
 	</div>
 </template>
@@ -203,13 +204,13 @@
 		data() {
 			return {
 				headerSelectCul: "深圳",
-				headerSelectList: [1, 2, 3],
+				headerSelectList: ["四川", "云南", "广东"],
 				headerSelectIsDrop: false,
 				provinceCul: "浙江",
 				provinceList: ["四川", "云南", "广东"],
 				provinceIsDrop: false,
 				cityCul: "杭州",
-				cityList: [1, 2, 3],
+				cityList: ["四川", "云南", "广东"],
 				cityIsDrop: false,
 				TabCur: 0,
 				tabList: [{
@@ -282,10 +283,21 @@
 					]
 				],
 				SubsidyCul3: [true,false,false],
-			
+				swiperHeight:33.9
 			}
 		},
+		mounted() {
+			let _this=this
+			document.getElementsByClassName('page')[0].addEventListener('click',this.page)
+			//document.getElementsByClassName("select-drop")[0].addEventListener('click',this.headerSelectDrop(event))
+		},
 		methods: {
+			page(){
+				this.headerSelectIsDrop = false
+				this.provinceIsDrop = false
+				this.cityIsDrop = false
+				console.log(this.headerSelectIsDrop)
+			},
 			headerSelectDrop() {
 				this.headerSelectIsDrop = !this.headerSelectIsDrop
 			},
@@ -295,7 +307,6 @@
 				this.headerSelectCul = item
 			},
 			provinceDrop() {
-
 				this.provinceIsDrop = !this.provinceIsDrop
 			},
 			provinceRise(item) {
@@ -313,6 +324,9 @@
 			},
 			tabChange(index) {
 				this.TabCur = index;
+			},
+			tabSwiperChange() {
+				
 			},
 			touchStart(e, index) {
 				// console.log("触摸开始")
@@ -350,12 +364,30 @@
 			selectList1(index){
 				this.$set(this.SubsidyCul1,index,!this.SubsidyCul1[index]);
 				//第一个参数为数组，第二个参数为数组下标，第三个参数为设置的值，
+				if(this.SubsidyCul1[index]){
+					this.swiperHeight = this.swiperHeight+5.5;
+				}else{
+					this.swiperHeight = this.swiperHeight-5.5;
+				}
+				console.log(this.swiperHeight)
 			},
 			selectList2(index){
 				this.$set(this.SubsidyCul2,index,!this.SubsidyCul2[index]);
+				if(this.SubsidyCul2[index]){
+					this.swiperHeight = this.swiperHeight+5.5;
+				}else{
+					this.swiperHeight = this.swiperHeight-5.5;
+				}
+				console.log(this.swiperHeight)
 			},
 			selectList3(index){
 				this.$set(this.SubsidyCul3,index,!this.SubsidyCul3[index]);
+				if(this.SubsidyCul3[index]){
+					this.swiperHeight = this.swiperHeight+4.8;
+				}else{
+					this.swiperHeight = this.swiperHeight-4.8;
+				}
+				console.log(this.swiperHeight)
 			}
 		}
 	}
