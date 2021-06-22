@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin: auto;
+        }
+
+        img {
+            /* width: 25%;
+            height: 50%;
+            position: relative;
+            left: 35%; */
+        }
+
+        .box {
+            box-sizing: border-box;
+            margin: auto;
+            width: 700px;
+            height: 1000px;
+        }
+
+        .canvas {
+            box-sizing: border-box;
+            position: absolute;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="box">
+        <canvas id="canvas" width="700" height="1000">
+            <img src="./01.jpg" alt="" id="img">
+        </canvas>
+    </div>
+</body>
+<script>
+    //getContext() 方法来访问绘画上下文
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d', {
+        alpha: true
+    });
+    console.log(ctx)
+    //获取画布大小
+    var cw = $("canvas").width()
+    var ch = $("canvas").height()
+    console.log(cw, ch)
+    //设置图像
+    var img = new Image()
+    var imgW = ""
+    var imgH = ""
+    img.src = "./01.jpg";
+    img.onload = function () {
+        imgW = img.width / 3
+        imgH = img.height / 3
+        imgX = (cw - imgW) / 2
+        //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
+        //ctx.drawImage(this,offsetX,0,imgW,imgH);
+        ctx.drawImage(document.getElementById('img'), imgX, 0, imgW, imgH);
+    }
+    //绘制文本
+    $(function () {
+        // ctx.font = "48px serif";
+        // ctx.fillText("Hello world", 10, 50);
+    })
+    //
+    $(function () {
+        var oldX = 0
+        var oldY = 0
+        //鼠标按下，将鼠标按下坐标保存在x,y中
+        canvas.onmousedown = function (ev) {
+            var e = ev || event;
+            var x = e.offsetX;
+            var y = e.offsetY;
+            // console.log(x, y)
+            drag(x, y);
+        };
+
+        var statusX = 0
+        var statusY = 0
+        var frameWidth = 0
+        var frameHeight = 0
+
+        function drag(x, y) {
+            // 按下鼠标判断鼠标位置是否在圆上，当画布上有多个路径时，isPointInPath只能判断最后那一个绘制的路径
+            //路径正确，鼠标移动事件
+            canvas.onmousemove = function (ev) {
+                // frameWidth = statusX-x
+                // frameHeight = statusY-y
+                var e = ev || event;
+                var ax = e.offsetX;
+                var ay = e.offsetY;
+                // statusX = ax
+                // statusY = ay
+                // console.log(x,y,ax, ay)
+                // ctx.strokeStyle = 'green';
+                // ctx.clearRect(x, y,frameWidth, frameHeight);
+                // ctx.strokeRect(x, y, ax-x, ay-y);
+            };
+            //鼠标移开事件
+            canvas.onmouseup = function () {
+                canvas.onmousemove = null;
+                canvas.onmouseup = null;
+            };
+        }
+    })
+</script>
+
+</html>

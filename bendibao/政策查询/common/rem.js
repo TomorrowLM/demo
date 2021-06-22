@@ -15,6 +15,3 @@
   win.addEventListener(resizeEvt, recalc, false);
   doc.addEventListener("DOMContentLoaded", recalc, false);
 })(document, window);
-document.getElementsByClassName(".select_label").onclick = function () {
-  console.log(1);
-};

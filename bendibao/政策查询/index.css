@@ -23,8 +23,6 @@
 }
 
 .nav .nav-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: auto;
   width: 90%;
@@ -59,6 +57,7 @@
   width: 0.15rem;
   height: 0.08rem;
   opacity: 1;
+  vertical-align: middle;
 }
 
 .nav .mod-select {
@@ -123,11 +122,8 @@
 }
 
 .active-1 .active-1-btn {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
   margin-bottom: 0.4rem;
 }
 
@@ -164,12 +160,8 @@
 }
 
 .active-1-body .header, .active-2 .active-2-body .header, .active-3 .active-3-body .header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
 
 .active-1-body .header span, .active-2 .active-2-body .header span, .active-3 .active-3-body .header span {
@@ -218,11 +210,8 @@
 }
 
 .active-1-body .footer, .active-2 .active-2-body .footer, .active-3 .active-3-body .footer {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
   border-top: 1px solid #3333331c;
   margin-top: 0.3rem;
   padding-top: 0.3rem;
@@ -255,8 +244,6 @@
 .active-3 .body-1,
 .active-3 .body-2,
 .active-3 .body-3 {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -301,8 +288,6 @@
 }
 
 .active-4 .active-body > div:nth-of-type(1) {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin-bottom: 0.3rem;
 }
@@ -312,14 +297,9 @@
 }
 
 .active-4 .active-body > div:nth-of-type(2) > div:nth-of-type(1) {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .active-4 .active-body > div:nth-of-type(2) > div:nth-of-type(1) div {
@@ -353,12 +333,8 @@
 
 .active-4 .active-tab-detail > div {
   overflow: hidden;
-  -webkit-transform: translate(0%);
-          transform: translate(0%);
-  -webkit-transition: -webkit-transform 0.3s linear;
-  transition: -webkit-transform 0.3s linear;
+  transform: translate(0%);
   transition: transform 0.3s linear;
-  transition: transform 0.3s linear, -webkit-transform 0.3s linear;
   opacity: 1;
 }
 
@@ -373,8 +349,7 @@
 .active-4 .hidden-tab {
   height: 0;
   overflow: hidden;
-  -webkit-transform: translate(100%) !important;
-          transform: translate(100%) !important;
+  transform: translate(100%) !important;
 }
 
 .active-5 {
@@ -392,11 +367,8 @@
 
 .active-5 .active-body {
   margin-left: 0.3rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   margin-bottom: 0.3rem;
 }
 
@@ -434,8 +406,7 @@
 }
 
 .active-6 .body div {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   width: 7.02rem;
   height: 1.09rem;
   line-height: 1.09rem;
@@ -469,11 +440,8 @@
 }
 
 .active-7 .active-tab {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
 }
 
 .active-7 .active-tab div {
@@ -488,12 +456,8 @@
 
 .active-7 .active-tab-detail > div {
   overflow: hidden;
-  -webkit-transform: translate(0%);
-          transform: translate(0%);
-  -webkit-transition: -webkit-transform 0.3s linear;
-  transition: -webkit-transform 0.3s linear;
+  transform: translate(0%);
   transition: transform 0.3s linear;
-  transition: transform 0.3s linear, -webkit-transform 0.3s linear;
   opacity: 1;
 }
 
@@ -509,8 +473,7 @@
 .active-7 .hidden-tab {
   height: 0;
   overflow: hidden;
-  -webkit-transform: translate(100%) !important;
-          transform: translate(100%) !important;
+  transform: translate(100%) !important;
 }
 
 .active-7 .info {
@@ -518,8 +481,6 @@
 }
 
 .active-7 .info .info-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -551,7 +512,6 @@
 }
 
 .active-7 .info .info-body {
-  opacity: 1;
   background: #f9fbfc;
   border-radius: 0.18rem;
   opacity: 1;
@@ -560,16 +520,17 @@
   font-weight: 500;
   text-align: left;
   color: #333333;
-  word-wrap: break-word;
   padding: 0.3rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding-bottom: 0.3rem;
 }
 
 .active-7 .info .info-body div {
-  height: 1rem;
-  overflow: hidden;
+  height: 1.1rem;
+  text-size-adjust: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap；;
+  white-space: initial;
+  overflow: auto;
+  line-height: 0.38rem;
 }
 
 .active-7 .more-info {
@@ -602,21 +563,7 @@
   height: 0.4rem;
   border-radius: 0.1rem;
   background: lightgreen;
-  -webkit-animation: load 1s ease infinite;
-          animation: load 1s ease infinite;
-}
-
-@-webkit-keyframes load {
-  0%,
-  100% {
-    height: 0.3rem;
-    background: lightgreen;
-  }
-  50% {
-    height: 0.3rem;
-    margin: -0.1rem 0;
-    background: lightblue;
-  }
+  animation: load 1s ease infinite;
 }
 
 @keyframes load {
@@ -633,23 +580,19 @@
 }
 
 .loading span:nth-child(2) {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .loading span:nth-child(3) {
-  -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
+  animation-delay: 0.4s;
 }
 
 .loading span:nth-child(4) {
-  -webkit-animation-delay: 0.6s;
-          animation-delay: 0.6s;
+  animation-delay: 0.6s;
 }
 
 .loading span:nth-child(5) {
-  -webkit-animation-delay: 0.8s;
-          animation-delay: 0.8s;
+  animation-delay: 0.8s;
 }
 
 .active-8 .active-title {
@@ -673,8 +616,6 @@
 }
 
 .active-8 .info .info-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -706,7 +647,6 @@
 }
 
 .active-8 .info .info-body {
-  opacity: 1;
   background: #f9fbfc;
   border-radius: 0.18rem;
   opacity: 1;
@@ -715,16 +655,17 @@
   font-weight: 500;
   text-align: left;
   color: #333333;
-  word-wrap: break-word;
   padding: 0.3rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  padding-bottom: 0.3rem;
 }
 
 .active-8 .info .info-body div {
-  height: 1rem;
-  overflow: hidden;
+  height: 1.1rem;
+  text-size-adjust: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap；;
+  white-space: initial;
+  overflow: auto;
+  line-height: 0.38rem;
 }
 
 .active-8 .more-info {
@@ -796,10 +737,6 @@
 }
 
 .key1 {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
 }
-/*# sourceMappingURL=index.css.map */

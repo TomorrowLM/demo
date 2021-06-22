@@ -53,7 +53,7 @@
             width: 0.15rem;
             height: 0.08rem;
             opacity: 1;
-
+            vertical-align: middle;
         }
     }
 
@@ -80,7 +80,6 @@
     .select_label {
         font-size: 0.28rem;
         float: left;
-        // margin-top: 0.05rem;
     }
 
     .select-2 .select_label {
@@ -96,9 +95,6 @@
     }
 }
 
-.main {
-    // margin: 0.3rem;
-}
 
 // 
 .active-title {
@@ -539,7 +535,6 @@
         }
 
         .info-body {
-            opacity: 1;
             background: #f9fbfc;
             border-radius: 0.18rem;
             opacity: 1;
@@ -548,15 +543,16 @@
             font-weight: 500;
             text-align: left;
             color: #333333;
-            word-wrap: break-word;
             padding: 0.3rem;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            padding-bottom: 0.3rem;
 
             div {
-                height: 1rem;
-                overflow: hidden;
+                height: 1.1rem;
+                text-size-adjust: auto;
+                text-overflow: ellipsis;
+                white-space: nowrap；;
+                white-space: initial;
+                overflow: auto;
+                line-height: 0.38rem;
             }
         }
     }
@@ -680,7 +676,6 @@
         }
 
         .info-body {
-            opacity: 1;
             background: #f9fbfc;
             border-radius: 0.18rem;
             opacity: 1;
@@ -689,15 +684,16 @@
             font-weight: 500;
             text-align: left;
             color: #333333;
-            word-wrap: break-word;
             padding: 0.3rem;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            padding-bottom: 0.3rem;
 
             div {
-                height: 1rem;
-                overflow: hidden;
+                height: 1.1rem;
+                text-size-adjust: auto;
+                text-overflow: ellipsis;
+                white-space: nowrap；;
+                white-space: initial;
+                overflow: auto;
+                line-height: 0.38rem;
             }
         }
     }
@@ -763,6 +759,7 @@
     font-weight: 500;
     color: #3b9639;
     margin-bottom: 0.3rem;
+
     img {
         width: 0.14rem;
         height: 0.08rem;
