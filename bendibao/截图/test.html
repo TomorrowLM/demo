@@ -26,6 +26,20 @@
         this.isSelected = false;
     }
 
+    function addRandomRect() {
+        var x = 10;
+        var y = 10;
+        var width = 100;
+        var height = 100;
+        // 创建一个新的矩形对象
+        var rect = new rectar(x, y, width, height);
+
+        // 把它保存在数组中
+        rects.push(rect);
+        // 重新绘制画布
+        drawRect();
+    }
+
     function drawRect() {
         // 清除画布，准备绘制
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -44,19 +58,7 @@
         }
     }
 
-    function addRandomRect() {
-        var x = 10;
-        var y = 10;
-        var width = 100;
-        var height = 100;
-        // 创建一个新的矩形对象
-        var rect = new rectar(x, y, width, height);
 
-        // 把它保存在数组中
-        rects.push(rect);
-        // 重新绘制画布
-        drawRect();
-    }
     var SelectedRect;
     var x1;
     var y1;
@@ -68,7 +70,7 @@
         // 取得画布上被单击的点
         var clickX = e.pageX - canvas.offsetLeft;
         var clickY = e.pageY - canvas.offsetTop;
-
+        console.log(clickX，clickY)
         // 查找被单击的矩形框
         for (var i = rects.length - 1; i >= 0; i--) {
             var rect = rects[i];
@@ -134,6 +136,8 @@
             drawRect();
         }
     };
+    
+    
     var isDragging = false;
 
     function stopDragging() {
@@ -150,9 +154,10 @@
         canvas = document.getElementById("canvas");
         context = canvas.getContext("2d");
         canvas.onmousedown = canvasClick;
+        canvas.onmousemove = dragRect;
         canvas.onmouseup = stopDragging;
         canvas.onmouseout = stopDragging;
-        canvas.onmousemove = dragRect;;
+
     };
 </script>
 

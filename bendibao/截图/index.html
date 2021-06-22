@@ -48,33 +48,40 @@
     var ctx = canvas.getContext('2d', {
         alpha: true
     });
-    console.log(ctx)
     //获取画布大小
     var cw = $("canvas").width()
     var ch = $("canvas").height()
-    console.log(cw, ch)
+    var clientRect = canvas.getBoundingClientRect();
     //设置图像
     var img = new Image()
     var imgW = ""
     var imgH = ""
     img.src = "./01.jpg";
-    img.onload = function () {
-        imgW = img.width / 3
-        imgH = img.height / 3
-        imgX = (cw - imgW) / 2
-        //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
-        //ctx.drawImage(this,offsetX,0,imgW,imgH);
-        ctx.drawImage(document.getElementById('img'), imgX, 0, imgW, imgH);
+
+    function drawImage() {
+        img.onload = function () {
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            imgW = img.width / 3
+            imgH = img.height / 3
+            imgX = (cw - imgW) / 2
+            //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
+            //ctx.drawImage(this,offsetX,0,imgW,imgH);
+            ctx.drawImage(document.getElementById('img'), imgX, 0, imgW, imgH);
+            ctx.restore();
+        }
     }
+    drawImage()
+    drawImage()
     //绘制文本
     $(function () {
         // ctx.font = "48px serif";
         // ctx.fillText("Hello world", 10, 50);
     })
     //
+    var oldX = 0
+    var oldY = 0
     $(function () {
-        var oldX = 0
-        var oldY = 0
         //鼠标按下，将鼠标按下坐标保存在x,y中
         canvas.onmousedown = function (ev) {
             var e = ev || event;
@@ -83,27 +90,43 @@
             // console.log(x, y)
             drag(x, y);
         };
-
-        var statusX = 0
-        var statusY = 0
-        var frameWidth = 0
-        var frameHeight = 0
+        //蒙层绘制
+        var drawCover = () => {
+            // ctx.fillStyle = 'rgba(0,0,0,0.1)';
+            // ctx.fillRect(0, 0, cw, ch);
+        };
+        var old = []
 
         function drag(x, y) {
             // 按下鼠标判断鼠标位置是否在圆上，当画布上有多个路径时，isPointInPath只能判断最后那一个绘制的路径
             //路径正确，鼠标移动事件
             canvas.onmousemove = function (ev) {
-                // frameWidth = statusX-x
-                // frameHeight = statusY-y
                 var e = ev || event;
                 var ax = e.offsetX;
                 var ay = e.offsetY;
-                // statusX = ax
-                // statusY = ay
-                // console.log(x,y,ax, ay)
-                // ctx.strokeStyle = 'green';
-                // ctx.clearRect(x, y,frameWidth, frameHeight);
-                // ctx.strokeRect(x, y, ax-x, ay-y);
+                // 取开始点和结束点的最小值
+                var xStart = Math.min(x, ax);
+                var yStart = Math.min(y, ay);
+                // 计算移动距离
+                var xDistance = Math.abs(x - ax);
+                var yDistance = Math.abs(y - ay);
+                ctx.strokeStyle = 'green';
+                drawCover();
+
+                // if (old[0] > ax || old[1] > ay) {
+                //     console.log(1)
+                //     ctx.clearRect(xStart-1, yStart-1, old[4]+2,old[5]+2);
+                //     ctx.strokeRect(xStart, yStart, xDistance, yDistance);
+
+                // } else {
+                //     ctx.clearRect(xStart, yStart, xDistance, yDistance);
+                //     ctx.strokeRect(xStart, yStart, xDistance, yDistance);
+                // }
+                ctx.beginPath()
+                ctx.moveTo(10, 10)
+                ctx.rect(xStart, yStart, xDistance, yDistance)
+                ctx.stroke()
+                //old = [ax, ay, xStart, yStart,xDistance,yDistance]
             };
             //鼠标移开事件
             canvas.onmouseup = function () {
