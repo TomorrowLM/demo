@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin: auto;
+
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+
+        img {
+            /* width: 25%;
+            height: 50%;
+            position: relative;
+            left: 35%; */
+        }
+
+        .box {
+            box-sizing: border-box;
+            margin: auto;
+            width: 700px;
+            height: 1000px;
+        }
+
+        .canvas {
+            box-sizing: border-box;
+            position: absolute;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="box">
+        <canvas id="canvas" width="700" height="1000">
+            <img src="./01.jpg" alt="" id="img">
+        </canvas>
+        <canvas id="canvas" width="700" height="1000">
+            <img src="./01.jpg" alt="" id="img">
+        </canvas>
+    </div>
+</body>
+<script>
+    //getContext() 方法来访问绘画上下文
+    var canvas = document.getElementById('canvas');
+
+
+    var ctx = canvas.getContext('2d', {
+        alpha: true
+    });
+    //获取画布大小
+    var cw = $("canvas").width()
+    var ch = $("canvas").height()
+    var clientRect = canvas.getBoundingClientRect();
+    //设置图像
+    var img = new Image()
+    var imgW = ""
+    var imgH = ""
+    img.src = "./01.jpg";
+    function drawImage() {
+        img.onload = function () {
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            imgW = img.width / 3
+            imgH = img.height / 3
+            imgX = (cw - imgW) / 2
+            //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
+            //ctx.drawImage(this,offsetX,0,imgW,imgH);
+            ctx.drawImage(document.getElementById('img'), imgX, 0, imgW, imgH);
+            ctx.restore();
+        }
+    }
+    drawImage()
+    //绘制文本
+    $(function () {
+        // ctx.font = "48px serif";
+        // ctx.fillText("Hello world", 10, 50);
+    })
+    //
+    var oldX = 0
+    var oldY = 0
+    $(function () {
+        //鼠标按下，将鼠标按下坐标保存在x,y中
+        canvas.onmousedown = function (ev) {
+            var e = ev || event;
+            var x = e.offsetX;
+            var y = e.offsetY;
+            // console.log(x, y)
+            drag(x, y);
+        };
+        //蒙层绘制
+        var drawCover = () => {
+            // ctx.fillStyle = 'rgba(0,0,0,0.1)';
+            // ctx.fillRect(0, 0, cw, ch);
+        };
+        var old = []
+
+        function drag(x, y) {
+            // 按下鼠标判断鼠标位置是否在圆上，当画布上有多个路径时，isPointInPath只能判断最后那一个绘制的路径
+            //路径正确，鼠标移动事件
+            canvas.onmousemove = function (ev) {
+                var e = ev || event;
+                var ax = e.offsetX;
+                var ay = e.offsetY;
+                // 取开始点和结束点的最小值
+                var xStart = Math.min(x, ax);
+                var yStart = Math.min(y, ay);
+                // 计算移动距离
+                var xDistance = Math.abs(x - ax);
+                var yDistance = Math.abs(y - ay);
+                
+                // drawCover();
+
+                // if (old[0] > ax || old[1] > ay) {
+                //     console.log(1)
+                //     ctx.clearRect(xStart-1, yStart-1, old[4]+2,old[5]+2);
+                //     ctx.strokeRect(xStart, yStart, xDistance, yDistance);
+
+                // } else {
+                //     ctx.clearRect(xStart, yStart, xDistance, yDistance);
+                //     ctx.strokeRect(xStart, yStart, xDistance, yDistance);
+                // }
+                ctx.clearRect(xStart, yStart, xDistance, yDistance);
+
+                
+                ctx.beginPath()
+                ctx.strokeStyle = "#11000000";
+                ctx.moveTo(10, 10)
+                ctx.strokeRect(xStart, yStart, xDistance, yDistance)
+                ctx.stroke()
+                
+            };
+            //鼠标移开事件
+            canvas.onmouseup = function () {
+                canvas.onmousemove = null;
+                canvas.onmouseup = null;
+            };
+        }
+    })
+</script>
+
+</html>

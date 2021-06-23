@@ -8,28 +8,40 @@
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
     <style>
-        canvas {
-            border: 1px solid black;
-            margin: auto;
-        }
-
-        img {
-            /* width: 25%;
-            height: 50%;
-            position: relative;
-            left: 35%; */
-        }
 
         .box {
+            display: flex;
+        }
+
+        .box-canvas {
             box-sizing: border-box;
             margin: auto;
             width: 700px;
             height: 1000px;
         }
 
-        .canvas {
+        canvas {
+            border: 1px solid black;
+            margin: auto;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+
+        canvas {
             box-sizing: border-box;
             position: absolute;
+
+        }
+        #canvas{
+            z-index: 0;
+        }
+        #canvas1{
+            z-index: 1;
+        }
+        #canva2{
+            z-index: 0;
         }
     </style>
 
@@ -37,17 +49,28 @@
 
 <body>
     <div class="box">
-        <canvas id="canvas" width="700" height="1000">
-            <img src="./01.jpg" alt="" id="img">
-        </canvas>
+        <div class="box-canvas">
+            <canvas id="canvas" width="700" height="1000">
+                <img src="./01.jpg" alt="" id="img">
+            </canvas>
+            <canvas id="canvas1" width="700" height="1000">
+            </canvas>
+            <canvas id="canvas2" width="700" height="1000">
+            </canvas>
+        </div>
+        <div>
+            <button>1</button>
+        </div>
     </div>
 </body>
 <script>
     //getContext() 方法来访问绘画上下文
     var canvas = document.getElementById('canvas');
-    var ctx = canvas.getContext('2d', {
-        alpha: true
-    });
+    var ctx = canvas.getContext('2d');
+    var canva1 = document.getElementById('canvas1');
+    var ctx1 = canvas1.getContext('2d');
+    var canva2 = document.getElementById('canvas2');
+    var ctx2 = canvas1.getContext('2d');
     //获取画布大小
     var cw = $("canvas").width()
     var ch = $("canvas").height()
@@ -60,34 +83,25 @@
 
     function drawImage() {
         img.onload = function () {
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-over';
             imgW = img.width / 3
             imgH = img.height / 3
             imgX = (cw - imgW) / 2
             //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
             //ctx.drawImage(this,offsetX,0,imgW,imgH);
             ctx.drawImage(document.getElementById('img'), imgX, 0, imgW, imgH);
-            ctx.restore();
         }
     }
     drawImage()
-    drawImage()
-    //绘制文本
-    $(function () {
-        // ctx.font = "48px serif";
-        // ctx.fillText("Hello world", 10, 50);
-    })
-    //
-    var oldX = 0
-    var oldY = 0
+    //鼠标事件
+    var old = []
     $(function () {
         //鼠标按下，将鼠标按下坐标保存在x,y中
-        canvas.onmousedown = function (ev) {
+        canva1.onmousedown = function (ev) {
+            returnOld()
             var e = ev || event;
             var x = e.offsetX;
             var y = e.offsetY;
-            // console.log(x, y)
+            old[old.length] = Array.of(x, y)
             drag(x, y);
         };
         //蒙层绘制
@@ -95,12 +109,22 @@
             // ctx.fillStyle = 'rgba(0,0,0,0.1)';
             // ctx.fillRect(0, 0, cw, ch);
         };
-        var old = []
-
+        //还原old
+        function returnOld() {
+            for (i = 0; i < old.length; i++) {
+                ctx1.beginPath()
+                ctx1.strokeStyle = "red";
+                ctx1.moveTo(10, 10)
+                ctx1.strokeRect(old[i][0], old[i][1], old[i][4], old[i][5])
+                ctx1.stroke()
+            }
+        }
+        //onmousemove onmouseup
         function drag(x, y) {
             // 按下鼠标判断鼠标位置是否在圆上，当画布上有多个路径时，isPointInPath只能判断最后那一个绘制的路径
             //路径正确，鼠标移动事件
-            canvas.onmousemove = function (ev) {
+            canva1.onmousemove = function (ev) {
+
                 var e = ev || event;
                 var ax = e.offsetX;
                 var ay = e.offsetY;
@@ -110,31 +134,30 @@
                 // 计算移动距离
                 var xDistance = Math.abs(x - ax);
                 var yDistance = Math.abs(y - ay);
-                ctx.strokeStyle = 'green';
-                drawCover();
+                //清除画布
+                ctx1.clearRect(0, 0, cw, ch);
+                //
+                returnOld()
 
-                // if (old[0] > ax || old[1] > ay) {
-                //     console.log(1)
-                //     ctx.clearRect(xStart-1, yStart-1, old[4]+2,old[5]+2);
-                //     ctx.strokeRect(xStart, yStart, xDistance, yDistance);
-
-                // } else {
-                //     ctx.clearRect(xStart, yStart, xDistance, yDistance);
-                //     ctx.strokeRect(xStart, yStart, xDistance, yDistance);
-                // }
-                ctx.beginPath()
-                ctx.moveTo(10, 10)
-                ctx.rect(xStart, yStart, xDistance, yDistance)
-                ctx.stroke()
-                //old = [ax, ay, xStart, yStart,xDistance,yDistance]
-            };
-            //鼠标移开事件
-            canvas.onmouseup = function () {
-                canvas.onmousemove = null;
-                canvas.onmouseup = null;
+                ctx1.beginPath()
+                ctx1.strokeStyle = "red";
+                ctx1.moveTo(10, 10)
+                ctx1.strokeRect(xStart, yStart, xDistance, yDistance)
+                ctx1.stroke()
+                //鼠标移开事件
+                canva1.onmouseup = function () {
+                    old[old.length - 1].push(ax, ay, xDistance, yDistance)
+                    console.log(old)
+                    canva1.onmousemove = null;
+                    canva1.onmouseup = null;
+                };
             };
         }
     })
+    //点击事件，添加文字
+    canva2.onclick = function () {
+        console.log(1)
+    }
 </script>
 
 </html>
