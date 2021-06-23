@@ -8,20 +8,16 @@
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
     <style>
-
         .box {
             display: flex;
         }
 
         .box-canvas {
             box-sizing: border-box;
-            margin: auto;
-            width: 700px;
-            height: 1000px;
+            border: 1px solid black;
         }
 
-        canvas {
-            border: 1px solid black;
+        #canvas {
             margin: auto;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -34,15 +30,24 @@
             position: absolute;
 
         }
-        #canvas{
+
+        #canvas {
             z-index: 0;
+            background: #0b0b0b;
         }
-        #canvas1{
+
+        #canvas1 {
+            z-index: 2;
+
+        }
+
+        #canvas2 {
             z-index: 1;
         }
-        #canva2{
-            z-index: 0;
-        }
+
+        /* #canvas3 {
+            z-index: 2;
+        } */
     </style>
 
 </head>
@@ -50,12 +55,15 @@
 <body>
     <div class="box">
         <div class="box-canvas">
-            <canvas id="canvas" width="700" height="1000">
+            <!-- width="700" height="1000" -->
+            <!-- 图像 -->
+            <canvas id="canvas">
                 <img src="./01.jpg" alt="" id="img">
             </canvas>
-            <canvas id="canvas1" width="700" height="1000">
+            <!--  -->
+            <canvas id="canvas1">
             </canvas>
-            <canvas id="canvas2" width="700" height="1000">
+            <canvas id="canvas2">
             </canvas>
         </div>
         <div>
@@ -65,66 +73,106 @@
 </body>
 <script>
     //getContext() 方法来访问绘画上下文
+    //图像层
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
-    var canva1 = document.getElementById('canvas1');
+    //矩形框层
+    var canvas1 = document.getElementById('canvas1');
     var ctx1 = canvas1.getContext('2d');
-    var canva2 = document.getElementById('canvas2');
-    var ctx2 = canvas1.getContext('2d');
-    //获取画布大小
+    //蒙版层
+    var canvas2 = document.getElementById('canvas2');
+    var ctx2 = canvas2.getContext('2d');
+    //文字层
+    // var canva3 = document.getElementById('canvas3');
+    // var ctx3 = canvas1.getContext('2d');
+    //画布宽高
+    var clientRect = canvas.getBoundingClientRect();
     var cw = $("canvas").width()
     var ch = $("canvas").height()
-    var clientRect = canvas.getBoundingClientRect();
     //设置图像
     var img = new Image()
     var imgW = ""
     var imgH = ""
     img.src = "./01.jpg";
-
+    //绘制图像
     function drawImage() {
         img.onload = function () {
+            //获取画布大小
             imgW = img.width / 3
             imgH = img.height / 3
             imgX = (cw - imgW) / 2
+            //用style和jq设置宽高不行
+            document.getElementsByTagName("canvas")[0].width = imgW
+            document.getElementsByTagName("canvas")[0].height = imgH
+            document.getElementsByTagName("canvas")[1].width = imgW
+            document.getElementsByTagName("canvas")[1].height = imgH
+            document.getElementsByTagName("canvas")[2].width = imgW
+            document.getElementsByTagName("canvas")[2].height = imgH
+            $(".box-canvas").width(imgW)
+            $(".box-canvas").height(imgH)
+            cw = imgW;
+            ch = imgH
             //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
             //ctx.drawImage(this,offsetX,0,imgW,imgH);
-            ctx.drawImage(document.getElementById('img'), imgX, 0, imgW, imgH);
+            ctx.drawImage(document.getElementById('img'), 0, 0, imgW, imgH);
         }
     }
     drawImage()
-    //鼠标事件
+    //蒙层绘制
+    var drawCover = (xStart, yStart, xDistance, yDistance) => {
+        ctx2.clearRect(0, 0, cw, ch);
+        ctx2.fillStyle = "#33333329";
+        ctx2.fillRect(0, 0, cw, ch);
+        for (i = 0; i < old.length; i++) {
+            ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+        }
+        ctx2.clearRect(xStart, yStart, xDistance, yDistance);
+    };
+
+    //还原之前的矩形框
     var old = []
+    //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框x轴的最小值
+    function returnOld() {
+        for (i = 0; i < old.length; i++) {
+            ctx1.beginPath()
+            ctx1.strokeStyle = "red";
+            ctx1.moveTo(10, 10)
+            ctx1.strokeRect(old[i][2], old[i][3], old[i][4], old[i][5])
+            ctx1.stroke()
+        }
+    }
+
+    //鼠标事件
     $(function () {
         //鼠标按下，将鼠标按下坐标保存在x,y中
-        canva1.onmousedown = function (ev) {
-            returnOld()
+        canvas1.onmousedown = function (ev) {
             var e = ev || event;
             var x = e.offsetX;
             var y = e.offsetY;
-            old[old.length] = Array.of(x, y)
-            drag(x, y);
-        };
-        //蒙层绘制
-        var drawCover = () => {
-            // ctx.fillStyle = 'rgba(0,0,0,0.1)';
-            // ctx.fillRect(0, 0, cw, ch);
-        };
-        //还原old
-        function returnOld() {
-            for (i = 0; i < old.length; i++) {
-                ctx1.beginPath()
-                ctx1.strokeStyle = "red";
-                ctx1.moveTo(10, 10)
-                ctx1.strokeRect(old[i][0], old[i][1], old[i][4], old[i][5])
-                ctx1.stroke()
+            //TODO 判断鼠标按下的位置是否是之前矩形框存在的位置
+            if (old.length == 0) {
+                drawCover()
+                returnOld()
+                old[old.length] = Array.of(x, y)
+                drag(x, y);
+            } else {
+                for (i = 0; i < old.length; i++) {
+                    console.log(old)
+                    if (old[i][2] < x < (old[i][2] + old[i][4]) && old[i][3] < y < (old[i][3] + old[i][
+                        5])) {
+                        drawCover()
+                        returnOld()
+                        old[old.length] = Array.of(x, y)
+                        drag(x, y);
+                    }
+                }
             }
-        }
+        };
         //onmousemove onmouseup
         function drag(x, y) {
             // 按下鼠标判断鼠标位置是否在圆上，当画布上有多个路径时，isPointInPath只能判断最后那一个绘制的路径
             //路径正确，鼠标移动事件
-            canva1.onmousemove = function (ev) {
-
+            canvas1.onmousemove = function (ev) {
                 var e = ev || event;
                 var ax = e.offsetX;
                 var ay = e.offsetY;
@@ -136,26 +184,27 @@
                 var yDistance = Math.abs(y - ay);
                 //清除画布
                 ctx1.clearRect(0, 0, cw, ch);
-                //
+                //产生矩形框
                 returnOld()
-
                 ctx1.beginPath()
                 ctx1.strokeStyle = "red";
                 ctx1.moveTo(10, 10)
                 ctx1.strokeRect(xStart, yStart, xDistance, yDistance)
                 ctx1.stroke()
+                //console.log(1, xStart, xStart, xDistance, yDistance)
+                drawCover(xStart, yStart, xDistance, yDistance)
                 //鼠标移开事件
-                canva1.onmouseup = function () {
-                    old[old.length - 1].push(ax, ay, xDistance, yDistance)
-                    console.log(old)
-                    canva1.onmousemove = null;
-                    canva1.onmouseup = null;
+                canvas1.onmouseup = function () {
+                    old[old.length - 1].push(xStart, yStart, xDistance, yDistance)
+                    //console.log(old)
+                    canvas1.onmousemove = null;
+                    canvas1.onmouseup = null;
                 };
             };
         }
     })
-    //点击事件，添加文字
-    canva2.onclick = function () {
+    //点击矩形框，添加文字
+    canvas2.onclick = function () {
         console.log(1)
     }
 </script>
