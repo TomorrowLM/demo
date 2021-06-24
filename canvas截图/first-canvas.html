@@ -67,6 +67,7 @@
     var imgW = ""
     var imgH = ""
     img.src = "./01.jpg";
+
     function drawImage() {
         img.onload = function () {
             ctx.save();
@@ -118,7 +119,7 @@
                 // 计算移动距离
                 var xDistance = Math.abs(x - ax);
                 var yDistance = Math.abs(y - ay);
-                
+
                 // drawCover();
 
                 // if (old[0] > ax || old[1] > ay) {
@@ -132,13 +133,13 @@
                 // }
                 ctx.clearRect(xStart, yStart, xDistance, yDistance);
 
-                
+
                 ctx.beginPath()
                 ctx.strokeStyle = "#11000000";
                 ctx.moveTo(10, 10)
                 ctx.strokeRect(xStart, yStart, xDistance, yDistance)
                 ctx.stroke()
-                
+
             };
             //鼠标移开事件
             canvas.onmouseup = function () {

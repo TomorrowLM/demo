@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <!-- <script src="./canvas2image/canvas2image.js"></script> -->
+    <script src="./common/html2canvas.min.js"></script>
+    <!-- <script src="./canvas2image/html2canvas.min.js"></script> -->
+    <script src="./common/canvas2image.js"></script>
+    <style>
+        .box {
+            display: flex;
+        }
+
+        .box-canvas {
+            box-sizing: border-box;
+            border: 1px solid black;
+        }
+
+        #canvas {
+            margin: auto;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+
+        canvas {
+            box-sizing: border-box;
+            position: absolute;
+        }
+
+        #canvas {
+            z-index: 0;
+            background: #0b0b0b;
+        }
+
+        #canvas1 {
+            z-index: 2;
+        }
+
+        #canvas2 {
+            z-index: 1;
+        }
+
+        #product {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="box-canvas">
+            <!-- width="700" height="1000" -->
+            <!-- 图像 -->
+            <canvas id="canvas">
+                <img src="./01.jpg" alt="" id="img" />
+            </canvas>
+            <!--  -->
+            <canvas id="canvas1"> </canvas>
+            <canvas id="canvas2"> </canvas>
+        </div>
+        <div>
+            <button id="save">保存</button>
+        </div>
+        <div id="product"></div>
+    </div>
+    <div id="show"></div>
+</body>
+<script>
+    //getContext() 方法来访问绘画上下文
+    //图像层
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    //矩形框层
+    var canvas1 = document.getElementById("canvas1");
+    var ctx1 = canvas1.getContext("2d");
+    //蒙版层
+    var canvas2 = document.getElementById("canvas2");
+    var ctx2 = canvas2.getContext("2d");
+    //画布宽高
+    var clientRect = canvas.getBoundingClientRect();
+    var cw = $("canvas").width();
+    var ch = $("canvas").height();
+    //设置图像
+    var img = new Image();
+    var imgW = "";
+    var imgH = "";
+    img.src = "./01.jpg";
+    //绘制图像
+    function drawImage() {
+        img.onload = function () {
+            //获取画布大小
+            imgW = img.width / 3;
+            imgH = img.height / 3;
+            imgX = (cw - imgW) / 2;
+            //用style和jq设置宽高不行
+            document.getElementsByTagName("canvas")[0].width = imgW;
+            document.getElementsByTagName("canvas")[0].height = imgH;
+            document.getElementsByTagName("canvas")[1].width = imgW;
+            document.getElementsByTagName("canvas")[1].height = imgH;
+            document.getElementsByTagName("canvas")[2].width = imgW;
+            document.getElementsByTagName("canvas")[2].height = imgH;
+            $(".box-canvas").width(imgW);
+            $(".box-canvas").height(imgH);
+            cw = imgW;
+            ch = imgH;
+            //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
+            //ctx.drawImage(this,offsetX,0,imgW,imgH);
+            ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
+            // ctx.scale(1.5,1.5)
+            // ctx.drawImage(document.getElementById("img"),0,0, imgW*3, imgH*3,0,0,imgW, imgH);
+        };
+    }
+    drawImage();
+    //蒙层绘制
+    var drawCover = (xStart, yStart, xDistance, yDistance, index) => {
+        ctx2.clearRect(0, 0, cw, ch);
+        ctx2.fillStyle = "#33333329";
+        ctx2.fillRect(0, 0, cw, ch);
+        for (i = 0; i < old.length; i++) {
+            if (index != i) {
+                ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+            }
+        }
+        ctx2.clearRect(xStart, yStart, xDistance, yDistance);
+    };
+
+    //还原之前的矩形框
+    var old = [];
+    //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框x轴的最小值
+    function returnOld(index) {
+        for (i = 0; i < old.length; i++) {
+            if (index != i) {
+                fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
+                ctx1.beginPath();
+
+                ctx1.strokeStyle = "red";
+                ctx1.moveTo(10, 10);
+                ctx1.strokeRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+                ctx1.stroke();
+                labelText(old[i][2], old[i][3], i)
+            }
+        }
+    }
+    //标号添加
+    function labelText(xStart, yStart, i) {
+        //绘制圆
+        ctx1.beginPath();
+        ctx1.fillStyle = "rgb(36,199,136)";
+        ctx1.arc(xStart, yStart, 30 / 2, 0, 2 * Math.PI, false);
+        ctx1.fill();
+        //绘制文字
+        ctx1.beginPath();
+
+        ctx1.font = '25px Arial icon';
+        ctx1.fillStyle = 'white';
+        ctx1.textAlign = 'center';
+        ctx1.fillText(i, xStart, yStart + 9);
+        console.log(1)
+    }
+    //放大选中的图像
+    function fixSelectImg(xStart, yStart, xDistance, yDistance) {
+        ctx.globalCompositeOperation = "destination-over";
+        //ctx1.scale(1.5,1.5)
+        ctx1.drawImage(document.getElementById("img"), xStart * 3, yStart * 3 + 20, xDistance * 2.5, yDistance * 2.5,
+            xStart, yStart, xDistance, yDistance);
+    }
+    //鼠标事件
+    $(function () {
+        //鼠标按下，将鼠标按下坐标保存在x,y中
+        canvas1.onmousedown = function (ev) {
+            var e = ev || event;
+            var x = e.offsetX;
+            var y = e.offsetY;
+            //TODO 判断鼠标按下的位置是否是之前矩形框存在的位置
+            if (old.length == 0) {
+                drawCover();
+                old[old.length] = Array.of(x, y);
+                createBox(x, y);
+            } else {
+                for (i = 0; i < old.length; i++) {
+                    //console.log(old[i][2],x<(old[i][2]))
+                    if (
+                        old[i][2] < x &&
+                        x < old[i][2] + old[i][4] &&
+                        old[i][3] < y &&
+                        y < old[i][3] + old[i][5]
+                    ) {
+                        drag(x, y, i)
+                        return;
+                    }
+                }
+                drawCover();
+                old[old.length] = Array.of(x, y);
+                createBox(x, y);
+                returnOld();
+            }
+        };
+        //拖拽矩形框
+        function drag(x, y, i) {
+            var index = i
+            canvas1.onmousemove = function (ev) {
+                var e = ev || event;
+                var ax = e.offsetX;
+                var ay = e.offsetY;
+                //console.log(old[i][0], ax)
+                // 计算移动距离
+                var xDistance = ax - x;
+                var yDistance = ay - y;
+                // 取开始点和结束点的最小值
+                var xStart = old[i][2] + xDistance;
+                var yStart = old[i][3] + yDistance
+                //清除画布
+                ctx1.clearRect(0, 0, cw, ch);
+                //产生除选中之外的矩形框
+                returnOld(index);
+                //标号
+                ctx1.beginPath();
+                ctx1.strokeStyle = "red";
+                ctx1.moveTo(10, 10);
+                ctx1.strokeRect(xStart, yStart, old[i][4], old[i][5]);
+                ctx1.stroke();
+                drawCover(xStart, yStart, old[i][4], old[i][5], index);
+                fixSelectImg(xStart, yStart, old[i][4], old[i][5])
+                canvas1.onmouseup = function () {
+                    labelText(xStart, yStart, i)
+                    old[i][2] = xStart
+                    old[i][3] = yStart
+                    canvas1.onmousemove = null;
+                    canvas1.onmouseup = null;
+                };
+            }
+        }
+        //创建矩形框
+        function createBox(x, y) {
+            // 按下鼠标判断鼠标位置是否在圆上，当画布上有多个路径时，isPointInPath只能判断最后那一个绘制的路径
+            //路径正确，鼠标移动事件
+            canvas1.onmousemove = function (ev) {
+                var e = ev || event;
+                var ax = e.offsetX;
+                var ay = e.offsetY;
+                // 取开始点和结束点的最小值
+                var xStart = Math.min(x, ax);
+                var yStart = Math.min(y, ay);
+                // 计算移动距离
+                var xDistance = Math.abs(x - ax);
+                var yDistance = Math.abs(y - ay);
+                //清除画布
+                ctx1.clearRect(0, 0, cw, ch);
+                //产生矩形框
+                returnOld();
+
+                ctx1.beginPath();
+                ctx1.strokeStyle = "red";
+                ctx.strokeStyle = "red";
+                ctx1.moveTo(10, 10);
+                ctx1.strokeRect(xStart, yStart, xDistance, yDistance);
+                ctx1.stroke();
+                drawCover(xStart, yStart, xDistance, yDistance);
+                fixSelectImg(xStart, yStart, xDistance, yDistance)
+                //鼠标移开事件
+                canvas1.onmouseup = function () {
+                    old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
+                    canvas1.onmousemove = null;
+                    canvas1.onmouseup = null;
+                    labelText(xStart, yStart, old.length - 1)
+                };
+            };
+        }
+    });
+
+    //右边的功能
+    // Dom 当前截屏的元素
+    // picType 图片要保存的图片类型
+    // picName 图片想要保存的名字
+    function downDom(xStart, yStart, xDistance, yDistance, picType, picName) {
+        // 像素比，清晰度
+        const scale = 2;
+        var Dom = canvas
+        // 调用html2canvas插件
+        console.log(1)
+        html2canvas(Dom, {
+            scale
+        }).then(function () {
+            // let dataURL = canvas.toDataURL('image/png')
+            // var img = Canvas2Image.convertToJPEG(canvas,800,100, "png");
+            //console.log(img)
+
+            $("#product").append('<canvas id="product-canvas"></canvas>');
+            var canvas = document.getElementById("product-canvas");
+            var ctx = canvas.getContext("2d");
+            //var img = new Image();
+            //img.src = dataURL
+            // ctx.drawImage(document.getElementById("img"), 0, 0, 200, 200, 30, 30, 50, 50);
+            canvas.width = xDistance
+            canvas.height = yDistance
+            ctx.drawImage(document.getElementById("img"), xStart * 3, yStart * 3, xDistance * 3, yDistance * 3,
+                0, 0, xDistance, yDistance);
+            var img1 = Canvas2Image.convertToJPEG(canvas, xDistance, yDistance, "png");
+            document.getElementById("show").appendChild(img1);
+            // 下载图片
+            let a = document.createElement('a')
+            document.body.appendChild(a)
+            a.href = img1.src
+            // 设置下载标题
+            a.download = "排课计划"
+            a.click()
+        });
+    }
+    document.getElementById("save").onclick = function () {
+        //this.parseInt();//取整，避免出现杂边线条
+        for (i = 0; i < old.length; i++) {
+            downDom(old[i][2], old[i][3], old[i][4], old[i][5])
+        }
+
+    }
+</script>
+
+</html>

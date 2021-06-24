@@ -7,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
-    <script src="./canvas2image/canvas2image.js"></script>
-    <script src="./canvas2image/html2canvas.min.js"></script>
+    <!-- <script src="./canvas2image/canvas2image.js"></script> -->
+    <script src="./common/html2canvas.min.js"></script>
+    <!-- <script src="./canvas2image/html2canvas.min.js"></script> -->
+    <script src="./common/canvas2image.js"></script>
     <style>
         .box {
             display: flex;
@@ -16,7 +18,9 @@
 
         .box-canvas {
             box-sizing: border-box;
-            border: 1px solid black;
+            width: 362px;
+            height: 782px;
+            box-shadow: 1px 1px 15px -4px;
         }
 
         #canvas {
@@ -48,6 +52,16 @@
         #product {
             display: none;
         }
+
+        button {
+            padding: 5px 20px;
+            border-radius: 5px;
+            border: 0px;
+            color: #ff2626;
+            margin: 20px 50px;
+            font-size: 17px;
+            font-weight: 700;
+        }
     </style>
 </head>
 
@@ -64,11 +78,31 @@
             <canvas id="canvas2"> </canvas>
         </div>
         <div>
-            <button id="save">保存</button>
+            <button id="reset">重置</button>
+            <div id="save-box">
+                <button id="save">保存</button>
+                <div style="margin-left:50px">
+                    <span>图像类型</span>
+                    <button>PNG</button>
+                    <button>JPG</button>
+                </div>
+                <div style="margin-left:50px">
+                    <span>图像大小</span>
+                    <input type="text" style="margin-left:50px;border: 2px solid #b2b2b2;
+                    border-radius: 3px;">
+                </div>
+                <div style="margin-left:50px">
+                    <span>图像名称</span>
+                    <div>
+
+                        
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="product"></div>
     </div>
-
+    <div id="show"></div>
 </body>
 <script>
     //getContext() 方法来访问绘画上下文
@@ -274,45 +308,50 @@
     });
 
     //右边的功能
-    // Dom 当前截屏的元素
-    // picType 图片要保存的图片类型
-    // picName 图片想要保存的名字
+    //重置
+    document.getElementById("reset").onclick = function () {
+        ctx1.clearRect(0, 0, cw, ch);
+        ctx2.clearRect(0, 0, cw, ch);
+        old = []
+    }
+    //下载截取的图像,picType 图片要保存的图片类型,picName 图片想要保存的名字
     function downDom(xStart, yStart, xDistance, yDistance, picType, picName) {
         // 像素比，清晰度
         const scale = 2;
         var Dom = canvas
         // 调用html2canvas插件
+        console.log(1)
         html2canvas(Dom, {
             scale
         }).then(function () {
             // let dataURL = canvas.toDataURL('image/png')
             // var img = Canvas2Image.convertToJPEG(canvas,800,100, "png");
             //console.log(img)
+
             $("#product").append('<canvas id="product-canvas"></canvas>');
             var canvas = document.getElementById("product-canvas");
             var ctx = canvas.getContext("2d");
             //var img = new Image();
-            //img.src = dataURL
-            ctx.drawImage(document.getElementById("img"), 0, 0, 200, 200, 30, 30, 50, 50);
-            var img1 = Canvas2Image.convertToJPEG(canvas, 500, 500, "png");
-            document.body.appendChild(img1);
-
+            // ctx.drawImage(document.getElementById("img"), 0, 0, 200, 200, 30, 30, 50, 50);
+            canvas.width = xDistance
+            canvas.height = yDistance
+            ctx.drawImage(document.getElementById("img"), xStart * 3, yStart * 3, xDistance * 3, yDistance * 3,
+                0, 0, xDistance, yDistance);
+            var img1 = Canvas2Image.convertToJPEG(canvas, xDistance, yDistance, "png");
+            document.getElementById("show").appendChild(img1);
             // 下载图片
-            // let a = document.createElement('a')
-            // document.body.appendChild(a)
-            // a.href = img.src
-            // // 设置下载标题
-            // a.download = "排课计划"
-            // a.click()
+            let a = document.createElement('a')
+            document.body.appendChild(a)
+            a.href = img1.src
+            // 设置下载标题
+            a.download = "排课计划"
+            a.click()
         });
     }
     document.getElementById("save").onclick = function () {
-
-        //this.parseInt();//取整，避免出现杂边线条
         for (i = 0; i < old.length; i++) {
-            downDom(old[i][2],old[i][3],old[i][4],old[i][5])
+            downDom(old[i][2], old[i][3], old[i][4], old[i][5])
         }
-        
     }
 </script>
 
