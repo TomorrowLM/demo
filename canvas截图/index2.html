@@ -94,8 +94,6 @@
                 <div style="margin-left:50px">
                     <span>图像名称</span>
                     <div>
-
-                        
                     </div>
                 </div>
             </div>
@@ -150,36 +148,52 @@
         };
     }
     drawImage();
-    //蒙层绘制
-    var drawCover = (xStart, yStart, xDistance, yDistance, index) => {
-        ctx2.clearRect(0, 0, cw, ch);
-        ctx2.fillStyle = "#33333329";
-        ctx2.fillRect(0, 0, cw, ch);
-        for (i = 0; i < old.length; i++) {
-            if (index != i) {
-                ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
-            }
+    //圆角
+    function strokeRoundRect(cxt, x, y, width, height, radius, /*optional*/ lineWidth, /*optional*/ strokeColor) {
+        //圆的直径必然要小于矩形的宽高          
+        if (2 * radius > width || 2 * radius > height) {
+            return false;
         }
-        ctx2.clearRect(xStart, yStart, xDistance, yDistance);
-    };
 
-    //还原之前的矩形框
-    var old = [];
-    //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框x轴的最小值
-    function returnOld(index) {
-        for (i = 0; i < old.length; i++) {
-            if (index != i) {
-                fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
-                ctx1.beginPath();
+        cxt.save();
+        cxt.translate(x, y);
+        //绘制圆角矩形的各个边  
 
-                ctx1.strokeStyle = "red";
-                ctx1.moveTo(10, 10);
-                ctx1.strokeRect(old[i][2], old[i][3], old[i][4], old[i][5]);
-                ctx1.stroke();
-                labelText(old[i][2], old[i][3], i)
-            }
-        }
+        drawRoundRectPath(cxt, width, height, radius);
+        cxt.lineWidth = lineWidth || 2; //若是给定了值就用给定的值否则给予默认值2  
+        cxt.strokeStyle = strokeColor || "#000";
+        cxt.stroke();
+        cxt.restore();
     }
+
+    function drawRoundRectPath(cxt, width, height, radius) {
+        cxt.beginPath(0);
+        //从右下角顺时针绘制，弧度从0到1/2PI  
+        cxt.arc(width - radius, height - radius, radius, 0, Math.PI / 2);
+
+        //矩形下边线  
+        cxt.lineTo(radius, height);
+
+        //左下角圆弧，弧度从1/2PI到PI  
+        cxt.arc(radius, height - radius, radius, Math.PI / 2, Math.PI);
+
+        //矩形左边线  
+        cxt.lineTo(0, radius);
+
+        //左上角圆弧，弧度从PI到3/2PI  
+        cxt.arc(radius, radius, radius, Math.PI, Math.PI * 3 / 2);
+
+        //上边线  
+        cxt.lineTo(width - radius, 0);
+
+        //右上角圆弧  
+        cxt.arc(width - radius, radius, radius, Math.PI * 3 / 2, Math.PI * 2);
+
+        //右边线  
+        cxt.lineTo(width, height - radius);
+        cxt.closePath();
+    }
+
     //标号添加
     function labelText(xStart, yStart, i) {
         //绘制圆
@@ -187,20 +201,52 @@
         ctx1.fillStyle = "rgb(36,199,136)";
         ctx1.arc(xStart, yStart, 30 / 2, 0, 2 * Math.PI, false);
         ctx1.fill();
-        //绘制文字
+        //绘制文字  
         ctx1.beginPath();
-
         ctx1.font = '25px Arial icon';
         ctx1.fillStyle = 'white';
         ctx1.textAlign = 'center';
         ctx1.fillText(i, xStart, yStart + 9);
-        console.log(1)
+    }
+    //蒙层绘制
+    function drawCover(xStart, yStart, xDistance, yDistance, index) {
+        ctx2.clearRect(0, 0, cw, ch);
+        ctx2.fillStyle = "#33333329";
+        ctx2.fillRect(0, 0, cw, ch);
+        for (i = 0; i < old.length; i++) {
+            //遍历之前的矩形框
+            if (i != old.length - 1&&i!=index) {
+                ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+            }
+            //拖拽的矩形框
+            else {
+                ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+            }
+        }
+    };
+
+    //还原之前的矩形框
+    //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框x轴的最小值
+    var old = [];
+
+    function returnOld(xStart, yStart, xDistance, yDistance,index) {
+        //清除图层
+        ctx1.clearRect(0, 0, cw, ch);
+        for (i = 0; i < old.length; i++) {
+            if (i != old.length - 1 ) {
+                // strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 1, "rgb(36,199,136)")
+                fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
+                ctx2.globalCompositeOperation="destination-over";
+                strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7,2,
+                    "rgb(36,199,136)")           
+                labelText(old[i][2], old[i][3], i)
+            }
+        }
     }
     //放大选中的图像
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
-        ctx.globalCompositeOperation = "destination-over";
-        //ctx1.scale(1.5,1.5)
-        ctx1.drawImage(document.getElementById("img"), xStart * 3, yStart * 3 + 20, xDistance * 2.5, yDistance * 2.5,
+        ctx.drawImage(document.getElementById("img"), xStart * 3, yStart * 3 + 20, xDistance * 2.5, yDistance *
+            2.5,
             xStart, yStart, xDistance, yDistance);
     }
     //鼠标事件
@@ -210,29 +256,21 @@
             var e = ev || event;
             var x = e.offsetX;
             var y = e.offsetY;
-            //TODO 判断鼠标按下的位置是否是之前矩形框存在的位置
-            if (old.length == 0) {
-                drawCover();
-                old[old.length] = Array.of(x, y);
-                createBox(x, y);
-            } else {
-                for (i = 0; i < old.length; i++) {
-                    //console.log(old[i][2],x<(old[i][2]))
-                    if (
-                        old[i][2] < x &&
-                        x < old[i][2] + old[i][4] &&
-                        old[i][3] < y &&
-                        y < old[i][3] + old[i][5]
-                    ) {
-                        drag(x, y, i)
-                        return;
-                    }
+            //判断鼠标按下的位置是否是之前矩形框存在的位置
+            for (i = 0; i < old.length; i++) {
+                if (
+                    old[i][2] < x &&
+                    x < old[i][2] + old[i][4] &&
+                    old[i][3] < y &&
+                    y < old[i][3] + old[i][5]
+                ) {
+                    drag(x, y, i)
+                    return;
                 }
-                drawCover();
-                old[old.length] = Array.of(x, y);
-                createBox(x, y);
-                returnOld();
             }
+            //创建矩形框
+            old[old.length] = Array.of(x, y);
+            createBox(x, y);
         };
         //拖拽矩形框
         function drag(x, y, i) {
@@ -241,38 +279,39 @@
                 var e = ev || event;
                 var ax = e.offsetX;
                 var ay = e.offsetY;
-                //console.log(old[i][0], ax)
                 // 计算移动距离
                 var xDistance = ax - x;
                 var yDistance = ay - y;
                 // 取开始点和结束点的最小值
                 var xStart = old[i][2] + xDistance;
                 var yStart = old[i][3] + yDistance
-                //清除画布
-                ctx1.clearRect(0, 0, cw, ch);
                 //产生除选中之外的矩形框
-                returnOld(index);
-                //标号
-                ctx1.beginPath();
-                ctx1.strokeStyle = "red";
-                ctx1.moveTo(10, 10);
-                ctx1.strokeRect(xStart, yStart, old[i][4], old[i][5]);
-                ctx1.stroke();
+                // returnOld(index);
+                // drawCover(xStart, yStart, old[i][4], old[i][5], index);
+                // fixSelectImg(xStart, yStart, old[i][4], old[i][5])
+                 //还原之前的矩形框
+                 returnOld(xStart, yStart, old[i][4], old[i][5],index);
+                //清除矩形框位置的蒙版
                 drawCover(xStart, yStart, old[i][4], old[i][5], index);
-                fixSelectImg(xStart, yStart, old[i][4], old[i][5])
+                //对当前矩形框进行处理
+                fixSelectImg(xStart, yStart, xDistance, yDistance)
+                ctx2.globalCompositeOperation="destination-in";
+                ctx2.clearRect(xStart, yStart, xDistance, yDistance)
+                strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
+                    "rgb(36,199,136)")
+
+
                 canvas1.onmouseup = function () {
-                    labelText(xStart, yStart, i)
                     old[i][2] = xStart
                     old[i][3] = yStart
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
+                    labelText(xStart, yStart, i)
                 };
             }
         }
         //创建矩形框
         function createBox(x, y) {
-            // 按下鼠标判断鼠标位置是否在圆上，当画布上有多个路径时，isPointInPath只能判断最后那一个绘制的路径
-            //路径正确，鼠标移动事件
             canvas1.onmousemove = function (ev) {
                 var e = ev || event;
                 var ax = e.offsetX;
@@ -283,19 +322,16 @@
                 // 计算移动距离
                 var xDistance = Math.abs(x - ax);
                 var yDistance = Math.abs(y - ay);
-                //清除画布
-                ctx1.clearRect(0, 0, cw, ch);
-                //产生矩形框
+                //还原之前的矩形框
                 returnOld();
-
-                ctx1.beginPath();
-                ctx1.strokeStyle = "red";
-                ctx.strokeStyle = "red";
-                ctx1.moveTo(10, 10);
-                ctx1.strokeRect(xStart, yStart, xDistance, yDistance);
-                ctx1.stroke();
-                drawCover(xStart, yStart, xDistance, yDistance);
+                //清除矩形框位置的蒙版
+                drawCover();
+                //对当前矩形框进行处理
                 fixSelectImg(xStart, yStart, xDistance, yDistance)
+                ctx2.globalCompositeOperation="destination-in";
+                ctx2.clearRect(xStart, yStart, xDistance, yDistance)
+                strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
+                    "rgb(36,199,136)")
                 //鼠标移开事件
                 canvas1.onmouseup = function () {
                     old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
@@ -320,7 +356,6 @@
         const scale = 2;
         var Dom = canvas
         // 调用html2canvas插件
-        console.log(1)
         html2canvas(Dom, {
             scale
         }).then(function () {
@@ -335,7 +370,8 @@
             // ctx.drawImage(document.getElementById("img"), 0, 0, 200, 200, 30, 30, 50, 50);
             canvas.width = xDistance
             canvas.height = yDistance
-            ctx.drawImage(document.getElementById("img"), xStart * 3, yStart * 3, xDistance * 3, yDistance * 3,
+            ctx.drawImage(document.getElementById("img"), xStart * 3, yStart * 3, xDistance * 3, yDistance *
+                3,
                 0, 0, xDistance, yDistance);
             var img1 = Canvas2Image.convertToJPEG(canvas, xDistance, yDistance, "png");
             document.getElementById("show").appendChild(img1);
