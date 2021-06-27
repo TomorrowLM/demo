@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../lib/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
+    <script>
+        $(function () {
+            $(".btn").click(function(){
+                $.ajax({
+                    url:'01.php',
+                    type:'get',
+                    dataType:'html',
+                    // async:false同步
+                    success:function (data) {
+                        $('div').html(data);
+                        alert(data);
+                        console.log(data);
+                    }
+                });
+            });
+
+        })
+
+    </script>
+</head>
+<body>
+
+<button type="button" class="btn btn-info btn-md" value="点击">点击</button>
+<input type="button" class="btn btn-info btn-md" value="点击">
+<div></div>
+</body>
+</html>

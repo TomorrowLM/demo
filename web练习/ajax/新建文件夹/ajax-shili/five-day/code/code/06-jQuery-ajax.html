@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-2.2.0.js"></script>
+    <script>
+//        $(function () {
+//            $("#btn").click(function () {
+//                $("#msg").text("正在拼命加载....");
+//                $.ajax({
+//                    type:"get",
+//                    cache:false,
+//                    url:"php/01-gettime.php",
+//                    success:function (data){
+//                        $("#msg").text(data);
+//                    },
+//                    error: function () {
+//                        $("#msg").text("亲，出错了");
+//                    }
+//                });
+//            });
+//
+//        })
+
+        $(function () {
+            $("#btn0").click(function () {
+                var name,pwd,msg0;
+                msg0 = $("#msg0");
+                name = $("#name").val();
+                pwd = $("#pwd").val();
+
+                //判断用户是否输入...todo...
+                //发送异步请求
+
+                msg0.text("正在拼命加载....");
+                $.ajax({
+                    type:"post",
+                    url:"php/02-login.php",
+                    data:{name:name,pwd:pwd},
+                    success: function (data) {
+                        if (data == 1) {
+                            msg0.text("登陆成功");
+                        }else{
+                            msg0.text("登陆失败");
+                        }
+                    },
+                    error: function () {
+                        msg0.text("亲，出错了");
+                    }
+                });
+            });
+        })
+    </script>
+</head>
+<body>
+<input type="button" value="gettime" id="btn">
+<div id="msg"></div>
+<hr />
+模拟登陆<br />
+<form action="php/02-login.php" method="post">
+    <input type="text" name="name" id="name"><br />
+    <input type="password" name="pwd" id="pwd"><br />
+
+    <input type="button" value="登 录" id="btn0">
+    <div id="msg0"></div>
+</form>
+</body>
+</html>

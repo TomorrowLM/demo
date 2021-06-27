@@ -1,0 +1,108 @@
+<div class="addressBook {{classes 'AddressBook'}}">
+  <div class="b2b-wrap address-lists-wrap {{classes 'b2bWrap'}}">
+    <div class="account-body">
+      <ul class="addressList"></ul>
+      <div class="search-toolbar top {{classes 'addressBook.actions.container'}}">
+        <div class=" search-input-box">
+          <input class="{{classes 'addressBook.search.input'}}  form-input" type="text" id="keyword" placeholder="Search by Keyword" data-filters-field="q" />
+          <a class="button button--small button-clear hide" href="javascript:void(0);" id="search_clear"><i class="fa fa-times"></i></a>
+          <a class="button button--small {{classes 'addressBook.search.icon'}}" href="javascript:void(0);" id="search_button"><i class="fa fa-search"></i></a>
+        </div>
+        <a class="button button--small {{classes 'addressBook.filter.button'}}" id="filter_open_button" href="javascript:void(0);">
+          <i class="fa fa-filter {{classes 'addressBook.filter.button.icon'}}"></i>
+          {{ text 'address.filters.button' }}
+        </a>
+        <a class="button button--primary button--small button-float-right {{classes 'addressBook.actions.addNew.button'}}" id="add_new_address_button" href="javascript:void(0);">{{text 'address.add.button'}}</a>
+      </div>
+      <form class="filter-box hide {{classes 'addressBook.filter.container'}}">
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'global.user.firstName.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}} form-input" type="text" id="firstName_filter" data-filters-field="firstName" />
+        </div>
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'global.user.lastName.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}}  form-input" type="text" id="lastName_filter" data-filters-field="lastName" />
+        </div>
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'address.filters.address.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}}  form-input" type="text" id="address_filter" data-filters-field="address" />
+        </div>
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'global.user.city.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}}  form-input" type="text" id="city_filter" data-filters-field="city"/>
+        </div>
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'address.filters.country.label' }}</label>
+          <select class="{{classes 'addressBook.filter.item.select'}} form-select" id="country_filter" data-filters-field="country">
+            <option value="">{{ text 'address.filters.country.palceholder' }}</option>
+            {{#countries}}
+            <option value="{{countryName}}" data-country='{{countryData}}'>{{countryName}}</option>
+            {{/countries}}
+          </select>
+        </div>
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'global.user.state.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}}  form-input" type="text" class="state_input" id="state_filter_input" data-filters-field="state"/>
+          <select class="state_select hide {{classes 'addressBook.filter.item.select'}} form-select" id="state_filter_select" data-filters-field="state">
+            <option value="">{{ text 'address.filters.state.palceholder' }}</option>
+          </select>
+        </div>
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'global.user.zipcode.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}}  form-input" type="text" id="zipcode_filter" data-filters-field="zipCode"/>
+        </div>
+        <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'global.user.phone.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}}  form-input" type="text" id="phoneNumber_filter" data-filters-field="phoneNumber"/>
+          </div>
+          <div class="filter-item {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'address.filters.addressLabel.label' }}</label>
+          <input class="{{classes 'addressBook.filter.item.input'}}  form-input" type="text" id="addressLabel_filter" data-filters-field="label"/>
+        </div>
+        <div class="filter-item address-type {{classes 'addressBook.filter.item.container'}}">
+          <label class="{{classes 'addressBook.filter.item.label'}}">{{ text 'address.filters.addressType.label' }}</label>
+          <div class="address-type-content {{classes 'addressBook.filter.item.checkbox.container'}}">
+            <input class="{{classes 'addressBook.filter.item.checkbox'}}" type="checkbox" id="isShipping_filter" data-filters-field="addressType.isShipping"/>
+            <label
+              class="{{classes 'addressBook.filter.item.checkbox.label'}}"
+              for="isShipping_filter">{{ text 'address.filters.addressType.shipping' }}</label>
+            <input class="{{classes 'addressBook.filter.item.checkbox'}}" type="checkbox" id="isBilling_filter" data-filters-field="addressType.isBilling"/>
+            <label
+              class="{{classes 'addressBook.filter.item.checkbox.label'}}"
+              for="isBilling_filter">{{ text 'address.filters.addressType.billing' }}</label>
+          </div>
+        </div>
+        <div class="filter-item button-box">
+          <a class="button button--small {{classes 'addressBook.filter.cancel.button'}}" id="filter_cancel_button" href="javascript:void(0);">{{text 'address.clear.button'}}</a>
+          <a class="button button--primary button--small {{classes 'addressBook.filter.apply.button'}}" id="filter_apply_button"
+            href="javascript:void(0);">{{text 'address.apply.button'}}</a>
+        </div>
+      </form>
+      <div class="table-wrap {{classes 'addressBook.table.wrap'}}">
+        <table class="responsive-table address-lists-table {{classes 'addressBook.table.container'}}">
+          <thead>
+            <tr>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'global.user.firstName.label' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'global.user.lastName.label' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'address.thead.address' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'address.thead.addressLabel' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'global.user.city.label' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'address.thead.country' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'global.user.zipcode.label' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'global.user.state.label' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'global.user.phone.label' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'address.thead.shipping' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'address.thead.billing' }}</th>
+              <th class="t-align-c {{classes 'addressBook.table.thead.th'}}">{{ text 'address.thead.action' }}</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <ul class="pagination-list" id="pagination"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+

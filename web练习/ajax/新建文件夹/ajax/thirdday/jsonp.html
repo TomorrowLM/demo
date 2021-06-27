@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+	<script>
+		function callback(data){
+			console.log(data);		
+		}
+		
+	</script>
+<!--	等于调用callback(["zs","ls","ww"])；只是数据放到PHP后台中，保护数据安全-->
+	<script src="03data.php?_jsonp=callback"></script>
+
+</body>
+</html>

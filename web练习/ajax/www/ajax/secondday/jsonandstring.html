@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>json对象和json字符串</title>
+</head>
+
+<body>
+	<script>
+		var str = '{"name":"三国","catagory":"文学"}';//必须是双引号“”
+		var data = JSON.parse(str);
+		var s = JSON.stringify(data);
+		console.log(data.name);//输出对象属性的值
+		console.log(typeof s);//输出字符串
+		
+//		var data = eval("("+ str +")");//有风险
+//		console.log(data.name);
+//		eval("alert(123);");
+	</script>
+</body>
+</html>

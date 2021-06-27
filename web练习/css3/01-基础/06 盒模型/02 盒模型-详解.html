@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CSS3盒模型详解</title>
+	<style>
+		div.box {
+			width: 400px;
+			height: 400px;
+			padding: 50px;
+			margin: 100px auto;
+			background-color: yellow;
+			box-sizing: border-box;
+			/*box-sizing: content-box;*/
+			border: 10px solid red;
+			/*类似 IE低版本 怪异模式*/
+			font-size: 20px;
+		}
+
+		div.box p {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		盒模型设定为border-box时 width = border + padding + content <br>
+		盒模型设定为content-box时 width = content
+		<p>所谓定盒模型即可以指定 属性width的计算方式</p>
+	</div>
+</body>
+</html>

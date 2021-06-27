@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../lib/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
+    <style>
+        body{
+            margin:50px;
+        }
+    </style>
+</head>
+<body>
+    <p>localStorage</p>
+    <button class="btn btn-primary btn-lg" onclick="clickCounter1()">点击</button>
+    <p class="local"></p>
+    <br>
+    <p>sessionStorage</p>
+    <button class="btn btn-primary btn-lg" onclick="clickCounter2()">点击</button>
+    <p class="session"></p>
+
+    <form action="" class="">
+        <div class="form-group">
+            <button class="btn btn-primary">get</button>
+        </div>
+        <div class="box1"></div>
+
+    </form>
+<script>
+    //长久保存
+    // if(typeof(Storage)!=='undefined')
+    // {
+    //     alert('storage');
+    // }
+    // localStorage.setItem('key1','1');
+
+    function clickCounter1()
+    {
+        if(typeof(Storage)!=="undefined")
+        {
+            if (localStorage.clickcount)
+            {
+                localStorage.clickcount=Number(localStorage.clickcount)+1;
+            }
+            else
+            {
+                localStorage.clickcount=1;
+            }
+            $('.local').text(localStorage.clickcount);
+        }
+        else
+        {
+            document.getElementsByClassName("local").innerHTML="对不起，您的浏览器不支持 web 存储。";
+        }
+    }
+    //关闭浏览器，数据删除
+   function clickCounter2()
+   {
+       if(typeof(Storage)!=="undefined")
+       {
+           if (sessionStorage.clickcount) {
+               sessionStorage.clickcount = Number(sessionStorage.clickcount) + 1;
+           } else {
+               sessionStorage.clickcount = 1;
+           }
+           $('.session').text(sessionStorage.clickcount);
+       }
+        else
+       {
+           document.getElementsByClassName("session").innerHTML="对不起，您的浏览器不支持 web 存储。";
+       }
+   }
+   document.cookie="user=cookie;pw=123";
+
+   $('button').click(function () {
+       $.ajax({
+           url:'02.php',
+           type:'get',
+           dataType:'html',
+           crossDomain: true,
+           xhrFields: {
+               withCredentials: true
+           },
+           beforeSend: function (xhr) {
+               xhr.withCredentials = true
+           },
+           success:function (data) {
+               var dat=data;
+            $('.box1').html(dat);
+
+           }
+       })
+   })
+</script>
+</body>
+</html>

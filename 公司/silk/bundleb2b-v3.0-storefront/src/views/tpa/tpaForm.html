@@ -1,0 +1,115 @@
+{{#if isVisible}}
+<div class="company-form-wrap2">
+  <form action="" data-create-company-form method="post" class="form">
+    <input type="hidden" name="company_id" id="company_id" value="{{companyId}}">
+    <input type="hidden" name="company_customer_role" id="company_customer_role" value="">
+    <input type="hidden" name="company_customer_id" id="company_customer_id" value="{{customer.id}}">
+
+    <div class="user-information" id="tpa-user-information" {{#if hide}}style="display:none" {{/if}}>
+      <h6 class="b2b-title" style="font-weight: 700;">
+        {{text 'tpa.form.company.admin.account.title'}}
+      </h6>
+      <div>
+        <div class="form-row form-row--half">
+          <div class="form-field">
+            <label class="form-label">
+              {{text 'global.user.firstName.label'}}
+            </label>
+            <input class="form-input" type="text" id="user-fist-name" disabled value="{{userFirstName}}">
+          </div>
+          <div class="form-field">
+            <label class="form-label">
+              {{text 'global.user.lastName.label'}}
+            </label>
+            <input class="form-input" type="text" id="user-last-name" disabled value={{userLastName}}>
+          </div>
+
+        </div>
+        <div class="form-field">
+          <label class="form-label">
+           {{text 'global.user.companyEmail.label'}}
+          </label>
+          <input class="form-input" type="text" disabled value={{customer.email}}>
+        </div>
+        <div class="form-field">
+          <label class="form-label">
+            {{text 'global.user.phone.label'}}
+          </label>
+          <input class="form-input" type="text" disabled value={{customer.phone}}>
+        </div>
+      </div>
+    </div>
+
+    <!-- <p>Please fill out the following company contact information</p>
+        <p class="span-required">*{{text 'global.required.label'}} Fields</p> -->
+    <h6 class="b2b-title" {{#if hide}}style="display:none" {{/if}} style="font-weight: 700;">
+      {{text 'tpa.form.company.info.title'}}
+    </h6>
+    <div class="form-field" {{#if hide}}style="display:none" {{/if}}>
+      <label class="form-label" for="company_name">{{text 'tpa.form.company.name.label'}}
+        <small>{{text 'global.required.label'}}</small>
+      </label>
+      <input class="form-input" type="text" id="company_name" name="company_name">
+    </div>
+    <div class="form-field" {{#if hide}}style="display:none" {{/if}}>
+      <label class="form-label" for="company_user_email">
+        {{ text 'global.user.companyEmail.label' }}
+        <small>{{text 'global.required.label'}}</small>
+      </label>
+      <input class="form-input" type="text" id="company_user_email" name="company_user_email">
+    </div>
+    <div class="form-field" {{#if hide}}style="display:none" {{/if}}>
+      <label class="form-label" for="company_user_phone">{{text 'global.user.phone.label'}}
+        <small>{{text 'global.required.label'}}</small>
+      </label>
+      <input class="form-input" type="text" id="company_user_phone" name="company_user_phone">
+    </div>
+
+    <div class="form-field" {{#if hide}}style="display:none" {{/if}}>
+      <label class="form-label" for="company_address_street">
+        {{ text 'global.user.address1.label' }}
+      </label>
+      <input class="form-input" type="text" id="company_address_street" name="company_address_street">
+    </div>
+    <div class="form-field" {{#if hide}}style="display:none" {{/if}}>
+      <label class="form-label" for="company_address_street2">
+        {{text 'global.user.address2.label'}}
+      </label>
+      <input class="form-input" type="text" id="company_address_street2" name="company_address_street2">
+    </div>
+    <div class="form-field" {{#if hide}}style="display:none" {{/if}}>
+      <label class="form-label" for="company_address_country">
+        {{text 'global.user.country.label'}}
+      </label>
+      <input class="form-input" type="text" id="company_address_country" name="company_address_country">
+    </div>
+    <div class="form-field" {{#if hide}}style="display:none" {{/if}}>
+      <label class="form-label" for="company_address_city">
+        {{text 'global.user.city.label'}}
+      </label>
+      <input class="form-input" type="text" id="company_address_city" name="company_address_city">
+    </div>
+    <div class="form-row form-row--half" {{#if hide}}style="display:none" {{/if}}>
+
+      <div class="form-field">
+        <label class="form-label" for="company_address_state">
+          {{text 'global.user.state.label'}}
+        </label>
+        <input class="form-input" type="text" id="company_address_state" name="company_address_state">
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="company_address_zip">
+          {{text 'global.user.zipcode.label'}}
+        </label>
+        <input class="form-input" type="text" id="company_address_zip" name="company_address_zip">
+      </div>
+
+    </div>
+
+    <div class="form-actions" style="text-align: left;">
+      <input type="submit" class="button button--primary" {{#if type}}data-submit-type='resubmit' {{else}}{{/if}}
+        value="{{#if type}}{{text 'tpa.form.resubmit.button'}}{{else}}{{text 'tpa.form.submit.button'}}{{/if}}" id='{{tpaSubmitBtnId}}' />
+    </div>
+  </form>
+</div>
+{{/if}}

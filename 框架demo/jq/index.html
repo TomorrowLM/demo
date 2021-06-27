@@ -14,11 +14,18 @@
     <div class="box2">
         <div class="box1-1">$([selector,[context]])</div>
     </div>
+    <div>
+        <p><div>2</div></p>
+        <p>2</p>
+    </div>
+    <p class="insert">I would like to say: </p><div id="foo">Hello</div>
 </body>
 <script>
    $('.box1-1',$('.box2')).css("color","red");
    console.log($(this)[0]==this)
    console.log($(this)[0]==$(this).get(0))
    console.log($(".box1").get(0))
+   console.log($('p').html())
+   $(".insert").insertAfter("#foo");
 </script>
 </html>

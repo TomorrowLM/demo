@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CSS3 媒体查询</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: '微软雅黑';
+			background-color: #F7F7F7;
+		}
+
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		.wrapper {
+			width: 1024px;
+			margin: 0 auto;
+		}
+
+		.wrapper > section {
+			min-height: 300px;
+			margin-bottom: 30px;
+			box-shadow: 1px 1px 4px #DDD;
+			background-color: #FFF;
+		}
+
+		.wrapper > header {
+			text-align: center;
+			line-height: 1;
+			padding: 20px;
+			margin-bottom: 10px;
+			font-size: 30px;
+		}
+
+		.wrapper section > header {
+			line-height: 1;
+			padding: 10px;
+			font-size: 22px;
+			color: #333;
+			background-color: #EEE;
+		}
+
+		.wrapper .wrap-box {
+			padding: 20px;
+		}
+
+		.wrapper .brief {
+			min-height: auto;
+		}
+
+		.wrapper .flex-img {
+			width: 100%;
+		}
+
+		code {
+			font-size: 20px;
+			font-family: Arial;
+		}
+
+
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<header>CSS3-媒体查询</header>
+		<!-- 简介 -->
+		<section class="brief">
+			<header>简介</header>
+			<div class="wrap-box">
+				<p>通过检测当前设备类型或设备特性来指定特定的CSS样式</p>
+				<p>设备类型包括: screen、print、all等</p>
+				<p>设备特性包括: width、height、device-width、device-height等</p>
+			</div>
+		</section>
+		<!-- 分隔线 -->
+		<section>
+			<header>link方式</header>
+			<div class="wrap-box">
+				<code>
+					&ltlink rel="stylesheet" media="screen and (max-width:600px)" href="./css/main.css"&gt
+				</code>
+			</div>
+		</section>
+		<section class="column">
+			<header>CSS3方式</header>
+			<div class="wrap-box">
+				<code>
+					@media screen and (max-width:600px) {
+						background: red;
+					}
+				</code>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

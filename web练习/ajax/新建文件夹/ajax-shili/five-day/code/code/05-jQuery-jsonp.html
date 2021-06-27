@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-2.2.0.js"></script>
+    <script>
+        $(function(){
+            $.ajax({
+                type:"get",
+                cache:false,//不缓存
+                url:"http://v.juhe.cn/weather/index?format=2&cityname=%E9%82%AF%E9%83%B8&key=e982f3629ae77eb7345b7e42f29b62ae&dtype=jsonp",
+                dataType:"jsonp",
+                success: function (data) {
+                    alert(data.reason);
+                },
+                error: function () {
+                    alert("亲，错误");
+                }
+            });
+        })
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>

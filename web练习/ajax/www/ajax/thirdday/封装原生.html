@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style>
+		#ems{
+			position:absolute;
+			left:50%;
+			width: 400px;
+			height: auto;
+			margin-left: -200px;
+			background:lightGreen;
+			text-align:center;
+			min-height: 50px;
+			height:500px;
+			overflow-y: scroll;
+			overflow-x: auto;
+		}
+		#ems input{
+			height: 25px;
+			margin-top: 10px;
+		}
+		#list{
+			background: lightBlue;
+		}
+		#list li{
+			text-align: left;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="ems">
+		<div>
+			<input type="text" id="code">
+			<input type="button" value="查询" id="btn">
+		</div>
+		<div id="list"></div>
+	</div>
+	<script>
+		function ajax(data){
+			//data={data:"",dataType:'xml/json,type:"get/post",url:"",asyn:"true/false",success:function(){},failure:function(){}}
+			//data:{username:123,password:456}
+			//data = 'username=123&password=456';
+			//第一步：创建xhr对象
+			var xhr = null;
+			if(window.XMLHttpRequest){
+				xhr = new XMLHttpRequest();//标准浏览器
+			}else{
+				xhr = new ActiveXObject('Microsoft.XMLHTTP');
+			}
+			//第二步：准备发送前一些配置参数
+			var type = data.type == 'get'?'get':'post';
+			var url = '';
+			if(data.url){
+				url = data.url;
+				if(type == 'get'){
+					url += "?"+data.data+"&_t="+new Date().getTime();
+				}
+			}
+			var flag = data.asyn == 'ture'?'true':'false';
+			xhr.open(type,url,flag);
+			//第三个步：执行发送的动作
+			if(type == 'get'){
+				xhr.send(null);//null兼容老版本浏览器
+			}else if(type == 'post'){
+				xhr.setRequestHeader("content-Type","application/x-www-from-urlencoded")//对表单数据编码
+				xhr.send(data.data);
+			}
+			
+			//第四步：指定回调函数
+			xhr.onreadystatechange = function(){
+				if(this.readyState == 4){
+					if(this.status == 200){
+						if(typeof data.success == 'function'){
+							var d = data.dataType == 'xml'?xhr.responseXML:xhr.responseText;
+							data.success(d);
+						}
+					}else{
+						if(typeof data.failure == 'function'){
+							data.failure();
+						}
+					}
+				}
+			}
+		}
+		window.onload = function(){
+			var btn = document.getElementById('btn');
+			btn.onclick = function(){
+				var param = {
+					url:"01data.php",
+					type:'get',
+					dataType:'json',
+					success:function(data){
+						alert(data);
+					}
+				};
+				ajax(param);
+			}
+		}
+
+	</script>
+</body>
+</html>
+	

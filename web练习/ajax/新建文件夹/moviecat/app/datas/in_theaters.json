@@ -1,0 +1,141 @@
+{
+  "status": 0,
+  "msg": "ok",
+  "result": {
+	"city": "杭州",
+	"cityid": "382",
+	"date": "2018-07-08",
+	"list": [
+	  {
+		"movieid": "137363",
+		"moviename": "我不是药神",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/14/137363.jpg"
+	  },
+	  {
+		"movieid": "137197",
+		"moviename": "动物世界",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/14/137197.jpg"
+	  },
+	  {
+		"movieid": "140409",
+		"moviename": "新大头儿子和小头爸爸3：俄罗斯奇遇记",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/15/140409.jpg"
+	  },
+	  {
+		"movieid": "17594",
+		"moviename": "侏罗纪世界2",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/2/17594.jpg"
+	  },
+	  {
+		"movieid": "8702",
+		"moviename": "超人总动员2",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/1/8702.jpg"
+	  },
+	  {
+		"movieid": "136269",
+		"moviename": "金蝉脱壳2",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/14/136269.jpg"
+	  },
+	  {
+		"movieid": "350",
+		"moviename": "阿飞正传",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/1/350.jpg"
+	  },
+	  {
+		"movieid": "140586",
+		"moviename": "细思极恐",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/15/140586.jpg"
+	  },
+	  {
+		"movieid": "140753",
+		"moviename": "您一定不要错过",
+		"pic": ""
+	  },
+	  {
+		"movieid": "137628",
+		"moviename": "龙虾刑警",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/14/137628.jpg"
+	  },
+	  {
+		"movieid": "8001",
+		"moviename": "猛虫过江",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/1/8001.jpg"
+	  },
+	  {
+		"movieid": "140750",
+		"moviename": "姽婳",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/15/140750.jpg"
+	  },
+	  {
+		"movieid": "11112",
+		"moviename": "暹罗决：九神战甲",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/2/11112.jpg"
+	  },
+	  {
+		"movieid": "140754",
+		"moviename": "生存家族",
+		"pic": ""
+	  },
+	  {
+		"movieid": "140041",
+		"moviename": "潜艇总动员：海底两万里",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/15/140041.jpg"
+	  },
+	  {
+		"movieid": "140751",
+		"moviename": "我的诗篇",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/15/140751.jpg"
+	  },
+	  {
+		"movieid": "138863",
+		"moviename": "泄密者",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/14/138863.jpg"
+	  },
+	  {
+		"movieid": "140752",
+		"moviename": "最后一球",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/15/140752.jpg"
+	  },
+	  {
+		"movieid": "310",
+		"moviename": "复仇者联盟3：无限战争",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/1/310.jpg"
+	  },
+	  {
+		"movieid": "1730",
+		"moviename": "寂静之地",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/1/1730.jpg"
+	  },
+	  {
+		"movieid": "127361",
+		"moviename": "第七个小矮人",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/13/127361.jpg"
+	  },
+	  {
+		"movieid": "140584",
+		"moviename": "小悟空",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/15/140584.jpg"
+	  },
+	  {
+		"movieid": "133229",
+		"moviename": "阿修罗",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/14/133229.jpg"
+	  },
+	  {
+		"movieid": "128837",
+		"moviename": "邪不压正",
+		"pic": "http://api.jisuapi.com/movie/upload/movie/13/128837.jpg"
+	  },
+	  {
+		"movieid": "140755",
+		"moviename": "摩天营救",
+		"pic": ""
+	  },
+	  {
+		"movieid": "140756",
+		"moviename": "汪星卧底",
+		"pic": ""
+	  }
+	]
+  }
+}

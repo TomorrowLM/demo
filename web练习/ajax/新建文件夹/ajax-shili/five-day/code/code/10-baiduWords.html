@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        #contents {
+            margin: 200px auto 0px auto;
+            width: 500px;
+
+        }
+        #txtSearch {
+            width: 400px;
+        }
+        #datas {
+            border: 1px red solid;
+            width: 400px;
+        }
+        #datas ul {
+            list-style-type: none;
+            padding: 5px;
+        }
+    </style>
+    <script src="js/jquery-2.2.0.js"></script>
+    <script src="js/template-native-debug.js"></script>
+    <script id="tpl" type="text/html">
+        <div id="datas">
+            <ul>
+                <% for(var i=0; i< s.length; i++) { %>
+                <li><%= s[i] %></li>
+                <% } %>
+            </ul>
+        </div>
+    </script>
+    <script>
+        $(function () {
+            $("#txtSearch").keyup(function () {
+                //
+                var key = $("#txtSearch").val();
+                //发送异步请求获取数据
+                $.ajax({
+                    type:"get",
+                    url:"https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd="+key,
+                    dataType:"jsonp",
+                    jsonp:"cb",
+                    success: function (data) {
+                        $("#datas").remove();
+
+                        if (data.s.length > 0) {
+                            var html = template("tpl",data);
+                            $("#contents").append(html);
+                        }
+
+                    },
+                    error: function () {
+                        alert("亲，出错了");
+                    }
+                })
+            });
+        })
+    </script>
+</head>
+<body>
+    <div id="contents">
+        <input type="text" name="" id="txtSearch">
+        <input type="button" value="搜索" id="btnSearch">
+    </div>
+</body>
+</html>

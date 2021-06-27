@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自己封装ajax请求</title>
+    <script src="js/ajax2.js"></script>
+    <script>
+        window.onload = function () {
+            var btn = document.getElementById("btn");
+            var msgDiv = document.getElementById("msg");
+            btn.onclick = function () {
+                msgDiv.innerHTML = "正在拼命加载...";
+                var name = document.getElementById("name").value;
+                var pwd = document.getElementById("pwd").value;
+
+                var data = "name=" + name + "&pwd=" + pwd;
+//                ajax("post", "php/02-login.php", data, true,function (response) {
+//                    if (response == 1) {
+//                        msgDiv.innerHTML = "登录成功";
+//                    }else{
+//                        msgDiv.innerHTML = "登录失败";
+//                    }
+//                }, function () {
+//                    msgDiv.innerHTML = "服务器内部错误";
+//                });
+
+
+                ajax2({
+                    type:"post",
+                    url:"php/02-login.php",
+                    data:data,
+                    async:true,
+                    success:function (response){
+                        if (response == 1) {
+                            msgDiv.innerHTML = "登录成功";
+                        }else{
+                            msgDiv.innerHTML = "登录失败";
+                        }
+                    },
+                    error:function (){
+                        msgDiv.innerHTML = "服务器内部错误";
+                    }
+                });
+
+            }
+        }
+
+    </script>
+</head>
+<body>
+<form action="php/02-login.php" method="post">
+    <input type="text" name="name" id="name"><br />
+    <input type="password" name="pwd" id="pwd"><br />
+
+    <input type="button" value="登 录" id="btn">
+    <div id="msg"></div>
+</form>
+</body>
+</html>

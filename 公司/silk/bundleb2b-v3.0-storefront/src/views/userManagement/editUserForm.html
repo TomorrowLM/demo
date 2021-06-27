@@ -1,0 +1,60 @@
+<div id="modal-user-management-edit-form" class="modal modal--small {{classes 'UserManagement'}}" data-reveal>
+  <div class="modal-header {{classes 'userManagement.modal.header.container'}}">
+    <h2 class="modal-header-title {{classes 'userManagement.modal.header.title'}}">{{text 'user.form.edit.title'}}</h2>
+    <a href="#" class="modal-close {{classes 'userManagement.modal.header.close'}}" aria-label="close" role="button">
+      <span aria-hidden="true">&#215;</span>
+    </a>
+  </div>
+  <div class="modal-body {{classes 'userManagement.modal.body'}}">
+    <form class="form" action="" method="post">
+      <fieldset class="form-fieldset {{classes 'userManagement.modal.form.container'}}">
+        <input name="user_id" id="user_id" type="hidden">
+        <div class="form-field {{classes 'userManagement.modal.form.item.container'}}">
+          <label class="form-label {{classes 'userManagement.modal.form.item.label'}}" for="role_id">
+            {{ text 'user.form.role.label' }}
+            <small class="{{classes 'userManagement.modal.form.item.required'}}">{{text 'global.required.label'}}</small>
+          </label>
+          <select class="form-select {{classes 'userManagement.modal.form.item.select'}}" name="role_id" id="role_id">
+            {{#roleOptions}}
+            <option value={{value}} {{selected}}>{{title}}</option>
+            {{/roleOptions}}
+          </select>
+        </div>
+        <div class="form-field {{classes 'userManagement.modal.form.item.container'}}">
+          <label class="form-label {{classes 'userManagement.modal.form.item.label'}}" for="email">
+            {{ text 'global.user.email.label' }}
+            <small class="{{classes 'userManagement.modal.form.item.required'}}">{{text 'global.required.label'}}</small>
+          </label>
+          <input class="form-input {{classes 'userManagement.modal.form.item.input'}}" type="text" name="email" id="email" disabled="true" value={{email}}>
+        </div>
+        <div class="form-field {{classes 'userManagement.modal.form.item.container'}}">
+          <label class="form-label {{classes 'userManagement.modal.form.item.label'}}" for="first_name">
+            {{ text 'global.user.firstName.label' }}
+            <small class="{{classes 'userManagement.modal.form.item.required'}}">{{text 'global.required.label'}}</small>
+          </label>
+          <input class="form-input {{classes 'userManagement.modal.form.item.input'}}" name="first_name" id="first_name" type="text" value={{firstName}}>
+        </div>
+        <div class="form-field {{classes 'userManagement.modal.form.item.container'}}">
+          <label class="form-label {{classes 'userManagement.modal.form.item.label'}}" for="last_name">
+            {{ text 'global.user.lastName.label' }}
+            <small class="{{classes 'userManagement.modal.form.item.required'}}">{{text 'global.required.label'}}</small>
+          </label>
+          <input class="form-input {{classes 'userManagement.modal.form.item.input'}}" type="text" name="last_name" id="last_name" value={{lastName}}>
+        </div>
+        <div class="form-field {{classes 'userManagement.modal.form.item.container'}}">
+          <label class="form-label {{classes 'userManagement.modal.form.item.label'}}" for="phone">
+            {{ text 'global.user.phone.label' }}
+          </label>
+          <input class="form-input {{classes 'userManagement.modal.form.item.input'}}" type="text" name="phone" id="phone" value={{phone}}>
+        </div>
+        <div class="form-actions {{classes 'userManagement.modal.form.button.container'}}">
+          <input type="button" class="button button--primary {{classes 'userManagement.modal.form.button.save'}}" value="{{text 'user.form.save.button'}}"
+            data-user-id={{userId}} id="update_user">
+          <button href="#"
+            class="button modal-close modal-close--button b3cacel-btn {{classes 'userManagement.modal.form.button.cancel'}}">{{text 'user.form.cancel.button'}}</a>
+        </div>
+
+      </fieldset>
+    </form>
+  </div>
+</div>

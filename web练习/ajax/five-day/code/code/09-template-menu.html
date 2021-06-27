@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .all {
+            margin-top: 30px;
+        }
+        .xh {
+            float: left;
+            margin-right: 20px;
+            color: red;
+            font-style: italic;
+            font-size: 30px;
+        }
+        #menu {
+            width: 500px;
+        }
+    </style>
+    <script src="js/template-native-debug.js"></script>
+    <script src="js/jquery-2.2.0.js"></script>
+    <script id="tpl" type="text/html">
+        <% for(var i=0; i< data.length; i++ ) { %>
+        <div class="all">
+            <h2><%= data[i].title %></h2>
+            <p class="intro"><%= data[i].imtro %></p>
+            <% for(var j=0; j< data[i].albums.length; j++) { %>
+                <img src="<%= data[i].albums[j] %>" />
+            <% } %>
+
+            <p class="zl">主料：<%= data[i].ingredients %></p>
+            <p class="fl">辅料：<%= data[i].burden %></p>
+            <div class="steps">
+                <% for(var j=0; j< data[i].steps.length; j++) { %>
+                    <em class="xh"><%= j+1 %>.</em>
+                    <div class="c">
+                        <p><%= data[i].steps[j].step %></p>
+                        <p><img src="<%= data[i].steps[j].img %>" /></p>
+                    </div>
+                <% } %>
+
+            </div>
+        </div>
+        <hr />
+        <% } %>
+    </script>
+    <script>
+        $(function () {
+            $("#btn").click(function () {
+                var key = $("#txt").val();
+                //
+                $.ajax({
+                    type:"get",
+                    url:"http://apis.juhe.cn/cook/query?key=3e1dcd706f3f21875c6d7c5035351d75&rn=5&pn=0&dtype=jsonp&menu="+key,
+                    dataType:"jsonp",
+                    success: function (data) {
+                        if (data.resultcode != 200) {
+                            $("#menu").text("亲，没有获取到数据");
+                            return;
+                        }
+
+                        //通过模板渲染html
+                        var html = template("tpl",data.result);
+                        $("#menu").html(html);
+                    },
+                    error: function () {
+                        $("#menu").text("亲，出错了");
+                    }
+                });
+            });
+        })
+    </script>
+</head>
+<body>
+<input type="text" name="txt" id="txt"> <input type="button" value="搜索" id="btn">
+
+<div id="menu">
+
+</div>
+</body>
+</html>

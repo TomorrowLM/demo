@@ -1,0 +1,25 @@
+{{#if result.length}}
+<div class="product-qty-label form-label">Qty: <small>*</small></div>
+{{#result}}
+<table class="search-product-table" product-search-result-table style="margin-bottom: 1.5rem;width:100%">
+  <tbody>
+    <tr data-product-id={{ productId }} data-variant-id="{{ variantId }}"
+      data-product-options={{ optionsList }}>
+      <td class="col-checkbox"><input type="checkbox" data-results-check-box data-product-id="{{productId }}"
+          data-variant-id="{{ variantId }}"></td>
+      <td class="col-product-figure"><img src="../../../../img/ProductDefault.gif" data-img-id="img_id_{{ productId }}_{{ idx }}"></td>
+      <td class="col-product-info">{{productName }}<br />
+        <b>SKU:</b> {{variantSku }}</td>
+      <td class="col-product-price" data-product-price data-product-price-value="{{price}}"><span
+          class="loading-span"><span></td>
+      <td class="product-qty-col"><input class="form-input" type="text" id="product_qty_{{productId }}"
+          name="product_qty_{{ productId }}" data-advqty-sku="{{ variantSku }}" value="1"></td>
+    </tr>
+  </tbody>
+</table>
+{{/result}}
+{{else}}
+<tr>
+  <td colspan="5">No products found for "{{searchValue}}".</td>
+</tr>
+{{/if}}

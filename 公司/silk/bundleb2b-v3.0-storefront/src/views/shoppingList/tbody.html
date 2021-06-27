@@ -1,0 +1,80 @@
+{{#list}}
+<tr
+  data-index="{{idx}}"
+  data-index-{{idx}}
+  data-product-{{productId}}
+  data-product-id="{{productId}}"
+  data-variant-id="{{variantId}}"
+  data-in-catalog="true"
+  data-item-id="{{itemId}}"
+  data-product-options="{{options}}"
+>
+  <td class="col-checkbox">
+    {{#if isShowAction}}
+    <input type="checkbox" data-item-id="{{itemId}}" />
+    {{/if}}
+  </td>
+  <td class="col-product-info">
+    <div class="product-iamge">
+      <img
+        class="{{classes 'shoppinglist.right.td.img'}}"
+        src="{{productImage}}"
+        alt="{{productName}}"
+      />
+    </div>
+    <div class="product-description">
+      <div class="product-title">
+        <a product-url href="{{productUrl}}">{{productName}}</a>
+      </div>
+      <div class="product-options"></div>
+      <div class="product-attribute product-sku">
+        <span>{{text 'shopping.list.td.sku.label'}} </span>{{productSku}}
+      </div>
+    </div>
+  </td>
+  <td
+    class="t-align-r col-product-price"
+    data-product-price-value="{{productPrice}}"
+  >
+    <span class="product-price" data-main-price="{{productPrice}}"
+      ><span class="loading-span"></span
+    ></span>
+  </td>
+  <td class="t-align-r col-product-qty" data-product-quantity>
+    <input
+      type="text"
+      value="{{qty}}"
+      class="input-text form-input update-list-item qty {{inputDisabled}} {{classes 'shoppinglist.right.td.qty.input'}}"
+      autocomplete="off"
+      data-advqty-sku="{{productSku}}"
+      update-list-item
+      {{inputDisabled}}
+    />
+  </td>
+  <td class="t-align-r col-action">
+    <div class="action-wrap">
+      <div class="product-subtotal">
+        <span class="product-subtotal-span"
+          ><span class="loading-span"></span
+        ></span>
+      </div>
+      {{#isShowAction}}
+      <div class="action-lists">
+        <!-- <a
+          class="button button--primary button--small update-list-item {{this.classes 'shoppinglist.right.button.updateQty'}}"
+          href="javascript:void(0);"
+          update-list-item
+          >{{text 'shopping.list.button.updateQty'}}</a
+        > -->
+        <a
+          class="button button--primary button--small square list-button-remove data-delete-item {{classes 'shoppinglist.right.button.delete'}}"
+          href="javascript:void(0);"
+          >
+          <i class="fa fa-trash data-delete-item {{classes 'shoppinglist.right.button.delete.icon'}}" data-delete-item data-item-id="{{itemId}}"></i>
+        </a>
+      </div>
+      {{/isShowAction}}
+    </div>
+  </td>
+</tr>
+{{/list}}

@@ -1,0 +1,12 @@
+<div class="rfq-header-title">
+  {{storeInfo.storeName}}
+</div>
+<div class="rfq-header-icon">
+  <button>{{quoteStatus}}</button>
+  <a class=" {{classes 'quote.button.print'}}" id="print_pdf" href="javascript:void(0);" data-click="printPDF" data-stop>
+    <i class="fa fa-print {{classes 'quote.button.print.icon'}}" data-click="printPDF" data-stop></i>
+  </a>
+  <a class="{{classes 'quote.button.pdf'}}" id="export_pdf" href="javascript:void(0);" data-click="exportPDF" data-stop>
+      <i class="fa fa-file-pdf-o {{classes 'quote.button.pdf.icon'}}" data-click="exportPDF" data-stop></i>
+  </a>
+</div>

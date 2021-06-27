@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style>
+		#ems{
+			position:absolute;
+			left:50%;
+			width: 400px;
+			height: auto;
+			margin-left: -200px;
+			background:lightGreen;
+			text-align:center;
+			min-height: 50px;
+			height:500px;
+			overflow-y: scroll;
+			overflow-x: auto;
+		}
+		#ems input{
+			height: 25px;
+			margin-top: 10px;
+		}
+		#list{
+			background: lightBlue;
+		}
+		#list li{
+			text-align: left;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="ems">
+		<div>
+			<input type="text" id="code">
+			<input type="button" value="查询" id="btn">
+		</div>
+		<div id="list"></div>
+	</div>
+	<script>
+		window.onload = function(){
+			var btn = document.getElementById('btn');
+			btn.onclick = function(){
+				var code = document.getElementById('code').value;
+				var xhr = null;
+				//异常处理：保证try中代码出现问题时，跳过try，执行catch中的代码
+				try{
+					xhr = new XMLHttpRequest();
+//					throw new Error('error');
+				}catch(e){
+					xhr = new ActiveObject('microsoft.XMLHTTP');
+				}
+				xhr.open('get','ems.php?code='+code);
+				xhr.send(null);
+				xhr.onreadystatechange = function(){
+					if(this.readyState == 4 && this.status == 200){
+						var data = JSON.parse(this.responseText);
+//						console.log(data);
+						if(data.status == 0){
+							var list = data.data.info.context;
+							var tag = '';
+							for(var i = 0;i<list.length;i++){
+								var item = list[i];
+								var time = item.time;
+								var desc = item.desc;
+								var time = new Date();
+								time.setTime(item.time+'000');
+								var str = time.getFullYear()+'年'+(time.getMonth()+1)+'月'+time.getDay()+'日'+(time.getHours()>12?'下午':'上午')+time.getHours()%12+':'+time.getMinutes()+':'+time.getSeconds();
+								
+								tag += '<li><div>'+str+'</div><div>'+desc+'</div></li>'
+							}
+							var ul = document.createElement('ul');
+							ul.innerHTML = tag;
+							document.getElementById('list').appendChild(ul);
+						}else{
+							var info = data.msg;
+							document.getElementById('list').innerHTML = info;
+						}
+					}
+				}
+			}
+		}
+
+	</script>
+</body>
+</html>

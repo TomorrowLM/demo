@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/template-native-debug.js"></script>
+    <script src="js/jquery-2.2.0.js"></script>
+
+    <script id="tpl" type="text/html">
+        <h3><%= title %></h3>
+        <ul>
+            <% for(var i=0; i< list.length; i++) { %>
+                <li><%= list[i] %></li>
+            <% } %>
+        </ul>
+    </script>
+    <script>
+        window.onload = function (){
+            var data = {
+                title:"班级人员",
+                list:["张三","李四","王五","凤姐","老罗"]
+            };
+            var html = template("tpl",data);
+            $("#d").html(html);
+        }
+
+    </script>
+</head>
+<body>
+    <div id="d"></div>
+</body>
+</html>

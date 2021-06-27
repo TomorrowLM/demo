@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax</title>
+    <script>
+
+        window.onload = function (){
+
+            document.getElementById("btn").onclick = function(){
+                var time = document.getElementById("time");
+                time.innerHTML = "正在加载服务器时间...";
+
+                //1 创建XMLHttpRequest
+                var xhr = null;
+                if (XMLHttpRequest) {
+                    xhr = new XMLHttpRequest();
+                }else {
+                    xhr = ActiveXObject("Microsoft.XMLHTTP");
+                }
+                //2 设置请求
+                var random = Math.random();
+                xhr.open("get","php/01-gettime.php?_="+random,true);
+                //3 注册状态发生改变的时间
+
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4 ){
+                        if(xhr.status == 200) {
+                            //获取服务器返回的结果
+                            var response = xhr.responseText;
+                            time.innerHTML = response;
+                        }else{
+                            time.innerHTML = "亲，出错了哦";
+                        }
+                    }
+                }
+                //4 发送请求
+                xhr.send(null);
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="button" name="" value="gettime" id="btn">
+    <div id="time"></div>
+
+</body>
+</html>

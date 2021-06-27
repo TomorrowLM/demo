@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+
+        window.onload = function (){
+            document.getElementById("btn").onclick = function(){
+                var name = document.getElementById("name").value;
+                var pwd = document.getElementById("pwd").value;
+                //1 判断用户是否输入
+                //显示消息的div
+                var msgDiv = document.getElementById("msg");
+                if (name.length == 0) {
+                    msgDiv.innerHTML = "用户名不能为空";
+                    return;
+                }
+                //判断密码是否为空
+                if (pwd.length == 0) {
+                    msgDiv.innerHTML = "密码不能为空";
+                    return;
+                }
+
+                msgDiv.innerHTML = "正在拼命登录...";
+
+                //2 发送异步请求
+                //2.1 创建XMLHttpRequest
+                var xhr = null;
+                if (XMLHttpRequest) {
+                    xhr = new XMLHttpRequest();
+                }else{
+                    //兼容IE6以前的老版本IE
+                    xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                //2.2 设置请求
+                xhr.open("post","php/02-login.php",true);
+                //设置请求头
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                //2.3 注册状态改变的时间
+                xhr.onreadystatechange = function(){
+                    //判断XMLHttpResponse的状态
+                    if (xhr.readyState == 4) {
+                        //判断http的状态码
+                        if (xhr.status == 200) {
+                            //获取服务器返回的内容
+                            var response = xhr.responseText;
+                            if (response == 1) {
+                                msgDiv.innerHTML = "登录成功";
+                            }else{
+                                msgDiv.innerHTML = "登录失败";
+                            }
+                        }else{
+                            msgDiv.innerHTML = "服务器内部错误";
+                        }
+                    }
+                };
+                //2.4 发送请求
+                var data = "name="+ name +"&pwd=" + pwd;
+                xhr.send(data);
+            }
+        }
+    </script>
+</head>
+<body>
+    <form action="php/02-login.php" method="post">
+        <input type="text" name="name" id="name"><br />
+        <input type="password" name="pwd" id="pwd"><br />
+
+        <input type="button" value="登 录" id="btn">
+        <div id="msg"></div>
+    </form>
+</body>
+</html>

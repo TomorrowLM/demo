@@ -1,0 +1,35 @@
+<div class="b2b-wrap {{classes 'Quotes'}} {{classes 'b2bWrap'}} {{classes 'quotes.container'}}">
+  <div class="b2b-head-flex {{classes 'quotes.head.container'}}">
+      <div class="b2b-head-left">
+          <h3 class="title {{classes 'quotes.head.title'}}">{{text 'quotes.list.title'}}</h3>
+      </div>
+      {{#if isShowCreateBtn}}
+        <a class="button button--primary button--small button-float-right {{classes 'quotes.head.button.createQuote'}}" id="create_new_quote_button" href="/create-quote">{{text 'quotes.create.button'}}</a>
+      {{/if}}
+  </div>
+  <div class="table-wrap">
+      <table class="responsive-table quote-list-table {{classes 'quotes.table'}}" id="quote_list_table">
+          <thead>
+            <tr>
+              <th class="{{classes 'quotes.thead.th'}}">{{text 'quote.form.referenceNumber.label'}}</th>
+              <th class="{{classes 'quotes.thead.th'}}">{{text 'quote.thead.title'}}</th>
+              <th class="t-align-c {{classes 'quotes.thead.th'}}">
+              {{#if isShowCreateBtn}}
+                {{text 'quote.thead.companyName'}}
+              {{else}}
+                {{text 'quote.thead.salesRep'}}
+              {{/if}}
+              </th>
+              <th class="t-align-c {{classes 'quotes.thead.th'}}">{{text 'quote.thead.createdOn'}}</th>
+              <th class="t-align-c {{classes 'quotes.thead.th'}}">{{text 'quote.thead.status'}}</th>
+              <th class="t-align-c {{classes 'quotes.thead.th'}}" style="text-align: center">{{text 'quote.thead.action'}}</th>
+            </tr>
+          </thead>
+          <tbody id="quote-list-container"></tbody>
+      </table>
+  </div>
+  <div class="quote__count {{classes 'quotes.unit.container'}}"><span id="quote_count" class="{{classes 'quotes.unit.num'}}">{{pagination.totalCount}}</span> Items</div>
+
+
+  <ul class="pagination-list" id="B3pagination"></ul>
+</div>

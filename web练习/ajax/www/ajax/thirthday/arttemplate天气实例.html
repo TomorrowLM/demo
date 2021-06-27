@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style type="text/css">
+		#weather{
+			position: absolute;
+			left: 50%;
+			margin-left: -150px;
+			width: 300px;
+			background: lightGreen;
+			height: 500px;
+			text-align: center;
+		}
+		#weather select,input{
+			height: 30px;
+			margin-top: 10px;
+		}
+		#weaInfo{
+			background: lightBlue;
+			width: 300px;
+			margin-top: 10px;
+		}
+		#weaInfo ul{
+			padding-left: 0px;
+			list-style: none;
+			text-align: left;
+			padding-top: 10px;
+		}
+		#weaInfo ul li{
+			height: 30px;
+			padding-left: 50px;
+		}
+	</style>
+	<script src="jquery-1.11.2.js"></script>	
+	<script src="template.js"></script>	
+
+<!--定义一个js模板，只有调用id=artid时，模板才以html加载到页面中-->
+	<script id="artid" type="text/hmtl">
+		{{if longitude}}
+		<ul>
+			<li>经度:{{longitude}}</li>
+			<li>维度:{{latitude}}</li>
+			<li>海拔高度:{{altitude}}</li>
+			<li>天气:{{weather}}</li>
+			<li>温度:{{temp}}</li>
+			<li>最低温度:{{l_tmp}}</li>
+			<li>最高温度:{{h_tmp}}</li>
+			<li>风向:{{WD}}</li>
+			<li>风速:{{WS}}</li>
+			<li>日出时间:{{sunrise}}</li>
+			<li>日落时间:{{sunset}}</li>
+		</ul>
+		{{/if}}
+	</script>
+</head>
+
+<body>
+	<div id="weather">
+	<div>
+		<select>
+			<option value="1">北京</option>
+			<option value="2">上海</option>
+			<option value="3">广州</option>
+			<option value="4">深圳</option>
+		</select>
+		<input type="button" value="查询" id="btn">
+	</div>
+	<div id="weaInfo"></div>
+</div>
+<script type="text/javascript">
+	$(function(){
+
+		$('#btn').click(function(){
+			var cityName = $('#weather select option:selected').text();
+			queryWeather(cityName);
+		});
+
+	});
+
+	//查询天气
+    function queryCitycode(cityCode){
+    	$.ajax({
+			type : "get",
+			url : 'weather.php',
+			dataType : "json",
+			data:{cityCode:cityCode},
+			success : function(data){
+//				var tag = '	{{if longitude}}'
+//					+'<ul>'
+//						+'<li>经度:{{longitude}}</li>'
+//						+'<li>维度:{{latitude}}</li>'
+//						+'<li>海拔高度:{{altitude}}</li>'
+//						+'<li>天气:{{weather}}</li>'
+//						+'<li>温度:{{temp}}</li>'
+//						+'<li>最低温度:{{l_tmp}}</li>'
+//						+'<li>最高温度:{{h_tmp}}</li>'
+//						+'<li>风向:{{WD}}</li>'
+//						+'<li>风速:{{WS}}</li>'
+//						+'<li>日出时间:{{sunrise}}</li>'
+//						+'<li>日落时间:{{sunset}}</li>'
+//					+'</ul>'
+//					+'{{/if}}';
+//					var render = template.compile(tag);
+//					var html = render(data.retData);
+//					$('#weaInfo').html(html);
+
+				 var html = template('artid', data.retData);
+				 $('#weaInfo').html(html);
+			},error:function(){
+			    console.log('fail');
+			}
+		});
+    }
+    //查询城市编码
+	function queryWeather(cityName){
+		$.ajax({
+			type : "get",
+			url : 'citycode.php',
+			dataType : "json",
+			data:{cityName:cityName},
+			success : function(data){
+				queryCitycode(data.cityCode);
+			},error:function(){
+			    console.log('fail');
+			}
+		});
+	}
+</script>
+</body>
+</html>

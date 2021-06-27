@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+	<script>
+		//function 函数名(参数列表){}
+		//js代码运行分两个阶段：
+		//1.预解析：变量和函数名定义提前，调用和赋值滞后
+		//2.执行：从上到下执行(setTimeout,setInterval,ajax中的回调函数，事件中的函数需要触发执行)
+		function fn1(){
+			
+		}
+		fn1();//fn1可以先调用，后定义
+			
+		var fn2 = function(){
+			
+		}
+		fn2();
+		
+		
+		fn3();//fn1可以先调用，后定义
+			console.log(123);
+		//setTimeout放在队列中，最后执行
+		setTimeout(function(){
+			console.log(456);
+		})
+			console.log(789);	
+		function fn3(){
+			console.log(111);	
+		}
+	
+		var obj = {
+			name:"zs",
+			say:function(){
+				console.log('hello');
+			}
+		}
+		obj.say();
+		
+		var cb = function(){
+			console.log(222);
+		}
+		function fn4(callback){
+			callback();
+		}
+		fn4(cb);//一个函数可以作为另一个函数的参数，并在另一个函数中调用
+		
+		//闭包：函数内部形成独立的空间，使内部的变量而不被销毁
+		//结论：1.函数可以作为返回值
+		//2.函数的嵌套形成闭包
+		function fn5(){
+			var n = 1;
+			var fn = function(){
+				n++;
+				console.log(n);
+			}
+			return fn;
+		}
+		var fn6 = fn5();
+		fn6();
+		fn6();
+		fn6();
+		
+		//js中没有块作用域，只有全局作用域和函数作用域
+		//for中的i是全局作用域
+		var data = [];
+		for(var i = 0;i<3;i++){
+			data[i] = function(){
+				console.log(i);
+			}
+		}
+		data[0]();
+		data[1]();
+		data[2]();
+		
+		var data = [];
+		for(var i = 0;i<3;i++){
+			data[i] = (function(k){
+				return function(){
+					console.log(k);
+				}
+			})(i);
+		}
+		data[0]();
+		data[1]();
+		data[2]();
+		
+		//构造函数
+		//
+		function juicemachine(friut){
+			this.fruit = friut;
+			this.produce = function(){
+				console.log(this.fruit+'果汁');
+			}
+		}
+		juicemachine.brand = '九阳';
+		juicemachine.open = function(){
+			console.log('open');
+		}
+		juicemachine.open();//juicemachine有两重身份1.对象2.构造函数
+		var apple = new juicemachine('苹果');
+		apple.produce();
+		apple.open();
+
+	</script>
+</body>
+</html>

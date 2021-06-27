@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/ajax2.js"></script>
+    <!--http://v.juhe.cn/weather/index?format=2&cityname=%E9%82%AF%E9%83%B8&key=e982f3629ae77eb7345b7e42f29b62ae&dtype=jsonp&callback=handle-->
+    <!--http://v.juhe.cn/weather/index?format=2&cityname=%E9%82%AF%E9%83%B8&key=e982f3629ae77eb7345b7e42f29b62ae-->
+    <script>
+        //问题：浏览器不允许跨域请求
+        //浏览器的同源策略：ajax请求的 协议、域名、端口必须一致
+
+//        window.onload = function () {
+//            ajax2({
+//                type:"get",
+//                url:"http://v.juhe.cn/weather/index?format=2&cityname=%E9%82%AF%E9%83%B8&key=e982f3629ae77eb7345b7e42f29b62ae",
+//                data:null,
+//                async:true,
+//                success: function (data) {
+//
+//                },
+//                error:function(){
+//                    alert("出错了");
+//                }
+//            });
+//        }
+
+        //解决方案：iframe、jsonp、服务器返回的响应头中包含Access-Control-Allow-Origin
+        //jsonp演示
+        //服务器返回的json使用一个函数包裹，页面写一个函数，当获取到服务器返回的数据后执行该函数
+
+        window.onload = function (){
+            var script = document.createElement("script");
+            script.src = "http://v.juhe.cn/weather/index?format=2&cityname=%E9%82%AF%E9%83%B8&key=e982f3629ae77eb7345b7e42f29b62ae&dtype=jsonp&callback=handle";
+            document.body.appendChild(script);
+
+        }
+        function handle(data) {
+            alert(data.reason);
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
