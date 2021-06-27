@@ -154,7 +154,6 @@
         if (2 * radius > width || 2 * radius > height) {
             return false;
         }
-
         cxt.save();
         cxt.translate(x, y);
         //绘制圆角矩形的各个边  
@@ -193,7 +192,6 @@
         cxt.lineTo(width, height - radius);
         cxt.closePath();
     }
-
     //标号添加
     function labelText(xStart, yStart, i) {
         //绘制圆
@@ -208,44 +206,73 @@
         ctx1.textAlign = 'center';
         ctx1.fillText(i, xStart, yStart + 9);
     }
+
     //蒙层绘制
-    function drawCover(xStart, yStart, xDistance, yDistance, index) {
+    function CreateDrawCover(xStart, yStart, xDistance, yDistance) {
         ctx2.clearRect(0, 0, cw, ch);
         ctx2.fillStyle = "#33333329";
         ctx2.fillRect(0, 0, cw, ch);
         for (i = 0; i < old.length; i++) {
-            //遍历之前的矩形框
-            if (i != old.length - 1&&i!=index) {
-                ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
-            }
-            //拖拽的矩形框
-            else {
+            ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+        }
+        ctx2.clearRect(xStart, yStart, xDistance, yDistance);
+    };
+
+    function dragDrawCover(xStart, yStart, xDistance, yDistance, index) {
+        ctx2.clearRect(0, 0, cw, ch);
+        ctx2.fillStyle = "#33333329";
+        ctx2.fillRect(0, 0, cw, ch);
+        for (i = 0; i < old.length; i++) {
+            if(i!=index){
                 ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
             }
         }
+        ctx2.clearRect(xStart, yStart, xDistance, yDistance);
     };
 
-    //还原之前的矩形框
-    //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框x轴的最小值
+    //old,存储矩形框信息的数组，6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框左上角x的最小值
+    //old最后一个是最新的一个，在创建矩形框的时候，数据还没有完全push，完全push是在mouseup
     var old = [];
-
-    function returnOld(xStart, yStart, xDistance, yDistance,index) {
+    //创建矩形框
+    function CreateReturnOld(xStart, yStart, xDistance, yDistance) {
         //清除图层
         ctx1.clearRect(0, 0, cw, ch);
+        //还原矩形框
+        for (i = 0; i < old.length - 1; i++) {
+            fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
+            strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 2,
+                "rgb(36,199,136)")
+            labelText(old[i][2], old[i][3], i)
+        }
+        fixSelectImg(xStart, yStart, xDistance, yDistance)
+        strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
+            "rgb(36,199,136)")
+        labelText(old[i][2], old[i][3], old.length)
+        CreateDrawCover(xStart, yStart, xDistance, yDistance)
+    }
+    //拖拽矩形框
+    function dragReturnOld(xStart, yStart, index) {
+        //清除图层
+        ctx1.clearRect(0, 0, cw, ch);
+        //还原矩形框
         for (i = 0; i < old.length; i++) {
-            if (i != old.length - 1 ) {
-                // strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 1, "rgb(36,199,136)")
+            if (i != index) {
                 fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
-                ctx2.globalCompositeOperation="destination-over";
-                strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7,2,
-                    "rgb(36,199,136)")           
+                strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 2,
+                    "rgb(36,199,136)")
                 labelText(old[i][2], old[i][3], i)
             }
         }
+        //拖拽
+        console.log(444)
+        fixSelectImg(xStart, yStart, old[index][4], old[index][5])
+        strokeRoundRect(ctx1, xStart, yStart, old[index][4], old[index][5], 7, 2,
+            "rgb(36,199,136)")
+        dragDrawCover(xStart, yStart, old[index][4], old[index][5], index)
     }
     //放大选中的图像
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
-        ctx.drawImage(document.getElementById("img"), xStart * 3, yStart * 3 + 20, xDistance * 2.5, yDistance *
+        ctx1.drawImage(document.getElementById("img"), xStart * 3, yStart * 3 + 20, xDistance * 2.5, yDistance *
             2.5,
             xStart, yStart, xDistance, yDistance);
     }
@@ -285,22 +312,7 @@
                 // 取开始点和结束点的最小值
                 var xStart = old[i][2] + xDistance;
                 var yStart = old[i][3] + yDistance
-                //产生除选中之外的矩形框
-                // returnOld(index);
-                // drawCover(xStart, yStart, old[i][4], old[i][5], index);
-                // fixSelectImg(xStart, yStart, old[i][4], old[i][5])
-                 //还原之前的矩形框
-                 returnOld(xStart, yStart, old[i][4], old[i][5],index);
-                //清除矩形框位置的蒙版
-                drawCover(xStart, yStart, old[i][4], old[i][5], index);
-                //对当前矩形框进行处理
-                fixSelectImg(xStart, yStart, xDistance, yDistance)
-                ctx2.globalCompositeOperation="destination-in";
-                ctx2.clearRect(xStart, yStart, xDistance, yDistance)
-                strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
-                    "rgb(36,199,136)")
-
-
+                dragReturnOld(xStart, yStart, index)
                 canvas1.onmouseup = function () {
                     old[i][2] = xStart
                     old[i][3] = yStart
@@ -322,16 +334,7 @@
                 // 计算移动距离
                 var xDistance = Math.abs(x - ax);
                 var yDistance = Math.abs(y - ay);
-                //还原之前的矩形框
-                returnOld();
-                //清除矩形框位置的蒙版
-                drawCover();
-                //对当前矩形框进行处理
-                fixSelectImg(xStart, yStart, xDistance, yDistance)
-                ctx2.globalCompositeOperation="destination-in";
-                ctx2.clearRect(xStart, yStart, xDistance, yDistance)
-                strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
-                    "rgb(36,199,136)")
+                CreateReturnOld(xStart, yStart, xDistance, yDistance)
                 //鼠标移开事件
                 canvas1.onmouseup = function () {
                     old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
