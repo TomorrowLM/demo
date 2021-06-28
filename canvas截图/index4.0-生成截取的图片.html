@@ -20,8 +20,6 @@
 
         canvas {
             position: absolute;
-            box-shadow: 11px 1px 14px #90909033;
-
         }
 
         #canvas {
@@ -46,33 +44,10 @@
             display: none;
         }
 
-        .progress {
-            position: absolute;
-        }
-
-        .progress div {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-
-        .progress div span:nth-of-type(2) {
-            text-align: center;
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            line-height: 20px;
-            background: rgb(36, 199, 136);
-            border-radius: 100px;
-            color: #fff;
-            vertical-align: middle;
-            margin: 0 5px;
-        }
-
         .tool {
-            /* display: flex; */
-            /* height: 500px; */
-            /* flex-wrap: wrap; */
-            position: absolute;
+            display: flex;
+            height: 500px;
+            flex-wrap: wrap;
         }
 
         button {
@@ -81,14 +56,16 @@
             border-radius: 5px;
             border: 0px;
             color: #ff2626;
-            margin: 20px 0px;
+            margin: 20px 50px;
             font-size: 17px;
             font-weight: 700;
+            width: 25%;
+
         }
 
-        .progress input {
+        input {
             height: 30px;
-            border: 0;
+            width: 50%;
         }
     </style>
 </head>
@@ -104,30 +81,22 @@
             <!--  -->
             <canvas id="canvas1"> </canvas>
             <canvas id="canvas2"> </canvas>
-            <div class="progress">
-            </div>
         </div>
         <div class="tool">
-            <div><input type="file" value="选择图片" class="file"></div>
-            <div>
-                <span>更改图像大小：</span>
-                <input type="text" placeholder="11" class="img-scale">
-                <button class="confirm">确认</button>
+            <input type="file" value="选择图片" class="file">
+            <input type="text" placeholder="11" class="img-scale">
+            <button class="confirm">确认</button>
+            <div class="file-name">
             </div>
             <button id="reset">重置</button>
-            <div>
-                <span>设置图片名称：</span>
-                <input type="text" class="file-name">
-                <button id="save">
-                    保存
-                </button>
-            </div>
+            <button id="save">保存</button>
         </div>
         <div id="product"></div>
     </div>
     <div id="show"></div>
 </body>
 <script>
+    //getContext() 方法来访问绘画上下文
     //图像层
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
@@ -147,14 +116,6 @@
     var img = new Image();
     var imgW = "";
     var imgH = "";
-    //存储图像标识的状态
-    var imgData = []
-    //old存储矩形框信息的数组
-    //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框左上角x的最小值
-    //old最后一个是最新的一个，在创建矩形框的时候，数据还没有完全push，完全push是在mouseup
-    var old = [];
-
-    imgData.push(0)
     //上传图像
     function getObjectURL(file) {
         var url = null;
@@ -173,21 +134,14 @@
         console.log('你的浏览器不支持读取文件');
     }
     $(".file").change(function () {
-        imgScale = 2;
-        // imgData.push(0)
-        // //存储上一个图像的状态
-        // for (i = 0; i < imgData.length - 1; i++) {
-        //     imgData[imgData.length - 1] = imgData[i] + old.length
-        //     console.log(imgData)
-        // }
-        reset()
-        var imgFile = $(this)[0].files[0]
+        imgFile = $(this)[0].files[0]
         if (!/image\/\w+/.test(imgFile.type)) {
             alert("文件必须为图片！");
             return false;
         }
         //读取照片第一种
         var objURL = getObjectURL(imgFile);
+        console.log(objURL)
         //读取照片第二种
         // var reader = new FileReader();
         // reader.readAsDataURL(this.files[0]);
@@ -203,7 +157,7 @@
     //绘制图像
     function drawImage() {
         img.onload = function () {
-            //设置画布大小
+            //获取画布大小
             imgW = img.width / imgScale;
             imgH = img.height / imgScale;
             // imgX = (cw - imgW) / 2;
@@ -215,10 +169,9 @@
             $("canvas")[2].height = imgH;
             $(".box-canvas").width(imgW);
             $(".box-canvas").height(imgH);
-            $(".tool").css("margin-left", imgW + 50)
+            $(".tool").css("margin-left", imgW + 20)
             cw = imgW;
             ch = imgH;
-            $(".box-canvas").height(imgH + 30)
             //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
             //ctx.drawImage(this,offsetX,0,imgW,imgH);
             ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
@@ -281,48 +234,30 @@
         ctx1.font = '25px Arial icon';
         ctx1.fillStyle = 'white';
         ctx1.textAlign = 'center';
-        ctx1.fillText(i, xStart, yStart + 9);
+        ctx1.fillText(i+1, xStart, yStart + 9);
     }
     //放大选中的图像
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
-        ctx1.drawImage(document.getElementById("img"), xStart * imgScale, yStart * imgScale + 15, xDistance * (
+        ctx1.drawImage(document.getElementById("img"), xStart * imgScale, yStart * imgScale + 20, xDistance * (
                 imgScale - 0.2), yDistance *
             (imgScale - 0.2),
             xStart, yStart, xDistance, yDistance);
     }
-    //生成图像下的步骤
-    function progress(index) {
-        //设置progress距离canvas为30
-        $(".progress").css("top", imgH + 30)
 
-        $(".progress").append("<div><span>第</span>" + "<span>" + index + "</span>" + "<span>步：</span>" +
-            "<input></input></div>")
-        $(".box-canvas").height(imgH + 30 + $(".progress").height());
-        $(".progress").width(imgW)
-        var spanW = 0;
-        console.log($(".progress>div span"))
-        //获取span的宽度
-        $(".progress>div:eq(1) span").each(function () {
-            spanW = spanW + $(this).width()
-        })
-        //设置input的宽度
-        $(".progress>div input").width(imgW - spanW - 20)
-    }
     //蒙层绘制
-    //创建矩形框时蒙层绘制
     function CreateDrawCover(xStart, yStart, xDistance, yDistance) {
         ctx2.clearRect(0, 0, cw, ch);
-        ctx2.fillStyle = "#c7c5c56b";
+        ctx2.fillStyle = "#33333329";
         ctx2.fillRect(0, 0, cw, ch);
         for (i = 0; i < old.length; i++) {
             ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
         }
         ctx2.clearRect(xStart, yStart, xDistance, yDistance);
     };
-    //拖拽矩形框时蒙层绘制
+
     function dragDrawCover(xStart, yStart, xDistance, yDistance, index) {
         ctx2.clearRect(0, 0, cw, ch);
-        ctx2.fillStyle = "#c7c5c56b";
+        ctx2.fillStyle = "#33333329";
         ctx2.fillRect(0, 0, cw, ch);
         for (i = 0; i < old.length; i++) {
             if (i != index) {
@@ -332,6 +267,9 @@
         ctx2.clearRect(xStart, yStart, xDistance, yDistance);
     };
 
+    //old,存储矩形框信息的数组，6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框左上角x的最小值
+    //old最后一个是最新的一个，在创建矩形框的时候，数据还没有完全push，完全push是在mouseup
+    var old = [];
     //创建矩形框
     function CreateReturnOld(xStart, yStart, xDistance, yDistance) {
         //清除图层
@@ -341,13 +279,12 @@
             fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
             strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 2,
                 "rgb(36,199,136)")
-            labelText(old[i][2], old[i][3], imgData[imgData.length - 1] + i + 1)
+            labelText(old[i][2], old[i][3], i)
         }
-        //创建当前矩形框
         fixSelectImg(xStart, yStart, xDistance, yDistance)
         strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
             "rgb(36,199,136)")
-        // labelText(old[i][2], old[i][3], imgData[imgData.length - 1] + old.length - 1)
+        labelText(old[i][2], old[i][3], old.length)
         CreateDrawCover(xStart, yStart, xDistance, yDistance)
     }
     //拖拽矩形框
@@ -360,10 +297,11 @@
                 fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
                 strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 2,
                     "rgb(36,199,136)")
-                labelText(old[i][2], old[i][3], imgData[imgData.length - 1] + i + 1)
+                labelText(old[i][2], old[i][3], i)
             }
         }
         //拖拽
+        console.log(444)
         fixSelectImg(xStart, yStart, old[index][4], old[index][5])
         strokeRoundRect(ctx1, xStart, yStart, old[index][4], old[index][5], 7, 2,
             "rgb(36,199,136)")
@@ -412,7 +350,7 @@
                     old[i][3] = yStart
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
-                    labelText(xStart, yStart, imgData[imgData.length - 1] + i + 1)
+                    labelText(xStart, yStart, i)
                 };
             }
         }
@@ -434,12 +372,12 @@
                     old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
-                    labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
-                    $(".box-canvas").height($(".box-canvas").height() + 30)
-                    progress(imgData[imgData.length - 1] + old.length)
+                    labelText(xStart, yStart, old.length - 1)
+                    $(".file-name").append("<p>第" + (old.length) + "步</p>" + "<input/>")
                 };
             };
         }
+
     });
 
     //右边的功能
@@ -449,36 +387,44 @@
         ctx2.clearRect(0, 0, cw, ch);
         old = []
         fileName = []
-        $(".box-canvas").height(imgH + 30)
+        $(".file-name").empty();
         $("#show").empty();
-        $(".progress").empty();
     }
     document.getElementById("reset").onclick = function () {
         reset()
     }
+    //获取文件名
     var fileName = []
 
     function getFileName() {
-        fileName = $(".file-name").val()
+        $(".file-name>input").each(function (i) {
+            fileName.push(this.value)
+            console.log(fileName)
+        })
     }
     //下载截取的图像,picType 图片要保存的图片类型,picName 图片想要保存的名字
-    function downDom(Dom, picType, picName) {
-        picName = picName || '下载'
+    function downDom(xStart, yStart, xDistance, yDistance, picType, picName) {
         // 像素比，清晰度
         const scale = 2;
+        var Dom = canvas
         // 调用html2canvas插件
         html2canvas(Dom, {
             scale
-        }).then(function (canvas) {
-            var context = canvas.getContext('2d');
-            // 【重要】关闭抗锯齿
-            context.mozImageSmoothingEnabled = false;
-            context.webkitImageSmoothingEnabled = false;
-            context.msImageSmoothingEnabled = false;
-            context.imageSmoothingEnabled = false;
-            console.log($(".progress>div").width())
-            Canvas2Image.saveAsImage(canvas, imgW, $(".box-canvas").height() + 150, picType, picName);
-            // 下载图片，saveAsImage原理
+        }).then(function () {
+            $("#product").append('<canvas id="product-canvas"></canvas>');
+            var canvas = document.getElementById("product-canvas");
+            var ctx = canvas.getContext("2d");
+            canvas.width = xDistance
+            canvas.height = yDistance
+            ctx.drawImage(document.getElementById("img"), xStart * imgScale, yStart * imgScale + 20, xDistance *
+                (
+                    imgScale - 0.2), yDistance *
+                (imgScale - 0.2),
+                0, 0, xDistance, yDistance);
+            Canvas2Image.saveAsImage(canvas, xDistance, yDistance, picType, picName);
+            var img1 = Canvas2Image.convertToJPEG(canvas, xDistance, yDistance, "png");
+            document.getElementById("show").appendChild(img1);
+            // // 下载图片
             // let a = document.createElement('a')
             // document.body.appendChild(a)
             // a.href = img1.src
@@ -490,12 +436,8 @@
     }
     document.getElementById("save").onclick = function () {
         getFileName()
-        downDom($(".box-canvas")[0], 'png', fileName)
-        imgData.push(0)
-        //存储上一个图像的状态
-        for (i = 0; i < imgData.length - 1; i++) {
-            imgData[imgData.length - 1] = imgData[i] + old.length
-            console.log(imgData)
+        for (i = 0; i < old.length; i++) {
+            downDom(old[i][2], old[i][3], old[i][4], old[i][5], 'png', fileName[i])
         }
         reset();
     }
@@ -515,7 +457,6 @@
         $(".box-canvas").width(imgW);
         $(".box-canvas").height(imgH);
         $(".tool").css("margin-left", imgW + 50)
-        $(".box-canvas").height(imgH + 30)
         ctx.clearRect(0, 0, cw, ch)
         cw = imgW;
         ch = imgH;

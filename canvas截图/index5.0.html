@@ -152,7 +152,7 @@
     //old存储矩形框信息的数组
     //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框左上角x的最小值
     //old最后一个是最新的一个，在创建矩形框的时候，数据还没有完全push，完全push是在mouseup
-    var old = [];
+    var old = []; 
 
     imgData.push(0)
     //上传图像
@@ -218,7 +218,6 @@
             $(".tool").css("margin-left", imgW + 50)
             cw = imgW;
             ch = imgH;
-            $(".box-canvas").height(imgH + 30)
             //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
             //ctx.drawImage(this,offsetX,0,imgW,imgH);
             ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
@@ -297,7 +296,7 @@
 
         $(".progress").append("<div><span>第</span>" + "<span>" + index + "</span>" + "<span>步：</span>" +
             "<input></input></div>")
-        $(".box-canvas").height(imgH + 30 + $(".progress").height());
+        $(".box-canvas").height($(".box-canvas").height() + $(".progress").height());
         $(".progress").width(imgW)
         var spanW = 0;
         console.log($(".progress>div span"))
@@ -449,7 +448,6 @@
         ctx2.clearRect(0, 0, cw, ch);
         old = []
         fileName = []
-        $(".box-canvas").height(imgH + 30)
         $("#show").empty();
         $(".progress").empty();
     }
@@ -470,14 +468,8 @@
         html2canvas(Dom, {
             scale
         }).then(function (canvas) {
-            var context = canvas.getContext('2d');
-            // 【重要】关闭抗锯齿
-            context.mozImageSmoothingEnabled = false;
-            context.webkitImageSmoothingEnabled = false;
-            context.msImageSmoothingEnabled = false;
-            context.imageSmoothingEnabled = false;
             console.log($(".progress>div").width())
-            Canvas2Image.saveAsImage(canvas, imgW, $(".box-canvas").height() + 150, picType, picName);
+            Canvas2Image.saveAsImage(canvas, cw, $(".box-canvas").height(), picType, picName);
             // 下载图片，saveAsImage原理
             // let a = document.createElement('a')
             // document.body.appendChild(a)
@@ -491,6 +483,7 @@
     document.getElementById("save").onclick = function () {
         getFileName()
         downDom($(".box-canvas")[0], 'png', fileName)
+
         imgData.push(0)
         //存储上一个图像的状态
         for (i = 0; i < imgData.length - 1; i++) {
@@ -515,7 +508,6 @@
         $(".box-canvas").width(imgW);
         $(".box-canvas").height(imgH);
         $(".tool").css("margin-left", imgW + 50)
-        $(".box-canvas").height(imgH + 30)
         ctx.clearRect(0, 0, cw, ch)
         cw = imgW;
         ch = imgH;
