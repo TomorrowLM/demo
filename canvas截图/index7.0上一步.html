@@ -399,6 +399,7 @@
         fixSelectImg(xStart, yStart, xDistance, yDistance)
         strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
             "rgb(36,199,136)")
+        // labelText(old[i][2], old[i][3], imgData[imgData.length - 1] + old.length - 1)
         CreateDrawCover(xStart, yStart, xDistance, yDistance)
     }
     //拖拽矩形框
@@ -485,9 +486,8 @@
                     old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
-                    console.log(imgData[imgData.length - 1] + old.length)
                     labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
-                   
+                    console.log(imgData[imgData.length - 1] + old.length)
                     progress(imgData[imgData.length - 1] + old.length)
                 };
             };
@@ -497,16 +497,7 @@
     //右边的功能
     //更改图像大小
     $(".change-step").on("click",function(){
-        var step = $(".step-val").val()
-        step = parseInt(step)-1
-        console.log(imgData)
-        if(imgData.length==1){
-            imgData[imgData.length-1] = step
-            console.log(imgData,old)
-        }else{    
-            imgData[imgData.length-1] = step
-            console.log(imgData,old)
-        }
+
     })
     //回退上一步
     //创建矩形框
