@@ -220,7 +220,6 @@
 						this.provinceCulList = value
 					}
 				})
-
 			},
 			//点击搜索按钮，展示provinceCulList
 			searchProvince() {

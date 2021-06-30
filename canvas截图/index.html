@@ -16,7 +16,9 @@
             display: flex;
         }
 
-        .box-canvas {}
+        .box-canvas {
+            position: relative;
+        }
 
         canvas {
             position: absolute;
@@ -267,11 +269,10 @@
                 this.height = imgH;
             })
             $(".box-canvas").width(imgW);
-            $(".box-canvas").height(imgH);
+            $(".box-canvas").height(imgH + 10)
             $(".tool").css("margin-left", imgW + 50)
             cw = imgW;
             ch = imgH;
-            $(".box-canvas").height(imgH + 30)
             //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
             //ctx.drawImage(this,offsetX,0,imgW,imgH);
             ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
@@ -348,7 +349,6 @@
         //设置progress距离canvas为30
         $(".progress").append("<div><span>第</span>" + "<span>" + index + "</span>" + "<span>步：</span>" +
             "<input></input></div>")
-        $(".box-canvas").height(imgH + 30 + $(".progress").height());
         $(".progress").width(imgW)
         //获取span的宽度
         var spanW = 0;
@@ -358,7 +358,8 @@
         //设置input的宽度
         $(".progress>div input").width(imgW - spanW - 30)
         //设置canvas距离顶部
-        $("canvas").css("top", $(".progress").height() + 30)
+        $("canvas").css("top", $(".progress").height() + 10)
+        $(".box-canvas").height(imgH + $(".progress").height() + 10);
     }
     //蒙层绘制
     //创建矩形框时蒙层绘制
@@ -442,6 +443,12 @@
             }
             //创建矩形框
             old[old.length] = Array.of(x, y);
+            //判断上一个数据长度，等于2，则删除
+            if (old.length >= 2) {
+                if (old[old.length - 2].length == 2) {
+                    old.splice(old.length - 2, 1)
+                }
+            }
             createBox(x, y);
         };
         //拖拽矩形框
@@ -483,29 +490,90 @@
                 //鼠标移开事件
                 canvas1.onmouseup = function () {
                     old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
+                    labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
+                    progress(imgData[imgData.length - 1] + old.length)
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
-                    console.log(imgData[imgData.length - 1] + old.length)
-                    labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
-                   
-                    progress(imgData[imgData.length - 1] + old.length)
+                    canvas1.onmouseout = null
+                    return;
                 };
+                //鼠标移出
+                canvas1.onmouseout = function () {
+                    var yStartOld = yStart
+                    var xStartOld = xStart
+                    $(document).mousemove(function (e) {
+                        var docX = e.pageX;
+                        var docY = e.pageY;
+                        var offsetCanvas = $(".box-canvas").offset()
+                        if (docX >= offsetCanvas.left + imgW) {
+                            if (yStartOld < docY - $("canvas").offset().top) {
+                                yDistance = docY - $("canvas").offset().top - yStartOld
+                                CreateReturnOld(xStart, yStart, xDistance, yDistance)
+                            } else {
+                                yStart = docY - $("canvas").offset().top
+                                yDistance = Math.abs(yStart - yStartOld);
+                                CreateReturnOld(xStart, yStart, xDistance, yDistance)
+                            }
+                        }
+                        // if(docX<offsetCanvas.left + imgW){
+                        //     if (yStartOld < docY - $("canvas").offset().top) {
+                        //         yDistance = docY - $("canvas").offset().top - yStartOld
+                        //         CreateReturnOld(xStart, yStart, xDistance, yDistance)
+                        //     } else {
+                        //         yStart = docY - $("canvas").offset().top
+                        //         yDistance = Math.abs(yStart - yStartOld);
+                        //         CreateReturnOld(xStart, yStart, xDistance, yDistance)
+                        //     }
+                        // }
+                        if (docY >= offsetCanvas.top + imgH) {
+                            if (xStartOld < docX - $("canvas").offset().left) {
+                                xDistance = docX - $("canvas").offset().left - xStartOld
+                                CreateReturnOld(xStart, yStart, xDistance, yDistance)
+                            } else {
+                                xStart = docX - $("canvas").offset().left
+                                xDistance = Math.abs(xStart - xStartOld);
+                                CreateReturnOld(xStart, yStart, xDistance, yDistance)
+                            }
+                        }
+                    })
+                    $(document).mouseup(function () {
+                        old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
+                        labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
+                        progress(imgData[imgData.length - 1] + old.length)
+                        canvas1.onmousemove = null;
+                        canvas1.onmouseup = null;
+                        canvas1.onmouseout = null;
+                        $(document).unbind("mousemove")
+                        $(document).unbind("mouseup")
+                    })
+                }
+                //鼠标重新进入canvas
+                canvas1.onmouseover = function () {
+                    $(document).unbind("mousemove")
+                    $(document).unbind("mouseup")
+                }
+            };
+            //鼠标移开事件
+            canvas1.onmouseup = function () {
+                canvas1.onmousemove = null;
+                canvas1.onmouseup = null;
+                canvas1.onmouseout = null
+                return;
             };
         }
+        //
+
     });
 
     //右边的功能
-    //更改图像大小
-    $(".change-step").on("click",function(){
+    //更改步骤
+    $(".change-step").on("click", function () {
         var step = $(".step-val").val()
-        step = parseInt(step)-1
-        console.log(imgData)
-        if(imgData.length==1){
-            imgData[imgData.length-1] = step
-            console.log(imgData,old)
-        }else{    
-            imgData[imgData.length-1] = step
-            console.log(imgData,old)
+        step = parseInt(step) - 1
+        if (imgData.length == 1) {
+            imgData[imgData.length - 1] = step
+        } else {
+            imgData[imgData.length - 1] = step
         }
     })
     //回退上一步
@@ -515,7 +583,6 @@
         ctx1.clearRect(0, 0, cw, ch);
         //还原矩形框
         for (i = 0; i < old.length; i++) {
-            console.log(i)
             fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
             strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 2,
                 "rgb(36,199,136)")
@@ -527,11 +594,10 @@
         old.splice(old.length - 1, 1)
         ctx.clearRect(0, 0, cw, ch)
         ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
-        console.log(old)
         CreateReturnLast()
         $(".progress>div:last-of-type").remove()
-        $(".box-canvas").height(imgH + 30 + $(".progress").height());
-        $("canvas").css("top", $(".progress").height() + 30)
+        $(".box-canvas").height(imgH + $(".progress").height() + 10);
+        $("canvas").css("top", $(".progress").height() + 10)
     })
     //重置
     function reset() {
@@ -595,7 +661,7 @@
             this.height = imgH;
         })
         $(".box-canvas").width(imgW);
-        $(".box-canvas").height(imgH);
+        $(".box-canvas").height(imgH + 10);
         $(".tool").css("margin-left", imgW + 50)
         ctx.clearRect(0, 0, cw, ch)
         cw = imgW;
