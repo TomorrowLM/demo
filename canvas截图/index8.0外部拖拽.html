@@ -247,21 +247,18 @@
             imgW = img.width
             imgH = img.height
             if (docH > imgH && docW > imgW) {
-                imgScale = 2
-                imgW = imgW * 2
-                imgH = imgH * 2
+                imgScale = 1
             } else {
                 if (docW < imgW && docH > imgH) {
                     imgScale = imgW / docW
-                    imgW = (docW * 3 / 4) * 2
+                    imgW = docW * 3 / 4
                     imgScale = imgScale * 4 / 3
-                    imgH = (imgH / imgScale) * 2
+                    imgH = imgH / imgScale
                 } else {
                     imgScale = imgH / docH
-                    imgH = (docH * 3 / 4) * 2
+                    imgH = docH * 3 / 4
                     imgScale = imgScale * 4 / 3
-                    imgW = (imgW / imgScale) * 2
-                    imgScale = imgScale*2
+                    imgW = imgW / imgScale
                 }
             }
             //设置画布大小
@@ -279,17 +276,6 @@
             //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
             //ctx.drawImage(this,offsetX,0,imgW,imgH);
             ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
-
-            $(".box-canvas").width($(".box-canvas").width() / 2)
-            $(".box-canvas").height($(".box-canvas").height() / 2)
-            $(canvas).each(function(){
-                $(this).css({
-                "width": canvas.width / 2 + "px",
-                "height": canvas.height / 2 + "px",
-            });
-            })
-            imgH = imgH/2
-            imgW = imgW/2
         };
     }
 
@@ -523,7 +509,7 @@
                         //右
                         if (docX >= offsetCanvas.left + imgW && docY <= offsetCanvas.top +
                             imgH) {
-                            xDistance = imgW - xStart
+                                xDistance = imgW-xStart
                             if (yStartOld <= docY - offsetCanvas.top) {
                                 yStart = yStartOld
                                 yDistance = docY - offsetCanvas.top - yStartOld
@@ -550,7 +536,7 @@
                         //左
                         if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
                             imgH) {
-                            xDistance = xStartOld
+                                xDistance = xStartOld
                             if (yStartOld <= docY - offsetCanvas.top) {
                                 yStart = yStartOld
                                 yDistance = docY - offsetCanvas.top - yStartOld
@@ -564,7 +550,7 @@
                         //下
                         if (docY >= offsetCanvas.top + imgH && docX <= offsetCanvas.left +
                             imgW) {
-                            yDistance = imgH - yStart
+                                yDistance = imgH-yStart
                             if (xStartOld <= docX - offsetCanvas.left) {
                                 xStart = xStartOld
                                 xDistance = docX - offsetCanvas.left - xStartOld
