@@ -23,7 +23,7 @@
         canvas {
             position: absolute;
             box-shadow: 11px 1px 14px #90909033;
-
+            background: #90909000;
         }
 
         #canvas {
@@ -33,7 +33,7 @@
             user-select: none;
             margin: auto;
             z-index: 0;
-            background: #0b0b0b;
+
         }
 
         #canvas1 {
@@ -177,12 +177,24 @@
     //图像层
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.msImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
     //矩形框层
     var canvas1 = document.getElementById("canvas1");
     var ctx1 = canvas1.getContext("2d");
+    ctx1.mozImageSmoothingEnabled = false;
+    ctx1.webkitImageSmoothingEnabled = false;
+    ctx1.msImageSmoothingEnabled = false;
+    ctx1.imageSmoothingEnabled = false;
     //蒙版层
     var canvas2 = document.getElementById("canvas2");
     var ctx2 = canvas2.getContext("2d");
+    ctx2.mozImageSmoothingEnabled = false;
+    ctx2.webkitImageSmoothingEnabled = false;
+    ctx2.msImageSmoothingEnabled = false;
+    ctx2.imageSmoothingEnabled = false;
     //画布宽高
     var clientRect = canvas.getBoundingClientRect();
     var cw = $("canvas").width();
@@ -240,56 +252,54 @@
         drawImage();
     })
     //绘制图像
+
+    //扩展canvas宽高变量
+    spreadX = 100
+    spreadY = 100
+
     function drawImage() {
         img.onload = function () {
             var docW = window.innerWidth;
             var docH = window.innerHeight;
             imgW = img.width
             imgH = img.height
+            //设置图像宽高
             if (docH > imgH && docW > imgW) {
-                imgScale = 2
-                imgW = imgW * 2
-                imgH = imgH * 2
+                imgScale = 1
             } else {
                 if (docW < imgW && docH > imgH) {
                     imgScale = imgW / docW
-                    imgW = (docW * 3 / 4) * 2
+                    imgW = docW * 3 / 4
                     imgScale = imgScale * 4 / 3
-                    imgH = (imgH / imgScale) * 2
+                    imgH = imgH / imgScale
                 } else {
                     imgScale = imgH / docH
-                    imgH = (docH * 3 / 4) * 2
+                    imgH = docH * 3 / 4
                     imgScale = imgScale * 4 / 3
-                    imgW = (imgW / imgScale) * 2
-                    imgScale = imgScale*2
+                    imgW = imgW / imgScale
                 }
             }
             //设置画布大小
-            // imgW = img.width / imgScale;
-            // imgH = img.height / imgScale;
-            $("canvas").each(function () {
-                this.width = imgW;
-                this.height = imgH;
-            })
-            $(".box-canvas").width(imgW);
-            $(".box-canvas").height(imgH + 10)
-            $(".tool").css("margin-left", imgW + 50)
-            cw = imgW;
-            ch = imgH;
-            //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
-            //ctx.drawImage(this,offsetX,0,imgW,imgH);
-            ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
+            cw = imgW + spreadX;
+            ch = imgH + spreadY;
+            document.getElementsByTagName("canvas")[0].width = cw;
+            document.getElementsByTagName("canvas")[0].height = ch;
+            document.getElementsByTagName("canvas")[1].width = cw;
+            document.getElementsByTagName("canvas")[1].height = ch;
+            document.getElementsByTagName("canvas")[2].width = cw;
+            document.getElementsByTagName("canvas")[2].height = ch;
 
-            $(".box-canvas").width($(".box-canvas").width() / 2)
-            $(".box-canvas").height($(".box-canvas").height() / 2)
-            $(canvas).each(function(){
-                $(this).css({
-                "width": canvas.width / 2 + "px",
-                "height": canvas.height / 2 + "px",
-            });
-            })
-            imgH = imgH/2
-            imgW = imgW/2
+
+            console.log(cw, ch)
+            $(".box-canvas").width(cw);
+            $(".box-canvas").height(ch + 10)
+            $(".tool").css("margin-left", cw + 50 + spreadX)
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowColor = '#ccc';
+            ctx.shadowBlur = 10;
+            // ctx.fillRect(0, 0, imgW, imgH);
+            ctx.drawImage(document.getElementById("img"), spreadX / 2, spreadY / 2, imgW, imgH);
         };
     }
 
@@ -302,7 +312,6 @@
         cxt.save();
         cxt.translate(x, y);
         //绘制圆角矩形的各个边  
-
         drawRoundRectPath(cxt, width, height, radius);
         cxt.lineWidth = lineWidth || 2; //若是给定了值就用给定的值否则给予默认值2  
         cxt.strokeStyle = strokeColor || "#000";
@@ -353,10 +362,11 @@
     }
     //放大选中的图像
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
-        ctx1.drawImage(document.getElementById("img"), xStart * imgScale, yStart * imgScale + 15, xDistance * (
-                imgScale - 0.3), yDistance *
-            (imgScale - 0.3),
-            xStart, yStart, xDistance, yDistance);
+        var imgData = ctx.getImageData(xStart, yStart, xDistance, yDistance);
+        console.log(imgData)
+        ctx1.scale(2, 2);
+        // ctx1.putImageData(imgData, 10, 70);
+        ctx1.putImageData(imgData, 0, 0,xStart,yStart,xDistance, yDistance);
     }
     //生成图像下的步骤
     function progress(index) {
@@ -378,25 +388,25 @@
     //蒙层绘制
     //创建矩形框时蒙层绘制
     function CreateDrawCover(xStart, yStart, xDistance, yDistance) {
-        ctx2.clearRect(0, 0, cw, ch);
-        ctx2.fillStyle = "#c7c5c56b";
-        ctx2.fillRect(0, 0, cw, ch);
-        for (i = 0; i < old.length; i++) {
-            ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
-        }
-        ctx2.clearRect(xStart, yStart, xDistance, yDistance);
+        // ctx2.clearRect(0, 0, cw, ch);
+        // ctx2.fillStyle = "#c7c5c56b";
+        // ctx2.fillRect(0, 0, cw, ch);
+        // for (i = 0; i < old.length; i++) {
+        //     ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+        // }
+        // ctx2.clearRect(xStart, yStart, xDistance, yDistance);
     };
     //拖拽矩形框时蒙层绘制
     function dragDrawCover(xStart, yStart, xDistance, yDistance, index) {
-        ctx2.clearRect(0, 0, cw, ch);
-        ctx2.fillStyle = "#c7c5c56b";
-        ctx2.fillRect(0, 0, cw, ch);
-        for (i = 0; i < old.length; i++) {
-            if (i != index) {
-                ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
-            }
-        }
-        ctx2.clearRect(xStart, yStart, xDistance, yDistance);
+        // ctx2.clearRect(0, 0, cw, ch);
+        // ctx2.fillStyle = "#c7c5c56b";
+        // ctx2.fillRect(0, 0, cw, ch);
+        // for (i = 0; i < old.length; i++) {
+        //     if (i != index) {
+        //         ctx2.clearRect(old[i][2], old[i][3], old[i][4], old[i][5]);
+        //     }
+        // }
+        // ctx2.clearRect(xStart, yStart, xDistance, yDistance);
     };
 
     //创建矩形框
@@ -484,8 +494,60 @@
                     old[i][3] = yStart
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
+                    canvas1.onmouseout = null;
+                    $(document).unbind("mousemove")
+                    $(document).unbind("mouseup")
                     labelText(xStart, yStart, imgData[imgData.length - 1] + i + 1)
                 };
+
+                var xStartOld = old[i][2]
+                var yStartOld = old[i][3]
+                canvas1.onmouseout = function () {
+                    $(document).mousemove(function (e) {
+                        var docX = e.pageX;
+                        var docY = e.pageY;
+                        var offsetCanvas = $("canvas").offset()
+                        //点击矩形框的位置距离矩形框顶部的距离
+                        var yD = y - yStartOld
+                        //点击矩形框的位置距离矩形框左侧的距离
+                        var xD = x - xStartOld
+                        //右
+                        if (docX >= offsetCanvas.left + imgW && offsetCanvas.top <= docY &&
+                            docY <= offsetCanvas.top +
+                            imgH) {
+                            yStart = docY - offsetCanvas.top - yD
+                            dragReturnOld(xStart, yStart, index)
+                        }
+                        //上
+                        if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + imgW &&
+                            offsetCanvas.left <= docX) {
+                            xStart = docX - offsetCanvas.left - xD
+                            dragReturnOld(xStart, yStart, index)
+                        }
+                        //左
+                        if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
+                            imgH && offsetCanvas.top <= docY) {
+                            yStart = docY - offsetCanvas.top - yD
+                            dragReturnOld(xStart, yStart, index)
+                        }
+                        //下
+                        if (docY >= offsetCanvas.top + imgH && docX <= offsetCanvas.left +
+                            imgW && offsetCanvas.left <= docX) {
+                            xStart = docX - offsetCanvas.left - xD
+                            dragReturnOld(xStart, yStart, index)
+                        }
+                    })
+                    $(document).mouseup(function () {
+                        old[i][2] = xStart
+                        old[i][3] = yStart
+                        labelText(xStart, yStart, imgData[imgData.length - 1] + i + 1)
+                        canvas1.onmousemove = null;
+                        canvas1.onmouseup = null;
+                        canvas1.onmouseout = null;
+                        $(document).unbind("mousemove")
+                        $(document).unbind("mouseup")
+                    })
+                }
             }
         }
         //创建矩形框
@@ -513,7 +575,6 @@
                 };
                 var xStartOld = x
                 var yStartOld = y
-                // console.log(x,y)
                 //鼠标移出
                 canvas1.onmouseout = function () {
                     $(document).mousemove(function (e) {
@@ -673,7 +734,7 @@
         ctx2.clearRect(0, 0, cw, ch);
         old = []
         fileName = []
-        $(".box-canvas").height(imgH + 10)
+        $(".box-canvas").height(ch + 10)
         $(".progress").empty();
         $("canvas").css("top", 10)
     }
@@ -686,7 +747,7 @@
     function downDom(Dom, picType, picName, downDomH) {
         picName = picName || '下载'
         // 像素比，清晰度
-        const scale = 2;
+        const scale = 4;
         // 调用html2canvas插件
         html2canvas(Dom, {
             scale

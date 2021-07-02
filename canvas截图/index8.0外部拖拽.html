@@ -177,12 +177,24 @@
     //图像层
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.msImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
     //矩形框层
     var canvas1 = document.getElementById("canvas1");
     var ctx1 = canvas1.getContext("2d");
+    ctx1.mozImageSmoothingEnabled = false;
+    ctx1.webkitImageSmoothingEnabled = false;
+    ctx1.msImageSmoothingEnabled = false;
+    ctx1.imageSmoothingEnabled = false;
     //蒙版层
     var canvas2 = document.getElementById("canvas2");
     var ctx2 = canvas2.getContext("2d");
+    ctx2.mozImageSmoothingEnabled = false;
+    ctx2.webkitImageSmoothingEnabled = false;
+    ctx2.msImageSmoothingEnabled = false;
+    ctx2.imageSmoothingEnabled = false;
     //画布宽高
     var clientRect = canvas.getBoundingClientRect();
     var cw = $("canvas").width();
@@ -509,7 +521,7 @@
                         //右
                         if (docX >= offsetCanvas.left + imgW && docY <= offsetCanvas.top +
                             imgH) {
-                                xDistance = imgW-xStart
+                            xDistance = imgW - xStart
                             if (yStartOld <= docY - offsetCanvas.top) {
                                 yStart = yStartOld
                                 yDistance = docY - offsetCanvas.top - yStartOld
@@ -536,7 +548,7 @@
                         //左
                         if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
                             imgH) {
-                                xDistance = xStartOld
+                            xDistance = xStartOld
                             if (yStartOld <= docY - offsetCanvas.top) {
                                 yStart = yStartOld
                                 yDistance = docY - offsetCanvas.top - yStartOld
@@ -550,7 +562,7 @@
                         //下
                         if (docY >= offsetCanvas.top + imgH && docX <= offsetCanvas.left +
                             imgW) {
-                                yDistance = imgH-yStart
+                            yDistance = imgH - yStart
                             if (xStartOld <= docX - offsetCanvas.left) {
                                 xStart = xStartOld
                                 xDistance = docX - offsetCanvas.left - xStartOld
@@ -619,6 +631,9 @@
         }
     });
 
+
+
+    
     //右边的功能
     //更改步骤
     $(".change-step").on("click", function () {
