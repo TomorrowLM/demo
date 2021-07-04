@@ -23,7 +23,7 @@
         canvas {
             position: absolute;
             box-shadow: 11px 1px 14px #90909033;
-
+            image-rendering: auto;
         }
 
         #canvas {
@@ -67,9 +67,6 @@
         }
 
         .tool {
-            /* display: flex; */
-            /* height: 500px; */
-            /* flex-wrap: wrap; */
             position: absolute;
         }
 
@@ -177,24 +174,16 @@
     //图像层
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
-    ctx.mozImageSmoothingEnabled = false;
-    ctx.webkitImageSmoothingEnabled = false;
-    ctx.msImageSmoothingEnabled = false;
-    ctx.imageSmoothingEnabled = false;
     //矩形框层
     var canvas1 = document.getElementById("canvas1");
     var ctx1 = canvas1.getContext("2d");
-    ctx1.mozImageSmoothingEnabled = false;
-    ctx1.webkitImageSmoothingEnabled = false;
-    ctx1.msImageSmoothingEnabled = false;
-    ctx1.imageSmoothingEnabled = false;
     //蒙版层
     var canvas2 = document.getElementById("canvas2");
     var ctx2 = canvas2.getContext("2d");
-    ctx2.mozImageSmoothingEnabled = false;
-    ctx2.webkitImageSmoothingEnabled = false;
-    ctx2.msImageSmoothingEnabled = false;
-    ctx2.imageSmoothingEnabled = false;
+
+    // ctx.imageSmoothingQuality  = "high";
+    // ctx2.imageSmoothingQuality  = "high";
+    // ctx1.imageSmoothingQuality  = "high";
     //画布宽高
     var clientRect = canvas.getBoundingClientRect();
     var cw = $("canvas").width();
@@ -287,6 +276,7 @@
             ch = imgH;
             //drawImage前4个是定义图像源的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
             //ctx.drawImage(this,offsetX,0,imgW,imgH);
+            ctx.imageSmoothingQuality = "high"
             ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
         };
     }

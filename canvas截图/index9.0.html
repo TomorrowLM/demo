@@ -7,9 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
-    <!-- <script src="./canvas2image/canvas2image.js"></script> -->
     <script src="./common/html2canvas.min.js"></script>
-    <!-- <script src="./canvas2image/html2canvas.min.js"></script> -->
     <script src="./common/canvas2image.js"></script>
     <script src="./common/konvajs.js"></script>
     <script src="./common/dist/jcanvas.js"></script>
@@ -68,9 +66,6 @@
         }
 
         .tool {
-            /* display: flex; */
-            /* height: 500px; */
-            /* flex-wrap: wrap; */
             position: absolute;
         }
 
@@ -144,6 +139,7 @@
             <canvas id="canvas2"> </canvas>
             <div class="progress">
             </div>
+            <div class="" id="test"></div>
         </div>
         <div class="tool">
             <div class="file">选择文件<input type="file" value="选择图片"></div>
@@ -215,7 +211,7 @@
         console.log('你的浏览器不支持读取文件');
     }
     $(".file>input").change(function () {
-        reset()
+        // reset()
         var imgFile = $(this)[0].files[0]
         if (!/image\/\w+/.test(imgFile.type)) {
             alert("文件必须为图片！");
@@ -238,6 +234,16 @@
     //扩展canvas宽高变量
     spreadX = 100
     spreadY = 100
+    //获取
+    var getPixelRatio = function (context) {
+        var backingStore = context.backingStorePixelRatio ||
+            context.webkitBackingStorePixelRatio ||
+            context.mozBackingStorePixelRatio ||
+            context.msBackingStorePixelRatio ||
+            context.oBackingStorePixelRatio ||
+            context.backingStorePixelRatio || 1;
+        return (window.devicePixelRatio || 1) / backingStore;
+    };
     //绘制图像
     function drawImage(objURL) {
         img.onload = function () {
@@ -266,8 +272,18 @@
             //设置画布大小
             cw = imgW + spreadX;
             ch = imgH + spreadY;
-            canvas.width = cw;
-            canvas.height = ch;
+            //
+            var pixelRatio = getPixelRatio(canvas);
+            // canvas.setAttribute("width",cw)
+            // canvas.setAttribute("height",ch)
+            console.log(pixelRatio)
+            canvas.width = pixelRatio * cw; // 想当于 2 * 375 = 750 
+            canvas.height = pixelRatio * ch;
+            // 设置canvas的真实宽高
+            canvas.style.width = cw + 'px';
+            canvas.style.height = ch + 'px';
+            ctx.scale(pixelRatio, pixelRatio);
+
             canvas1.width = cw;
             canvas1.height = ch;
             canvas2.width = cw;
@@ -279,32 +295,34 @@
             ctx.shadowOffsetY = 0;
             ctx.shadowColor = '#ccc';
             ctx.shadowBlur = 10;
-            // ctx.drawImage(this, spreadX / 2, spreadY / 2, imgW, imgH);
+            ctx.drawImage(this, spreadX / 2, spreadY / 2, imgW, imgH);
 
-            var stage = new Konva.Stage({
-                container: 'canvas',
-                width: cw,
-                height: ch
-            });
-            var layer = new Konva.Layer();
-            stage.add(layer);
-            var imageObj = new Image();
-            imageObj.src = objURL;
-            imageObj.onload = function () {
-                var yoda = new Konva.Image({
-                    x: spreadX / 2,
-                    y: spreadY / 2,
-                    image: imageObj,
-                    width: imgW,
-                    height: imgH
-                });
-                layer.add(yoda);
-                layer.batchDraw();
-            };
-
-            console.log(objURL)
+            // stage = new Konva.Stage({
+            //     container: 'test',
+            //     width: cw,
+            //     height: ch
+            // });
+            // layer = new Konva.Layer();
+            // stage.add(layer);
+            // var imageObj = new Image();
+            // imageObj.onload = function () {
+            //     var yoda = new Konva.Image({
+            //         x: spreadX / 2,
+            //         y: spreadY / 2,
+            //         image: imageObj,
+            //         width: imgW,
+            //         height: imgH
+            //     });
+            //     layer.add(yoda);
+            //     layer.batchDraw();
+            // };
+            // imageObj.src = "./img/01.jpg";
         }
     }
+
+
+
+
     //圆角
     function strokeRoundRect(cxt, x, y, width, height, radius, /*optional*/ lineWidth, /*optional*/ strokeColor) {
         //圆的直径必然要小于矩形的宽高          
