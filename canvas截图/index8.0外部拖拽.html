@@ -7,9 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
-    <!-- <script src="./canvas2image/canvas2image.js"></script> -->
     <script src="./common/html2canvas.min.js"></script>
-    <!-- <script src="./canvas2image/html2canvas.min.js"></script> -->
     <script src="./common/canvas2image.js"></script>
     <style>
         .box {
@@ -676,19 +674,11 @@
     //下载截取的图像,picType 图片要保存的图片类型,picName 图片想要保存的名字
     function downDom(Dom, picType, picName, downDomH) {
         picName = picName || '下载'
-        // 像素比，清晰度
-        const scale = 2;
         // 调用html2canvas插件
         html2canvas(Dom, {
-            scale
+            imgScale
         }).then(function (Dom) {
-            //
             var context = Dom.getContext('2d');
-            // 【重要】关闭抗锯齿
-            context.mozImageSmoothingEnabled = false;
-            context.webkitImageSmoothingEnabled = false;
-            context.msImageSmoothingEnabled = false;
-            context.imageSmoothingEnabled = false;
             Canvas2Image.saveAsImage(Dom, imgW, downDomH, picType, picName);
             // 下载图片，saveAsImage原理
             // let a = document.createElement('a')

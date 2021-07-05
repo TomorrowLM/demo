@@ -7,9 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
-    <!-- <script src="./canvas2image/canvas2image.js"></script> -->
     <script src="./common/html2canvas.min.js"></script>
-    <!-- <script src="./canvas2image/html2canvas.min.js"></script> -->
     <script src="./common/canvas2image.js"></script>
     <script src="./common/konvajs.js"></script>
     <script src="./common/dist/jcanvas.js"></script>
@@ -24,8 +22,9 @@
 
         canvas {
             position: absolute;
-            box-shadow: 11px 1px 14px #90909033;
-            background: #90909000;
+            background: #9090900f;
+            /* box-shadow: 11px 1px 14px #9090900f; */
+            image-rendering: crisp-edges;
         }
 
         #canvas {
@@ -68,9 +67,6 @@
         }
 
         .tool {
-            /* display: flex; */
-            /* height: 500px; */
-            /* flex-wrap: wrap; */
             position: absolute;
         }
 
@@ -110,8 +106,6 @@
         .file:hover,
         button:hover {
             background: #c3c5c7;
-            /* border-color: #78C3F3;
-            color: #004974; */
             text-decoration: none;
         }
 
@@ -193,10 +187,12 @@
     var imgData = []
     //old存储矩形框信息的数组
     //6个参数(x ,y , xStart, yStart, xDistance, yDistance),xStart矩形框左上角x的最小值
-    //old最后一个是最新的一个，在创建矩形框的时候，数据还没有完全push，完全push是在mouseup
+    //在创建矩形框的时候，数据还没有完全push，完全push是在mouseup
     var old = [];
-
     imgData.push(0)
+    //扩展canvas宽高变量
+    spreadX = 100
+    spreadY = 100
     //上传图像
     function getObjectURL(file) {
         var url = null;
@@ -235,9 +231,29 @@
         $(".box-canvas").show()
         drawImage(objURL);
     })
-    //扩展canvas宽高变量
-    spreadX = 100
-    spreadY = 100
+
+    //获取设备像素比
+    var getPixelRatio = function (context) {
+        var backingStore = context.backingStorePixelRatio ||
+            context.webkitBackingStorePixelRatio ||
+            context.mozBackingStorePixelRatio ||
+            context.msBackingStorePixelRatio ||
+            context.oBackingStorePixelRatio ||
+            context.backingStorePixelRatio || 1;
+        return (window.devicePixelRatio || 1) / backingStore;
+    };
+    var pixelRatio = getPixelRatio(canvas);
+    console.log(pixelRatio)
+    //设置图层宽高
+    function setCanvasArea(canvas, ctx) {
+        canvas.width = Math.floor(cw * pixelRatio);
+        canvas.height = Math.floor(ch * pixelRatio);
+        // 设置canvas的真实宽高
+        canvas.style.width = cw + 'px';
+        canvas.style.height = ch + 'px';
+        ctx.scale(pixelRatio, pixelRatio);
+        ctx.imageSmoothingQuality = "high"
+    }
     //绘制图像
     function drawImage(objURL) {
         img.onload = function () {
@@ -266,43 +282,17 @@
             //设置画布大小
             cw = imgW + spreadX;
             ch = imgH + spreadY;
-            canvas.width = cw;
-            canvas.height = ch;
-            canvas1.width = cw;
-            canvas1.height = ch;
-            canvas2.width = cw;
-            canvas2.height = ch;
+            setCanvasArea(canvas, ctx)
+            setCanvasArea(canvas1, ctx1)
+            setCanvasArea(canvas2, ctx2)
             $(".box-canvas").width(cw);
             $(".box-canvas").height(ch + 10)
-            $(".tool").css("margin-left", cw + 50 + spreadX)
+            $(".tool").css("margin-left", cw + 30)
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 0;
             ctx.shadowColor = '#ccc';
             ctx.shadowBlur = 10;
-            // ctx.drawImage(this, spreadX / 2, spreadY / 2, imgW, imgH);
-
-            var stage = new Konva.Stage({
-                container: 'canvas',
-                width: cw,
-                height: ch
-            });
-            var layer = new Konva.Layer();
-            stage.add(layer);
-            var imageObj = new Image();
-            imageObj.src = objURL;
-            imageObj.onload = function () {
-                var yoda = new Konva.Image({
-                    x: spreadX / 2,
-                    y: spreadY / 2,
-                    image: imageObj,
-                    width: imgW,
-                    height: imgH
-                });
-                layer.add(yoda);
-                layer.batchDraw();
-            };
-
-            console.log(objURL)
+            ctx.drawImage(this, spreadX / 2, spreadY / 2, imgW, imgH);
         }
     }
     //圆角
@@ -364,27 +354,29 @@
     }
     //放大选中的图像
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
-        var img = new Image()
-        img.src = canvas.toDataURL()
-        ctx1.drawImage(img, xStart + 20, yStart + 20, xDistance - 20, yDistance - 20, xStart, yStart, xDistance,
-            yDistance);
+        ctx1.drawImage(canvas,
+            xStart + 5, yStart + 5,
+            xDistance - 10, yDistance - 10,
+            xStart, yStart,
+            xDistance, yDistance
+        )
     }
     //生成图像下的步骤
     function progress(index) {
         //设置progress距离canvas为30
         $(".progress").append("<div><span>第</span>" + "<span>" + index + "</span>" + "<span>步：</span>" +
             "<input></input></div>")
-        $(".progress").width(imgW)
+        $(".progress").width(cw)
         //获取span的宽度
         var spanW = 0;
         $(".progress>div:eq(0) span").each(function () {
             spanW = spanW + $(this).width()
         })
         //设置input的宽度
-        $(".progress>div input").width(imgW - spanW - 30)
+        $(".progress>div input").width(cw - spanW - 30)
         //设置canvas距离顶部
         $("canvas").css("top", $(".progress").height() + 10)
-        $(".box-canvas").height(imgH + $(".progress").height() + 10);
+        $(".box-canvas").height(ch + $(".progress").height() + 10);
     }
     //蒙层绘制
     //创建矩形框时蒙层绘制
@@ -422,10 +414,12 @@
             labelText(old[i][2], old[i][3], imgData[imgData.length - 1] + i + 1)
         }
         //创建当前矩形框
-        fixSelectImg(xStart, yStart, xDistance, yDistance)
-        strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
-            "rgb(36,199,136)")
-        CreateDrawCover(xStart, yStart, xDistance, yDistance)
+        if (xDistance > 5 || yDistance > 5) {
+            fixSelectImg(xStart, yStart, xDistance, yDistance)
+            strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
+                "rgb(36,199,136)")
+            CreateDrawCover(xStart, yStart, xDistance, yDistance)
+        }
     }
     //拖拽矩形框
     function dragReturnOld(xStart, yStart, index) {
@@ -488,8 +482,28 @@
                 var yDistance = ay - y;
                 // 取开始点和结束点的最小值
                 var xStart = old[i][2] + xDistance;
-                var yStart = old[i][3] + yDistance
-                dragReturnOld(xStart, yStart, index)
+                var yStart = old[i][3] + yDistance;
+                if (xStart <= 0 || xStart + old[i][4] >= cw || yStart <= 0 || yStart + old[i][5] >= ch) {
+                    if (xStart <= 0) {
+                        xStart = 0
+                        dragReturnOld(xStart, yStart, index)
+                    }
+                    if (xStart + old[i][4] >= cw) {
+                        xStart = cw - old[i][4]
+                        dragReturnOld(xStart, yStart, index)
+
+                    }
+                    if (yStart <= 0) {
+                        yStart = 0
+                        dragReturnOld(xStart, yStart, index)
+                    }
+                    if (yStart + old[i][5] >= ch) {
+                        yStart = ch - old[i][5]
+                        dragReturnOld(xStart, yStart, index)
+                    }
+                } else {
+                    dragReturnOld(xStart, yStart, index)
+                }
                 canvas1.onmouseup = function () {
                     old[i][2] = xStart
                     old[i][3] = yStart
@@ -513,30 +527,65 @@
                         //点击矩形框的位置距离矩形框左侧的距离
                         var xD = x - xStartOld
                         //右
-                        if (docX >= offsetCanvas.left + imgW && offsetCanvas.top <= docY &&
-                            docY <= offsetCanvas.top +
-                            imgH) {
-                            yStart = docY - offsetCanvas.top - yD
-                            dragReturnOld(xStart, yStart, index)
-                        }
-                        //上
-                        if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + imgW &&
-                            offsetCanvas.left <= docX) {
-                            xStart = docX - offsetCanvas.left - xD
-                            dragReturnOld(xStart, yStart, index)
-                        }
-                        //左
-                        if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
-                            imgH && offsetCanvas.top <= docY) {
-                            yStart = docY - offsetCanvas.top - yD
-                            dragReturnOld(xStart, yStart, index)
-                        }
-                        //下
-                        if (docY >= offsetCanvas.top + imgH && docX <= offsetCanvas.left +
-                            imgW && offsetCanvas.left <= docX) {
-                            xStart = docX - offsetCanvas.left - xD
-                            dragReturnOld(xStart, yStart, index)
-                        }
+                        // if (docX >= offsetCanvas.left + cw && offsetCanvas.top <= docY &&
+                        //     docY <= offsetCanvas.top +
+                        //     ch) {
+                        //     console.log(1)
+                        //     if (yStart + yDistance >= ch) {
+                        //         yStart = ch - yDistance
+                        //         dragReturnOld(xStart, yStart, index)
+                        //     } else {
+                        //         yStart = docY - offsetCanvas.top - yD
+                        //         dragReturnOld(xStart, yStart, index)
+                        //     }
+
+                        // }
+                        // //上
+                        // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + cw &&
+                        //     offsetCanvas.left <= docX) {
+                        //     console.log(2)
+                        //     xStart = docX - offsetCanvas.left - xD
+                        //     dragReturnOld(xStart, yStart, index)
+                        // }
+                        // //左
+                        // if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
+                        //     ch && offsetCanvas.top <= docY) {
+                        //     console.log(3)
+                        //     yStart = docY - offsetCanvas.top - yD
+                        //     dragReturnOld(xStart, yStart, index)
+                        // }
+                        // //下
+                        // if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left +
+                        //     imgW && offsetCanvas.left <= docX) {
+                        //     console.log(4)
+                        //     xStart = docX - offsetCanvas.left - xD
+                        //     dragReturnOld(xStart, yStart, index)
+                        // }
+                        // //右下
+                        // if (docY >= offsetCanvas.top + ch && docX >= offsetCanvas.left +
+                        //     cw) {
+                        //     xStart = cw - old[i][4]
+                        //     yStart = ch - old[i][5]
+                        //     dragReturnOld(xStart, yStart, index)
+                        // }
+                        // //右上
+                        // if (docY <= offsetCanvas.top && docX >= offsetCanvas.left + cw) {
+                        //     xStart = cw - old[i][4]
+                        //     yStart = 0
+                        //     dragReturnOld(xStart, yStart, index)
+                        // }
+                        // //左上
+                        // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left) {
+                        //     xStart = 0
+                        //     yStart = old[i][5]
+                        //     dragReturnOld(xStart, yStart, index)
+                        // }
+                        // //左下
+                        // if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left) {
+                        //     xStart = 0
+                        //     yStart = ch - old[i][5]
+                        //     dragReturnOld(xStart, yStart, index)
+                        // }
                     })
                     $(document).mouseup(function () {
                         old[i][2] = xStart
@@ -566,9 +615,14 @@
                 CreateReturnOld(xStart, yStart, xDistance, yDistance)
                 //鼠标移开事件
                 canvas1.onmouseup = function () {
-                    old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
-                    labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
-                    progress(imgData[imgData.length - 1] + old.length)
+                    if (xDistance <= 5 || yDistance <= 5) {
+                        old.pop()
+                        console.log(old)
+                    } else {
+                        labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
+                        progress(imgData[imgData.length - 1] + old.length)
+                        old[old.length - 1].push(xStart, yStart, xDistance, yDistance);
+                    }
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
                     canvas1.onmouseout = null
@@ -583,9 +637,9 @@
                         var docY = e.pageY;
                         var offsetCanvas = $("canvas").offset()
                         //右
-                        if (docX >= offsetCanvas.left + imgW && docY <= offsetCanvas.top +
-                            imgH) {
-                            xDistance = imgW - xStart
+                        if (docX >= offsetCanvas.left + cw && docY <= offsetCanvas.top +
+                            ch && offsetCanvas.top <= docY) {
+                            xDistance = cw - xStart
                             if (yStartOld <= docY - offsetCanvas.top) {
                                 yStart = yStartOld
                                 yDistance = docY - offsetCanvas.top - yStartOld
@@ -597,7 +651,8 @@
                             }
                         }
                         //上
-                        if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + imgW) {
+                        if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + cw &&
+                            offsetCanvas.left <= docX) {
                             yDistance = yStartOld
                             if (xStartOld <= docX - offsetCanvas.left) {
                                 xStart = xStartOld
@@ -611,7 +666,7 @@
                         }
                         //左
                         if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
-                            imgH) {
+                            ch && offsetCanvas.top <= docY) {
                             xDistance = xStartOld
                             if (yStartOld <= docY - offsetCanvas.top) {
                                 yStart = yStartOld
@@ -624,9 +679,9 @@
                             }
                         }
                         //下
-                        if (docY >= offsetCanvas.top + imgH && docX <= offsetCanvas.left +
-                            imgW) {
-                            yDistance = imgH - yStart
+                        if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left +
+                            cw && offsetCanvas.left <= docX) {
+                            yDistance = ch - yStart
                             if (xStartOld <= docX - offsetCanvas.left) {
                                 xStart = xStartOld
                                 xDistance = docX - offsetCanvas.left - xStartOld
@@ -638,17 +693,17 @@
                             }
                         }
                         //右下
-                        if (docY >= offsetCanvas.top + imgH && docX >= offsetCanvas.left +
-                            imgW) {
-                            xDistance = imgW - xStartOld
-                            yDistance = imgH - yStartOld
+                        if (docY >= offsetCanvas.top + ch && docX >= offsetCanvas.left +
+                            cw) {
+                            xDistance = cw - xStartOld
+                            yDistance = ch - yStartOld
                             CreateReturnOld(xStart, yStart, xDistance, yDistance)
                         }
                         //右上
-                        if (docY <= offsetCanvas.top && docX >= offsetCanvas.left + imgW) {
+                        if (docY <= offsetCanvas.top && docX >= offsetCanvas.left + cw) {
                             xStart = xStartOld
                             yStart = 0
-                            xDistance = imgW - xStartOld
+                            xDistance = cw - xStartOld
                             yDistance = Math.abs(yStart - yStartOld);
                             CreateReturnOld(xStart, yStart, xDistance, yDistance)
                         }
@@ -661,10 +716,10 @@
                             CreateReturnOld(xStart, yStart, xDistance, yDistance)
                         }
                         //左下
-                        if (docY >= offsetCanvas.top + imgH && docX <= offsetCanvas.left) {
+                        if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left) {
                             xStart = 0
                             xDistance = xStartOld
-                            yDistance = imgH - yStartOld
+                            yDistance = ch - yStartOld
                             CreateReturnOld(xStart, yStart, xDistance, yDistance)
                         }
                     })
@@ -723,10 +778,10 @@
     $("#returnLast").on("click", function () {
         old.splice(old.length - 1, 1)
         ctx.clearRect(0, 0, cw, ch)
-        ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
+        ctx.drawImage(document.getElementById("img"), spreadX / 2, spreadY / 2, imgW, imgH);
         CreateReturnLast()
         $(".progress>div:last-of-type").remove()
-        $(".box-canvas").height(imgH + $(".progress").height() + 10);
+        $(".box-canvas").height(ch + $(".progress").height() + 10);
         $("canvas").css("top", $(".progress").height() + 10)
     })
     //重置
@@ -748,19 +803,19 @@
     function downDom(Dom, picType, picName, downDomH) {
         picName = picName || '下载'
         // 像素比，清晰度
-        const scale = 4;
+        var opts = {
+            pixelRatio,
+            logging: true,
+        };
         // 调用html2canvas插件
-        html2canvas(Dom, {
-            scale
-        }).then(function (Dom) {
-            //
+        html2canvas(Dom, opts).then(function (Dom) {
             var context = Dom.getContext('2d');
             // 【重要】关闭抗锯齿
             context.mozImageSmoothingEnabled = false;
             context.webkitImageSmoothingEnabled = false;
             context.msImageSmoothingEnabled = false;
             context.imageSmoothingEnabled = false;
-            Canvas2Image.saveAsImage(Dom, imgW, downDomH, picType, picName);
+            Canvas2Image.saveAsImage(Dom, cw, downDomH, picType, picName);
             // 下载图片，saveAsImage原理
             // let a = document.createElement('a')
             // document.body.appendChild(a)
@@ -782,23 +837,23 @@
         reset();
     }
     //改变画布大小
+    //改变画布大小
     $(".confirm").on("click", function () {
         reset();
         imgScale = $(".img-scale").val()
-        imgW = img.width / imgScale;
-        imgH = img.height / imgScale;
-        // imgX = (cw - imgW) / 2;
-        $("canvas").each(function () {
-            this.width = imgW;
-            this.height = imgH;
-        })
-        $(".box-canvas").width(imgW);
-        $(".box-canvas").height(imgH + 10);
-        $(".tool").css("margin-left", imgW + 50)
+        imgW = Math.floor(img.width / imgScale);
+        imgH = Math.floor(img.height / imgScale);
+        cw = imgW + spreadX;
+        ch = imgH + spreadY;
+        setCanvasArea(canvas, ctx)
+        setCanvasArea(canvas1, ctx1)
+        setCanvasArea(canvas2, ctx2)
+        $(".box-canvas").width(cw);
+        $(".box-canvas").height(ch + 10);
+        $(".tool").css("margin-left", cw + 30)
+
         ctx.clearRect(0, 0, cw, ch)
-        cw = imgW;
-        ch = imgH;
-        ctx.drawImage(document.getElementById("img"), 0, 0, imgW, imgH);
+        ctx.drawImage(document.getElementById("img"), spreadX / 2, spreadY / 2, imgW, imgH);
     })
 </script>
 
