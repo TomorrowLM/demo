@@ -243,7 +243,6 @@
         return (window.devicePixelRatio || 1) / backingStore;
     };
     var pixelRatio = getPixelRatio(canvas);
-    console.log(pixelRatio)
     //设置图层宽高
     function setCanvasArea(canvas, ctx) {
         canvas.width = Math.floor(cw * pixelRatio);
@@ -421,6 +420,25 @@
             CreateDrawCover(xStart, yStart, xDistance, yDistance)
         }
     }
+    //
+    function spreadReturnOld(xStart, yStart, xDistance, yDistance, index) {
+        //清除图层
+        ctx1.clearRect(0, 0, cw, ch);
+        //还原矩形框
+        for (i = 0; i < old.length; i++) {
+            if (i != index) {
+                fixSelectImg(old[i][2], old[i][3], old[i][4], old[i][5])
+                strokeRoundRect(ctx1, old[i][2], old[i][3], old[i][4], old[i][5], 7, 2,
+                    "rgb(36,199,136)")
+                labelText(old[i][2], old[i][3], imgData[imgData.length - 1] + i + 1)
+            }
+        }
+        //拖拽
+        fixSelectImg(xStart, yStart, xDistance, yDistance)
+        strokeRoundRect(ctx1, xStart, yStart, xDistance, yDistance, 7, 2,
+            "rgb(36,199,136)")
+        dragDrawCover(xStart, yStart, xDistance, yDistance, index)
+    }
     //拖拽矩形框
     function dragReturnOld(xStart, yStart, index) {
         //清除图层
@@ -440,7 +458,6 @@
             "rgb(36,199,136)")
         dragDrawCover(xStart, yStart, old[index][4], old[index][5], index)
     }
-
     //鼠标事件
     $(function () {
         //鼠标按下，将鼠标按下坐标保存在x,y中
@@ -456,8 +473,14 @@
                     old[i][3] < y &&
                     y < old[i][3] + old[i][5]
                 ) {
-                    drag(x, y, i)
-                    return;
+                    if (old[i][2] + old[i][4] - 10 < x && x < old[i][2] + old[i][4] &&
+                        old[i][3] + old[i][5] - 10 < y && y < old[i][3] + old[i][5]) {
+                        spreadArea(x, y, i)
+                        return;
+                    } else {
+                        drag(x, y, i)
+                        return;
+                    }
                 }
             }
             //创建矩形框
@@ -526,38 +549,42 @@
                         var yD = y - yStartOld
                         //点击矩形框的位置距离矩形框左侧的距离
                         var xD = x - xStartOld
-                        //右
+                        // //右
                         // if (docX >= offsetCanvas.left + cw && offsetCanvas.top <= docY &&
                         //     docY <= offsetCanvas.top +
                         //     ch) {
-                        //     console.log(1)
-                        //     if (yStart + yDistance >= ch) {
-                        //         yStart = ch - yDistance
+                        //     if (yStart <= 0) {
+                        //         yStart = 0
                         //         dragReturnOld(xStart, yStart, index)
-                        //     } else {
+                        //     } if(yStart>=ch-old[index][5]){
+                        //         yStart = ch-old[index][5]
+                        //         dragReturnOld(xStart, yStart, index)
+                        //     }
+                        //     else {
                         //         yStart = docY - offsetCanvas.top - yD
                         //         dragReturnOld(xStart, yStart, index)
                         //     }
-
                         // }
                         // //上
                         // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + cw &&
                         //     offsetCanvas.left <= docX) {
-                        //     console.log(2)
-                        //     xStart = docX - offsetCanvas.left - xD
-                        //     dragReturnOld(xStart, yStart, index)
+                        //     if (xStart >= offsetCanvas.left + cw) {
+                        //         xStart = 0
+                        //         dragReturnOld(xStart, yStart, index)
+                        //     } else {
+                        //         xStart = docX - offsetCanvas.left - xD
+                        //         dragReturnOld(xStart, yStart, index)
+                        //     }
                         // }
                         // //左
                         // if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
                         //     ch && offsetCanvas.top <= docY) {
-                        //     console.log(3)
                         //     yStart = docY - offsetCanvas.top - yD
                         //     dragReturnOld(xStart, yStart, index)
                         // }
                         // //下
                         // if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left +
                         //     imgW && offsetCanvas.left <= docX) {
-                        //     console.log(4)
                         //     xStart = docX - offsetCanvas.left - xD
                         //     dragReturnOld(xStart, yStart, index)
                         // }
@@ -577,7 +604,7 @@
                         // //左上
                         // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left) {
                         //     xStart = 0
-                        //     yStart = old[i][5]
+                        //     yStart = 0
                         //     dragReturnOld(xStart, yStart, index)
                         // }
                         // //左下
@@ -600,6 +627,63 @@
                 }
             }
         }
+        //拖拽扩展矩形框
+        function spreadArea(x, y, index) {
+            canvas1.onmousemove = function (ev) {
+                var e = ev || event;
+                var ax = e.offsetX;
+                var ay = e.offsetY;
+                // 计算移动距离
+                // var xDistance = ax - x;
+                // var yDistance = ay - y;
+                var xDistance = old[index][4] + ax - x
+                var yDistance = old[index][5] + ay - y
+                // 取开始点和结束点的最小值
+                // var xStart = old[i][2] + xDistance;
+                // var yStart = old[i][3] + yDistance;
+                spreadReturnOld(old[index][2], old[index][3], xDistance, yDistance, index)
+                canvas1.onmouseup = function () {
+                    old[index][4] = xDistance
+                    old[index][5] = yDistance
+                    labelText(old[index][2], old[index][3], imgData[imgData.length - 1] + index + 1)
+                    canvas1.onmousemove = null;
+                    canvas1.onmouseup = null;
+                    canvas1.onmouseout = null
+                    return;
+                };
+                //鼠标移出
+                var xStartOld = x
+                var yStartOld = y
+                canvas1.onmouseout = function (e) {
+                    $(document).mousemove(function (e) {
+                        var docX = e.pageX;
+                        var docY = e.pageY;
+                        var offsetCanvas = $("canvas").offset()
+                        //右
+                        if (docX >= offsetCanvas.left + cw && docY <= offsetCanvas.top +
+                            ch && offsetCanvas.top <= docY) {
+                            console.log(1)
+                            CreateReturnOld(old[index][2], old[index][3], cw - old[index][2],
+                                docY - old[
+                                    index][3]-offsetCanvas.top)
+                        }
+                        $(document).mouseup(function () {
+                            old[index][4] = cw - old[index][2]
+                            old[index][5] = docY - old[index][3]
+                            labelText(old[index][2], old[index][3], imgData[imgData
+                                    .length - 1] + i +
+                                1)
+                            canvas1.onmousemove = null;
+                            canvas1.onmouseup = null;
+                            canvas1.onmouseout = null;
+                            $(document).unbind("mousemove")
+                            $(document).unbind("mouseup")
+                        })
+                    })
+
+                }
+            }
+        }
         //创建矩形框
         function createBox(x, y) {
             canvas1.onmousemove = function (ev) {
@@ -617,7 +701,6 @@
                 canvas1.onmouseup = function () {
                     if (xDistance <= 5 || yDistance <= 5) {
                         old.pop()
-                        console.log(old)
                     } else {
                         labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
                         progress(imgData[imgData.length - 1] + old.length)
@@ -628,9 +711,9 @@
                     canvas1.onmouseout = null
                     return;
                 };
+                //鼠标移出
                 var xStartOld = x
                 var yStartOld = y
-                //鼠标移出
                 canvas1.onmouseout = function () {
                     $(document).mousemove(function (e) {
                         var docX = e.pageX;
