@@ -1,20 +1,20 @@
 <template>
   <div>
     <!-- 父子通信props-->
-    <h1 @click="fixpostTitle()">{{ postTitle }}</h1>
+    <h1 @click="fixpostTitle()">我是子级：{{ postTitle }}</h1>
     <!-- 父子通信emit -->
-    <h1 @click="changeTitle">{{ title }}</h1>
+    <h1 @click="changeTitle">我是子级：{{ title }}</h1>
     <!-- eventBus -->
-    <h1 @click="eventBus()">eventBus</h1>
+    <h1 @click="eventBus()">我是子级：eventBus</h1>
   </div>
 </template>
 
 <script>
-import Event from "../../common/event"
+import Event from "../../common/event";
 export default {
-  inject: ['name'],
-  mounted(){
-    console.log(this.name);  // 浪里行舟
+  inject: ["name"],
+  mounted() {
+    console.log(this.name); // 浪里行舟
   },
   props: {
     postTitle: String,
@@ -33,9 +33,9 @@ export default {
     changeTitle() {
       this.$emit("titleChanged", "子向父组件传值"); //自定义事件  传递值“子向父组件传值”
     },
-    eventBus(){
-      Event.$emit('eventData','中央事件总线new');
-    }
+    eventBus() {
+      Event.$emit("eventData", "中央事件总线new");
+    },
   },
 };
 </script>

@@ -475,7 +475,6 @@
                 ) {
                     if (old[i][2] + old[i][4] - 10 < x && x < old[i][2] + old[i][4] &&
                         old[i][3] + old[i][5] - 10 < y && y < old[i][3] + old[i][5]) {
-                        $(".box-canvas").css("cursor","se-resize")
                         spreadArea(x, y, i)
                         return;
                     } else {
@@ -649,8 +648,7 @@
                     labelText(old[index][2], old[index][3], imgData[imgData.length - 1] + index + 1)
                     canvas1.onmousemove = null;
                     canvas1.onmouseup = null;
-                    canvas1.onmouseout = null;
-                    $(".box-canvas").css("cursor","default")
+                    canvas1.onmouseout = null
                     return;
                 };
                 //鼠标移出

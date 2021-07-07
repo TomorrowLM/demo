@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Nav from "../components/nav.vue";
 import Props from "../components/props.vue";
 import Transition from "../components/transition.vue";
-import Canvas from "../components/canvas.vue"
+import Canvas from "../components/canvas.vue";
 Vue.use(VueRouter);
 
 const routes = [

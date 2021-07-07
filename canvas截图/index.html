@@ -228,7 +228,7 @@
         $("#canvas").append("<img id='img''></img>")
         $("#img").attr("src", objURL)
         img.src = objURL;
-        $(".box-canvas").show()
+        $(".box-canvas").show();
         drawImage(objURL);
     })
 
@@ -617,7 +617,6 @@
                 canvas1.onmouseup = function () {
                     if (xDistance <= 5 || yDistance <= 5) {
                         old.pop()
-                        console.log(old)
                     } else {
                         labelText(xStart, yStart, imgData[imgData.length - 1] + old.length)
                         progress(imgData[imgData.length - 1] + old.length)
