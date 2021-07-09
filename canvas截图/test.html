@@ -131,6 +131,10 @@
         border-radius: 6px;
         height: 28px;
       }
+      .img-scale-tip {
+        vertical-align: middle;
+        margin-left: 10px;
+      }
     </style>
   </head>
 
@@ -145,9 +149,14 @@
       <div class="tool">
         <div class="file">选择文件<input type="file" value="选择图片" /></div>
         <div>
-          <span>更改图像大小：</span>
+          <!-- <span>更改图像大小：</span>
+          <input type="text" placeholder="更改图像大小" class="img-scale" /> -->
+          <span>宽：</span>
+          <input type="text" placeholder="更改图像大小" class="img-scale" />
+          <span>高：</span>
           <input type="text" placeholder="更改图像大小" class="img-scale" />
           <button class="confirm">确认</button>
+          <span class="img-scale-tip"></span>
         </div>
         <div>
           <span>更改开始步骤：</span>
@@ -273,6 +282,8 @@
             imgW = imgW / imgScale;
           }
         }
+        // $(".img-scale-tip").text(`图像适合以${imgScale.toFixed(1)}做自适应`);
+        $(".img-scale-tip").text(`图像适合以${Math.floor(imgW)}×${Math.floor(imgH)}做自适应`);
         imgW = Math.floor(imgW);
         imgH = Math.floor(imgH);
         //设置画布大小
@@ -1138,12 +1149,14 @@
       reset();
     };
     //改变画布大小
-    //改变画布大小
     $(".confirm").on("click", function () {
       reset();
-      imgScale = $(".img-scale").val();
-      imgW = Math.floor(img.width / imgScale);
-      imgH = Math.floor(img.height / imgScale);
+      // imgScale = $(".img-scale").val();
+      // imgW = Math.floor(img.width / imgScale);
+      // imgH = Math.floor(img.height / imgScale);
+      imgW = parseInt($(".img-scale").eq(0).val());
+      imgH = parseInt($(".img-scale").eq(1).val());
+      console.log(imgW,imgH)
       cw = imgW + spreadX;
       ch = imgH + spreadY;
       setCanvasArea(canvas, ctx);
