@@ -9,7 +9,6 @@
     <script src="./common/html2canvas.min.js"></script>
     <script src="./common/canvas2image.js"></script>
     <script src="./common/konvajs.js"></script>
-    <script src="./common/jcanvas.min.js"></script>
     <style>
       .box {
         display: flex;
@@ -72,6 +71,7 @@
 
       .tool {
         position: absolute;
+        width: 420px;
       }
 
       button {
@@ -97,6 +97,7 @@
         text-decoration: none;
         text-indent: 0;
         line-height: 20px;
+        margin-bottom: 12px;
       }
 
       .file input {
@@ -135,6 +136,11 @@
         vertical-align: middle;
         margin-left: 10px;
       }
+      /* @media screen and (max-width: 414px) {
+        .tool {
+          display: initial !important;
+        }
+      } */
     </style>
   </head>
 
@@ -151,10 +157,14 @@
         <div>
           <!-- <span>更改图像大小：</span>
           <input type="text" placeholder="更改图像大小" class="img-scale" /> -->
-          <span>宽：</span>
-          <input type="text" placeholder="更改图像大小" class="img-scale" />
-          <span>高：</span>
-          <input type="text" placeholder="更改图像大小" class="img-scale" />
+          <div style="margin-bottom: 10px">
+            <span>宽：</span>
+            <input type="text" placeholder="更改图像大小" class="img-scale" />
+          </div>
+          <div>
+            <span>高：</span>
+            <input type="text" placeholder="更改图像大小" class="img-scale" />
+          </div>
           <button class="confirm">确认</button>
           <span class="img-scale-tip"></span>
         </div>
@@ -168,7 +178,10 @@
         <div>
           <span>设置图片名称：</span>
           <input type="text" class="file-name" />
-          <button id="save">保存</button>
+          <button id="save">保存图像</button>
+        </div>
+        <div class="save-clipboard-box">
+          <button class="save-clipboard">复制图像到剪切板</button>
         </div>
       </div>
     </div>
@@ -283,9 +296,13 @@
           }
         }
         // $(".img-scale-tip").text(`图像适合以${imgScale.toFixed(1)}做自适应`);
-        $(".img-scale-tip").text(`图像适合以${Math.floor(imgW)}×${Math.floor(imgH)}做自适应`);
+        // $(".img-scale-tip").text(
+        //   `图像适合以${Math.floor(imgW)}×${Math.floor(imgH)}做自适应`
+        // );
         imgW = Math.floor(imgW);
         imgH = Math.floor(imgH);
+        $(".img-scale").eq(0).val(imgW);
+        $(".img-scale").eq(1).val(imgH);
         //设置画布大小
         cw = imgW + spreadX;
         ch = imgH + spreadY;
@@ -294,7 +311,11 @@
         setCanvasArea(canvas2, ctx2);
         $(".box-canvas").width(cw);
         $(".box-canvas").height(ch + 10);
-        $(".tool").css("margin-left", cw + 30);
+        if (window.innerWidth <= 414) {
+          $(".tool").css("margin-top", ch + 30);
+        } else {
+          $(".tool").css("margin-left", cw + 30);
+        }
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.shadowColor = "#ccc";
@@ -1156,7 +1177,6 @@
       // imgH = Math.floor(img.height / imgScale);
       imgW = parseInt($(".img-scale").eq(0).val());
       imgH = parseInt($(".img-scale").eq(1).val());
-      console.log(imgW,imgH)
       cw = imgW + spreadX;
       ch = imgH + spreadY;
       setCanvasArea(canvas, ctx);
@@ -1164,7 +1184,11 @@
       setCanvasArea(canvas2, ctx2);
       $(".box-canvas").width(cw);
       $(".box-canvas").height(ch + 10);
-      $(".tool").css("margin-left", cw + 30);
+      if (window.innerWidth <= 414) {
+        $(".tool").css("margin-top", ch + 30);
+      } else {
+        $(".tool").css("margin-left", cw + 30);
+      }
       ctx.clearRect(0, 0, cw, ch);
       ctx.drawImage(
         document.getElementById("img"),
@@ -1172,6 +1196,50 @@
         spreadY / 2,
         imgW,
         imgH
+      );
+    });
+
+    $(".save-clipboard").on("click", function () {
+      $(".progress input").css("border-width", 0);
+      //复制图像到剪切板
+      function downClipboard(Dom, picType, picName, downDomH) {
+        picName = picName || "下载";
+        // 像素比，清晰度
+        var opts = {
+          pixelRatio,
+          logging: true,
+        };
+        // 调用html2canvas插件
+        html2canvas(Dom, opts).then(function (Dom) {
+          var context = Dom.getContext("2d");
+          // 【重要】关闭抗锯齿
+          context.mozImageSmoothingEnabled = false;
+          context.webkitImageSmoothingEnabled = false;
+          context.msImageSmoothingEnabled = false;
+          context.imageSmoothingEnabled = false;
+          $(".save-clipboard").after(
+            Canvas2Image.convertToImage(Dom, cw, downDomH, picType)
+          );
+          console.log(1, document.querySelector(".save-clipboard-box img"));
+          const selection = window.getSelection(); // 清除选中
+          if (selection.rangeCount > 0) selection.removeAllRanges();
+          // https://developer.mozilla.org/zh-CN/docs/Web/API/Document/queryCommandSupported
+          if (!document.queryCommandSupported("copy"))
+            return alert("浏览器暂不支持复制命令");
+          // 创建range区域
+          const range = document.createRange();
+          range.selectNode(document.querySelector(".save-clipboard-box img"));
+          selection.addRange(range);
+          document.execCommand("copy");
+          selection.removeAllRanges();
+        
+        });
+      }
+      downClipboard(
+        $(".box-canvas")[0],
+        "png",
+        fileName,
+        $(".box-canvas").height()
       );
     });
   </script>
