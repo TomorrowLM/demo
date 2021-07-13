@@ -17,6 +17,7 @@
     "webpack": "^5.43.0"
   },
   "dependencies": {
+    "clipboard": "^2.0.8",
     "eslint-loader": "^4.0.2"
   }
 }
