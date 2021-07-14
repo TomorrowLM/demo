@@ -1297,7 +1297,6 @@
           });
           async function askWritePermission() {
             try {
-              console.log(navigator.permissions)
               const { state } = await navigator.permissions.query({
                 name: "clipboard-write",
               });
@@ -1307,6 +1306,7 @@
             }
           }
           if (askWritePermission()) {
+            console.log(navigator.clipboard);
             navigator.clipboard.write([item]);
             alert("成功复制到剪切板");
           } else {
