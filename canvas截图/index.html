@@ -4,12 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name=renderer  content=webkit>
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
     <script src="./common/html2canvas.min.js"></script>
     <script src="./common/canvas2image.js"></script>
-    <script src="./common/konvajs.js"></script>
-    <script src="./common/jcanvas.min.js"></script>
     <style>
       .box {
         display: flex;
@@ -27,7 +26,6 @@
       canvas {
         position: absolute;
         background: #9090900f;
-        /* box-shadow: 11px 1px 14px #9090900f; */
         image-rendering: crisp-edges;
       }
 
@@ -50,11 +48,20 @@
 
       .progress {
         position: absolute;
+        width: 850px;
+        color: #716f6f;
+        font-weight: 700;
       }
-
+      .progress input {
+        color: #8b8888;
+        font-weight: 600;
+        vertical-align: middle;
+        font-size: 15px;
+      }
       .progress div {
         margin: 5px 0;
         font-size: 14px;
+        margin-left: 10px;
       }
 
       .progress div span:nth-of-type(2) {
@@ -72,16 +79,17 @@
 
       .tool {
         position: absolute;
+        width: 420px;
+        margin-top: 40px;
       }
 
       button {
-        height: 30px;
         padding: 5px 20px;
         border-radius: 5px;
         border: 0px;
         color: #5f5f5f;
         margin: 20px 0px;
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 700;
         vertical-align: sub;
       }
@@ -89,14 +97,15 @@
       .file {
         position: relative;
         display: inline-block;
-        background: rgb(239, 239, 239);
-        border-radius: 4px;
-        padding: 4px 12px;
+        padding: 2px 12px;
+        padding-bottom: 3px;
         overflow: hidden;
-        color: #8c8f90;
         text-decoration: none;
         text-indent: 0;
-        line-height: 20px;
+        top: 3px;
+        left: -5px;
+        border-radius: 0 6px 6px 0;
+        border: 1px solid #c7c5c5;
       }
 
       .file input {
@@ -105,14 +114,21 @@
         right: 0;
         top: 0;
         opacity: 0;
+        width: 100%;
       }
 
-      .file:hover,
-      button:hover {
+      button:hover,
+      #save:hover,
+      #reset:hover,
+      #returnLast:hover {
         background: #c3c5c7;
         text-decoration: none;
       }
-
+      .file:hover {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+      }
       .tool span {
         background: #5f5f5f;
         -webkit-background-clip: text;
@@ -123,7 +139,7 @@
       .tool input {
         border: 1px solid #c7c5c5;
         border-radius: 6px;
-        height: 28px;
+        height: 24px;
       }
 
       .progress input {
@@ -135,11 +151,112 @@
         vertical-align: middle;
         margin-left: 10px;
       }
-      @media screen and (max-width: 750px) {
-        .tool{
+      #returnLast {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+        margin-right: 15px;
+        padding: 5px 12px;
+        margin-left: 14px;
+      }
+      #reset {
+        color: #fff;
+        background-color: #e6a23c;
+        border-color: #e6a23c;
+      }
+      .confirm {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+      }
+      .change-step {
+        color: #fff;
+        background-color: #49d14f;
+        border-color: #49d14f;
+      }
+      .change-step {
+        margin: 0 10px;
+      }
+      .tab {
+        display: flex;
+        width: 100%;
+        height: 35px;
+        background: #a99696;
+        justify-items: center;
+        margin-bottom: 40px;
+      }
+      .tab > div {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid black;
+        color: white;
+      }
+      .tab > div:nth-of-type(2) {
+        border: 0;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+      }
+      .tab > div > p {
+        cursor: default;
+        padding: 0;
+        margin: 0;
+        font-weight: 600;
+      }
+      .img-type > input {
+        border-radius: 6px 0 0 6px;
+      }
+      .img-scale-box,
+      .img-scale-box > div {
+        margin-top: 20px;
+      }
+      .img-scale-box span {
+        width: 38px;
+        height: 100%;
+        margin-left: 15px;
+      }
+      .confirm {
+        margin-left: 91px;
+      }
+      .file {
+        color: #409eff;
+      }
+      .save-clipboard-box {
+        margin-left: 110px;
+      }
+      .save-clipboard-box button {
+        padding: 5px 12px;
+      }
+      /* @media screen and (max-width: 414px) {
+        .tool {
           display: initial !important;
-          margin-left: 0 !important;
         }
+      } */
+      .tab-active {
+        background-color: #e8e8e8;
+        color: black !important;
+      }
+      .tab-others {
+        display: none !important;
+      }
+      #save {
+        background-color: #409eff;
+        border-color: #409eff;
+        color: white;
+      }
+      .save-clipboard {
+        color: #fff;
+        background: #75d064;
+      }
+      .file-box,
+      .change-step-box,
+      .save-box {
+        text-align: center;
+      }
+      .img-scale-box {
+        text-align: left;
+        margin-left: 50px;
       }
     </style>
   </head>
@@ -153,24 +270,54 @@
         <div class="progress"></div>
       </div>
       <div class="tool">
-        <div class="file">选择文件<input type="file" value="选择图片" /></div>
-        <div>
-          <span>更改图像大小：</span>
-          <input type="text" placeholder="更改图像大小" class="img-scale" />
-          <button class="confirm">确认</button>
-          <span class="img-scale-tip"></span>
+        <div class="tab" style="display: flex">
+          <div class="tab-1">
+            <p>选择图片</p>
+          </div>
+          <div class="tab-2">
+            <p>编辑流程</p>
+          </div>
+          <div class="tab-3">
+            <p>导出图片</p>
+          </div>
         </div>
-        <div>
+        <div class="file-box">
+          <div class="img-type">
+            <span style="vertical-align: super">图片：</span>
+            <input type="text" style="vertical-align: super" />
+            <div class="file">
+              选择文件<input type="file" value="选择图片" />
+            </div>
+          </div>
+          <div class="img-scale-box">
+            <div style="margin-bottom: 10px">
+              <span>宽：</span>
+              <input type="text" placeholder="更改图像大小" class="img-scale" />
+            </div>
+            <div>
+              <span>高：</span>
+              <input type="text" placeholder="更改图像大小" class="img-scale" />
+            </div>
+            <button class="confirm">确认</button>
+            <span class="img-scale-tip"></span>
+          </div>
+        </div>
+        <div class="change-step-box">
           <span>更改开始步骤：</span>
           <input type="text" placeholder="更改开始步骤" class="step-val" />
           <button class="change-step">确认</button>
+          <button id="returnLast">上一步</button>
+          <button id="reset">重置</button>
         </div>
-        <button id="returnLast">上一步</button>
-        <button id="reset">重置</button>
-        <div>
-          <span>设置图片名称：</span>
-          <input type="text" class="file-name" />
-          <button id="save">保存</button>
+        <div class="save-box">
+          <div>
+            <span>设置图片名称：</span>
+            <input type="text" class="file-name" />
+          </div>
+          <div class="save-clipboard-box">
+            <button class="save-clipboard">复制图片</button>
+            <button id="save">保存图像</button>
+          </div>
         </div>
       </div>
     </div>
@@ -225,12 +372,19 @@
     $(".file>input").change(function () {
       reset();
       var imgFile = $(this)[0].files[0];
+      $(".img-type>input").val(imgFile.name);
       if (!/image\/\w+/.test(imgFile.type)) {
         alert("文件必须为图片！");
         return false;
       }
       //读取照片第一种
       var objURL = getObjectURL(imgFile);
+      //读取照片第二种
+      // var reader = new FileReader();
+      // reader.readAsDataURL(this.files[0]);
+      // reader.onload = function (e) {
+      //     console.log(this.result)
+      // }
       $("#canvas").append("<img id='img''></img>");
       $("#img").attr("src", objURL);
       img.src = objURL;
@@ -284,9 +438,10 @@
             imgW = imgW / imgScale;
           }
         }
-        $(".img-scale-tip").text(`图像适合以${imgScale.toFixed(1)}做自适应`);
         imgW = Math.floor(imgW);
         imgH = Math.floor(imgH);
+        $(".img-scale").eq(0).val(imgW);
+        $(".img-scale").eq(1).val(imgH);
         //设置画布大小
         cw = imgW + spreadX;
         ch = imgH + spreadY;
@@ -295,7 +450,11 @@
         setCanvasArea(canvas2, ctx2);
         $(".box-canvas").width(cw);
         $(".box-canvas").height(ch + 10);
-        $(".tool").css("margin-left", cw + 30);
+        if (window.innerWidth <= 414) {
+          $(".tool").css("margin-top", ch + 30);
+        } else {
+          $(".tool").css("margin-left", cw + 30);
+        }
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.shadowColor = "#ccc";
@@ -383,7 +542,7 @@
         yDistance
       );
     }
-    //生成图像下的步骤
+    //创建矩形框后，在图像上生成对应的步骤
     function progress(index) {
       //设置progress距离canvas为30
       $(".progress").append(
@@ -406,7 +565,6 @@
       $("canvas").css("top", $(".progress").height() + 10);
       $(".box-canvas").height(ch + $(".progress").height() + 10);
     }
-    //蒙层绘制
     //创建矩形框时蒙层绘制
     function CreateDrawCover(xStart, yStart, xDistance, yDistance) {
       ctx2.clearRect(0, 0, cw, ch);
@@ -548,8 +706,8 @@
         }
       };
     }
-    //
-    function fn(e) {
+    //切换箭头样式
+    function switchCursor(e) {
       var x = e.offsetX;
       var y = e.offsetY;
       for (var index = 0; index < old.length; ++index) {
@@ -570,8 +728,8 @@
         }
       }
     }
-    //监听
-    $("canvas").mousemove(throttle(fn, 100));
+    //监听鼠标是否移动到矩形框的右下角
+    $("canvas").mousemove(throttle(switchCursor, 100));
     //鼠标事件
     $(function () {
       //鼠标按下，将鼠标按下坐标保存在x,y中
@@ -672,70 +830,6 @@
               var yD = y - yStartOld;
               //点击矩形框的位置距离矩形框左侧的距离
               var xD = x - xStartOld;
-              // //右
-              // if (docX >= offsetCanvas.left + cw && offsetCanvas.top <= docY &&
-              //     docY <= offsetCanvas.top +
-              //     ch) {
-              //     if (yStart <= 0) {
-              //         yStart = 0
-              //         dragReturnOld(xStart, yStart, index)
-              //     } if(yStart>=ch-old[index][5]){
-              //         yStart = ch-old[index][5]
-              //         dragReturnOld(xStart, yStart, index)
-              //     }
-              //     else {
-              //         yStart = docY - offsetCanvas.top - yD
-              //         dragReturnOld(xStart, yStart, index)
-              //     }
-              // }
-              // //上
-              // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + cw &&
-              //     offsetCanvas.left <= docX) {
-              //     if (xStart >= offsetCanvas.left + cw) {
-              //         xStart = 0
-              //         dragReturnOld(xStart, yStart, index)
-              //     } else {
-              //         xStart = docX - offsetCanvas.left - xD
-              //         dragReturnOld(xStart, yStart, index)
-              //     }
-              // }
-              // //左
-              // if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
-              //     ch && offsetCanvas.top <= docY) {
-              //     yStart = docY - offsetCanvas.top - yD
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //下
-              // if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left +
-              //     imgW && offsetCanvas.left <= docX) {
-              //     xStart = docX - offsetCanvas.left - xD
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //右下
-              // if (docY >= offsetCanvas.top + ch && docX >= offsetCanvas.left +
-              //     cw) {
-              //     xStart = cw - old[i][4]
-              //     yStart = ch - old[i][5]
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //右上
-              // if (docY <= offsetCanvas.top && docX >= offsetCanvas.left + cw) {
-              //     xStart = cw - old[i][4]
-              //     yStart = 0
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //左上
-              // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left) {
-              //     xStart = 0
-              //     yStart = 0
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //左下
-              // if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left) {
-              //     xStart = 0
-              //     yStart = ch - old[i][5]
-              //     dragReturnOld(xStart, yStart, index)
-              // }
             });
             $(document).mouseup(function () {
               old[i][2] = xStart;
@@ -750,7 +844,7 @@
           };
         };
       }
-      //拖拽扩展矩形框
+      //扩展矩形框
       function spreadArea(x, y, index) {
         var xStartSpread = old[index][2];
         var yStartSpread = old[index][3];
@@ -1056,7 +1150,38 @@
       }
     });
 
-    //右边的功能
+    //功能区
+    //tab
+    $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+    $(".file-box").removeClass("tab-others");
+    $(".tab-1").addClass("tab-active");
+    $(".tab>div").on("click", function (e) {
+      console.log($(this).index());
+      let index = $(this).index();
+      switch (index) {
+        case 0: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".file-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-1").addClass("tab-active");
+          break;
+        }
+        case 1: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".change-step-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-2").addClass("tab-active");
+          break;
+        }
+        case 2: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".save-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-3").addClass("tab-active");
+          break;
+        }
+      }
+    });
     //更改步骤
     $(".change-step").on("click", function () {
       var step = $(".step-val").val();
@@ -1120,15 +1245,18 @@
     //设置图像名字
     var fileName = [];
     //下载截取的图像,picType 图片要保存的图片类型,picName 图片想要保存的名字
-    function downDom(Dom, picType, picName, downDomH) {
+    async function downDom(Dom, picType, picName, downDomH) {
       picName = picName || "下载";
       // 像素比，清晰度
       var opts = {
         pixelRatio,
         logging: true,
       };
+      let scrollTop = $(document).scrollTop();
+      let scrollLeft = $(document).scrollLeft();
+      window.scroll(0, 0);
       // 调用html2canvas插件
-      html2canvas(Dom, opts).then(function (Dom) {
+      await html2canvas(Dom, opts).then(function (Dom) {
         var context = Dom.getContext("2d");
         // 【重要】关闭抗锯齿
         context.mozImageSmoothingEnabled = false;
@@ -1136,6 +1264,9 @@
         context.msImageSmoothingEnabled = false;
         context.imageSmoothingEnabled = false;
         Canvas2Image.saveAsImage(Dom, cw, downDomH, picType, picName);
+      });
+      await new Promise(() => {
+        window.scroll(0, 0);
       });
     }
     document.getElementById("save").onclick = function () {
@@ -1150,12 +1281,10 @@
       reset();
     };
     //改变画布大小
-    //改变画布大小
     $(".confirm").on("click", function () {
       reset();
-      imgScale = $(".img-scale").val();
-      imgW = Math.floor(img.width / imgScale);
-      imgH = Math.floor(img.height / imgScale);
+      imgW = parseInt($(".img-scale").eq(0).val());
+      imgH = parseInt($(".img-scale").eq(1).val());
       cw = imgW + spreadX;
       ch = imgH + spreadY;
       setCanvasArea(canvas, ctx);
@@ -1163,7 +1292,11 @@
       setCanvasArea(canvas2, ctx2);
       $(".box-canvas").width(cw);
       $(".box-canvas").height(ch + 10);
-      $(".tool").css("margin-left", cw + 30);
+      if (window.innerWidth <= 414) {
+        $(".tool").css("margin-top", ch + 30);
+      } else {
+        $(".tool").css("margin-left", cw + 30);
+      }
       ctx.clearRect(0, 0, cw, ch);
       ctx.drawImage(
         document.getElementById("img"),
@@ -1171,6 +1304,87 @@
         spreadY / 2,
         imgW,
         imgH
+      );
+    });
+    //保存到剪切板
+    $(".save-clipboard").on("click", function () {
+      $(".progress input").css("border-width", 0);
+      let scrollTop = $(document).scrollTop();
+      let scrollLeft = $(document).scrollLeft();
+      //复制图像到剪切板
+      async function downClipboard(Dom, picType, picName, downDomH) {
+        picName = picName || "下载";
+        // 像素比，清晰度
+        var opts = {
+          pixelRatio,
+          logging: true,
+        };
+        window.scroll(0, 0);
+        // 调用html2canvas插件
+        await html2canvas(Dom, opts).then(function (Dom) {
+          var context = Dom.getContext("2d");
+          // 【重要】关闭抗锯齿
+          context.mozImageSmoothingEnabled = false;
+          context.webkitImageSmoothingEnabled = false;
+          context.msImageSmoothingEnabled = false;
+          context.imageSmoothingEnabled = false;
+          $(".save-clipboard").after(
+            Canvas2Image.convertToImage(Dom, cw, downDomH, picType)
+          );
+          const imgClipboard = document.querySelector(
+            ".save-clipboard-box img"
+          );
+          $(".save-clipboard-box img").hide();
+          const src = imgClipboard.getAttribute("src");
+          //将base64转换为blob对象
+          function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(",");
+            var mime = arr[0].match(/:(.*?);/)[1];
+            var bstr = atob(arr[1]);
+            var n = bstr.length;
+            var u8arr = new Uint8Array(n);
+            while (n--) {
+              u8arr[n] = bstr.charCodeAt(n);
+            }
+            //转换成file对象
+            //return new File([u8arr], filename, { type: mime });
+            //转换成成blob对象
+            return new Blob([u8arr], { type: mime });
+          }
+          var imageBlob = dataURLtoFile(src);
+          const item = new ClipboardItem({
+            [imageBlob.type]: imageBlob,
+          });
+          async function askWritePermission() {
+            try {
+              console.log(navigator.permissions);
+              const { state } = await navigator.permissions.query({
+                name: "clipboard-write",
+              });
+              return state === "granted";
+            } catch (error) {
+              return false;
+            }
+          }
+          if (askWritePermission()) {
+            navigator.clipboard.write([item]);
+            alert("成功复制到剪切板");
+          } else {
+            alert("不支持复制");
+          }
+        });
+        await new Promise(() => {
+          window.scroll(0, 0);
+          $(".save-clipboard-box img").remove();
+          $(".progress input").css("border-width", 1);
+        });
+      }
+
+      downClipboard(
+        $(".box-canvas")[0],
+        "png",
+        fileName,
+        $(".box-canvas").height()
       );
     });
   </script>

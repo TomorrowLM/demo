@@ -65,6 +65,7 @@
       .progress div {
         margin: 5px 0;
         font-size: 14px;
+        margin-left: 10px;
       }
 
       .progress div span:nth-of-type(2) {
@@ -83,6 +84,7 @@
       .tool {
         position: absolute;
         width: 420px;
+        margin-top: 40px;
       }
 
       button {
@@ -100,15 +102,15 @@
       .file {
         position: relative;
         display: inline-block;
-        background: rgb(239, 239, 239);
-        border-radius: 4px;
-        padding: 4px 12px;
+        padding: 2px 12px;
+        padding-bottom: 3px;
         overflow: hidden;
-        color: #8c8f90;
         text-decoration: none;
         text-indent: 0;
-        line-height: 20px;
-        margin-bottom: 12px;
+        top: 3px;
+        left: -5px;
+        border-radius: 0 6px 6px 0;
+        border: 1px solid #c7c5c5;
       }
 
       .file input {
@@ -117,9 +119,9 @@
         right: 0;
         top: 0;
         opacity: 0;
+        width: 100%;
       }
 
-      .file:hover,
       button:hover,
       #save:hover,
       #reset:hover,
@@ -127,7 +129,11 @@
         background: #c3c5c7;
         text-decoration: none;
       }
-
+      .file:hover {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+      }
       .tool span {
         background: #5f5f5f;
         -webkit-background-clip: text;
@@ -138,7 +144,7 @@
       .tool input {
         border: 1px solid #c7c5c5;
         border-radius: 6px;
-        height: 28px;
+        height: 24px;
       }
 
       .progress input {
@@ -166,18 +172,99 @@
         background-color: #409eff;
         border-color: #409eff;
       }
-      .file,
-      #save,
-      .save-clipboard {
-        color: #fff;
-        background-color: #67c23a;
-        border-color: #67c23a;
+
+      /* .file-box {
+        margin-bottom: 10px;
+      }
+      p {
+        margin: 0;
+        color: #848484;
+        font-family: "Courier New", Courier, monospace, "Times New Roman", Times,
+          serif, Arial, Helvetica, sans-serif, Verdana;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .file-box p,
+      .img-scale-box p,
+      .change-step-box p,
+      .save-box p {
+        margin: 0;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 20px;
+      }
+      .change-step-box button {
+        margin: 0;
+      }
+      #reset {
+        margin: 20px 0 20px 20px;
+      }
+      .save-box button {
+        margin-top: 10px;
+      }
+      .file {
+        margin-bottom: 10px;
+      } */
+      .tab {
+        display: flex;
+        width: 400px;
+        height: 35px;
+        background: #a99696;
+        justify-items: center;
+        margin-bottom: 40px;
+      }
+      .tab > div {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid black;
+        color: white;
+      }
+      .tab > div:nth-of-type(2) {
+        border: 0;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+      }
+      /* .tab > div:hover {
+        background-color: #e8e8e8;
+        color: black;
+      } */
+      .tab > div > p {
+        cursor: default;
+        padding: 0;
+        margin: 0;
+        font-weight: 600;
+      }
+      .img-type > input {
+        border-radius: 6px 0 0 6px;
+      }
+      .img-scale-box,
+      .img-scale-box > div {
+        margin-top: 20px;
+      }
+      .img-scale-box span {
+        width: 38px;
+        height: 100%;
+        margin-left: 15px;
+      }
+      .confirm {
+        margin-left: 91px;
+      }
+      .file {
+        color: #409eff;
       }
       /* @media screen and (max-width: 414px) {
         .tool {
           display: initial !important;
         }
       } */
+      .tab-active {
+        background-color: #e8e8e8;
+        color: black !important;
+      }
+      .tab-others {
+        display: none !important;
+      }
     </style>
   </head>
 
@@ -190,35 +277,54 @@
         <div class="progress"></div>
       </div>
       <div class="tool">
-        <div class="file">选择文件<input type="file" value="选择图片" /></div>
-        <div class="img-scale-box">
-          <!-- <span>更改图像大小：</span>
-          <input type="text" placeholder="更改图像大小" class="img-scale" /> -->
-          <div style="margin-bottom: 10px">
-            <span>宽：</span>
-            <input type="text" placeholder="更改图像大小" class="img-scale" />
+        <div class="tab" style="display: flex">
+          <div class="tab-1">
+            <p>选择图片</p>
           </div>
-          <div>
-            <span>高：</span>
-            <input type="text" placeholder="更改图像大小" class="img-scale" />
+          <div class="tab-2">
+            <p>编辑流程</p>
           </div>
-          <button class="confirm">确认</button>
-          <span class="img-scale-tip"></span>
+          <div class="tab-3">
+            <p>导出</p>
+          </div>
         </div>
-        <div>
+        <div class="file-box">
+          <div class="img-type">
+            <span style="vertical-align: super">图片：</span>
+            <input type="text" style="vertical-align: super" />
+            <div class="file">
+              选择文件<input type="file" value="选择图片" />
+            </div>
+          </div>
+          <div class="img-scale-box">
+            <div style="margin-bottom: 10px">
+              <span>宽：</span>
+              <input type="text" placeholder="更改图像大小" class="img-scale" />
+            </div>
+            <div>
+              <span>高：</span>
+              <input type="text" placeholder="更改图像大小" class="img-scale" />
+            </div>
+            <button class="confirm">确认</button>
+            <span class="img-scale-tip"></span>
+          </div>
+        </div>
+        <div class="change-step-box">
           <span>更改开始步骤：</span>
           <input type="text" placeholder="更改开始步骤" class="step-val" />
           <button class="change-step">确认</button>
+          <button id="returnLast">上一步</button>
+          <button id="reset">重置</button>
         </div>
-        <button id="returnLast">上一步</button>
-        <button id="reset">重置</button>
-        <div>
-          <span>设置图片名称：</span>
-          <input type="text" class="file-name" />
-          <button id="save">保存图像</button>
-        </div>
-        <div class="save-clipboard-box">
-          <button class="save-clipboard">复制图像到剪切板</button>
+        <div class="save-box">
+          <div>
+            <span>设置图片名称：</span>
+            <input type="text" class="file-name" />
+            <button id="save">保存图像</button>
+          </div>
+          <div class="save-clipboard-box">
+            <button class="save-clipboard">复制图像到剪切板</button>
+          </div>
         </div>
       </div>
     </div>
@@ -273,6 +379,7 @@
     $(".file>input").change(function () {
       reset();
       var imgFile = $(this)[0].files[0];
+      $(".img-type>input").val(imgFile.name);
       if (!/image\/\w+/.test(imgFile.type)) {
         alert("文件必须为图片！");
         return false;
@@ -1119,6 +1226,37 @@
     });
 
     //功能区
+    //tab
+    $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+    $(".file-box").removeClass("tab-others");
+    $(".tab-1").addClass("tab-active");
+    $(".tab>div").on("click", function (e) {
+      console.log($(this).index());
+      let index = $(this).index();
+      switch (index) {
+        case 0: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".file-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-1").addClass("tab-active");
+          break;
+        }
+        case 1: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".change-step-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-2").addClass("tab-active");
+          break;
+        }
+        case 2: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".save-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-3").addClass("tab-active");
+          break;
+        }
+      }
+    });
     //更改步骤
     $(".change-step").on("click", function () {
       var step = $(".step-val").val();
@@ -1297,7 +1435,7 @@
           });
           async function askWritePermission() {
             try {
-              console.log(navigator.permissions)
+              console.log(navigator.permissions);
               const { state } = await navigator.permissions.query({
                 name: "clipboard-write",
               });
