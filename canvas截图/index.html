@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name=renderer  content=webkit>
+    <meta name="renderer" content="webkit" />
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
     <script src="./common/html2canvas.min.js"></script>
@@ -13,22 +13,16 @@
       .box {
         display: flex;
       }
-
+      /* canvas */
       .box-canvas {
         position: relative;
-      }
-      .box-canvas-cursor {
-        cursor: se-resize !important;
-      }
-      .box-canvas-default {
-        cursor: default !important;
+        top: 40px;
       }
       canvas {
         position: absolute;
         background: #9090900f;
         image-rendering: crisp-edges;
       }
-
       #canvas {
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -37,15 +31,18 @@
         margin: auto;
         z-index: 0;
       }
-
       #canvas1 {
         z-index: 100;
       }
-
       #canvas2 {
         z-index: 1;
       }
-
+      .box-canvas-cursor {
+        cursor: se-resize !important;
+      }
+      .box-canvas-default {
+        cursor: default !important;
+      }
       .progress {
         position: absolute;
         width: 850px;
@@ -57,13 +54,15 @@
         font-weight: 600;
         vertical-align: middle;
         font-size: 15px;
+        border: 1px solid #c7c5c5;
+        border-radius: 6px;
+        height: 28px;
       }
       .progress div {
         margin: 5px 0;
         font-size: 14px;
         margin-left: 10px;
       }
-
       .progress div span:nth-of-type(2) {
         text-align: center;
         display: inline-block;
@@ -77,106 +76,7 @@
         margin: 0 5px;
       }
 
-      .tool {
-        position: absolute;
-        width: 420px;
-        margin-top: 40px;
-      }
-
-      button {
-        padding: 5px 20px;
-        border-radius: 5px;
-        border: 0px;
-        color: #5f5f5f;
-        margin: 20px 0px;
-        font-size: 16px;
-        font-weight: 700;
-        vertical-align: sub;
-      }
-
-      .file {
-        position: relative;
-        display: inline-block;
-        padding: 2px 12px;
-        padding-bottom: 3px;
-        overflow: hidden;
-        text-decoration: none;
-        text-indent: 0;
-        top: 3px;
-        left: -5px;
-        border-radius: 0 6px 6px 0;
-        border: 1px solid #c7c5c5;
-      }
-
-      .file input {
-        position: absolute;
-        font-size: 100px;
-        right: 0;
-        top: 0;
-        opacity: 0;
-        width: 100%;
-      }
-
-      button:hover,
-      #save:hover,
-      #reset:hover,
-      #returnLast:hover {
-        background: #c3c5c7;
-        text-decoration: none;
-      }
-      .file:hover {
-        color: #fff;
-        background-color: #409eff;
-        border-color: #409eff;
-      }
-      .tool span {
-        background: #5f5f5f;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 700;
-      }
-
-      .tool input {
-        border: 1px solid #c7c5c5;
-        border-radius: 6px;
-        height: 24px;
-      }
-
-      .progress input {
-        border: 1px solid #c7c5c5;
-        border-radius: 6px;
-        height: 28px;
-      }
-      .img-scale-tip {
-        vertical-align: middle;
-        margin-left: 10px;
-      }
-      #returnLast {
-        color: #fff;
-        background-color: #409eff;
-        border-color: #409eff;
-        margin-right: 15px;
-        padding: 5px 12px;
-        margin-left: 14px;
-      }
-      #reset {
-        color: #fff;
-        background-color: #e6a23c;
-        border-color: #e6a23c;
-      }
-      .confirm {
-        color: #fff;
-        background-color: #409eff;
-        border-color: #409eff;
-      }
-      .change-step {
-        color: #fff;
-        background-color: #49d14f;
-        border-color: #49d14f;
-      }
-      .change-step {
-        margin: 0 10px;
-      }
+      /*  tab*/
       .tab {
         display: flex;
         width: 100%;
@@ -204,35 +104,6 @@
         margin: 0;
         font-weight: 600;
       }
-      .img-type > input {
-        border-radius: 6px 0 0 6px;
-      }
-      .img-scale-box,
-      .img-scale-box > div {
-        margin-top: 20px;
-      }
-      .img-scale-box span {
-        width: 38px;
-        height: 100%;
-        margin-left: 15px;
-      }
-      .confirm {
-        margin-left: 91px;
-      }
-      .file {
-        color: #409eff;
-      }
-      .save-clipboard-box {
-        margin-left: 110px;
-      }
-      .save-clipboard-box button {
-        padding: 5px 12px;
-      }
-      /* @media screen and (max-width: 414px) {
-        .tool {
-          display: initial !important;
-        }
-      } */
       .tab-active {
         background-color: #e8e8e8;
         color: black !important;
@@ -240,6 +111,90 @@
       .tab-others {
         display: none !important;
       }
+      /* file-box */
+      .img-type > input {
+        border-radius: 6px 0 0 6px !important;
+      }
+      .img-type > span,
+      .img-type > input {
+        vertical-align: super;
+      }
+      .file {
+        position: relative;
+        display: inline-block;
+        padding: 2px 12px;
+        padding-bottom: 3px;
+        overflow: hidden;
+        text-decoration: none;
+        text-indent: 0;
+        top: 3px;
+        left: -5px;
+        border-radius: 0 6px 6px 0;
+        border: 1px solid #4a4747;
+        color: white;
+        background: #75d064;
+      }
+
+      .file input {
+        position: absolute;
+        font-size: 100px;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+      }
+      .img-scale-box,
+      .img-scale-box > div {
+        margin-top: 10px;
+      }
+      .img-scale-box span {
+        width: 38px;
+        height: 100%;
+        margin-left: 15px;
+      }
+      /* .img-scale-box {
+        text-align: left;
+        margin-left: 50px;
+      } */
+      .confirm {
+        margin-left: 91px;
+      }
+      /* change-step-box */
+      #returnLast {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+        margin-right: 15px;
+        padding: 5px 12px;
+        margin-left: 14px;
+      }
+      #reset {
+        color: #fff;
+        background-color: #e6a23c;
+        border-color: #e6a23c;
+      }
+      .confirm {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+      }
+      .change-step {
+        color: #fff;
+        background-color: #49d14f;
+        border-color: #49d14f;
+        vertical-align: middle;
+      }
+      .change-step {
+        margin: 0 10px;
+      }
+      /* save-box */
+      .save-clipboard-box {
+        margin-left: 110px;
+      }
+      .save-clipboard-box button {
+        padding: 5px 12px;
+      }
+
       #save {
         background-color: #409eff;
         border-color: #409eff;
@@ -249,24 +204,74 @@
         color: #fff;
         background: #75d064;
       }
-      .file-box,
+      .file-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 50px;
+      }
       .change-step-box,
       .save-box {
         text-align: center;
       }
-      .img-scale-box {
-        text-align: left;
-        margin-left: 50px;
+      /* defalut */
+      button {
+        padding: 5px 20px;
+        border-radius: 5px;
+        border: 0px;
+        color: #5f5f5f;
+        margin: 20px 0px;
+        font-size: 16px;
+        font-weight: 700;
+        vertical-align: sub;
+      }
+
+      button:hover,
+      #save:hover,
+      #reset:hover,
+      #returnLast:hover,
+      .file:hover {
+        background: #c3c5c7;
+        text-decoration: none;
+      }
+      /* tool */
+      .tool {
+        position: absolute;
+        width: 420px;
+        margin-top: 40px;
+        margin-left: 600px;
+      }
+      .tool span {
+        background: #5f5f5f;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+      }
+
+      .tool input {
+        border: 1px solid #c7c5c5;
+        border-radius: 6px;
+        height: 24px;
+      }
+
+      .tool-introduce {
+        color: #409eff;
+        position: absolute;
+      }
+      .img-demo{
+        margin-top: 40px;
       }
     </style>
   </head>
 
   <body>
     <div class="box">
+      <div class="tool-introduce">图片标注小工具</div>
+      <div class="img-demo"><img src="./img/demo.png"><img></div>
       <div class="box-canvas" style="display: none">
         <canvas id="canvas"></canvas>
-        <canvas id="canvas1"> </canvas>
-        <canvas id="canvas2"> </canvas>
+        <canvas id="canvas1"></canvas>
+        <canvas id="canvas2"></canvas>
         <div class="progress"></div>
       </div>
       <div class="tool">
@@ -283,14 +288,14 @@
         </div>
         <div class="file-box">
           <div class="img-type">
-            <span style="vertical-align: super">图片：</span>
-            <input type="text" style="vertical-align: super" />
+            <span>图片：</span>
+            <input type="text" />
             <div class="file">
               选择文件<input type="file" value="选择图片" />
             </div>
           </div>
           <div class="img-scale-box">
-            <div style="margin-bottom: 10px">
+            <div style="margin-bottom: 20px">
               <span>宽：</span>
               <input type="text" placeholder="更改图像大小" class="img-scale" />
             </div>
@@ -299,7 +304,6 @@
               <input type="text" placeholder="更改图像大小" class="img-scale" />
             </div>
             <button class="confirm">确认</button>
-            <span class="img-scale-tip"></span>
           </div>
         </div>
         <div class="change-step-box">
@@ -371,6 +375,7 @@
     }
     $(".file>input").change(function () {
       reset();
+      $(".img-demo").empty()
       var imgFile = $(this)[0].files[0];
       $(".img-type>input").val(imgFile.name);
       if (!/image\/\w+/.test(imgFile.type)) {
@@ -405,7 +410,8 @@
       return (window.devicePixelRatio || 1) / backingStore;
     };
     var pixelRatio = getPixelRatio(canvas);
-    //设置图层宽高
+    console.log(pixelRatio);
+    //设置图层宽高，解决图像模糊
     function setCanvasArea(canvas, ctx) {
       canvas.width = Math.floor(cw * pixelRatio);
       canvas.height = Math.floor(ch * pixelRatio);
@@ -449,7 +455,7 @@
         setCanvasArea(canvas1, ctx1);
         setCanvasArea(canvas2, ctx2);
         $(".box-canvas").width(cw);
-        $(".box-canvas").height(ch + 10);
+        $(".box-canvas").height(ch);
         if (window.innerWidth <= 414) {
           $(".tool").css("margin-top", ch + 30);
         } else {
@@ -532,10 +538,10 @@
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
       ctx1.drawImage(
         canvas,
-        xStart + 5,
-        yStart + 5,
-        xDistance - 10,
-        yDistance - 10,
+        xStart * pixelRatio + 5,
+        yStart * pixelRatio + 5,
+        xDistance * pixelRatio - 10,
+        yDistance * pixelRatio - 10,
         xStart,
         yStart,
         xDistance,
@@ -562,8 +568,9 @@
       //设置input的宽度
       $(".progress>div input").width(cw - spanW - 30);
       //设置canvas距离顶部
-      $("canvas").css("top", $(".progress").height() + 10);
-      $(".box-canvas").height(ch + $(".progress").height() + 10);
+      //$("canvas").css("top", $(".progress").height() + 10);
+      $(".progress").css("top", ch + 10);
+      $(".box-canvas").height(ch + $(".progress").height() + 20);
     }
     //创建矩形框时蒙层绘制
     function CreateDrawCover(xStart, yStart, xDistance, yDistance) {
@@ -1226,8 +1233,9 @@
       );
       CreateReturnLast();
       $(".progress>div:last-of-type").remove();
-      $(".box-canvas").height(ch + $(".progress").height() + 10);
-      $("canvas").css("top", $(".progress").height() + 10);
+      $(".box-canvas").height(ch + $(".progress").height() + 20);
+      // $("canvas").css("top", $(".progress").height() + 10);
+      // $(".progress").height($(".progress").height());
     });
     //重置
     function reset() {
@@ -1235,9 +1243,9 @@
       ctx2.clearRect(0, 0, cw, ch);
       old = [];
       fileName = [];
-      $(".box-canvas").height(ch + 10);
+      $(".box-canvas").height(ch);
       $(".progress").empty();
-      $("canvas").css("top", 10);
+      $("canvas").css("top", 0);
     }
     document.getElementById("reset").onclick = function () {
       reset();

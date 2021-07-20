@@ -4,33 +4,25 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="renderer" content="webkit" />
     <title>Document</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
     <script src="./common/html2canvas.min.js"></script>
     <script src="./common/canvas2image.js"></script>
-    <script src="./common/konvajs.js"></script>
-    <script src="./common/dist/clipboard.js"></script>
     <style>
       .box {
         display: flex;
       }
-
+      /* canvas */
       .box-canvas {
         position: relative;
-      }
-      .box-canvas-cursor {
-        cursor: se-resize !important;
-      }
-      .box-canvas-default {
-        cursor: default !important;
+        top: 40px;
       }
       canvas {
         position: absolute;
         background: #9090900f;
-        /* box-shadow: 11px 1px 14px #9090900f; */
         image-rendering: crisp-edges;
       }
-
       #canvas {
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -39,34 +31,38 @@
         margin: auto;
         z-index: 0;
       }
-
       #canvas1 {
-        z-index: 100;
+        z-index: 2;
       }
-
       #canvas2 {
         z-index: 1;
       }
-
+      .box-canvas-cursor {
+        cursor: se-resize !important;
+      }
+      .box-canvas-default {
+        cursor: default !important;
+      }
       .progress {
         position: absolute;
         width: 850px;
         color: #716f6f;
         font-weight: 700;
-        /* font-family: PingFang SC, PingFang SC-Medium; */
       }
       .progress input {
         color: #8b8888;
         font-weight: 600;
-        /* font-family: PingFang SC, PingFang SC-Medium; */
         vertical-align: middle;
         font-size: 15px;
+        border: 1px solid #c7c5c5;
+        border-radius: 6px;
+        height: 28px;
       }
       .progress div {
         margin: 5px 0;
         font-size: 14px;
+        margin-left: 10px;
       }
-
       .progress div span:nth-of-type(2) {
         text-align: center;
         display: inline-block;
@@ -80,35 +76,63 @@
         margin: 0 5px;
       }
 
-      .tool {
-        position: absolute;
-        width: 420px;
+      /*  tab*/
+      .tab {
+        display: flex;
+        width: 100%;
+        height: 35px;
+        background: #a99696;
+        justify-items: center;
+        margin-bottom: 40px;
       }
-
-      button {
-        height: 30px;
-        padding: 5px 20px;
-        border-radius: 5px;
-        border: 0px;
-        color: #5f5f5f;
-        margin: 20px 0px;
-        font-size: 17px;
-        font-weight: 700;
-        vertical-align: sub;
+      .tab > div {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid black;
+        color: white;
       }
-
+      .tab > div:nth-of-type(2) {
+        border: 0;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+      }
+      .tab > div > p {
+        cursor: default;
+        padding: 0;
+        margin: 0;
+        font-weight: 600;
+      }
+      .tab-active {
+        background-color: #e8e8e8;
+        color: black !important;
+      }
+      .tab-others {
+        display: none !important;
+      }
+      /* file-box */
+      .img-type > input {
+        border-radius: 6px 0 0 6px !important;
+      }
+      .img-type > span,
+      .img-type > input {
+        vertical-align: super;
+      }
       .file {
         position: relative;
         display: inline-block;
-        background: rgb(239, 239, 239);
-        border-radius: 4px;
-        padding: 4px 12px;
+        padding: 2px 12px;
+        padding-bottom: 3px;
         overflow: hidden;
-        color: #8c8f90;
         text-decoration: none;
         text-indent: 0;
-        line-height: 20px;
-        margin-bottom: 12px;
+        top: 3px;
+        left: -5px;
+        border-radius: 0 6px 6px 0;
+        border: 1px solid #4a4747;
+        color: white;
+        background: #75d064;
       }
 
       .file input {
@@ -117,17 +141,106 @@
         right: 0;
         top: 0;
         opacity: 0;
+        width: 100%;
+      }
+      .img-scale-box,
+      .img-scale-box > div {
+        margin-top: 10px;
+      }
+      .img-scale-box span {
+        width: 38px;
+        height: 100%;
+        margin-left: 15px;
+      }
+      /* .img-scale-box {
+        text-align: left;
+        margin-left: 50px;
+      } */
+      .confirm {
+        margin-left: 91px;
+      }
+      /* change-step-box */
+      #returnLast {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+        margin-right: 15px;
+        padding: 5px 12px;
+        margin-left: 14px;
+      }
+      #reset {
+        color: #fff;
+        background-color: #e6a23c;
+        border-color: #e6a23c;
+      }
+      .confirm {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+      }
+      .change-step {
+        color: #fff;
+        background-color: #49d14f;
+        border-color: #49d14f;
+        vertical-align: middle;
+      }
+      .change-step {
+        margin: 0 10px;
+      }
+      /* save-box */
+      .save-clipboard-box {
+        margin-left: 110px;
+      }
+      .save-clipboard-box button {
+        padding: 5px 12px;
       }
 
-      .file:hover,
+      #save {
+        background-color: #409eff;
+        border-color: #409eff;
+        color: white;
+      }
+      .save-clipboard {
+        color: #fff;
+        background: #75d064;
+      }
+      .file-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 50px;
+      }
+      .change-step-box,
+      .save-box {
+        text-align: center;
+      }
+      /* defalut */
+      button {
+        padding: 5px 20px;
+        border-radius: 5px;
+        border: 0px;
+        color: #5f5f5f;
+        margin: 20px 0px;
+        font-size: 16px;
+        font-weight: 700;
+        vertical-align: sub;
+      }
+
       button:hover,
       #save:hover,
       #reset:hover,
-      #returnLast:hover {
+      #returnLast:hover,
+      .file:hover {
         background: #c3c5c7;
         text-decoration: none;
       }
-
+      /* tool */
+      .tool {
+        position: absolute;
+        width: 420px;
+        margin-top: 40px;
+        margin-left: 600px;
+      }
       .tool span {
         background: #5f5f5f;
         -webkit-background-clip: text;
@@ -138,87 +251,77 @@
       .tool input {
         border: 1px solid #c7c5c5;
         border-radius: 6px;
-        height: 28px;
+        height: 24px;
       }
 
-      .progress input {
-        border: 1px solid #c7c5c5;
-        border-radius: 6px;
-        height: 28px;
+      .tool-introduce {
+        color: #409eff;
+        position: absolute;
       }
-      .img-scale-tip {
-        vertical-align: middle;
-        margin-left: 10px;
+      .img-demo {
+        margin-top: 40px;
       }
-      #returnLast {
-        color: #fff;
-        background-color: #e6a23c;
-        border-color: #e6a23c;
-      }
-      #reset {
-        color: #fff;
-        background-color: #f56c6c;
-        border-color: #f56c6c;
-      }
-      .confirm,
-      .change-step {
-        color: #fff;
-        background-color: #409eff;
-        border-color: #409eff;
-      }
-      .file,
-      #save,
-      .save-clipboard {
-        color: #fff;
-        background-color: #67c23a;
-        border-color: #67c23a;
-      }
-      /* @media screen and (max-width: 414px) {
-        .tool {
-          display: initial !important;
-        }
-      } */
     </style>
   </head>
 
   <body>
     <div class="box">
+      <div class="tool-introduce">图片标注小工具</div>
+      <div class="img-demo"><img src="./img/demo.png" /><img /></div>
       <div class="box-canvas" style="display: none">
         <canvas id="canvas"></canvas>
-        <canvas id="canvas1"> </canvas>
-        <canvas id="canvas2"> </canvas>
+        <canvas id="canvas1"></canvas>
+        <canvas id="canvas2"></canvas>
         <div class="progress"></div>
       </div>
       <div class="tool">
-        <div class="file">选择文件<input type="file" value="选择图片" /></div>
-        <div class="img-scale-box">
-          <!-- <span>更改图像大小：</span>
-          <input type="text" placeholder="更改图像大小" class="img-scale" /> -->
-          <div style="margin-bottom: 10px">
-            <span>宽：</span>
-            <input type="text" placeholder="更改图像大小" class="img-scale" />
+        <div class="tab" style="display: flex">
+          <div class="tab-1">
+            <p>选择图片</p>
           </div>
-          <div>
-            <span>高：</span>
-            <input type="text" placeholder="更改图像大小" class="img-scale" />
+          <div class="tab-2">
+            <p>编辑流程</p>
           </div>
-          <button class="confirm">确认</button>
-          <span class="img-scale-tip"></span>
+          <div class="tab-3">
+            <p>导出图片</p>
+          </div>
         </div>
-        <div>
+        <div class="file-box">
+          <div class="img-type">
+            <span>图片：</span>
+            <input type="text" />
+            <div class="file">
+              选择文件<input type="file" value="选择图片" />
+            </div>
+          </div>
+          <div class="img-scale-box">
+            <div style="margin-bottom: 20px">
+              <span>宽：</span>
+              <input type="text" placeholder="更改图像大小" class="img-scale" />
+            </div>
+            <div>
+              <span>高：</span>
+              <input type="text" placeholder="更改图像大小" class="img-scale" />
+            </div>
+            <button class="confirm">确认</button>
+          </div>
+        </div>
+        <div class="change-step-box">
           <span>更改开始步骤：</span>
           <input type="text" placeholder="更改开始步骤" class="step-val" />
           <button class="change-step">确认</button>
+          <button id="returnLast">上一步</button>
+          <button id="reset">重置</button>
         </div>
-        <button id="returnLast">上一步</button>
-        <button id="reset">重置</button>
-        <div>
-          <span>设置图片名称：</span>
-          <input type="text" class="file-name" />
-          <button id="save">保存图像</button>
-        </div>
-        <div class="save-clipboard-box">
-          <button class="save-clipboard">复制图像到剪切板</button>
+        <div class="save-box">
+          <div>
+            <span>设置图片名称：</span>
+            <input type="text" class="file-name" />
+          </div>
+          <div class="save-clipboard-box">
+            <button class="save-clipboard">复制图片</button>
+            <button id="save">保存图像</button>
+          </div>
         </div>
       </div>
     </div>
@@ -272,7 +375,9 @@
     }
     $(".file>input").change(function () {
       reset();
+      $(".img-demo").empty();
       var imgFile = $(this)[0].files[0];
+      $(".img-type>input").val(imgFile.name);
       if (!/image\/\w+/.test(imgFile.type)) {
         alert("文件必须为图片！");
         return false;
@@ -305,7 +410,8 @@
       return (window.devicePixelRatio || 1) / backingStore;
     };
     var pixelRatio = getPixelRatio(canvas);
-    //设置图层宽高
+    console.log(pixelRatio);
+    //设置图层宽高，解决图像模糊
     function setCanvasArea(canvas, ctx) {
       canvas.width = Math.floor(cw * pixelRatio);
       canvas.height = Math.floor(ch * pixelRatio);
@@ -338,10 +444,6 @@
             imgW = imgW / imgScale;
           }
         }
-        // $(".img-scale-tip").text(`图像适合以${imgScale.toFixed(1)}做自适应`);
-        // $(".img-scale-tip").text(
-        //   `图像适合以${Math.floor(imgW)}×${Math.floor(imgH)}做自适应`
-        // );
         imgW = Math.floor(imgW);
         imgH = Math.floor(imgH);
         $(".img-scale").eq(0).val(imgW);
@@ -353,7 +455,7 @@
         setCanvasArea(canvas1, ctx1);
         setCanvasArea(canvas2, ctx2);
         $(".box-canvas").width(cw);
-        $(".box-canvas").height(ch + 10);
+        $(".box-canvas").height(ch);
         if (window.innerWidth <= 414) {
           $(".tool").css("margin-top", ch + 30);
         } else {
@@ -436,15 +538,16 @@
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
       ctx1.drawImage(
         canvas,
-        xStart + 5,
-        yStart + 5,
-        xDistance - 10,
-        yDistance - 10,
+        xStart * pixelRatio + 5,
+        yStart * pixelRatio + 5,
+        xDistance * pixelRatio - 10,
+        yDistance * pixelRatio - 10,
         xStart,
         yStart,
-        xDistance,
-        yDistance
+        xDistance+10,
+        yDistance+10
       );
+
     }
     //创建矩形框后，在图像上生成对应的步骤
     function progress(index) {
@@ -466,8 +569,9 @@
       //设置input的宽度
       $(".progress>div input").width(cw - spanW - 30);
       //设置canvas距离顶部
-      $("canvas").css("top", $(".progress").height() + 10);
-      $(".box-canvas").height(ch + $(".progress").height() + 10);
+      //$("canvas").css("top", $(".progress").height() + 10);
+      $(".progress").css("top", ch + 10);
+      $(".box-canvas").height(ch + $(".progress").height() + 20);
     }
     //创建矩形框时蒙层绘制
     function CreateDrawCover(xStart, yStart, xDistance, yDistance) {
@@ -734,70 +838,6 @@
               var yD = y - yStartOld;
               //点击矩形框的位置距离矩形框左侧的距离
               var xD = x - xStartOld;
-              // //右
-              // if (docX >= offsetCanvas.left + cw && offsetCanvas.top <= docY &&
-              //     docY <= offsetCanvas.top +
-              //     ch) {
-              //     if (yStart <= 0) {
-              //         yStart = 0
-              //         dragReturnOld(xStart, yStart, index)
-              //     } if(yStart>=ch-old[index][5]){
-              //         yStart = ch-old[index][5]
-              //         dragReturnOld(xStart, yStart, index)
-              //     }
-              //     else {
-              //         yStart = docY - offsetCanvas.top - yD
-              //         dragReturnOld(xStart, yStart, index)
-              //     }
-              // }
-              // //上
-              // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left + cw &&
-              //     offsetCanvas.left <= docX) {
-              //     if (xStart >= offsetCanvas.left + cw) {
-              //         xStart = 0
-              //         dragReturnOld(xStart, yStart, index)
-              //     } else {
-              //         xStart = docX - offsetCanvas.left - xD
-              //         dragReturnOld(xStart, yStart, index)
-              //     }
-              // }
-              // //左
-              // if (docX <= offsetCanvas.left && docY <= offsetCanvas.top +
-              //     ch && offsetCanvas.top <= docY) {
-              //     yStart = docY - offsetCanvas.top - yD
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //下
-              // if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left +
-              //     imgW && offsetCanvas.left <= docX) {
-              //     xStart = docX - offsetCanvas.left - xD
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //右下
-              // if (docY >= offsetCanvas.top + ch && docX >= offsetCanvas.left +
-              //     cw) {
-              //     xStart = cw - old[i][4]
-              //     yStart = ch - old[i][5]
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //右上
-              // if (docY <= offsetCanvas.top && docX >= offsetCanvas.left + cw) {
-              //     xStart = cw - old[i][4]
-              //     yStart = 0
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //左上
-              // if (docY <= offsetCanvas.top && docX <= offsetCanvas.left) {
-              //     xStart = 0
-              //     yStart = 0
-              //     dragReturnOld(xStart, yStart, index)
-              // }
-              // //左下
-              // if (docY >= offsetCanvas.top + ch && docX <= offsetCanvas.left) {
-              //     xStart = 0
-              //     yStart = ch - old[i][5]
-              //     dragReturnOld(xStart, yStart, index)
-              // }
             });
             $(document).mouseup(function () {
               old[i][2] = xStart;
@@ -1119,6 +1159,37 @@
     });
 
     //功能区
+    //tab
+    $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+    $(".file-box").removeClass("tab-others");
+    $(".tab-1").addClass("tab-active");
+    $(".tab>div").on("click", function (e) {
+      console.log($(this).index());
+      let index = $(this).index();
+      switch (index) {
+        case 0: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".file-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-1").addClass("tab-active");
+          break;
+        }
+        case 1: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".change-step-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-2").addClass("tab-active");
+          break;
+        }
+        case 2: {
+          $(".file-box,.change-step-box,.save-box").addClass("tab-others");
+          $(".save-box").removeClass("tab-others");
+          $(".tab>div").removeClass("tab-active");
+          $(".tab-3").addClass("tab-active");
+          break;
+        }
+      }
+    });
     //更改步骤
     $(".change-step").on("click", function () {
       var step = $(".step-val").val();
@@ -1163,8 +1234,9 @@
       );
       CreateReturnLast();
       $(".progress>div:last-of-type").remove();
-      $(".box-canvas").height(ch + $(".progress").height() + 10);
-      $("canvas").css("top", $(".progress").height() + 10);
+      $(".box-canvas").height(ch + $(".progress").height() + 20);
+      // $("canvas").css("top", $(".progress").height() + 10);
+      // $(".progress").height($(".progress").height());
     });
     //重置
     function reset() {
@@ -1172,9 +1244,9 @@
       ctx2.clearRect(0, 0, cw, ch);
       old = [];
       fileName = [];
-      $(".box-canvas").height(ch + 10);
+      $(".box-canvas").height(ch);
       $(".progress").empty();
-      $("canvas").css("top", 10);
+      $("canvas").css("top", 0);
     }
     document.getElementById("reset").onclick = function () {
       reset();
@@ -1220,9 +1292,6 @@
     //改变画布大小
     $(".confirm").on("click", function () {
       reset();
-      // imgScale = $(".img-scale").val();
-      // imgW = Math.floor(img.width / imgScale);
-      // imgH = Math.floor(img.height / imgScale);
       imgW = parseInt($(".img-scale").eq(0).val());
       imgH = parseInt($(".img-scale").eq(1).val());
       cw = imgW + spreadX;
@@ -1297,7 +1366,7 @@
           });
           async function askWritePermission() {
             try {
-              console.log(navigator.permissions)
+              console.log(navigator.permissions);
               const { state } = await navigator.permissions.query({
                 name: "clipboard-write",
               });
