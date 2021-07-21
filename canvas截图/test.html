@@ -20,7 +20,7 @@
       }
       canvas {
         position: absolute;
-        background: #9090900f;
+        /* background: #9090900f; */
         image-rendering: crisp-edges;
       }
       #canvas {
@@ -465,6 +465,11 @@
         ctx.shadowOffsetY = 0;
         ctx.shadowColor = "#ccc";
         ctx.shadowBlur = 10;
+
+        ctx.fillStyle = "#9090900f";
+        ctx.fillRect(0, 0, cw, ch);
+        ctx1.fillStyle = "#9090900f";
+        ctx1.fillRect(0, 0, cw, ch);
         ctx.drawImage(this, spreadX / 2, spreadY / 2, imgW, imgH);
       };
     }
@@ -536,18 +541,19 @@
     }
     //放大选中的图像
     function fixSelectImg(xStart, yStart, xDistance, yDistance) {
+      ctx1.fillStyle = "#fff";
+      ctx1.fillRect(xStart, yStart, xDistance, yDistance);
       ctx1.drawImage(
         canvas,
-        xStart * pixelRatio + 5,
-        yStart * pixelRatio + 5,
+        xStart * pixelRatio + 10,
+        yStart * pixelRatio + 10,
         xDistance * pixelRatio - 10,
         yDistance * pixelRatio - 10,
         xStart,
         yStart,
-        xDistance+10,
-        yDistance+10
+        xDistance,
+        yDistance
       );
-
     }
     //创建矩形框后，在图像上生成对应的步骤
     function progress(index) {
@@ -759,7 +765,6 @@
               old[i][3] + old[i][5] - 10 < y &&
               y < old[i][3] + old[i][5]
             ) {
-              //   $("canvas").css("cursor", "se-resize");
               spreadArea(x, y, i);
               return;
             } else {
@@ -859,7 +864,6 @@
         var xDistanceSpread = old[index][4];
         var yDistanceSpread = old[index][5];
         canvas1.onmousemove = function (ev) {
-          //   $(".box-canvas").css("cursor", "se-resize");
           var e = ev || event;
           var ax = e.offsetX;
           var ay = e.offsetY;
@@ -1235,13 +1239,14 @@
       CreateReturnLast();
       $(".progress>div:last-of-type").remove();
       $(".box-canvas").height(ch + $(".progress").height() + 20);
-      // $("canvas").css("top", $(".progress").height() + 10);
-      // $(".progress").height($(".progress").height());
     });
     //重置
     function reset() {
       ctx1.clearRect(0, 0, cw, ch);
       ctx2.clearRect(0, 0, cw, ch);
+
+      ctx1.fillStyle = "#9090900f";
+      ctx1.fillRect(0, 0, cw, ch);
       old = [];
       fileName = [];
       $(".box-canvas").height(ch);
@@ -1314,6 +1319,8 @@
         imgW,
         imgH
       );
+      ctx1.fillStyle = "#9090900f";
+      ctx1.fillRect(0, 0, cw, ch);
     });
     //保存到剪切板
     $(".save-clipboard").on("click", function () {
