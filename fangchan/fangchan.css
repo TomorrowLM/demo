@@ -1,0 +1,97 @@
+@media screen and (max-width:950px) {
+    .nav {
+        width: 1000px;
+    }
+}
+
+.nav {
+    display: flex;
+    height: 0.8rem;
+    opacity: 1;
+    background: #ffffff;
+    margin: 0 3.6rem;
+    width: 15rem;
+}
+
+.nav>img {
+    width: 78px;
+    height: 32px;
+    opacity: 1;
+    margin: auto 0;
+    padding: auto 0;
+    margin-right: 0.2rem;
+}
+
+.nav>ul {
+    padding: 0;
+}
+
+.nav>ul>li {
+    float: left;
+    opacity: 1;
+    font-size: 0.18rem;
+    font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+    font-weight: 400;
+    text-align: center;
+    color: #333333;
+    line-height: 0.8rem;
+    margin-right: 0.2rem;
+}
+
+.mod-select {
+    display: flex;
+    justify-content: space-between;
+    margin: auto 0;
+    margin-left: 0.7rem;
+    width: 1.02rem;
+    height: 0.34rem;
+    border: 0.02rem solid #ff6600;
+    border-radius: 0.04rem;
+}
+
+.select_label {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+.jiantou-img {
+    margin-top: -1px;
+    text-align: center;
+    width: 0.34rem;
+    opacity: 1;
+    background: #ff6600;
+}
+
+.jiantou-img img {
+    width: 13px;
+    height: 11px;
+    margin-top: 10px;
+}
+
+.nav>span {
+
+    margin: auto 0;
+    margin-left: 30px;
+    width: 36px;
+    opacity: 1;
+
+    font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+    font-weight: 400;
+    color: #333333;
+}
+
+.header {
+    width: 19.2rem;
+    height: 0.5rem;
+    opacity: 1;
+    background: #333333;
+}
+
+.header>div:nth-of-type(1) {
+    width: 1.75rem;
+    height: 0.5rem;
+    opacity: 1;
+    background: #ff6600;
+    margin-left: 3.6rem;
+}

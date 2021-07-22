@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./common/common.css" />
+    <link rel="stylesheet" href="./common/normalize.css" />
+    <link rel="stylesheet" href="./fangchan.css" />
+    <script src="./common/jquery-3.5.1.js"></script>
+    <script src="./common/rem.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <div class="nav">
+        <img src="./fangchan-img/本地宝logo.png" alt="" />
+        <ul>
+          <li>生活指南</li>
+          <li>办事</li>
+          <li>交通</li>
+          <li>地铁</li>
+          <li>公交</li>
+          <li>地图</li>
+          <li>购物</li>
+          <li>香港</li>
+          <li>办事指南</li>
+          <li>旅游</li>
+          <li>攻略</li>
+          <li>教育</li>
+          <li>天气</li>
+        </ul>
+        <div class="mod-select select-1">
+          <div class="select_label">深圳</div>
+          <div class="jiantou-img">
+            <img src="./fangchan-img/jiantou.png" alt="" />
+          </div>
+          <ul class="select-list hidden" style="display: none">
+            <li>成都</li>
+            <li>广州</li>
+            <li>武汉</li>
+          </ul>
+        </div>
+        <span>首页</span>
+      </div>
+      <div class="header">
+          <div>全部办事指南</div>
+          <div>
+            <input type="text">
+          </div>
+          <span>下载本地宝APP</span>
+      </div>
+    </div>
+  </body>
+  <script>
+    //下拉框
+    $(function () {
+      $(".select_label").on("click", function (e) {
+        e.stopPropagation();
+        console.log($(this));
+        $(this).siblings(".select-list").slideToggle(300);
+      });
+      $(".bg1").click(function (e) {
+        e.stopPropagation();
+        $(this).siblings(".select-list").slideToggle(300);
+      });
+      $(".select-list").click(function (e) {
+        var target = $(e.target);
+        var selectText = target.text();
+        $(this).siblings(".select_label").text(selectText);
+        $(this).slideUp();
+        300;
+      });
+    });
+  </script>
+</html>
