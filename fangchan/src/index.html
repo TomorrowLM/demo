@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社保明细查询</title>
+    <link rel="stylesheet" href="./css/element-ui/index.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/main.css">
+
+    <script src="./js/vue/vue-2.6.14.min.js"></script>
+    <script src="./js/element-ui/index.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="index">
+            <div class="index-header">
+                <div class="index-header-content">
+                    <div class="header-logo">
+                        <img src="./resource/images/header-logo.png" />
+                    </div>
+                    <ul class="header-nav">
+                        <li><a href="">生活指南</a></li>
+                        <li><a href="">办事</a></li>
+                        <li><a href="">交通</a></li>
+                        <li><a href="">地铁</a></li>
+                        <li><a href="">公交</a></li>
+                        <li><a href="">地图</a></li>
+                        <li><a href="">购物</a></li>
+                        <li><a href="">香港</a></li>
+                        <li><a href="">办事指南</a></li>
+                        <li><a href="">旅游</a></li>
+                        <li><a href="">攻略</a></li>
+                        <li><a href="">教育</a></li>
+                        <li><a href="">天气</a></li>
+                    </ul>
+                    <div class="header-select">
+                        <el-select v-model="headerSelectV" placeholder="选择">
+                            <el-option value="杭州">杭州</el-option>
+                            <el-option value="深圳">深圳</el-option>
+                            <el-option value="南京">南京</el-option>
+                        </el-select>
+                    </div>
+                    <div class="header-to-index">
+                        <a href="">首页</a>
+                    </div>
+                </div>
+            </div>
+            <div class="index-search">
+                <div class="index-search-top">
+                    <div class="search-top-content">
+                        <div class="all-guide">
+                            全部办事指南
+                            <img src="./resource/icons/guide-icon.png" />
+                        </div>
+                        <div class="search-dropdown">
+                            <el-dropdown>
+                                <div class="search-input">
+                                    <el-input placeholder="搜索" v-model="searchQuery">
+                                        <el-button type="index-search-btn" slot="append" icon="el-icon-search"></el-button>
+                                    </el-input>
+                                </div>
+                                <el-dropdown-menu class="search-dropdown-menu" slot="dropdown">
+                                    <div class="search-history">
+                                        <div class="history-title">历史记录</div>
+                                        <div class="clear-history">全部清除</div>
+                                    </div>
+                                    <el-dropdown-item><a href="#">买房最新政策1</a></el-dropdown-item>
+                                    <el-dropdown-item><a href="#">买房最新政策2</a></el-dropdown-item>
+                                    <div class="hot-search">热门搜索</div>
+                                    <el-dropdown-item><a href="#">深圳买房条件</a></el-dropdown-item>
+                                    <el-dropdown-item><a href="#">深圳查询指南</a></el-dropdown-item>
+                                    <el-dropdown-item><a href="#">非深圳户籍买房指南</a></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </div>
+                        <div class="download-text">
+                            <a href="#">下载本地宝APP</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="index-search-bottom">
+                    <div class="search-bottom-content">
+                        <div class="detail-search">
+                            <div class="detail-search-title">社保明细查询</div>
+                            <div class="common-search">
+                                <div class="common-search-title">常用查询</div>
+                                <div class="common-search-box">
+                                    <div class="common-box-item">
+                                        <el-carousel height="5.625rem" :autoplay="false" arrow="never">
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">社保卡办事进度查询1</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">社保卡办事进度查询2</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">社保卡办事进度查询3</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">社保卡办事进度查询4</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">社保卡办事进度查询5</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                        </el-carousel>
+                                    </div>
+                                    <div class="common-box-item">
+                                        <el-carousel height="5.625rem" :autoplay="false" arrow="never">
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">养老退休认证查询1</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">养老退休认证查询2</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">养老退休认证查询3</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">养老退休认证查询4</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                            <el-carousel-item>
+                                                <div class="box-content">
+                                                    <div class="box-item-title">养老退休认证查询5</div>
+                                                    <div class="box-item-hot">热度1.3k</div>
+                                                </div>
+                                            </el-carousel-item>
+                                        </el-carousel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="index-main">
+                <div class="index-main-top">
+                    <!-- <basic-search></basic-search> -->
+                    <div class="basic-search">
+                        <div class="basic-panel" id="panelF" ref="panelF">
+                            <div class="basic-tabs">
+                                <div class="basic-tabs-content">
+                                    <el-tabs v-model="activeNameF" type="card" @tab-click="handleClickF">
+                                        <el-tab-pane ref="basic-tabsF" label="基本信息查询" name="basicInfoSearch">
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/basic-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">参保信息查询</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">五险缴费明细查询</div>
+                                                    <div class="tabs-list-item-f">重疾参保查询</div>
+                                                    <div class="tabs-list-item-f">个人参保信息查询</div>
+                                                    <div class="tabs-list-item-f">大学生参保信息查询</div>
+                                                    <div class="tabs-list-item-f">少儿参保信息查询</div>
+                                                </div>
+                                            </div>
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/move-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">转移信息查询</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">医疗关系转移查询</div>
+                                                    <div class="tabs-list-item-f">省内养老保险归集查询</div>
+                                                    <div class="tabs-list-item-f">跨省养老保险查询</div>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                        <el-tab-pane ref="basic-tabsF" label="社保卡查询" name="socialCardSearch">
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/social-card-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">社保卡查询</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">社保卡办理进度查询</div>
+                                                    <div class="tabs-list-item-f">刷卡信息查询</div>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                        <el-tab-pane ref="basic-tabsF" label="社保材料下载" name="socialDownload">
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/download-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">社保材料下载</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">异地转入明细下载</div>
+                                                    <div class="tabs-list-item-f">劳动能力鉴定回执下载</div>
+                                                    <div class="tabs-list-item-f">异地备案申请表下载</div>
+                                                    <div class="tabs-list-item-f">个人缴费清单下载</div>
+                                                    <div class="tabs-list-item-f">个人权益记录清单下载</div>
+                                                    <div class="tabs-list-item-f">个人参保证明下载</div>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                        <el-tab-pane ref="basic-tabsF" label="待遇信息查询" name="treatInfoSearch">
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/medical-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">医疗保险</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">医疗待遇查询</div>
+                                                    <div class="tabs-list-item-f">少儿医保缴费查询</div>
+                                                    <div class="tabs-list-item-f">异地就医备案信息查询</div>
+                                                    <div class="tabs-list-item-f">门诊大病认证结果查询</div>
+                                                    <div class="tabs-list-item-f">门诊特定病种认证结果查询</div>
+                                                    <div class="tabs-list-item-f">门诊特定病种治疗机构绑定信息查询</div>
+                                                    <div class="tabs-list-item-f">医保个人账户消费信息查询</div>
+                                                    <div class="tabs-list-item-f">市外就医的门诊/住院医疗费用报销记录查询</div>
+                                                    <div class="tabs-list-item-f">一次性定额报销记录查询</div>
+                                                </div>
+                                            </div>
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/work-injury-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">工伤保险</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">工伤待遇查询</div>
+                                                    <div class="tabs-list-item-f">工伤生存认证信息查询</div>
+                                                </div>
+                                            </div>
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/birth-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">生育保险</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">生育保险刷卡消费记录查询</div>
+                                                    <div class="tabs-list-item-f">生育待遇查询</div>
+                                                    <div class="tabs-list-item-f">生育津贴申领记录查询</div>
+                                                    <div class="tabs-list-item-f">居民生育医疗费用报销记录查询</div>
+                                                </div>
+                                            </div>
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/lost-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">失业保险</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">失业补助金查询</div>
+                                                    <div class="tabs-list-item-f">失业待遇查询</div>
+                                                    <div class="tabs-list-item-f">失业金领取额度查询</div>
+                                                    <div class="tabs-list-item-f">失业待遇补发情况查询</div>
+                                                </div>
+                                            </div>
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/old-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">养老保险</div>
+                                                </div>
+                                                <div class="tabs-list">
+                                                    <div class="tabs-list-item-f">养老退休认证信息查询</div>
+                                                    <div class="tabs-list-item-f">养老待遇查询</div>
+                                                    <div class="tabs-list-item-f">职工电子退休证</div>
+                                                    <div class="tabs-list-item-f">城乡养老金测算</div>
+                                                    <div class="tabs-list-item-f">职工企业养老金测试</div>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                    </el-tabs>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="basic-panel" ref="panelS">
+                            <div class="basic-tabs">
+                                <div class="basic-tabs-content">
+                                    <el-tabs v-model="activeNameS" type="card" @tab-click="handleClickS">
+                                        <el-tab-pane ref="basic-tabsS" label="窗口查询" name="windowSearch">
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/search-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">查询中心名称</div>
+                                                </div>
+                                                <div class="tabs-list-s">
+                                                    <div class="tabs-list-item-s">
+                                                        <span>地址</span>：深圳市福田区深南大道8005号深圳市社保局南山分局
+                                                    </div>
+                                                    <div class="tabs-list-item-s">
+                                                        <span>电话</span>：8888-8888888
+                                                        <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp8888-8888889
+                                                    </div>
+                                                    <div class="tabs-list-item-s">
+                                                        <span>地址</span>：<span class="search-allAddr">深圳各区县社保中心地址一览（可点击查看详情</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                        <el-tab-pane ref="basic-tabsS" label="电话查询" name="phoneSearch">
+                                            <div class="tabs-content-list">
+                                                <div class="tabs-list-header">
+                                                    <div class="tabs-list-icon">
+                                                        <img src="./resource/icons/search-icon.png" />
+                                                    </div>
+                                                    <div class="tabs-list-title">查询中心名称</div>
+                                                </div>
+                                                <div class="tabs-list-s">
+                                                    <div class="tabs-list-item-s">
+                                                        <span>电话</span>：8888-8888888
+                                                        <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp8888-8888889
+                                                    </div>
+                                                    <div class="tabs-list-item-s">
+                                                        <span>范围</span>：查询范围查询范围查询范围查询范围查询范围查询范围查询范围查询范围
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </el-tab-pane>
+                                    </el-tabs>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="index-main-midden">
+                    <div class="main-midden-content">
+                        <div class="main-midden-info">
+                            <div class="midden-info-box">
+                                <div class="info-box-title">最新<span>动态</span></div>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                                <li><a href="#">深圳试点小学生暑期托管时间及安排</a></li>
+                            </div>
+                            <div class="midden-info-box">
+                                <div class="info-box-title">热点<span>推荐</span></div>
+                                <li><a href="#">2021年深圳机场防疫政策热点问题解答</a></li>
+                            </div>
+                            <div class="midden-info-box">
+                                <div class="info-box-title">常见<span>问答</span></div>
+                                <li><a href="#">2021年深圳机场防疫政策热点问题解答</a></li>
+                            </div>
+                        </div>
+                        <div class="index-midden-img">
+                            <img src="./resource/images/main-mid-bg.png" />
+                        </div>
+                    </div>
+                </div>
+                <div class="index-main-bottom">
+                    <div class="main-bottom-content">
+                        <div class="bottom-content-left">办事指引</div>
+                        <div class="bottom-content-right">
+                            <div class="guide-list">
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">社会保障</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">社保</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">生育保险</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">养老保险</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">医疗保险</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">工伤保险</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">失业保险</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">户口登记</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">新生儿入户</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">积分入户</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">毕业生接收</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">调干</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">身份证办理</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">居住证办理</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">医疗健康</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">疫苗接种</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">健康检查</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">看病指南</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">健康证</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">体检</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">医疗救助</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">最新消息</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">出入境</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">港澳通行证</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">台湾通行证</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">公积金</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">公积金官网</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">查询</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">缴存</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">提取</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">封存</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">贷款</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">生活办事</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">日常生活热点</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">其他办事</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">商业保险</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">金融理财</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">政府最新政策</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">土地房产</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">安居房</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">公租房</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">廉租房</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">经济适用房</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">买房</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                                <el-dropdown placement="bottom">
+                                    <div class="guide-list-title">教育培训</div>
+                                    <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                                        <el-dropdown-item><a href="#">职业资格</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">幼儿园</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">小学</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">初中</a></el-dropdown-item>
+                                        <el-dropdown-item><a href="#">成人高考</a></el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="index-footer">
+                <div class="footer-content">
+                    <div class="footer-item">
+                        <a href="http://www.bendibao.com/culture.htm" target="_blank">企业文化</a> |
+                        <a href="http://www.bendibao.com/adservices.htm" target="_blank">合作加盟</a> |
+                        <a href="http://www.bendibao.com/about.htm" target="_blank">关于我们</a> |
+                        <a href="http://www.bendibao.com/contact.htm" target="_blank">联系我们</a> |
+                        <a href="http://www.bendibao.com/job.htm" target="_blank">诚聘英才</a> |
+                        <a href="http://www.bendibao.com/law.htm" target="_blank">法律顾问</a> |
+                        <a href="http://sz.bendibao.com/suggest/suggest.htm" target="_blank">意见建议</a><br>
+                        <a href="http://www.bendibao.com" target="_blank">本地宝</a> BENDIBAO.COM 汇深网 版权所有 2006-2018
+                        <a href="">ICP证：粤ICP备17055554号-1</a>
+                    </div>
+                    <div class="footer-logo">
+                        <a href="#" target="_blank"><img src="http://bsy.sz.bendibao.com/images/sznet110wangan.gif" width="40" height="50" border="0"></a>&nbsp;
+                        <a href="#" target="_blank"><img src="http://bsy.sz.bendibao.com/images/sznet110gangting.gif" width="40" height="50" border="0"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="./js/main.js"></script>
+
+</body>
+
+</html>

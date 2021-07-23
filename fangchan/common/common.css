@@ -14,7 +14,14 @@ span,
 p {
 	font-size: 0.07rem;
 }
-
+ul{
+	padding:0;
+}
 li{
 	list-style: none;
+}
+
+a{
+	list-style: none;
+	text-decoration: none;
 }
