@@ -138,11 +138,9 @@
 }
 
 .header>div:nth-of-type(1) {
-    width: 1.75rem;
     height: 0.5rem;
     opacity: 1;
     background: #ff6600;
-    /* margin-left: 3.6rem; */
     text-align: center;
     display: flex;
 }
@@ -154,11 +152,9 @@
     text-align: center;
     color: #ffffff;
     display: inline-block;
-    width: 1rem;
-    margin-left: 0.1rem;
-    height: 0.5rem;
-    opacity: 1;
+    margin-left: 0.2rem;
     background: #ff6600;
+    width: 1rem;
 }
 
 .header>div:nth-of-type(1) img {
@@ -209,10 +205,24 @@
 .search-content {
     position: absolute;
     width: 3.5rem;
-    top: 1.3rem;
+    top: 1.25rem;
     padding: 0 0.2rem;
     background: #fff;
     box-sizing: border-box;
+    display: none;
+    cursor: default;
+}
+
+.search-content p:hover {
+    color: #e7650d;
+}
+
+.search-content p {
+    font-size: 0.16rem;
+    font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+    font-weight: 400;
+    text-align: left;
+    color: #333333;
 }
 
 .history>div:nth-of-type(1) {
@@ -229,28 +239,24 @@
     color: #333333;
 }
 
-.history-content p {
-    font-size: 0.14rem;
-}
-
 .search-content p {
     padding: 0;
     margin: 0;
+    font-size: 0.14rem;
+    height: 0.3rem;
 }
 
-.hot-search div>:nth-of-type(1) {
-    opacity: 1;
+.hot-search div:nth-of-type(1) {
     font-size: 0.18rem;
     font-family: Microsoft YaHei, Microsoft YaHei-Bold;
     font-weight: 700;
     text-align: left;
     color: #333333;
-    font-size: 0.18rem;
-    font-family: Microsoft YaHei, Microsoft YaHei-Bold;
-    font-weight: 700;
-    text-align: left;
-    color: #333333;
+    margin-top: 0.3rem;
+}
 
+.hot-search {
+    margin-bottom: 0.3rem;
 }
 
 .header>span {
@@ -261,6 +267,7 @@
     text-align: center;
     color: #ffffff;
     margin-left: 0.4rem;
+    cursor: default;
 
 }
 
@@ -283,8 +290,7 @@
 }
 
 .notification {
-    height: 0.19rem;
-    width: 14rem;
+    width: 12rem;
     opacity: 1;
     font-size: 0.18rem;
     font-family: Microsoft YaHei, Microsoft YaHei-Regular;
@@ -356,6 +362,7 @@
 
 .guide-box {
     padding: 0.05rem;
+    padding-bottom: 1.48rem;
 }
 
 .guide-title p {
@@ -376,10 +383,11 @@
 
 .guide-nav {
     width: 1.44rem;
-    height: 2.4rem;
     opacity: 1;
     background: #ffffff;
     margin-left: 0.1rem;
+    padding-bottom: 0.2rem;
+    cursor: default;
 }
 
 .guide-nav-title {
@@ -390,6 +398,7 @@
     color: #333333;
     padding: 0.2rem 0 0.1rem 0.1rem;
     border-bottom: 0.01rem solid #F3F3F3;
+    margin-bottom: 0.2rem;
 }
 
 .guide-nav ul {
@@ -423,18 +432,18 @@
 
 .guide-content-right {
     width: 6.16rem;
-    /* background: #ffffff; */
     margin-left: 0.2rem;
 }
 
 
 .guide-content-select ul>li {
     float: left;
+    margin-left: 0.2rem;
+    line-height: 0.3rem;
 }
 
 .guide-content-select {
-    width: 6.16rem;
-    height: 1.02rem;
+    padding: 0.12rem;
     opacity: 1;
     background: #ffffff;
     display: flex;
@@ -444,7 +453,6 @@
 }
 
 .guide-content-article-title>div:nth-child(1) {
-    width: 0.8rem;
     font-size: 0.2rem;
     font-family: Microsoft YaHei, Microsoft YaHei-Bold;
     font-weight: 700;
@@ -457,14 +465,12 @@
 
 .guide-content-article-title>div:nth-child(2) {
     padding: 0.24rem;
-    height: 1.37rem;
     opacity: 1;
     font-size: 0.16rem;
     font-family: Microsoft YaHei, Microsoft YaHei-Regular;
     font-weight: 400;
     text-align: justifyLeft;
     color: #666666;
-    line-height: 0.24rem;
     background-color: #fff;
 }
 
@@ -524,7 +530,6 @@
 }
 
 .scan-tip {
-    text-align: center;
     padding: 0 0.2rem 0.1rem 0.2rem;
 }
 
@@ -534,6 +539,7 @@
     box-sizing: border-box;
     margin: 0.48rem 0 1.56rem 0;
     width: 19.2rem;
+    cursor: default;
 }
 
 .index-main-bottom .main-bottom-content {
@@ -569,9 +575,10 @@
     margin-top: 1.1rem;
 }
 
+/*  */
 .el-dropdown {
-    padding-right: 0.26rem;
-    margin-left: 0.26rem;
+    padding-right: 0.22rem;
+    margin-left: 0.22rem;
     border-right: 0.02rem solid #aaaaaa;
     opacity: 1;
     font-size: 0.18rem;
@@ -581,8 +588,25 @@
     color: #333333;
 }
 
+.el-dropdown:last-of-type {
+    border-width: 0;
+}
+
 .el-dropdown-menu {
     background: #666666 !important;
+}
+
+.guide-list-title {
+    font-size: 0.18rem;
+    font-family: Microsoft YaHei, Microsoft YaHei-Bold;
+    font-weight: 700;
+    text-align: center;
+    color: #333333;
+}
+
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+    background-color: initial !important;
 }
 
 .popper__arrow {
@@ -603,6 +627,8 @@
 .index-footer {
     height: 2.5rem;
     border-top: 2px solid #CCC;
+    width: 10.5rem;
+    margin: auto;
 }
 
 .footer-content {
@@ -627,4 +653,104 @@
 .footer-logo img {
     width: 0.5rem;
     height: 0.5rem;
+}
+
+.page {
+    position: relative;
+}
+
+.page:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 19.2rem;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    content: attr(data-text);
+    /* transition:all 1s ease; */
+    transform: translateY(-100%);
+    color: #FFF;
+    z-index: 0;
+}
+
+.mark:after {
+    transform: translateY(0);
+}
+
+.mark-box {
+    width: 7rem;
+    position: fixed;
+    z-index: 100;
+    display: none;
+    box-sizing: border-box;
+}
+
+.mark-header {
+    height: 0.5rem;
+    line-height: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    background: #e7650d;
+    padding: 0.2rem 0.5rem;
+}
+
+.mark-header span {
+    font-size: 0.24rem;
+    font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+    font-weight: 400;
+    text-align: center;
+    color: #ffffff;
+}
+
+.mark-header img {
+    width: 0.36rem;
+    height: 0.36rem;
+}
+
+.mark-content {
+    padding: 0.2rem 0.5rem;
+    background-color: #fff;
+}
+
+.mark-content>div:first-of-type {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mark-content div span {
+    font-size: 0.22rem;
+    font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+    font-weight: 400;
+    text-align: left;
+    color: #333333;
+}
+
+.mark-content div input {
+    width: 3.6rem;
+    height: 0.3rem;
+    margin-top: -0.04rem;
+}
+
+.platform {
+    display: flex;
+    justify-content: start;
+    margin: 0.2rem 0;
+}
+
+.platform>span {
+    width: 1.2rem;
+}
+
+.platform-content img {
+    width: 0.8rem;
+    height: 0.8rem;
+    opacity: 1;
+}
+
+.platform-content {
+    display: flex;
+    width: 4rem;
+    justify-content: space-between;
+    text-align: center;
 }

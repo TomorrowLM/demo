@@ -6,11 +6,9 @@
         var clientWidth = docEl.clientWidth;
         if (!clientWidth) return;
         if (1400 < clientWidth) {
-          console.log(clientWidth)
           docEl.style.fontSize = 100 * (clientWidth / 1920) + "px";
-          // docEl.style.fontSize = "100px";
+         // docEl.style.fontSize = "100px";
         } else if (clientWidth <= 1400) {
-          console.log(clientWidth)
           // docEl.style.fontSize = 100 * (clientWidth / 1920) + "px";
           docEl.style.fontSize = "100px";
         }

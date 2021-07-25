@@ -25,3 +25,18 @@ a{
 	list-style: none;
 	text-decoration: none;
 }
+
+.font-strong{
+font-size: 0.18rem;
+font-family: Microsoft YaHei, Microsoft YaHei-Bold;
+font-weight: 700;
+text-align: left;
+color: #333333;
+}
+.font-default{
+	font-size: 0.18rem;
+	font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+	font-weight: 400;
+	text-align: left;
+	color: #333333;
+}
