@@ -1,138 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
 
-    <link rel="stylesheet" href="./common/common.css" />
-    <link rel="stylesheet" href="./common/normalize.css" />
-    <link rel="stylesheet" href="./fangchan-1.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-  </head>
-  <body>
-    <div class="page" id="app">
-      <div class="nav">
-        <img src="./fangchan-img/本地宝logo.png" alt="" />
-        <ul>
-          <li><a href="">生活指南</a></li>
-          <li><a href="">办事</a></li>
-          <li><a href="">交通</a></li>
-          <li><a href="">地铁</a></li>
-          <li><a href="">公交</a></li>
-          <li><a href="">地图</a></li>
-          <li><a href="">购物</a></li>
-          <li><a href="">香港</a></li>
-          <li><a href="">办事指南</a></li>
-          <li><a href="">旅游</a></li>
-          <li><a href="">攻略</a></li>
-          <li><a href="">教育</a></li>
-          <li><a href="">天气</a></li>
+  <link rel="stylesheet" href="./common/common.css" />
+  <link rel="stylesheet" href="./common/normalize.css" />
+  <link rel="stylesheet" href="./fangchan.css" />
+
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+  <div class="page" id="app">
+    <div class="nav">
+      <img src="./fangchan-img/本地宝logo.png" alt="" />
+      <ul>
+        <li><a href="">生活指南</a></li>
+        <li><a href="">办事</a></li>
+        <li><a href="">交通</a></li>
+        <li><a href="">地铁</a></li>
+        <li><a href="">公交</a></li>
+        <li><a href="">地图</a></li>
+        <li><a href="">购物</a></li>
+        <li><a href="">香港</a></li>
+        <li><a href="">办事指南</a></li>
+        <li><a href="">旅游</a></li>
+        <li><a href="">攻略</a></li>
+        <li><a href="">教育</a></li>
+        <li><a href="">天气</a></li>
+      </ul>
+      <div class="mod-select select-1">
+        <div class="select_label">深圳</div>
+        <div class="jiantou-img">
+          <img src="./fangchan-img/jiantou-nav.png" alt="" />
+        </div>
+        <ul class="select-list hidden" style="display: none">
+          <li>成都</li>
+          <li>广州</li>
+          <li>武汉</li>
         </ul>
-        <div class="mod-select select-1">
-          <div class="select_label">深圳</div>
-          <div class="jiantou-img">
-            <img src="./fangchan-img/jiantou-nav.png" alt="" />
-          </div>
-          <ul class="select-list hidden" style="display: none">
-            <li>成都</li>
-            <li>广州</li>
-            <li>武汉</li>
-          </ul>
-        </div>
-        <span><a href="">首页</a></span>
       </div>
-      <div class="header">
-        <div>
-          <span>全部办事指南</span>
-          <img src="./fangchan-img/jiantou-header.png" alt="" />
-        </div>
-        <div class="search-header">
-          <input type="text" />
-          <div>
-            <img src="./fangchan-img/search-header.png" alt="" />
-          </div>
-          <div class="search-content">
-            <div class="history">
-              <div>
-                <span>历史记录</span>
-                <span>全部删除</span>
-              </div>
-              <div class="history-content">
-                <p>买房最新政策</p>
-                <p>买房最新政策</p>
-              </div>
+      <span><a href="">首页</a></span>
+    </div>
+    <div class="header">
+      <div>
+        <span>全部办事指南</span>
+        <img src="./fangchan-img/jiantou-header.png" alt="" />
+      </div>
+      <div class="search-header">
+        <input type="text" />
+        <a href="#">
+          <img src="./fangchan-img/search-header.png" alt="" />
+        </a>
+        <div class="search-content">
+          <div class="history">
+            <div>
+              <span>历史记录</span>
+              <span class="delete-history">全部删除</span>
             </div>
-            <div class="hot-search">
-              <div>热门搜索</div>
+            <div class="history-content">
+            </div>
+          </div>
+          <div class="hot-search">
+            <div>热门搜索</div>
+            <a href="">
               <p>
                 深圳买房条件
               </p>
+            </a>
+            <a href="">
               <p>
                 深圳买房条件
               </p>
+            </a>
+            <a href="">
               <p>
                 深圳买房条件
               </p>
+            </a>
+            <a href="">
               <p>
                 ......
               </p>
-            </div>
+            </a>
           </div>
         </div>
-        <span>下载本地宝APP</span>
       </div>
-      <div class="header-tip">深圳房产信息查询</div>
-      <div class="notification">
-        深圳房产信息查询包括房产抵押状态查询，房产查封状态查询，产权信息查询以及无房证明开具等等。如何查询房屋信息，深圳本地宝为您解答！
-      </div>  
-      <div class="main">
-        <div class="main-left">
-          <div class="search-title">
-            <div class="search-title-left">
-              <span>我要查询:</span>
-            </div>
-            <div class="search-title-right">
-              <span>房产评估价查询</span>
-            </div>
+      <span>下载本地宝APP</span>
+    </div>
+    <div class="header-tip">深圳房产信息查询</div>
+    <div class="notification">
+      深圳房产信息查询包括房产抵押状态查询，房产查封状态查询，产权信息查询以及无房证明开具等等。如何查询房屋信息，深圳本地宝为您解答！
+    </div>
+    <div class="main">
+      <div class="main-left">
+        <div class="search-title">
+          <div class="search-title-left">
+            <span>我要查询:</span>
           </div>
-          <div class="guide">
-            <div class="guide-box">
-              <div class="guide-title">
-                <p>办事指南:</p>
-              </div>
-              <div class="guide-content">
-                <div class="guide-content-left">
-                  <div class="guide-nav">
-                    <div class="guide-nav-title">导航</div>
-                    <ul>二手房过户</ul>
-                    <ul>房产证办理</ul>
-                    <ul>房产信息查询</ul>
-                    <ul>相关阅读</ul>
-                    <ul>温馨提示</ul>
+          <div class="search-title-right">
+            <span>房产评估价查询</span>
+          </div>
+        </div>
+        <div class="guide">
+          <div class="guide-box">
+            <div class="guide-title">
+              <p>办事指南:</p>
+            </div>
+            <div class="guide-content">
+              <div class="guide-content-left">
+                <div class="guide-nav">
+                  <div class="guide-nav-title">导航</div>
+                  <ul>
+                    <li><a href="">二手房过户</a></li>
+                    <li><a href="">房产证办理</a></li>
+                    <li><a href="">房产信息查询</a></li>
+                    <li><a href="">相关阅读</a></li>
+                    <li><a href="">温馨提示</a></li>
+                  </ul>
+                </div>
+                <div class="guide-ico">
+                  <div class="to-top">
+                    <a href="#app"><img src="./fangchan-img/guide-jiantou.png" alt=""></a>
                   </div>
-                  <div class="guide-ico">
-                    <img src="./fangchan-img/guide-jiantou.png" alt="">
-                    <img src="./fangchan-img/guide-fangkui.png" alt="">
+                  <div>
+                    <a href=""><img src="./fangchan-img/guide-fangkui.png" alt=""></a>
+                  </div>
+                  <div>
                     <img src="./fangchan-img/guide-share.png" alt="">
                   </div>
                 </div>
-                <div class="guide-content-right">
-                  <div class="guide-content-select">
-                    <ul>
-                      <li class="font-strong">无房证明</li>
-                      <li class="font-strong">过户进度</li>
-                    </ul>
-                    <ul   class="font-default">
-                      <li class="font-strong">房产信息查询：</li>
-                      <li>抵押状态</li>
-                      <li>查封状态</li>
-                      <li>房屋产权</li>
-                      <li>房屋编码</li>
-                    </ul>
+              </div>
+              <div class="guide-content-right">
+                <div class="guide-content-select">
+                  <ul>
+                    <li class="font-strong guide-select">无房证明</li>
+                    <li class="font-strong guide-select">过户进度</li>
+                  </ul>
+                  <ul class="font-default">
+                    <li class="font-strong">房产信息查询：</li>
+                    <li class="guide-select">抵押状态</li>
+                    <li class="guide-select">查封状态</li>
+                    <li class="guide-select">房屋产权</li>
+                    <li class="guide-select">房屋编码</li>
+                  </ul>
+                </div>
+                <div class="guide-select-1 guide-select-index">
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
                   </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-select-2 guide-select-index hidden">
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明2
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明2
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明2
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-select-3 guide-select-index hidden">
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-select-4 guide-select-index hidden">
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-select-5 guide-select-index hidden">
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="guide-content-article">
+                    <div class="guide-content-article-title">
+                      <div>
+                        办事说明
+                      </div>
+                      <div>
+                        内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-select-6 guide-select-index hidden">
                   <div class="guide-content-article">
                     <div class="guide-content-article-title">
                       <div>
@@ -168,252 +345,239 @@
             </div>
           </div>
         </div>
-        <div class="main-right">
-          <div class="active">
-            <div class="active-title">
-              深圳房产动态
-            </div>
-            <div class="active-content">
-              <ul>
-                <li>
-                  <a href="">1</a>
-                </li>
-                <li><a href="">1</a></li>
-                <li><a href="">1</a></li>
-                <li><a href="">1</a></li>
-                <li><a href="">1</a></li>
-                <li><a href="">1</a></li>
-              </ul>
-            </div>
+      </div>
+      <div class="main-right">
+        <div class="active">
+          <div class="active-title">
+            深圳房产动态
           </div>
-          <div class="active">
-            <div class="active-title">
-              深圳房产动态
+          <div class="active-content">
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
             </div>
-            <div class="active-content">
-              <ul>
-                <li><a href="">1</a></li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-                <li>6</li>
-              </ul>
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
             </div>
-          </div>
-          <div class="active">
-            <div class="active-title">
-              深圳本地宝
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
             </div>
-            <div class="active-content">
-              <img src="http://imgbdb3.bendibao.com/weixinbdb/20169/5/201695202114686.jpg" alt="">
-              <div class="scan-tip">扫描二维码关注<span style="color: red;">深圳本地宝</span>可在线查询社保,公积金,公租房,安居房深圳余额等信息</div>
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
+            </div>
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
             </div>
           </div>
         </div>
-      </div>
-      <div class="index-main-bottom">
-        <div class="main-bottom-content">
-            <div class="bottom-content-left">办事指引</div>
-            <div class="bottom-content-right">
-                <div class="guide-list">
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">社会保障</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">社保</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">生育保险</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">养老保险</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">医疗保险</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">工伤保险</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">失业保险</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">户口登记</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">新生儿入户</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">积分入户</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">毕业生接收</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">调干</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">身份证办理</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">居住证办理</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">医疗健康</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">疫苗接种</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">健康检查</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">看病指南</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">健康证</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">体检</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">医疗救助</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">最新消息</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">出入境</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">港澳通行证</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">台湾通行证</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">公积金</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">公积金官网</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">查询</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">缴存</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">提取</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">封存</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">贷款</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">生活办事</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">日常生活热点</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">其他办事</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">商业保险</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">金融理财</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">政府最新政策</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">土地房产</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">安居房</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">公租房</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">廉租房</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">经济适用房</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">买房</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                    <el-dropdown placement="bottom">
-                        <div class="guide-list-title">教育培训</div>
-                        <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
-                            <el-dropdown-item><a href="#">职业资格</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">幼儿园</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">小学</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">初中</a></el-dropdown-item>
-                            <el-dropdown-item><a href="#">成人高考</a></el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </div>
+        <div class="active">
+          <div class="active-title">
+            深圳房产动态
+          </div>
+          <div class="active-content">
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
             </div>
-        </div>
-    
-      </div>
-      <div class="footer"> 
-        <div class="index-footer">
-          <div class="footer-content">
-              <div class="footer-item">
-                  <a href="http://www.bendibao.com/culture.htm" target="_blank">企业文化</a> |
-                  <a href="http://www.bendibao.com/adservices.htm" target="_blank">合作加盟</a> |
-                  <a href="http://www.bendibao.com/about.htm" target="_blank">关于我们</a> |
-                  <a href="http://www.bendibao.com/contact.htm" target="_blank">联系我们</a> |
-                  <a href="http://www.bendibao.com/job.htm" target="_blank">诚聘英才</a> |
-                  <a href="http://www.bendibao.com/law.htm" target="_blank">法律顾问</a> |
-                  <a href="http://sz.bendibao.com/suggest/suggest.htm" target="_blank">意见建议</a><br>
-                  <a href="http://www.bendibao.com" target="_blank">本地宝</a> BENDIBAO.COM 汇深网 版权所有 2006-2018
-                  <a href="">ICP证：粤ICP备17055554号-1</a>
-              </div>
-              <div class="footer-logo">
-                  <a href="#" target="_blank"><img src="http://bsy.sz.bendibao.com/images/sznet110wangan.gif" width="40" height="50" border="0"></a>&nbsp;
-                  <a href="#" target="_blank"><img src="http://bsy.sz.bendibao.com/images/sznet110gangting.gif" width="40" height="50" border="0"></a>
-              </div>
-          </div>
-      </div>
-      </div>
-      <div class="mark-box">
-        <div class="mark-header">
-          <span>分享</span>
-          <img src="./fangchan-img/叉号.png" alt="">
-        </div>
-        <div class="mark-content">
-          <div>
-            <span>分享链接:</span>
-            <input type="text">
-            <span>复制链接</span>
-          </div>
-          <div class="platform">
-            <span>社交平台:</span>
-            <div class="platform-content">
-              <div>
-                <a href="">
-                  <img src="./fangchan-img/微信@2x.png" alt="">
-                <div>微信</div>
-                </a>
-              </div>
-              <div>
-               <a href="">
-                <img src="./fangchan-img/微博_1@2x.png" alt="">
-                <div>微博</div>
-               </a>
-              </div>
-              <div>
-               <a href="">
-                <img src="./fangchan-img/QQ@2x.png" alt="">
-                <div>QQ</div>
-               </a>
-              </div>
-              <div>
-                <a href="">
-                  <img src="./fangchan-img/QQ空间@2x.png" alt="">
-                  <div>QQ空间</div>
-                </a>
-              </div>
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
+            </div>
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
+            </div>
+
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
+            </div>
+            <div>
+              <span class="circle"></span>
+              <a href=""><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
             </div>
           </div>
+        </div>
+        <div class="active">
+          <div class="active-title">
+            深圳本地宝
           </div>
+          <div class="active-content">
+            <img src="http://imgbdb3.bendibao.com/weixinbdb/20169/5/201695202114686.jpg" alt="">
+            <div class="scan-tip">扫描二维码关注<span style="color: red;">深圳本地宝</span>可在线查询社保,公积金,公租房,安居房深圳余额等信息</div>
+          </div>
+        </div>
       </div>
     </div>
-  </body>
-  <script src="./common/jquery-3.5.1.js"></script>
-  <script src="./common/rem.js"></script>
-    <!-- import Vue before Element -->
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <!-- import JavaScript -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script>
-      new Vue({
-        el: '#app',
-        data: function () {
-          return { visible: false }
-        }
-      })
-      //下拉框
-      $(".select-list").on("click", function (e) {
-          var target = $(e.target);
-          var selectText = $(".select-list li").eq(target.index()).text();
-          $(".select_label").text(selectText);
-        });
-        $(".mod-select").on("click", function (e) {
-          e.stopPropagation();
-          var selectText = $(".select_label").text();
-          $(this).children(".select_label").text(selectText);
-          $(this).children(".select-list").slideToggle(300);
-        });
-        $(window).on("click",function(){
-          $(".select-list").slideUp(300);
-        })
-        //hover
-        $(".search-header").hover(function(){
-          $(".search-content").slideToggle(500)
-        })
-        //share
-        $(".guide-ico img:eq(2)").click(function(){
-          $(".page").addClass("mark")
-          $(".mark-box").show().css(
-            {
-              "left":$(window).width()/2-$(".mark-box").width()/2,
-              "top":$(window).height()/2-$(".mark-box").height()/2,
-            }
-          )
-        })
-        $(".mark-header img").click(function(){
-          $(".page").removeClass("mark")
-          $(".mark-box").hide()
-        })
-   </script>
+    <div class="index-main-bottom">
+      <div class="main-bottom-content">
+        <div class="bottom-content-left">办事指引</div>
+        <div class="bottom-content-right">
+          <div class="guide-list">
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">社会保障</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">社保</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">生育保险</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">养老保险</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">医疗保险</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">工伤保险</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">失业保险</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">户口登记</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">新生儿入户</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">积分入户</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">毕业生接收</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">调干</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">身份证办理</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">居住证办理</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">医疗健康</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">疫苗接种</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">健康检查</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">看病指南</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">健康证</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">体检</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">医疗救助</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">最新消息</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">出入境</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">港澳通行证</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">台湾通行证</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">公积金</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">公积金官网</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">查询</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">缴存</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">提取</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">封存</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">贷款</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">生活办事</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">日常生活热点</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">其他办事</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">商业保险</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">金融理财</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">政府最新政策</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">土地房产</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">安居房</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">公租房</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">廉租房</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">经济适用房</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">买房</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown placement="bottom">
+              <div class="guide-list-title">教育培训</div>
+              <el-dropdown-menu class="guide-dropdown-menu" slot="dropdown">
+                <el-dropdown-item><a href="#">职业资格</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">幼儿园</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">小学</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">初中</a></el-dropdown-item>
+                <el-dropdown-item><a href="#">成人高考</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer">
+      <div class="index-footer">
+        <div class="footer-content">
+          <div class="footer-item">
+            <a href="http://www.bendibao.com/culture.htm" target="_blank">企业文化</a> |
+            <a href="http://www.bendibao.com/adservices.htm" target="_blank">合作加盟</a> |
+            <a href="http://www.bendibao.com/about.htm" target="_blank">关于我们</a> |
+            <a href="http://www.bendibao.com/contact.htm" target="_blank">联系我们</a> |
+            <a href="http://www.bendibao.com/job.htm" target="_blank">诚聘英才</a> |
+            <a href="http://www.bendibao.com/law.htm" target="_blank">法律顾问</a> |
+            <a href="http://sz.bendibao.com/suggest/suggest.htm" target="_blank">意见建议</a><br>
+            <a href="http://www.bendibao.com" target="_blank">本地宝</a> BENDIBAO.COM 汇深网 版权所有 2006-2018
+            <a href="">ICP证：粤ICP备17055554号-1</a>
+          </div>
+          <div class="footer-logo">
+            <a href="#" target="_blank"><img src="http://bsy.sz.bendibao.com/images/sznet110wangan.gif" width="40"
+                height="50" border="0"></a>&nbsp;
+            <a href="#" target="_blank"><img src="http://bsy.sz.bendibao.com/images/sznet110gangting.gif" width="40"
+                height="50" border="0"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mark-box">
+      <div class="mark-header">
+        <span>分享</span>
+        <img src="./fangchan-img/叉号.png" alt="">
+      </div>
+      <div class="mark-content">
+        <div>
+          <span>分享链接:</span>
+          <input type="text">
+          <span>复制链接</span>
+        </div>
+        <div class="platform">
+          <span>社交平台:</span>
+          <div class="platform-content">
+            <div>
+              <a href="">
+                <img src="./fangchan-img/微信@2x.png" alt="">
+                <div>微信</div>
+              </a>
+            </div>
+            <div>
+              <a href="">
+                <img src="./fangchan-img/微博_1@2x.png" alt="">
+                <div>微博</div>
+              </a>
+            </div>
+            <div>
+              <a href="">
+                <img src="./fangchan-img/QQ@2x.png" alt="">
+                <div>QQ</div>
+              </a>
+            </div>
+            <div>
+              <a href="">
+                <img src="./fangchan-img/QQ空间@2x.png" alt="">
+                <div>QQ空间</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="./common/jquery-3.5.1.js"></script>
+<script src="./common/rem.js"></script>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="./index.js"></script>
+
 </html>
