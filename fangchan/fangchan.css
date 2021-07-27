@@ -429,7 +429,7 @@
     margin-left: 0.1rem;
     position: absolute;
     top: 0;
-    margin-top: 4rem;
+    /* margin-top: 4rem; */
 }
 
 .guide-ico img {
@@ -539,23 +539,27 @@
     white-space: nowrap;
     width: 3.04rem;
 }
+
 .active-content div>a>span {
     display: inline-block;
     width: 100%;
 }
+
 .scan-tip {
     padding: 0 0.2rem 0.1rem 0.2rem !important;
-    height: initial  !important;
+    height: initial !important;
     line-height: initial !important;
     width: initial !important;
     border-top: 0 !important;
 }
-.scan-tip span{
+
+.scan-tip span {
     width: initial !important;
     background-color: initial !important;
     margin: 0 !important;
     line-height: initial !important;
 }
+
 /*  */
 .index-main-bottom {
     padding: 0 3.6rem;
@@ -574,7 +578,7 @@
     width: 1.77rem;
     height: 2.4rem;
     opacity: 1;
-    background: #d7d7d7;
+    background: #F2F2F2;
     border-radius: 0.2rem;
     text-align: center;
     line-height: 2.4rem;
@@ -599,9 +603,16 @@
 }
 
 /*  */
+.guide-list-title {
+    font-size: 0.18rem;
+    font-family: Microsoft YaHei, Microsoft YaHei-Bold;
+    font-weight: 700;
+    text-align: center;
+    color: #333333;
+}
+
 .el-dropdown {
-    padding-right: 0.22rem;
-    margin-left: 0.22rem;
+    padding: 0 0.22rem;
     border-right: 0.02rem solid #aaaaaa;
     opacity: 1;
     font-size: 0.18rem;
@@ -611,34 +622,34 @@
     color: #333333;
 }
 
-.el-dropdown:last-of-type {
-    border-width: 0;
-}
-
 .el-dropdown-menu {
-    background: #666666 !important;
+    /* padding: 10px 10px !important; */
+    border-radius: 0.15rem !important;
 }
 
-.guide-list-title {
-    font-size: 0.18rem;
-    font-family: Microsoft YaHei, Microsoft YaHei-Bold;
-    font-weight: 700;
+.guide-dropdown-menu .el-dropdown-menu__item {
     text-align: center;
+    padding: 0 0.31rem;
+    font-size: 0.16rem !important;
+    font-family: Microsoft YaHei, Microsoft YaHei-Light;
     color: #333333;
+    line-height: 0.35rem;
 }
 
 .el-dropdown-menu__item:focus,
 .el-dropdown-menu__item:not(.is-disabled):hover {
-    background-color: initial !important;
+    background-color: #FF6600 !important;
 }
 
-.popper__arrow {
-    display: none !important;
-}
-
-.el-dropdown-menu__item a {
+.guide-dropdown-menu .el-dropdown-menu__item:hover a {
     color: #fff;
 }
+
+/* 改变三角箭头颜色 */
+/* .el-popper .popper__arrow::after {
+    content: none !important;
+    border-width: initial !important;
+} */
 
 /* footer模块样式 */
 .footer {

@@ -45,35 +45,38 @@ $(document).ready(function () {
     $(".mark-box").hide();
   });
   //history
-  localStorage.setItem("history-input", "");
-  var historyVal = "买房最新政策,买房最新政策";
+  var historyVal = localStorage.getItem("history-input") || "";
   var historyValArr = historyVal.split(",");
   historyValArr.forEach((value) => {
-    $(".history-content").append("<p>" + value + "</p>");
+    if(value){
+      $(".history-content").append("<p>" + value + "</p>");
+    }
   });
   $(".search-header>a").click(function (e) {
     if ($(".search-header>input").val() == "") {
       return;
     } else {
-      var old = localStorage.getItem("history-input");
-      historyVal = old + "," + $(".search-header>input").val();
       $(".history-content").append(
         "<p>" + $(".search-header>input").val() + "</p>"
       );
     }
-    if (historyVal[0] == ",") {
-      historyVal = historyVal.substr(1, historyVal.length - 1);
-    }
-    localStorage.setItem("history-input", historyVal);
+    localStorage.setItem(
+      "history-input",
+      historyVal + "," + $(".search-header>input").val()
+    );
   });
   $(".delete-history").on("click", function () {
     $(".history-content").empty();
     localStorage.setItem("history-input", "");
   });
-  $(".history-content p").click(function () {
-    $(".search-header input").val($(this).text());
+  $(".history-content").click(function (event) {
+    var $target = $(event.target);
+    $(".search-header input").val($target.text());
   });
   //图标固定
+  $(".guide-ico").css({
+    "margin-top": document.getElementsByClassName("guide-nav")[0].offsetTop+$(".guide-nav").height()+80
+  })
   var c = 0;
   $(window).scroll(function (e) {
     let a = $(document).scrollTop() - $(".guide-box").offset().top;
@@ -102,7 +105,7 @@ $(document).ready(function () {
   });
   //指南选择
   $(".guide-select").click(function () {
-    let index = $(this).index();
+    let index = $(".guide-select").index(this);
     $(".guide-select-index").hide();
     $(".guide-select-" + (index + 1)).show();
   });
