@@ -74,9 +74,11 @@ $(document).ready(function () {
     $(".search-header input").val($target.text());
   });
   //图标固定
+  var docClient = 100 * (document.documentElement.clientWidth / 1920)
   $(".guide-ico").css({
-    "margin-top": document.getElementsByClassName("guide-nav")[0].offsetTop+$(".guide-nav").height()+80
+    "margin-top": (document.getElementsByClassName("guide-nav")[0].offsetTop+$(".guide-nav").height()+80)/docClient+"rem"
   })
+  console.log((document.getElementsByClassName("guide-nav")[0].offsetTop+$(".guide-nav").height()+80)/docClient)
   var c = 0;
   $(window).scroll(function (e) {
     let a = $(document).scrollTop() - $(".guide-box").offset().top;

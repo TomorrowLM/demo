@@ -47,3 +47,7 @@ a {
 .hidden{
 	display: none;
 }
+
+table{
+	width: initial !important;
+}

@@ -10,14 +10,17 @@
 </template>
 
 <script>
-import Event from "../../common/event";
+import Event from "../../common/EventBus";
 export default {
   inject: ["name"],
   mounted() {
     console.log(this.name); // 浪里行舟
   },
   props: {
-    postTitle: String,
+    postTitle: {
+      type: String,
+      // validator: (s1) => ["父向子组件传值", "rounded"].includes(s1),
+    },
   },
   data() {
     return {

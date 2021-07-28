@@ -12,10 +12,6 @@
     }
 }
 
-.page {
-    /* width: 100vw; */
-}
-
 .nav {
     display: flex;
     height: 0.8rem;
@@ -368,6 +364,7 @@
 .guide-box {
     padding: 0.05rem;
     padding-bottom: 1.48rem;
+    min-height: 6rem;
 }
 
 .guide-title p {
@@ -445,22 +442,37 @@
     margin-left: 0.2rem;
 }
 
-
-.guide-content-select ul>li {
-    float: left;
-    margin-left: 0.2rem;
-    line-height: 0.3rem;
-    cursor: default;
-}
-
 .guide-content-select {
-    padding: 0.12rem 0.05rem 0.12rem 0.05rem;
+    padding: 0rem 0.05rem 0.2rem 0.05rem;
     opacity: 1;
     background: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     cursor: initial;
+}
+
+.guide-content-select>div {
+    display: flex;
+}
+
+.guide-content-select>div>span {
+    display: inline-block;
+    margin: auto 0;
+    padding-left: 0.2rem;
+    word-break: keep-all;
+    margin-top: 0.19rem;
+}
+
+.guide-content-select ul {
+    margin: 0.2rem 0.1rem 0 0;
+}
+
+.guide-content-select ul>li {
+    float: left;
+    margin-right: 0.2rem;
+    cursor: default;
+    line-height: 0.26rem;
 }
 
 .guide-content-article-title>div:nth-child(1) {
@@ -543,6 +555,7 @@
 .active-content div>a>span {
     display: inline-block;
     width: 100%;
+    font-size: 0.14rem;
 }
 
 .scan-tip {
@@ -740,6 +753,7 @@
 .mark-header img {
     width: 0.36rem;
     height: 0.36rem;
+    margin-top: 0.07rem;
 }
 
 .mark-content {

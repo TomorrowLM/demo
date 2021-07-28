@@ -1,17 +1,17 @@
 <template>
   <div>
+    <h1>{{ title }}</h1>
+    <h1>我是父级：{{ eventBus }}</h1>
     <Propscomponent
       :postTitle="postTitle"
       @titleChanged="updateTitle"
     ></Propscomponent>
-    <h1>我是父级：{{ title }}</h1>
-    <h1>我是父级：{{ eventBus }}</h1>
   </div>
 </template>
 
 <script>
 import Propscomponent from "./props-component";
-import Event from "../../common/event";
+import Event from "../../common/EventBus";
 export default {
   components: {
     Propscomponent,
@@ -28,16 +28,16 @@ export default {
   },
   data() {
     return {
+      eventBus: "EventBus中央事件总线old",
       postTitle: "父向子组件传值",
       title: "传递的是一个值",
-      eventBus: "中央事件总线old",
     };
   },
   methods: {
-    updateTitle(e) {
+    updateTitle(e1) {
       //声明这个函数
-      console.log(e);
-      this.title = e;
+      console.log(e1);
+      this.title = e1;
     },
   },
 };
