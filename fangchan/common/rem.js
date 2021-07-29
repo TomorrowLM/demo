@@ -4,7 +4,7 @@
     recalc = function () {
       var clientWidth = docEl.clientWidth;
       if (!clientWidth) return;
-      if (1400 < clientWidth) {
+      if (1400 < clientWidth && clientWidth < 1920) {
         docEl.style.fontSize = 100 * (clientWidth / 1920) + "px";
         // docEl.style.fontSize = "100px";
       } else if (clientWidth <= 1400) {

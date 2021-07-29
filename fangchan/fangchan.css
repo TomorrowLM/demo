@@ -1,4 +1,4 @@
-@media screen and (min-width:1920px) {
+/* @media screen and (min-width:1920px) {
     html{
         font-size: 100px;
     }
@@ -6,6 +6,11 @@
 @media screen and (max-width:1920px) {
     html{
         font-size: 100px;
+    }
+}
+@media screen and (max-width:1538px) {
+    html{
+        font-size: 100vw;
     }
 }
 @media screen and (max-width:1400px) {
@@ -17,15 +22,16 @@
     html{
         font-size: 80px;
     }
-}
+} */
 .nav {
     display: flex;
     height: 0.8rem;
     opacity: 1;
     background: #ffffff;
-    /* padding: 0 0 0 3.6rem; */
-    margin: 0 3.6rem;
-    width: 13.2rem;
+    width: 19.2rem;
+    padding: 0 3.2rem 0 3.6rem;
+    box-sizing: border-box;
+    margin: auto;
 }
 
 .nav>img {
@@ -139,6 +145,7 @@
     display: flex;
     padding: 0 3.6rem;
     box-sizing: border-box;
+    margin:auto;
 }
 
 .header>div:nth-of-type(1) {
@@ -272,7 +279,7 @@
     font-weight: 400;
     text-align: center;
     color: #ffffff;
-    margin-left: 0.4rem;
+    margin-left: 0.7rem;
     cursor: default;
     word-break: keep-all;
 }
@@ -291,25 +298,29 @@
     background: url("./fangchan-img/header-bg.png");
     padding-left: 3.6rem;
     box-sizing: border-box;
-    box-sizing: border-box;
     background-size: cover;
+    margin: auto;
 }
 
 .notification {
-    width: 12rem;
+    width: 19.2rem;
     opacity: 1;
     font-size: 0.18rem;
     font-family: Microsoft YaHei, Microsoft YaHei-Regular;
     font-weight: 400;
     text-align: left;
     color: #333333;
-    margin: 0.2rem 3.6rem;
-
+    padding: 0.2rem 3.6rem;
+    box-sizing: border-box;
+    margin: auto;
 }
 
 .main {
-    margin: 0 3.6rem;
     display: flex;
+    width: 19.2rem;
+    margin: auto;
+    padding: 0 3.6rem;
+    box-sizing: border-box;
 }
 
 .main-left {
@@ -486,10 +497,13 @@
     font-family: Microsoft YaHei, Microsoft YaHei-Bold;
     font-weight: 700;
     text-align: left;
-    color: #ff6600;
+    /* color: #ff6600; */
     padding-left: 0.1rem;
-    border-left: 0.04rem solid;
+    border-left: 0.04rem solid #ff6600;
     margin: 0.2rem 0;
+}
+.guide-content-article-title>div:nth-child(1):hover{
+    color: #ff6600;
 }
 
 .guide-content-article-title>div:nth-child(2) {
@@ -535,7 +549,7 @@
 
 .active-content div {
     border-top: 1px solid #ccc;
-    height: 0.4rem;
+    height: 0.42rem;
     width: 3.42rem;
     padding: 0 0.1rem;
     line-height: 0.4rem;
@@ -554,14 +568,15 @@
 .active-content div>a {
     display: inline-block;
     overflow: hidden;
-    white-space: nowrap;
+    height: 0.42rem;
+    line-height: 0.42rem;
     width: 3.04rem;
 }
 
 .active-content div>a>span {
     display: inline-block;
     width: 100%;
-    font-size: 0.14rem;
+    font-size: 0.15rem;
 }
 
 .scan-tip {
@@ -581,11 +596,11 @@
 
 /*  */
 .index-main-bottom {
-    padding: 0 3.6rem;
+    padding: 0.48rem 3.6rem 1.56rem 3.6rem;
     box-sizing: border-box;
-    margin: 0.48rem 0 1.56rem 0;
     width: 19.2rem;
     cursor: default;
+    margin: auto;
 }
 
 .index-main-bottom .main-bottom-content {
@@ -675,6 +690,8 @@
     padding: 0 3.6rem;
     width: 19.2rem;
     box-sizing: border-box;
+    margin: auto;
+
 }
 
 .index-footer {
