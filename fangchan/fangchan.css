@@ -1,17 +1,23 @@
-@media screen and (max-width:1400px) {
-    .nav {
-        width: 1000px;
-    }
-
-    .header {
-        width: 1920px !important;
-    }
-
-    .header-tip {
-        width: 1920px !important;
+@media screen and (min-width:1920px) {
+    html{
+        font-size: 100px;
     }
 }
-
+@media screen and (max-width:1920px) {
+    html{
+        font-size: 100px;
+    }
+}
+@media screen and (max-width:1400px) {
+    html{
+        font-size: 80px;
+    }
+}
+@media screen and (max-width:960px) {
+    html{
+        font-size: 80px;
+    }
+}
 .nav {
     display: flex;
     height: 0.8rem;
@@ -19,7 +25,7 @@
     background: #ffffff;
     /* padding: 0 0 0 3.6rem; */
     margin: 0 3.6rem;
-    width: 15rem;
+    width: 13.2rem;
 }
 
 .nav>img {
@@ -125,7 +131,7 @@
 }
 
 .header {
-    /* width: 19.2rem; */
+    width: 19.2rem;
     height: 0.5rem;
     opacity: 1;
     background: #333333;
@@ -268,11 +274,11 @@
     color: #ffffff;
     margin-left: 0.4rem;
     cursor: default;
-
+    word-break: keep-all;
 }
 
 .header-tip {
-    /* width: 19.2rem; */
+    width: 19.2rem;
     height: 2rem;
     opacity: 0.5;
     line-height: 2rem;
