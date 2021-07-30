@@ -216,7 +216,7 @@
 .search-content {
     position: absolute;
     width: 3.5rem;
-    top: 1.25rem;
+    top: 93%;
     padding: 0 0.2rem;
     background: #fff;
     box-sizing: border-box;
@@ -428,6 +428,7 @@
 
 .main-nav ul li.dropdown .sub-menu .item dd {
     margin-left: 90px;
+    text-align: left;
 }
 
 .main-nav ul li.dropdown .sub-menu .item a {
