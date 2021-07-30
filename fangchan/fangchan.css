@@ -193,6 +193,8 @@
     padding-left: 0.1rem;
     margin-top: 0.1rem;
     box-sizing: border-box;
+    font-size: 0.14rem;
+    color: #333333;
 }
 
 .search-header>a {

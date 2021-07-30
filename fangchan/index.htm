@@ -1000,7 +1000,7 @@
 
 
     <div class="search-header">
-      <input type="text" />
+      <input type="text" placeholder="搜索"/>
       <a href="#">
         <img src="./fangchan-img/search-header.png" alt="" />
       </a>
@@ -1066,7 +1066,7 @@
                 <ul>
                   <li><a href="http://bsy.sz.bendibao.com/ershoufangbs/" target="_blank">二手房过户</a></li>
                   <li><a href="http://bsy.sz.bendibao.com/fangchanzhengbs/" target="_blank">房产证办理</a></li>
-                  <li><a href="http://bsy.sz.bendibao.com/fangchanxxcxbs/" target="_blank">房产信息查询</a></li>
+                  <!-- <li><a href="http://bsy.sz.bendibao.com/fangchanxxcxbs/" target="_blank">房产信息查询</a></li> -->
                   <li><a href="http://bsy.sz.bendibao.com/szmfzcbs/" target="_blank">买房条件</a></li>
                   <li><a href="http://m.bendibao.com/cyfw/chaxun/?id=84" target="_blank">买房资格自测</a></li>
                 </ul>
@@ -1198,58 +1198,25 @@
           深圳房产动态
         </div>
         <div class="active-content">
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
+          <?php foreach ($bsyDataArr as $k => $v){ ?>
+            <div>
+              <span class="circle"></span>
+              <a href="{$v['url']}"><span>{$v['title']}</span></a>
+            </div>
+            <?php } ?>
         </div>
       </div>
       <div class="active">
         <div class="active-title">
-          深圳房产动态
+          深圳房产过户
         </div>
         <div class="active-content">
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
-          <div>
-            <span class="circle"></span>
-            <a href="" title="深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒"><span>深圳海域使用权首次登记办理指南阿斯蒂芬货币f服务撒</span></a>
-          </div>
+          <?php foreach ($ghDataArr as $k => $v){ ?>
+            <div>
+              <span class="circle"></span>
+              <a href="{$v['url']}"><span>{$v['title']}</span></a>
+            </div>
+            <?php } ?>
         </div>
       </div>
       <div class="active">
