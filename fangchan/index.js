@@ -48,7 +48,7 @@ $(document).ready(function () {
   var historyVal = localStorage.getItem("history-input") || "";
   var historyValArr = historyVal.split(",");
   historyValArr.forEach((value) => {
-    if(value){
+    if (value) {
       $(".history-content").append("<p>" + value + "</p>");
     }
   });
@@ -74,10 +74,15 @@ $(document).ready(function () {
     $(".search-header input").val($target.text());
   });
   //图标固定
-  var docClient = 100 * (document.documentElement.clientWidth / 1920)
+  var docClient = 100 * (document.documentElement.clientWidth / 1920);
   $(".guide-ico").css({
-    "margin-top": (document.getElementsByClassName("guide-nav")[0].offsetTop+$(".guide-nav").height()+80)/docClient+"rem"
-  })
+    "margin-top":
+      (document.getElementsByClassName("guide-nav")[0].offsetTop +
+        $(".guide-nav").height() +
+        80) /
+        docClient +
+      "rem",
+  });
   var c = 0;
   $(window).scroll(function (e) {
     let a = $(document).scrollTop() - $(".guide-box").offset().top;
@@ -103,11 +108,5 @@ $(document).ready(function () {
     $(".guide-ico").css({
       top: 0,
     });
-  });
-  //指南选择
-  $(".guide-select").click(function () {
-    let index = $(".guide-select").index(this);
-    $(".guide-select-index").hide();
-    $(".guide-select-" + (index + 1)).show();
   });
 });

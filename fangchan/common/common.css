@@ -44,7 +44,7 @@ a {
 	text-align: left;
 	color: #333333;
 }
-.guide-select:hover{
+.guide-select>a:hover{
 	color: #ff6600;
 }
 .hidden{

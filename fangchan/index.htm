@@ -117,8 +117,8 @@
                   <li><a href="">二手房过户</a></li>
                   <li><a href="">房产证办理</a></li>
                   <li><a href="">房产信息查询</a></li>
-                  <li><a href="">相关阅读</a></li>
-                  <li><a href="">温馨提示</a></li>
+                  <li><a href="http://bsy.sz.bendibao.com/szmfzcbs/">买房条件</a></li>
+                  <li><a href="http://m.bendibao.com/cyfw/chaxun/?id=84">买房资格自测</a></li>
                 </ul>
               </div>
               <div class="guide-ico">
@@ -136,20 +136,20 @@
             <div class="guide-content-right">
               <div class="guide-content-select">
                 <div>
-                  <span class="font-default"></span>
-                  <ul>
-                    <li class="font-strong guide-select"><a href="./fangchan.php?select=1">无房证明</a></li>
-                    <li class="font-strong guide-select"><a href="./fangchan.php?select=2">过户进度</a></li>
-                  </ul>
-                </div>
-                <div>
                   <span class="font-strong">房产信息查询：</span>
                   <ul class="font-default">
                     <li class="font-strong"></li>
-                    <li class="guide-select"><a href="./fangchan.php?select=3">抵押状态</a></li>
-                    <li class="guide-select"><a href="./fangchan.php?select=4">查封状态</a></li>
-                    <li class="guide-select"><a href="./fangchan.php?select=5">房屋产权</a></li>
-                    <li class="guide-select"><a href="./fangchan.php?select=6">房屋编码</a></li>
+                    <li class="guide-select"><a href="./fangchan.php?select=3" target="_blank">抵押状态</a></li>
+                    <li class="guide-select"><a href="./fangchan.php?select=4" target="_blank">查封状态</a></li>
+                    <li class="guide-select"><a href="./fangchan.php?select=5" target="_blank">房屋产权</a></li>
+                    <li class="guide-select"><a href="./fangchan.php?select=6" target="_blank">房屋编码</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <span class="font-default"></span>
+                  <ul>
+                    <li class="font-strong guide-select"><a href="./fangchan.php?select=1" target="_blank">无房证明</a></li>
+                    <li class="font-strong guide-select"><a href="./fangchan.php?select=2" target="_blank">过户进度</a></li>
                   </ul>
                 </div>
               </div>
@@ -480,8 +480,30 @@
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="./index.js"></script>
 <script>
-    $("table").css({
-        "width": "initial"
-    })
+  $("table").css({
+    "width": "initial"
+  })
+  //指南选择
+  if (location.search) {
+    var index = location.search.substr(location.search.length - 1, 1);
+    index = Number(index);
+    if (index > 2) {
+      $(".guide-select>a")
+        .eq(index - 3)
+        .css({
+          color: "#ff6600",
+        });
+    } else {
+      $(".guide-select>a")
+        .eq(index + 3)
+        .css({
+          color: "#ff6600",
+        });
+    }
+  } else {
+    $(".guide-select>a").eq(0).css({
+      color: "#ff6600",
+    });
+  }
 </script>
 </html>

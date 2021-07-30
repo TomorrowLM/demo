@@ -145,7 +145,7 @@
     display: flex;
     padding: 0 3.6rem;
     box-sizing: border-box;
-    margin:auto;
+    margin: auto;
 }
 
 .header>div:nth-of-type(1) {
@@ -430,7 +430,7 @@
     text-align: left;
     color: #333333;
     font-size: 0.16rem;
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.16rem;
 }
 
 .guide-ico {
@@ -502,7 +502,8 @@
     border-left: 0.04rem solid #ff6600;
     margin: 0.2rem 0;
 }
-.guide-content-article-title>div:nth-child(1):hover{
+
+.guide-content-article-title>div:nth-child(1):hover>a {
     color: #ff6600;
 }
 
@@ -576,7 +577,11 @@
 .active-content div>a>span {
     display: inline-block;
     width: 100%;
-    font-size: 0.15rem;
+    font-size: 0.16rem;
+}
+
+.active-content div>a>span:hover {
+    color: #ff6600;
 }
 
 .scan-tip {
