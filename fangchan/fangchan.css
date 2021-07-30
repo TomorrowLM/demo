@@ -302,6 +302,147 @@
     margin: auto;
 }
 
+/*  */
+.header {
+    position: relative;
+}
+
+.main-nav {
+    position: absolute;
+    top: 100%;
+}
+
+.main-nav ul {
+    margin: 0;
+}
+
+.main-nav ul li.dropdown .menu {
+    font-size: 0.12rem;
+    font-family: "\5b8b\4f53";
+}
+
+.main-nav ul li.dropdown .menu a {
+    font-size: 0.12rem;
+    line-height: 0.24rem;
+    display: inline;
+    color: #252525;
+}
+
+.main-nav ul li.dropdown .menu a:hover,
+.main-nav ul li.dropdown .menu a.active {
+    text-decoration: none;
+    background: none;
+}
+
+.main-nav ul li.dropdown .main-menu {
+    /* position: relative; */
+    z-index: 100;
+    /* width: 278px;
+    border: 1px solid #e0e0e0; */
+    border-right: 0;
+}
+
+.main-nav ul li.dropdown .main-menu dl {
+    height: 0.3rem;
+    /* width: 2.78rem; */
+    line-height: 0.3rem;
+    padding: 0.1rem 0.15rem;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f6f6f6 url(../fangchan-img/arr.gif) no-repeat 2.6rem 0.04rem;
+    margin: 0;
+}
+
+.main-nav ul li.dropdown .main-menu dl.active-menu {
+    border-right: 0;
+    background: #f6f6f6 url(../fangchan-img/arr.gif) no-repeat 2.6rem -44px;
+    border-right: 0px;
+}
+
+.main-nav ul li.dropdown .main-menu dl dt {
+    font-weight: bold;
+    line-height: 0.35rem;
+    float: left;
+}
+
+.main-nav ul li.dropdown .main-menu dl dd {
+    float: left;
+    font-size: 0.12rem;
+    line-height: 0.35rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.main-nav ul li.dropdown .main-menu dl dd a {
+    display: inline-block;
+    margin-right: 0.3rem;
+    white-space: nowrap;
+    color: #252525;
+}
+
+.main-nav ul li.dropdown .main-menu dl dd a:hover {
+    color: #f50;
+}
+
+.main-nav ul li.dropdown .main-menu dl.last-child {
+    border-bottom: 0;
+}
+
+.main-nav ul li.dropdown .sub-menu {
+    /* position: absolute; */
+    z-index: 10;
+    top: 0;
+    border: 1px solid #e0e0e0;
+    border-left: 0px;
+    padding: 0.2rem;
+    /* width: 680px;
+    height: 421px; */
+    background: #ffffff;
+    left: 278px;
+}
+
+.main-nav ul li.dropdown .sub-menu .item {
+    width: 680px;
+}
+
+.main-nav ul li.dropdown .sub-menu .item dl {
+    padding: 5px 0;
+    border-bottom: 1px dotted #ccc;
+}
+
+.main-nav ul li.dropdown .sub-menu .item dl.last-child {
+    border-bottom: 0;
+}
+
+.main-nav ul li.dropdown .sub-menu .item dt {
+    font-weight: bold;
+    float: left;
+    overflow: hidden;
+    width: 80px;
+    text-align: right;
+}
+
+.main-nav ul li.dropdown .sub-menu .item dt a {
+    color: #f60;
+}
+
+.main-nav ul li.dropdown .sub-menu .item dd {
+    margin-left: 90px;
+}
+
+.main-nav ul li.dropdown .sub-menu .item a {
+    line-height: 28px;
+    display: inline-block;
+    height: 28px;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.main-nav ul li.dropdown .sub-menu .item a:hover {
+    color: #f50;
+}
+
+/*  */
 .notification {
     width: 19.2rem;
     opacity: 1;

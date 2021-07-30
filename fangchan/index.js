@@ -109,4 +109,30 @@ $(document).ready(function () {
       top: 0,
     });
   });
+  $(".header>div:first").mousemove(function(){
+    $(".header .menu").css({
+      display:"flex"
+    })
+  })
+  $(".header>div:first").mouseleave(function(){
+    $(".header .menu").hide()
+  })
+  $(".main-menu>dl").hover(function () {
+    $(".main-menu>dl").removeClass("active-menu");
+    $(this).removeClass("dark");
+    $(this).addClass("active-menu");
+    var index = $(this).index();
+    $(".sub-menu .item").hide();
+    $(".sub-menu .item").eq(index).show();
+  });
+  var curl = window.location.href;
+  var isfind = false;
+  $(".main-nav>ul>li>a").each(function (index, element) {
+    if ($(this).attr("href") == curl && isfind == false) {
+      $(this).addClass("active-menu");
+      isfind = true;
+    } else {
+      $(this).removeClass("active-menu");
+    }
+  });
 });
