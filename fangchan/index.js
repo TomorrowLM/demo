@@ -6,20 +6,21 @@ $(document).ready(function () {
     },
   });
   //下拉框
-  $(".select-list").on("click", function (e) {
-    var target = $(e.target);
-    var selectText = $(".select-list li").eq(target.index()).text();
-    $(".select_label").text(selectText);
-  });
-  $(".mod-select").on("click", function (e) {
-    e.stopPropagation();
-    var selectText = $(".select_label").text();
-    $(this).children(".select_label").text(selectText);
-    $(this).children(".select-list").slideToggle(300);
-  });
-  $(window).on("click", function () {
-    $(".select-list").slideUp(300);
-  });
+  // $(".select-list").on("click", function (e) {
+  //   var target = $(e.target);
+  //   var selectText = $(".select-list li").eq(target.index()).text();
+  //   $(".select_label").text(selectText);
+  // });
+  // $(".mod-select").on("click", function (e) {
+  //   e.stopPropagation();
+  //   var selectText = $(".select_label").text();
+  //   $(this).children(".select_label").text(selectText);
+  //   $(this).children(".select-list").slideToggle(300);
+  //   window.location.href="https://www.baidu.com";
+  // });
+  // $(window).on("click", function () {
+  //   $(".select-list").slideUp(300);
+  // });
   //hover
   $(".search-header>input").hover(function () {
     $(".search-content").slideDown(500);

@@ -67,7 +67,6 @@
     text-align: center;
     color: #333333;
 }
-
 .mod-select {
     display: flex;
     justify-content: space-between;
@@ -93,12 +92,11 @@
 }
 
 .jiantou-img {
-    margin-top: -1px;
     text-align: center;
     width: 0.34rem;
-    opacity: 1;
     background: #ff6600;
     margin: -0.01rem;
+    height: 0.32rem;
 }
 
 .jiantou-img img {
@@ -179,8 +177,12 @@
     margin-left: 5.1rem;
     display: flex;
 }
-
-.search-header input {
+.search-header form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-header form input {
     width: 3.18rem;
     height: 0.32rem;
     vertical-align: middle;
@@ -191,10 +193,17 @@
     outline: 0;
     padding: 0;
     padding-left: 0.1rem;
-    margin-top: 0.1rem;
     box-sizing: border-box;
     font-size: 0.14rem;
     color: #333333;
+}
+.search-header form button{
+    height: 0.32rem;
+    width: 0.3rem;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    margin-left: 0px; 
 }
 
 .search-header>a {
@@ -937,6 +946,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.4rem;
+    margin-top: 0.3rem;
 }
 
 .mark-content div span {
@@ -958,7 +968,7 @@
 .mark-content div input {
     width: 3.6rem;
     height: 0.3rem;
-    margin-top: -0.04rem;
+    /* margin-top: -0.04rem; */
     outline-style: none;
 }
 
@@ -970,6 +980,7 @@
 
 .platform>span {
     width: 1.2rem;
+    line-height: 1.3rem;
 }
 
 .platform-content img {

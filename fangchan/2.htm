@@ -52,43 +52,13 @@
         <img src="fangchan-img/jiantou-header.png" alt="" />
       </div>
       <div class="search-header">
-        <input type="text" />
-        <a href="#">
-          <img src="fangchan-img/search-header.png" alt="" />
-        </a>
-        <div class="search-content">
-          <div class="history">
-            <div>
-              <span>历史记录</span>
-              <span class="delete-history">全部删除</span>
-            </div>
-            <div class="history-content">
-            </div>
-          </div>
-          <div class="hot-search">
-            <div>热门搜索</div>
-            <a href="">
-              <p>
-                深圳买房条件
-              </p>
-            </a>
-            <a href="">
-              <p>
-                深圳买房条件
-              </p>
-            </a>
-            <a href="">
-              <p>
-                深圳买房条件
-              </p>
-            </a>
-            <a href="">
-              <p>
-                ......
-              </p>
-            </a>
-          </div>
-        </div>
+        <form action="http://sou.sz.bendibao.com/cse/search" type="get" target="_blank">
+          <input type="hidden" name="s" value="906193989229995552">
+          <input type="text" name="q" placeholder="搜索">
+          <button type="submit">
+            <i class="el-icon-search"></i>
+          </button>
+        </form>
       </div>
       <span>下载本地宝APP</span>
     </div>

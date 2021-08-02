@@ -32,15 +32,12 @@
       <li><a href="http://sz.bendibao.com/tianqi/" target="_blank">天气</a></li>
     </ul>
     <div class="mod-select select-1">
-      <div class="select_label">深圳</div>
-      <div class="jiantou-img">
-        <img src="./fangchan-img/jiantou-nav.png" alt="" />
-      </div>
-      <ul class="select-list hidden" style="display: none">
-        <li>成都</li>
-        <li>广州</li>
-        <li>武汉</li>
-      </ul>
+      <a class="select_label" href="http://sz.bendibao.com/" target="_blank">深圳</a>
+      <a href="http://www.bendibao.com/city.htm" target="_blank">
+        <div class="jiantou-img">
+          <img src="./fangchan-img/jiantou-nav.png" alt="" />
+        </div>
+      </a>
     </div>
     <span><a href="">首页</a></span>
   </div>
@@ -1000,7 +997,14 @@
 
 
     <div class="search-header">
-      <input type="text" placeholder="搜索"/>
+      <form action="http://sou.sz.bendibao.com/cse/search" type="get" target="_blank">
+        <input type="hidden" name="s" value="906193989229995552">
+        <input type="text" name="q" placeholder="搜索">
+        <button type="submit">
+          <img src="./fangchan-img/search-header.png" alt="" />
+        </button>
+      </form>
+      <!-- <input type="text" placeholder="搜索"/>
       <a href="#">
         <img src="./fangchan-img/search-header.png" alt="" />
       </a>
@@ -1036,7 +1040,7 @@
             </p>
           </a>
         </div>
-      </div>
+      </div> -->
     </div>
     <span>下载本地宝APP</span>
   </div>
@@ -1076,7 +1080,7 @@
                   <a href="#app"><img src="./fangchan-img/guide-jiantou.png" alt=""></a>
                 </div>
                 <div>
-                  <a href=""><img src="./fangchan-img/guide-fangkui.png" alt=""></a>
+                  <a href="http://sz.bendibao.com/suggest/suggest.htm"><img src="./fangchan-img/guide-fangkui.png" alt=""></a>
                 </div>
                 <div>
                   <img src="./fangchan-img/guide-share.png" alt="">
