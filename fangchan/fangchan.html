@@ -1517,8 +1517,8 @@
       <div class="mark-content">
         <div>
           <span>分享链接:</span>
-          <input type="text">
-          <span>复制链接</span>
+          <input type="text" id="foo">
+          <span data-clipboard-action="copy" data-clipboard-target="#foo">复制链接</span>
         </div>
         <div class="platform">
           <span>社交平台:</span>
@@ -1559,6 +1559,7 @@
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="./common/clipboard.min.js"></script>
 <script src="./index.js"></script>
 
 </html>

@@ -48,12 +48,13 @@ $(document).ready(function () {
   //复制链接
   $(".mark-content>div>input").val(location.href);
   $(".mark-content>div>span").click(function(){
-    try {
-       navigator.clipboard.writeText(location.href);
-      // console.log("页面地址已经被拷贝到剪贴板中");
-    } catch (err) {
-      console.error("页面地址拷贝失败: ", err);
-    }
+    var clipboard = new ClipboardJS('.mark-content>div>span');
+    clipboard.on('success', function(e) {
+      console.log(e);
+    }); 
+    clipboard.on('error', function(e) {
+      console.log(e);
+    });
   })
   //history
   var historyVal = localStorage.getItem("history-input") || "";
