@@ -47,15 +47,11 @@ $(document).ready(function () {
   });
   //复制链接
   $(".mark-content>div>input").val(location.href);
-  $(".mark-content>div>span").click(function(){
-    var clipboard = new ClipboardJS('.mark-content>div>span');
-    clipboard.on('success', function(e) {
-      console.log(e);
-    }); 
-    clipboard.on('error', function(e) {
-      console.log(e);
-    });
-  })
+  $(".mark-content>div>span").click(function () {
+    var clipboard = new ClipboardJS(".mark-content>div>span");
+    clipboard.on("success", function (e) {});
+    clipboard.on("error", function (e) {});
+  });
   //history
   var historyVal = localStorage.getItem("history-input") || "";
   var historyValArr = historyVal.split(",");
@@ -121,14 +117,18 @@ $(document).ready(function () {
       top: 0,
     });
   });
-  $(".header>div:first").mousemove(function(){
-    $(".header .menu").css({
-      display:"flex"
-    })
-  })
-  $(".header>div:first").mouseleave(function(){
-    $(".header .menu").hide()
-  })
+  // 
+  // $(".header>div:first").mousemove(function () {
+  //   $(".header .menu").css({
+  //     display: "flex",
+  //   });
+  // });
+  // $(".header>div:first").mouseleave(function () {
+  //   $(".header .menu").hide();
+  // });
+  $(".header .menu").css({
+    display: "flex",
+  });
   $(".main-menu>dl").hover(function () {
     $(".main-menu>dl").removeClass("active-menu");
     $(this).removeClass("dark");

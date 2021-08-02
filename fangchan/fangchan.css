@@ -67,6 +67,7 @@
     text-align: center;
     color: #333333;
 }
+
 .mod-select {
     display: flex;
     justify-content: space-between;
@@ -177,11 +178,13 @@
     margin-left: 5.1rem;
     display: flex;
 }
-.search-header form{
+
+.search-header form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .search-header form input {
     width: 3.18rem;
     height: 0.32rem;
@@ -197,13 +200,14 @@
     font-size: 0.14rem;
     color: #333333;
 }
-.search-header form button{
+
+.search-header form button {
     height: 0.32rem;
     width: 0.3rem;
     border: 0;
     padding: 0;
     margin: 0;
-    margin-left: 0px; 
+    margin-left: 0px;
 }
 
 .search-header>a {
@@ -294,7 +298,9 @@
     cursor: default;
     word-break: keep-all;
 }
-
+.header>span a{
+    color: #ffffff;
+}
 .header-tip {
     width: 19.2rem;
     height: 2rem;
@@ -316,11 +322,12 @@
 /*  */
 .header {
     position: relative;
+    z-index: 100;
 }
-
 .main-nav {
     position: absolute;
-    top: 100%;
+    top:100%;
+    z-index: 100;
 }
 
 .main-nav ul {
@@ -328,13 +335,12 @@
 }
 
 .main-nav ul li.dropdown .menu {
-    font-size: 0.12rem;
+    font-size: 12px;
     font-family: "\5b8b\4f53";
 }
 
 .main-nav ul li.dropdown .menu a {
-    font-size: 0.12rem;
-    line-height: 0.24rem;
+    font-size: 12px;
     display: inline;
     color: #252525;
 }
@@ -346,47 +352,48 @@
 }
 
 .main-nav ul li.dropdown .main-menu {
-    /* position: relative; */
     z-index: 100;
-    /* width: 278px;
-    border: 1px solid #e0e0e0; */
-    border-right: 0;
+    max-height: 560px;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .main-nav ul li.dropdown .main-menu dl {
-    height: 0.3rem;
-    /* width: 2.78rem; */
-    line-height: 0.3rem;
-    padding: 0.1rem 0.15rem;
-    border-right: 1px solid #e0e0e0;
+    display: flex;
+    height: 30px;
+    width: 278px;
+    line-height: 30px;
+    padding: 10px 15px;
     border-bottom: 1px solid #e0e0e0;
-    background: #f6f6f6 url(../fangchan-img/arr.gif) no-repeat 2.6rem 0.04rem;
+    background: #f6f6f6 url(./fangchan-img/arr.gif) no-repeat 260px 2px;
     margin: 0;
 }
 
 .main-nav ul li.dropdown .main-menu dl.active-menu {
-    border-right: 0;
-    background: #f6f6f6 url(../fangchan-img/arr.gif) no-repeat 2.6rem -44px;
-    border-right: 0px;
+    background: #f6f6f6 url(./fangchan-img/arr.gif) no-repeat 260px -46px;
+    border-right: 1px solid #fff;
 }
 
 .main-nav ul li.dropdown .main-menu dl dt {
     font-weight: bold;
-    line-height: 0.35rem;
+    color: #000;
+    line-height: 30px;
     float: left;
 }
 
 .main-nav ul li.dropdown .main-menu dl dd {
     float: left;
-    font-size: 0.12rem;
-    line-height: 0.35rem;
+    font-size: 12px;
+    line-height: 30px;
     overflow: hidden;
     cursor: pointer;
 }
 
 .main-nav ul li.dropdown .main-menu dl dd a {
     display: inline-block;
-    margin-right: 0.3rem;
+    margin-right: 30px;
     white-space: nowrap;
     color: #252525;
 }
@@ -400,16 +407,14 @@
 }
 
 .main-nav ul li.dropdown .sub-menu {
-    /* position: absolute; */
     z-index: 10;
     top: 0;
     border: 1px solid #e0e0e0;
-    border-left: 0px;
-    padding: 0.2rem;
-    /* width: 680px;
-    height: 421px; */
+    padding: 20px;
+    width: 680px;
     background: #ffffff;
-    left: 278px;
+    margin: 0;
+    margin-left: -1px;
 }
 
 .main-nav ul li.dropdown .sub-menu .item {
@@ -419,6 +424,8 @@
 .main-nav ul li.dropdown .sub-menu .item dl {
     padding: 5px 0;
     border-bottom: 1px dotted #ccc;
+    font-size: 12px;
+    margin: 0;
 }
 
 .main-nav ul li.dropdown .sub-menu .item dl.last-child {
@@ -431,6 +438,7 @@
     overflow: hidden;
     width: 80px;
     text-align: right;
+    line-height: 35px;
 }
 
 .main-nav ul li.dropdown .sub-menu .item dt a {
@@ -440,6 +448,7 @@
 .main-nav ul li.dropdown .sub-menu .item dd {
     margin-left: 90px;
     text-align: left;
+    line-height: 35px;
 }
 
 .main-nav ul li.dropdown .sub-menu .item a {
@@ -963,6 +972,7 @@
     font-weight: 400;
     text-align: left;
     color: #fab736;
+    cursor: default;
 }
 
 .mark-content div input {
@@ -980,7 +990,7 @@
 
 .platform>span {
     width: 1.2rem;
-    line-height: 1.3rem;
+    line-height: 0.8rem;
 }
 
 .platform-content img {
