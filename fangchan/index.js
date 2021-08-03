@@ -118,17 +118,17 @@ $(document).ready(function () {
     });
   });
   // 
-  // $(".header>div:first").mousemove(function () {
-  //   $(".header .menu").css({
-  //     display: "flex",
-  //   });
-  // });
-  // $(".header>div:first").mouseleave(function () {
-  //   $(".header .menu").hide();
-  // });
-  $(".header .menu").css({
-    display: "flex",
+  $(".header>div:first").mousemove(function () {
+    $(".header .menu").css({
+      display: "flex",
+    });
   });
+  $(".header>div:first").mouseleave(function () {
+    $(".header .menu").hide();
+  });
+  // $(".header .menu").css({
+  //   display: "flex",
+  // });
   $(".main-menu>dl").hover(function () {
     $(".main-menu>dl").removeClass("active-menu");
     $(this).removeClass("dark");
