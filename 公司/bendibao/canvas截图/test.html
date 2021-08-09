@@ -1352,6 +1352,7 @@
           );
           $(".save-clipboard-box img").hide();
           const src = imgClipboard.getAttribute("src");
+          console.log(src)
           //将base64转换为blob对象
           function dataURLtoFile(dataurl, filename) {
             var arr = dataurl.split(",");
