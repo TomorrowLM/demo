@@ -1374,7 +1374,6 @@
           });
           async function askWritePermission() {
             try {
-              console.log(navigator.permissions);
               const { state } = await navigator.permissions.query({
                 name: "clipboard-write",
               });
