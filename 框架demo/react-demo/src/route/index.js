@@ -1,23 +1,18 @@
-import Home from "../components/content/home.jsx";
-import User from "../components/content/Users.jsx";
-import About from "../components/content/About.jsx";
-import User1 from "../components/content/users1.jsx";
+import Store from "../components/content/Store.jsx";
+import Communicate from "../components/content/Communicate.jsx";
+import OnRef from "../components/content/OnRef.jsx";
 const route = [
   {
-    path: "Home",
-    component: Home,
+    path: "Store",
+    component: Store,
   },
   {
-    path: "User",
-    component: User,
+    path: "Communicate",
+    component: Communicate,
   },
-//   {
-//     path: "User1",
-//     component: User1,
-//   },
   {
-    path: "About",
-    component: About,
+    path: "OnRef",
+    component: OnRef,
   }
 ];
 export default route;

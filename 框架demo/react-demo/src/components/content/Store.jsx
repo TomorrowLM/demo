@@ -4,12 +4,12 @@ import { Button } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { increment, decrement } from "../../store/actions/counter";
-const Home = function (props) {
+const Store = function (props) {
   const useStyles1 = makeStyles(() => ({
     root: {
       color: "white",
       height: 1000,
-      padding: "0 50px",
+      padding: "50px 50px",
       margin: "20px 0",
       background: "#3bd0725e",
     },
@@ -30,18 +30,14 @@ const Home = function (props) {
     },
   });
   const style2 = { backgroundColor: "black", color: "white" };
-  // 将 props 作为 useStyles() 的第一个属性传入
   const classes2 = useStyles2(style2);
 
   const { count, onincrement, ondecrement} = props;
-  // console.log(props);
-  //生产模式
-  // console.log(process);
+  
   return (
     <div className={classes1.root}>
       <CssBaseline />
       <div>
-        <div className={`${classes2.foo} ${classes2.bar}`}>'123'</div>
         <Button
           variant="contained"
           color="primary"
@@ -75,4 +71,4 @@ function mapDispatchToProps(dispatch) {
     ondecrement: () => dispatch(decrement())
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Store);

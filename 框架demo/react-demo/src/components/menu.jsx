@@ -2,7 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import { Link, Route, HashRouter, IndexRoute } from "react-router-dom";
-
 import route from "../route/index.js";
 import { Provider } from "react-redux";
 import store from "../store";
@@ -37,9 +36,9 @@ export default function Menu() {
           {/* Hash history cannot PUSH the same path; a new entry will not be added to the */}
           {/* 这个是 reactr-router 的一个提示，当前路由下的 history 不能 push 相同的路径到 stack 里。只有开发环境存在，生产环境不存在，目前还没看到官方有去掉的意思。 */}
           {/* replace={true} */}
-          <Route path="/About" component={route[2].component}></Route>
-          <Route path="/User" component={route[1].component} exact></Route>
-          <Route path="/Home" component={route[0].component} exact></Route>
+          <Route path="/OnRef" component={route[2].component} exact></Route>
+          <Route path="/Communicate" component={route[1].component} exact></Route>
+          <Route path="/Store" component={route[0].component} exact></Route>
           <Route path="/" component={route[0].component} exact></Route>
         </HashRouter>
       </Provider>
