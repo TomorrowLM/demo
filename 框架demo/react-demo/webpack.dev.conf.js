@@ -11,7 +11,7 @@ module.exports = {
   //     //配置dev-server命令参数的第二种形式
   //     // "dev": "webpack-dev-server --open --port 3000 --contentBase src --hot"
   //     open:true,//自动打开浏览器
-  //     port:3500,
+  //     port:3500,W
   //     contentBase:'src',//指定托管的根目录
   //     hot:true,//启动热更新
   //     inline: true
@@ -37,10 +37,10 @@ module.exports = {
       },
       { test: /\.(png|gif|bmp|jpg)$/, use: "url-loader?limit=5000" },
       { test: /\.jsx?$/, use: "babel-loader", exclude: /node_modules/ },
-      // {test:/\.js$/,use:'babel-loader',exclude:/node_modules/} 
+      // {test:/\.js$/,use:'babel-loader',exclude:/node_modules/}
     ],
   },
-  resolve:{
-    extensions: ['.js','.jsx']
-  }
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
 };
