@@ -8,7 +8,7 @@ function configureStore() {
 
   const middlewares = [thunk]
   //这里判断项目环境，正式的话打印的
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'production') {
     middlewares.push(logger)
   }
 

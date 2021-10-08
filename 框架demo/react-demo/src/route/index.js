@@ -1,19 +1,25 @@
-import Store from "../components/content/Store.jsx";
+import Store from "../view/Store.jsx";
 import Communicate from "../components/content/Communicate.jsx";
 import OnRef from "../components/content/OnRef.jsx";
-export const menu = [
+import Dashboard from "../view/Dashboard"
+export const routes = [
   {
-    path: "Store",
+    path: "Dashboard",
+    component: Dashboard,
+    exact: true,
+  },
+  {
+    path: "store",
     component: Store,
     exact: true,
   },
   {
-    path: "Communicate",
+    path: "communicate",
     component: Communicate,
     exact: true,
   },
   {
-    path: "OnRef",
+    path: "onRef",
     component: OnRef,
     exact: true,
   },
