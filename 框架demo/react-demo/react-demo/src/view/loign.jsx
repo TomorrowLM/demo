@@ -2,6 +2,7 @@ import { Form, Input, Button, Checkbox } from "antd";
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
 import { useHistory, Route } from "react-router-dom";
+import request from "../api/request";
 const useStyles = makeStyles({
   root: {
     width: "100vw",
@@ -15,9 +16,8 @@ const login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
     let { username, password } = values;
-    if (username == 1 && password == 1) {
-      history.push("/");
-    }
+    console.log(username, password)
+    request.post("/login",{username, password}).then((res) => {});
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

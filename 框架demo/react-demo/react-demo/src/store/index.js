@@ -8,7 +8,7 @@ function configureStore() {
 
   const middlewares = [thunk]
   //这里判断项目环境，正式的话打印的
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'development') {
     middlewares.push(logger)
   }
 
@@ -16,7 +16,7 @@ function configureStore() {
     typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
       : compose
-  //通过applyMiddleware来结合多个Middleware, 返回一个enhancer；
+  //通过composeEnhancers从右到左把接收到的函数合成后的最终函数
   const enhancer = composeEnhancers(applyMiddleware(...middlewares))
 
   return createStore(reducers, enhancer)
