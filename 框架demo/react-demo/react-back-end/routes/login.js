@@ -6,40 +6,40 @@ var vertoken = require("../token/index");
 router.post("/", function (req, res) {
   //获取参数
   const params = [];
-  params[0] = req.body.user_name;
+  params[0] = req.body.username;
   params[1] = req.body.password;
-  console.log(21,123)
-  res.send({
-    code: 1,
-    message: "账户或密码不能为空",
-  });
-  // if (params[0] === "" || params[1] === "") {
-  //    res.send({
-  //     code: 1,
-  //     message: "账户或密码不能为空",
-  //   });
-  // } else {
-  //   if (username === "liming" && password === "123456") {
-  //     vertoken
-  //       .setToken(result[0].user_name, result[0].user_id)
-  //       .then((token) => {
-  //         return res.send({
-  //           code: 200,
-  //           message: "登录成功",
-  //           token: token,
-  //           //前端获取token后存储在localStroage中,
-  //           //**调用接口时 设置axios(ajax)请求头Authorization的格式为`Bearer ` +token
-  //         });
-  //       });
-  //   } else {
-  //     return res.json({
-  //       code: 200,
-  //       message: "登录成功",
-  //       token: token,
-  //       //前端获取token后存储在localStroage中,
-  //       //**调用接口时 设置axios(ajax)请求头Authorization的格式为`Bearer ` +token
-  //     });
-  //   }
+  if (params[0] === "" || params[1] === "") {
+     return res.send({
+      code: 1,
+      message: "账户或密码不能为空",
+    });
+  } else {
+    console.log(params[0] === "1"&& params[1] === "1")
+    if (params[0] === "1" && params[1] === "1") {
+      console.log(123)
+      vertoken
+        .setToken(params[0],params[1])
+        .then((token) => {
+          console.log(124)
+          return res.send({
+            code: 200,
+            message: "登录成功",
+            token: token,
+            //前端获取token后存储在localStroage中,
+            //**调用接口时 设置axios(ajax)请求头Authorization的格式为`Bearer ` +token
+          });
+        },(error)=>{
+          console.log(error)
+        });
+    } else {
+      return res.json({
+        code: 200,
+        message: "登录成功",
+        token: token,
+        //前端获取token后存储在localStroage中,
+        //**调用接口时 设置axios(ajax)请求头Authorization的格式为`Bearer ` +token
+      });
+    }}
   //   // 查询数据是否存在数据库中(user表没有设置索引)
   //   // connection.query(sqlobj.sqls.login, params, function (err, result) {
   //   //   if (err) {

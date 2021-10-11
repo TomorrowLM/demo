@@ -7,6 +7,7 @@ var logger = require("morgan");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var login = require("./routes/login");
+var token = require("./routes/token");
 var app = express();
 
 //token
@@ -39,20 +40,18 @@ app.all("*", function (req, res, next) {
     " Origin, X-Requested-With, Content-Type, Accept"
   );
   //允许访问的方式
-  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE");
   //修改程序信息与版本
   res.header("X-Powered-By", " 3.2.1");
   //内容类型：如果是post请求必须指定这个属性
   res.header("Content-Type", "application/json;charset=utf-8");
   next(); // 执行下一个路由
 });
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/login", login);
 
 //解析token获取用户信息
 app.use(function (req, res, next) {
-  var token = req.headers["authorization"];
+  // var token = req.headers["authorization"];
+  var token = req.query.token;
   if (token == undefined) {
     return next();
   } else {
@@ -60,6 +59,7 @@ app.use(function (req, res, next) {
       .getToken(token)
       .then((data) => {
         req.data = data;
+        console.log(req.data);
         return next();
       })
       .catch((error) => {
@@ -76,6 +76,11 @@ app.use(
     path: ["/login", "/register"], //不需要验证的接口名称
   })
 );
+
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
+app.use("/login", login);
+app.use("/token", token);
 //token失效返回信息
 app.use(function (err, req, res, next) {
   if (err.status == 401) {

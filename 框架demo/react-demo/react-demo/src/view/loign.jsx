@@ -16,8 +16,10 @@ const login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
     let { username, password } = values;
-    console.log(username, password)
-    request.post("/login",{username, password}).then((res) => {});
+    console.log(username, password);
+    request.post("/login", { username, password }).then((res) => {
+      history.push("/home");
+    });
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
