@@ -16,9 +16,11 @@ const login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
     let { username, password } = values;
-    console.log(username, password);
     request.post("/login", { username, password }).then((res) => {
-      history.push("/home");
+      console.log(res);
+      const { token } = res.data;
+      window.localStorage.setItem("token", token);
+      history.push("/dashboard");
     });
   };
   const onFinishFailed = (errorInfo) => {

@@ -2,14 +2,13 @@ var jwt = require("jsonwebtoken");
 var jwtScrect = "zgs_first_token"; //签名
 
 //登录接口 生成token的方法
-var setToken = function (user_name, user_id) {
+var setToken = function (user_name, user_password) {
   return new Promise((resolve, reject) => {
     //expiresln 设置token过期的时间
-    //{ user_name: user_name, user_id: user_id } 传入需要解析的值（ 一般为用户名，用户id 等）
     const token = jwt.sign(
-      { user_name: user_name, user_id: user_id },
+      { user_name: user_name, user_password: user_password },
       jwtScrect,
-      { expiresIn: "24h" }
+      { expiresIn: 60*20 }
     );
     resolve(token);
   });
@@ -23,10 +22,13 @@ var getToken = function (token) {
         error: "token 是空的",
       });
     } else {
-      //第二种  改版后的
-      var info = jwt.verify(token, jwtScrect);
-      console.log(1214, info);
-      resolve(info); //解析返回的值（sign 传入的值）
+      var info = jwt.verify(token, jwtScrect, (err) => {
+        if (err) {
+          console.log("invalid");
+          return;
+        }
+        resolve(info); //解析返回的值（sign 传入的值）
+      });
     }
   });
 };

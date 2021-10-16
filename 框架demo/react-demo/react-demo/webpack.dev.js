@@ -19,7 +19,7 @@ module.exports = merge(base, {
     open: true, //自动打开浏览器
     port: 3500,
     // contentBase: "./src", //指定托管的根目录
-    static: "./", //指定托管的根目录
+    static: "./src", //指定托管的根目录
     hot: true, //启动热更新
   },
   plugins: [

@@ -67,11 +67,11 @@ module.exports = {
       {
         test: /\.(png|gif|bmp|jpg)$/,
         use: "file-loader?cacheDirectory",
-        include: [path.resolve(__dirname, "src")],
+        include: [path.resolve(__dirname, "./src/assets")],
       },
       {
         test: /(\.jsx|\.js)$/,
-        use: ["babel-loader?cacheDirectory"],
+        use: ["babel-loader"],
         include: path.resolve(__dirname, "./src"),
         exclude: /node_modules/,
       },

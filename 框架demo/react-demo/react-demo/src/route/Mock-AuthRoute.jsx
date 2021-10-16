@@ -7,19 +7,14 @@ const AuthRoute = (props) => {
   const history = useHistory();
   // const tokenIsRefresh = true
   useEffect(() => {
-    console.log(window.localStorage.getItem("token"))
-    let token = window.localStorage.getItem("token")
-    request.get("/token?token="+token).then((res) => {
-      history.push("/home");
+    console.log(window.localStorage.getItem("token"));
+    let token = window.localStorage.getItem("token");
+    request.get("/token").then((res) => {
+      // if (res.response.status === 401) {
+      //   history.push("/login");
+      // }
+      // history.push("/home");
     });
-    if (isCheckingTokenStatus) {
-      setIsCheckingTokenStatus(isCheckingTokenStatus, true);
-    } else {
-      setTimeout(() => {
-        setIsCheckingTokenStatus(isCheckingTokenStatus, false);
-        history.push("/login");
-      }, 1000);
-    }
   });
 
   return isCheckingTokenStatus ? (
