@@ -66,7 +66,7 @@ app.use(
 app.use(function (err, req, res, next) {
   if (err.name === "UnauthorizedError") {
     //  这个需要根据自己的业务逻辑来处理（ 具体的err值 请看下面）
-    res.status(401).send("非法token");
+    res.status(401).send("token失效");
   }
 });
 // app.use("/index", indexRouter);

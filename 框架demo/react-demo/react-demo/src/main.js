@@ -8,7 +8,6 @@ import App from "./app.jsx";
 import "./css/global.css";
 import AuthRoute from "./route/Mock-AuthRoute";
 import "antd/dist/antd.css";
-import Store from "./view/Store";
 ReactDom.render(
   <Provider store={store}>
     <Router>

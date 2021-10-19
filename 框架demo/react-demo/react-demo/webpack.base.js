@@ -65,10 +65,33 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|gif|bmp|jpg)$/,
-        use: "file-loader?cacheDirectory",
-        include: [path.resolve(__dirname, "./src/assets")],
+        test: /\.(png|jpg|gif|svg)$/,
+        use: ['file-loader']
       },
+      // {
+      //   test: /\.(png|gif|bmp|jpg)$/,
+      //   use: {
+      //     loader: "file-loader",
+      //     options: {
+      //       name: "[name].[ext]",
+      //       outputPath: "images/",//图片打包的出口
+      //       publicPath: "images/"//打包后img标签src的根级路径
+      //     }
+      //   },
+      //   include: [path.resolve(__dirname, "./src/assets")],
+      // },
+      // {
+      //   test: /\.(png|jpg|jpeg|gif)$/,
+      //   use: [{
+      //     loader: "url-loader",
+      //     options: {
+      //       limit: 200000,
+      //       name: "[name].[ext]",
+      //       outputPath: "images/",//图片打包的出口
+      //       publicPath: "images/"//打包后img标签src的根级路径
+      //     }
+      //   }],
+      // },
       {
         test: /(\.jsx|\.js)$/,
         use: ["babel-loader"],

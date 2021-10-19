@@ -3,8 +3,9 @@ import store from "../store";
 import { message, notification, Button, Space, Spin } from 'antd';
 import ReactDOM from 'react-dom';
 import React from 'react';
-const API_BASE_URLS = {
-  development: "http://localhost:3600",
+const API_BASE_URLS = { 
+  development: "http://121.40.61.99:3600/",
+  production: "http://121.40.61.99:3600/"
 };
 console.log(123, process.env.NODE_ENV);
 const request = axios.create({
@@ -33,10 +34,15 @@ let requestCount = 0
 // 显示loading
 function showLoading() {
   if (requestCount === 0) {
+    console.log(213)
     const dom = document.createElement('div')
     dom.setAttribute('id', 'loading')
+    dom.setAttribute('style', {
+      position:"absolute",
+
+    })
     document.body.appendChild(dom)
-    ReactDOM.render(<Spin tip="努力加载中..." delay={500} size="large" />, dom)
+    ReactDOM.render(<Spin tip="努力加载中..." delay={1000} size="large" />, dom)
   }
   requestCount += 1;
 }
@@ -60,7 +66,7 @@ export const errorHandler = (error: ResponseError) => {
         status,
         data
       },
-    }: any = error;
+    } = error;
     if (status) {
       const errorText = data || codeMessage[status];
       if (status === 500) {
@@ -68,10 +74,11 @@ export const errorHandler = (error: ResponseError) => {
       } else if (status === 400) {
         message.info(errorText);
       } else if (status === 401) {
+        console.log(213124)
         window.localStorage.removeItem("authorization");
         message.info(errorText);
         setTimeout(() => {
-          window.location.pathname = "login"
+          // window.location.href = "http://localhost:3500/login"
           // window.location.reload();
         }, 500);
       }
@@ -95,8 +102,7 @@ export const errorHandler = (error: ResponseError) => {
       message: "网络异常",
     });
   }
-
-  throw error;
+  return error;
 };
 request.interceptors.request.use((config) => {
   //调用接口时 设置axios(ajax)请求头Authorization的格式为`Bearer ` +token
@@ -107,11 +113,12 @@ request.interceptors.request.use((config) => {
 });
 request.interceptors.response.use(
   (resp) => {
+    hideLoading();
     return resp;
   },
   (respError) => {
     errorHandler(respError)
-    return respError;
+    return respError.response;
   }
 );
 

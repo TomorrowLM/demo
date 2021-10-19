@@ -1,7 +1,7 @@
-import Store from "../view/Store.jsx";
+import Store from "../view/Store/Store";
 import Communicate from "../components/content/Communicate.jsx";
-import OnRef from "../components/content/OnRef.jsx";
-import Dashboard from "../view/Dashboard"
+import OnRef from "../view/Dom/OnRef.jsx";
+import Dashboard from "../view/DashBoard/Dashboard"
 export const routes = [
   {
     path: "Dashboard",
