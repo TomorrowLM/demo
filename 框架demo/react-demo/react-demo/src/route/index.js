@@ -1,10 +1,12 @@
 import Store from "../view/Store/Store";
-import Communicate from "../components/content/Communicate.jsx";
-import OnRef from "../view/Dom/OnRef.jsx";
+import Communicate from "../view/Communicate/Communicate";
+import OnRef from "../view/Dom/OnRef";
 import Dashboard from "../view/DashBoard/Dashboard"
+import FindDomDode from "../view/Dom/FindDomDode"
+import Ref from "../view/Dom/Ref";
 export const routes = [
   {
-    path: "Dashboard",
+    path: "dashboard",
     component: Dashboard,
     exact: true,
   },
@@ -21,6 +23,16 @@ export const routes = [
   {
     path: "onRef",
     component: OnRef,
+    exact: true,
+  },
+  {
+    path: "findDomDode",
+    component: FindDomDode,
+    exact: true,
+  },
+  {
+    path: "ref",
+    component: Ref,
     exact: true,
   },
 ];

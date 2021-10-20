@@ -17,7 +17,7 @@ module.exports = merge(base, {
     //配置dev-server命令参数的第二种形式
     // "dev": "webpack-dev-server --open --port 3000 --contentBase src --hot"
     open: true, //自动打开浏览器
-    port: 3500,
+    port: 3200,
     // contentBase: "./src", //指定托管的根目录
     static: "./src", //指定托管的根目录
     hot: true, //启动热更新

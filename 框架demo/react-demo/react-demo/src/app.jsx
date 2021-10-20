@@ -1,24 +1,13 @@
 import React, { useState } from "react";
 import { routes } from "./route/index.js";
 import { Route, Link, Switch } from "react-router-dom";
-import { Provider } from "react-redux";
-import store from "./store";
 import "./css/antd.css";
 import "./css/app.css";
-import { Layout, Menu, Breadcrumb, Button } from "antd";
+import { Layout, Menu, Breadcrumb } from "antd";
 import {
-  UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
-} from "@ant-design/icons";
-import {
-  AppstoreOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  PieChartOutlined,
   DesktopOutlined,
-  ContainerOutlined,
-  MailOutlined,
 } from "@ant-design/icons";
 export default function App() {
   const { SubMenu } = Menu;
@@ -55,16 +44,27 @@ export default function App() {
               style={{ height: "100%", borderRight: 0 }}
             >
               <Menu.Item key="1" icon={<DesktopOutlined />}>
-                <Link to="/Dashboard">Dashboard</Link>
+                <Link to="/dashboard">Dashboard</Link>
               </Menu.Item>
               <SubMenu key="sub2" icon={<LaptopOutlined />} title="store">
                 <Menu.Item key="2" icon={<DesktopOutlined />}>
-                  <Link to="/store">store</Link>
+                  <Link to="/store">Store</Link>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub3" icon={<NotificationOutlined />} title="Dom">
                 <Menu.Item key="3" icon={<DesktopOutlined />}>
-                  <Link to="/onRef">ref</Link>
+                  <Link to="/onRef">OnRef</Link>
+                </Menu.Item>
+                <Menu.Item key="4" icon={<DesktopOutlined />}>
+                  <Link to="/findDomDode">FindDomDode</Link>
+                </Menu.Item>
+                <Menu.Item key="5" icon={<DesktopOutlined />}>
+                  <Link to="/ref">Ref</Link>
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu key="sub4" icon={<NotificationOutlined />} title="Communicate">
+                <Menu.Item key="6" icon={<DesktopOutlined />}>
+                  <Link to="/communicate">Communicate</Link>
                 </Menu.Item>
               </SubMenu>
             </Menu>
@@ -80,7 +80,7 @@ export default function App() {
               style={{
                 padding: 24,
                 margin: 0,
-                minHeight: 280,
+                overflowY: "auto"
               }}
             >
               <div style={{ width: "100%" }}>

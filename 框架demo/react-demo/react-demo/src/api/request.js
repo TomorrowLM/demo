@@ -74,13 +74,8 @@ export const errorHandler = (error: ResponseError) => {
       } else if (status === 400) {
         message.info(errorText);
       } else if (status === 401) {
-        console.log(213124)
         window.localStorage.removeItem("authorization");
         message.info(errorText);
-        setTimeout(() => {
-          // window.location.href = "http://localhost:3500/login"
-          // window.location.reload();
-        }, 500);
       }
     }
     if (!status) {

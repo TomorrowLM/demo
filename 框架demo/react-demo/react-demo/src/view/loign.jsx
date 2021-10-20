@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useHistory, Route } from "react-router-dom";
 import request from "../api/request";
 import { Row, Col } from "antd";
-const login = (props) => {
+const Login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
     let { username, password } = values;
@@ -91,4 +91,4 @@ const login = (props) => {
     </div>
   );
 };
-export default login;
+export default Login;
