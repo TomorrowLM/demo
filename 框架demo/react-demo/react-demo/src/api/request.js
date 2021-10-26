@@ -34,7 +34,6 @@ let requestCount = 0
 // 显示loading
 function showLoading() {
   if (requestCount === 0) {
-    console.log(213)
     const dom = document.createElement('div')
     dom.setAttribute('id', 'loading')
     dom.setAttribute('style', {

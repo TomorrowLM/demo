@@ -4,6 +4,8 @@ import OnRef from "../view/Dom/OnRef";
 import Dashboard from "../view/DashBoard/Dashboard"
 import FindDomDode from "../view/Dom/FindDomDode"
 import Ref from "../view/Dom/Ref";
+import ClassHooks from "../view/Hooks/ClassHooks";
+import FunctionHooks from "../view/Hooks/FunctionHooks";
 export const routes = [
   {
     path: "dashboard",
@@ -33,6 +35,16 @@ export const routes = [
   {
     path: "ref",
     component: Ref,
+    exact: true,
+  },
+  {
+    path: "classHooks",
+    component: ClassHooks,
+    exact: true,
+  },
+  {
+    path: "functionHooks",
+    component: FunctionHooks,
     exact: true,
   },
 ];

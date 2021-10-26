@@ -62,9 +62,25 @@ export default function App() {
                   <Link to="/ref">Ref</Link>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub4" icon={<NotificationOutlined />} title="Communicate">
+              <SubMenu
+                key="sub4"
+                icon={<NotificationOutlined />}
+                title="Communicate"
+              >
                 <Menu.Item key="6" icon={<DesktopOutlined />}>
                   <Link to="/communicate">Communicate</Link>
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="sub5"
+                icon={<NotificationOutlined />}
+                title="ClassHooks"
+              >
+                <Menu.Item key="7" icon={<DesktopOutlined />}>
+                  <Link to="/classHooks">ClassHooks</Link>
+                </Menu.Item>
+                <Menu.Item key="8" icon={<DesktopOutlined />}>
+                  <Link to="/functionHooks">FunctionHooks</Link>
                 </Menu.Item>
               </SubMenu>
             </Menu>
@@ -80,7 +96,7 @@ export default function App() {
               style={{
                 padding: 24,
                 margin: 0,
-                overflowY: "auto"
+                overflowY: "auto",
               }}
             >
               <div style={{ width: "100%" }}>
