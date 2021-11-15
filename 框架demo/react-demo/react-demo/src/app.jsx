@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { routes } from "./route/index.js";
-import { Route, Link, Switch } from "react-router-dom";
+import { Route, Link, Switch, Redirect } from "react-router-dom";
 import "./css/antd.css";
 import "./css/app.css";
 import { Layout, Menu, Breadcrumb } from "antd";
@@ -9,6 +9,9 @@ import {
   NotificationOutlined,
   DesktopOutlined,
 } from "@ant-design/icons";
+import Dashboard from "./view/DashBoard/Dashboard.jsx";
+import Second from "./view/Router/second.jsx";
+import Router from "./view/Router/index.jsx";
 export default function App() {
   const { SubMenu } = Menu;
   const [collapsed, setCollapsed] = useState(false);
@@ -83,6 +86,27 @@ export default function App() {
                   <Link to="/functionHooks">FunctionHooks</Link>
                 </Menu.Item>
               </SubMenu>
+              <SubMenu
+                key="sub6"
+                icon={<NotificationOutlined />}
+                title="特效"
+              >
+                <Menu.Item key="9" icon={<DesktopOutlined />}>
+                  <Link to="/reactSortable">ReactSortable</Link>
+                </Menu.Item>
+                <Menu.Item key="9" icon={<DesktopOutlined />}>
+                  <Link to="/reactSortable">ReactSortable</Link>
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu
+                key="sub7"
+                icon={<NotificationOutlined />}
+                title="Router"
+              >
+                <Menu.Item key="10" icon={<DesktopOutlined />}>
+                  <Link to="/router">Router</Link>
+                </Menu.Item>
+              </SubMenu>
             </Menu>
           </Sider>
           <Layout style={{ padding: "0 24px 24px" }}>
@@ -101,15 +125,17 @@ export default function App() {
             >
               <div style={{ width: "100%" }}>
                 <Switch>
-                  {routes.map(({ path, component }) => {
+                  {routes.map(({ path, component, exact }) => {
                     return (
                       <Route
                         key={path}
-                        path={"/" + path}
+                        path={"/"+path}
                         component={component}
+                        exact={exact}
                       />
                     );
                   })}
+                  <Redirect to="/dashboard"  exact/>
                 </Switch>
               </div>
             </Content>

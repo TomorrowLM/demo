@@ -1,0 +1,5 @@
+export { default as BasicInfo } from './BasicInfo'
+export { default as SourceFileUpload } from './SourceFileUpload'
+export { default as FileAnalysis } from './FileAnalysis'
+export { default as AttributeMapping } from './AttributeMapping'
+export { default as ProfilePreview } from './ProfilePreview'

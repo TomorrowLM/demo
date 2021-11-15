@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { Route, HashRouter as Router, Switch } from "react-router-dom";
+import { Route, HashRouter as Router, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import Login from "./view/Loign";

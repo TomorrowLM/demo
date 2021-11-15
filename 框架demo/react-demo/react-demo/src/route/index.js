@@ -6,6 +6,9 @@ import FindDomDode from "../view/Dom/FindDomDode"
 import Ref from "../view/Dom/Ref";
 import ClassHooks from "../view/Hooks/ClassHooks";
 import FunctionHooks from "../view/Hooks/FunctionHooks";
+import ReactSortable from "../view/ReactSortable"
+import Router from "../view/Router"
+import Second from "../view/Router/second";
 export const routes = [
   {
     path: "dashboard",
@@ -46,5 +49,15 @@ export const routes = [
     path: "functionHooks",
     component: FunctionHooks,
     exact: true,
+  },
+  {
+    path: "reactSortable",
+    component: ReactSortable,
+    exact: true,
+  },
+  {
+    path: "router",
+    component: Router,
+    exact: false,
   },
 ];

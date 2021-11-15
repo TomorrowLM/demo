@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    height: 18.6rem;
+    background-color: #F4F4F4;
+    font-size: 0.28rem;
+}
+
+p {
+    margin: 0;
+}
+
+.page {
+    width: 100%;
+}
+
+.search {
+    height: 4.5rem;
+    position: relative;
+}
+
+img {
+    height: auto;
+    width: 100%;
+}
+
+.search>img {
+    position: absolute;
+    z-index: -1;
+}
+
+.search>input {
+    width: 5.73rem;
+    height: 0.64rem;
+    opacity: 1;
+    background: #ffffff;
+    border-radius: 11px;
+    border-color: #fff;
+    position: absolute;
+    top: 0.23rem;
+    left: 0.39rem;
+    border: 1px solid #fff;
+    padding-left: 0.8rem;
+    font-size: 0.28rem;
+}
+
+.search .icon {
+    display: inline-block;
+    height: 0.37rem;
+    width: 0.37rem;
+    background-image: url(./image/iPhone12Pro/查找_find.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    top: 0.4rem;
+    z-index: 2;
+    left: 0.7rem;
+}

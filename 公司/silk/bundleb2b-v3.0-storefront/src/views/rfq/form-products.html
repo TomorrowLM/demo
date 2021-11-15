@@ -1,0 +1,34 @@
+<h4>{{text 'global.toolbar.unit'}}</h4>
+{{#each productList}}
+  <div class="product-list-item-container">
+    <img src="{{imageUrl}}" alt="">
+    <div class="description-container">
+      <p class="product-name">{{productName}}</p>
+      <p class="product-sku">{{sku}}</p>
+      <p class="base-price-container">
+        <span>{{formatBasePrice}}</span>
+        <i class="fa fa-edit"></i>
+      </p>
+      <input 
+        class="form-input offered-price" 
+        type="text" 
+        value="{{offeredPrice}}" 
+        data-input="handleOfferedPriceInput" 
+        data-productId="{{productId}}"
+        data-variantId="{{variantId}}"
+      >
+    </div>
+    <input 
+      class="form-input product-qty-edit" 
+      type="text" 
+      value="{{quantity}}" 
+      data-change="handleQuantityChange"
+      data-product-id="{{productId}}"
+      data-variant-id="{{variantId}}"
+    > 
+    <i class="fa fa-trash" data-click="handleDeleteProduct"></i>
+  </div>
+{{/each}}
+{{#if productList.length '==' 0}}
+  <p class="text-center">No Products</p>
+{{/if}}

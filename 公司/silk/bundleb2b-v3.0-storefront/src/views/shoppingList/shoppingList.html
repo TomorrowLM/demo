@@ -1,0 +1,252 @@
+<div class="b2b-wrap {{classes 'b2bWrap'}} {{classes 'ShoppingList'}}">
+  <div class="title-wrap title-wrap--alt {{classes 'shoppinglist.head.container'}}">
+    <h2 class="page-title remove-margin-right {{classes 'shoppinglist.head.title'}}" id="shopping_list_name">{{name}}</h2>
+    {{#if isShowEdit}}
+    <a
+      href="javascript:void(0);"
+      class="button--small action-link {{classes 'shoppinglist.button.editInfo'}}"
+      data-rename-list
+    >
+      <button><i class="fa fa-edit"></i></button>
+    </a>
+    {{/if}}
+    <!-- <a
+      href="javascript:void(0);"
+      class="rename-shopping-list button button--primary button--small action-link {{classes 'shoppinglist.button.editInfo'}}"
+      data-rename-list
+    >
+      {{text 'shopping.list.edit.info.button'}}
+    </a> -->
+    <div class="page-title-desc {{classes 'shoppinglist.info.container'}}" id="shopping_list_comment">
+      {{#if description}}
+      <p class="rename-shopping-list">{{description}}</p>
+      <!-- <b class="{{classes 'shoppinglist.info.label'}}">{{text 'shopping.list.description'}}</b> -->
+      {{/if}}
+    </div>
+    <div class="shopping-list-detail" id="shopping_list_detail">
+      {{#if createdAtTime}}
+      <div class="{{classes 'shoppinglist.info.container'}}"><b class="{{classes 'shoppinglist.info.label'}}">{{text 'shopping.list.create.date'}}</b><span>{{createdAt}}</span></div>
+      {{/if}} {{#if updatedAtTime}}
+      <div class="{{classes 'shoppinglist.info.container'}}"><b class="{{classes 'shoppinglist.info.label'}}">{{text 'shopping.list.last.update'}}</b><span>{{updatedAtTime}}</span></div>
+      {{/if}} {{#if customerInfo}}
+      <div class="{{classes 'shoppinglist.info.container'}}">
+        <b class="{{classes 'shoppinglist.info.label'}}">{{text 'shopping.list.create.by'}}</b
+        ><span>{{customerInfo.firstName}} {{customerInfo.lastName}}</span>
+      </div>
+      {{/if}}
+    </div>
+    <div class="shopping-list-status {{classes 'shoppinglist.info.container'}}">
+      <b class="{{classes 'shoppinglist.info.label'}}">{{text 'shopping.list.status.show.label'}}</b>
+      <!-- <select
+        class="form-select form-select--small {{classes 'shoppinglist.info.select'}}"
+        name="shopping_list_status"
+        id="shopping_list_status"
+        value="{{status}}"
+      >
+        {{#statusSelectOptions}}
+        <option value="{{value}}" {{selected}}>{{title}}</option>
+        {{/statusSelectOptions}}
+      </select> -->
+      {{#statusTitle}}
+      <span>{{title}}</span>
+      {{/statusTitle}}
+
+      {{#if isShowUpdateStatus}}
+      <button
+        class="button button--primary button--small button-status-approval {{classes 'shoppinglist.button.update'}}"
+        data-update-status
+        style="margin-bottom: 0;"
+        name='Approved'
+      >
+        {{text 'shopping.list.approval.button'}}
+      </button>
+      <button
+      class="button button--primary button--small button-status-reject {{classes 'shoppinglist.button.update'}}"
+      data-update-status
+      style="margin-bottom: 0;"
+      name='Draft'
+    >
+      {{text 'shopping.list.reject.button'}}
+    </button>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="b2b-column-wrap {{classes 'shoppinglist.products.container'}}">
+    <div class="b2b-column-right {{classes 'shoppinglist.right.wraper'}}">
+      <div class="table-toolbar top">
+        <div class="number-items {{classes 'shoppinglist.right.unit.container'}}">
+          <span class="{{classes 'shoppinglist.right.unit.num'}}" id="num_items">{{products.length}} </span>{{text 'shopping.list.unit.text'}}
+          <span id="totle_list_products"> | {{pagination.totalCount}} Total</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="shopping-list-table" id="shopping_list_table">
+          <thead>
+            <tr>
+              <th class="th-checkbox">
+                {{#if isShowSelectAll}}
+                <label class="action-label" for="select_all">
+                  <input type="checkbox" name="select_all" id="select_all" />
+                </label>
+                {{/if}}
+                <a
+                  class="button button--primary button--small button--removeall {{classes 'shoppinglist.right.button.deleteSelected'}}"
+                  href="javascript:void(0);"
+                  id="shopping_item_remove"
+                  data-delete-items
+                >
+                  {{text 'shopping.list.delete.seleted.button'}}
+                </a>
+              </th>
+              <th class="th-product-item"></th>
+              <th class="t-align-r">{{text 'shopping.list.thead.price'}}</th>
+              <th class="t-align-r">{{text 'shopping.list.thead.qty'}}</th>
+              <th class="t-align-r">{{text 'shopping.list.thead.subtotal'}}</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <ul class="pagination-list" id="shopping-list-pagination"></ul>
+      <span class="grand-total {{classes 'shoppinglist.right.item.grand.total'}}" id="shopping_list_grand_total">
+        ​ {{text 'shopping.list.item.grand.total'}} {{baseGrangTotal}}
+      </span>
+      {{#if isShowSubmitToApproval}}
+      <a
+        class="button button--primary button--small button--submit--approval {{classes 'shoppinglist.right.button.deleteSelected'}}"
+        href="javascript:void(0);"
+        data-submit-approval
+        >
+        {{text 'shopping.list.submit.approval.button'}}
+      </a>
+      {{/if}}
+    </div>
+    {{#if isShowAddToList}}
+    <div class="b2b-column-left {{classes 'shoppinglist.left.wraper'}}">
+      <div class="form-wrap {{classes 'shoppinglist.left.container'}}" id="quick_add_section">
+        <div class="title-wrap">
+          <h3 class="page-title-small {{classes 'shoppinglist.left.title'}}">{{text 'shopping.list.add.to.list.title'}}</h3>
+        </div>
+        <div class="{{classes 'shoppinglist.left.form.container'}}">
+          <div class="form-field larger {{classes 'shoppinglist.left.form.item.container'}}">
+            <label class="form-label {{classes 'shoppinglist.left.form.item.label'}}" for="product_search_input"
+              >{{text 'shopping.list.single.search.label'}}</label
+            >
+            <input
+              class="form-input {{classes 'shoppinglist.left.form.item.input'}}"
+              type="text"
+              id="product_search_input"
+              name="product_search_input"
+            />
+          </div>
+          <div class="form-field smaller {{classes 'shoppinglist.left.form.item.container'}}">
+            <label class="form-label {{classes 'shoppinglist.left.form.item.label'}}" for="product_qty">&nbsp;</label>
+            <button
+              class="button--search {{classes 'shoppinglist.left.button.singleSku'}}"
+              type="button"
+              id="search_single_sku"
+              name="search_single_sku"
+            >
+              <i class="fa fa-search {{classes 'shoppinglist.left.button.singleSku.icon'}}"></i>
+            </button>
+          </div>
+
+          <div style="padding-top: 100px;">
+            <span
+              id="loading-span"
+              style="display: none;"
+              class="loading-span"
+            ></span>
+          </div>
+          <div
+            class="form-field large {{classes 'shoppinglist.left.form.item.container'}}"
+            id="product_search_results"
+            style="margin-bottom: 0;"
+          ></div>
+          <ul class="pagination-list" id="more-results" style="float: left;width: 100%;"></ul>
+
+          <div class="form-field form-field--split"><b>{{text 'shopping.list.divider.or'}}</b></div>
+
+          <div class="form-field larger {{classes 'shoppinglist.left.form.item.container'}}">
+            <label class="form-label {{classes 'shoppinglist.left.form.item.label'}}" for="product_search_skus"
+              >{{{text 'shopping.list.multiple.search.label'}}}</label
+            >
+            <input
+              class="form-input {{classes 'shoppinglist.left.form.item.input'}}"
+              type="text"
+              id="product_search_skus"
+              name="product_search_skus"
+            />
+            <div class="form-input-desc">
+              {{{text 'shopping.list.multiple.search.tip'}}}
+            </div>
+          </div>
+          <div class="form-field smaller {{classes 'shoppinglist.left.form.item.container'}}">
+            <label class="form-label" for="">&nbsp;</label>
+            <button
+              class="button--search {{classes 'shoppinglist.left.button.multipleSku'}}"
+              type="button"
+              id="search_skus"
+              name="search_skus"
+            >
+              <i class="fa fa-search {{classes 'shoppinglist.left.button.multipleSku.icon'}}"></i>
+            </button>
+          </div>
+          <div
+            class="form-field large {{classes 'shoppinglist.left.form.item.container'}}"
+            id="skus_search_results"
+            style="margin-bottom: 0;"
+          ></div>
+
+          <div class="form-field form-field--split"><b>{{text 'shopping.list.divider.or'}}</b></div>
+
+          <div class="form-field {{classes 'shoppinglist.left.form.item.container'}}">
+            <label class="form-label form-label--mb {{classes 'shoppinglist.left.form.item.label'}}" for=""
+              >{{text 'shopping.list.upload.label'}}</label
+            >
+
+            <div class="upload-container">
+              <a
+                href="javascript:void(0);"
+                class="uploadFile-mockup button button--primary {{classes 'shoppinglist.left.button.choose'}}"
+                >{{text 'shopping.list.choose.file.button'}}</a
+              >
+              <input
+                id="customer_sku_csv"
+                type="file"
+                data-reset="true"
+                class="action-upload"
+                name="sku_file"
+                accept=".csv"
+              />
+            </div>
+
+            <div class="form-input-desc" style="margin-bottom: 1rem;">
+              <a
+                href="https://silk-demo-store45.mybigcommerce.com/content/sample_template.csv"
+                >{{text 'shopping.list.download.sample.csv.button'}}
+              </a>
+            </div>
+            <div class="csv-file-name" id="csv_file_name"></div>
+            <div class="csv-check-info" id="csv_check_info"></div>
+          </div>
+          <div class="form-field large {{classes 'shoppinglist.left.form.item.container'}}">
+            <div class="csv-product-list" id="csv_products_list"></div>
+          </div>
+
+          <div class="form-action right">
+            <a
+              href="javascript:void(0);"
+              class="button button--primary {{classes 'shoppinglist.left.button.addToList'}}"
+              id="add_items_to_list"
+              >{{text 'shopping.list.add.to.list.title'}}</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>

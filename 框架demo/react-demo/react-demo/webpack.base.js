@@ -13,23 +13,24 @@ const NODE_ENV = process.env.NODE_ENV;
 console.log("当前环境", NODE_ENV);
 module.exports = {
   //webpack 入口文件
-  entry: path.join(__dirname, "./src/main.js"),
+  entry: path.resolve(__dirname, "./src/main.js"),
   //webpack 输出文件配置
   output: {
     //指定打包好的文件，输出到哪个目录中去
-    path: path.join(__dirname, "./dist"),
+    path: path.resolve(__dirname, "./dist"),
     //输出文件名
-    filename: "bundle.js",
+    filename: "js/bundle.js",
+    // publicPath: '/static/',//publicPath是你启用服务器（webpack-dev-server/react-hot-loader）时的路径
   },
   //配置插件
   plugins: [
-    // new WebpackBar(),
-    //创建一个在内存中生成Html页面的插件
+    //开发中，创建一个在内存中生成Html页面的插件。打包中，用来生成HTML文件并自动引用打包好的JS文件
     new HtmlWebpackPlugin({
       //模板文件路径
       template: path.join(__dirname, "./src/index.html"),
       //模板文件名
       filename: "index.html",
+      title: 'react app',
       minify: {
         //压缩html文件
         removeComments: true, //移出html中的注释
@@ -57,45 +58,13 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       }, // 如果想要启用 CSS 模块化，可以为 css-loader 添加 modules 参数即可
       {
-        test: /\.scss$/,
-        use: [
-          "style-loader",
-          "css-loader?modules&localIdentName=[name]_[local]-[hash:5]",
-          "sass-loader",
-        ],
+        test: /\.(png|svg|jpeg|jpg|gif)$/,
+        type: 'asset/resource'
       },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        use: ['file-loader']
-      },
-      // {
-      //   test: /\.(png|gif|bmp|jpg)$/,
-      //   use: {
-      //     loader: "file-loader",
-      //     options: {
-      //       name: "[name].[ext]",
-      //       outputPath: "images/",//图片打包的出口
-      //       publicPath: "images/"//打包后img标签src的根级路径
-      //     }
-      //   },
-      //   include: [path.resolve(__dirname, "./src/assets")],
-      // },
-      // {
-      //   test: /\.(png|jpg|jpeg|gif)$/,
-      //   use: [{
-      //     loader: "url-loader",
-      //     options: {
-      //       limit: 200000,
-      //       name: "[name].[ext]",
-      //       outputPath: "images/",//图片打包的出口
-      //       publicPath: "images/"//打包后img标签src的根级路径
-      //     }
-      //   }],
-      // },
       {
         test: /(\.jsx|\.js)$/,
         use: ["babel-loader"],
-        include: path.resolve(__dirname, "./src"),
+        // include: path.resolve(__dirname, "./src"),
         exclude: /node_modules/,
       },
     ],

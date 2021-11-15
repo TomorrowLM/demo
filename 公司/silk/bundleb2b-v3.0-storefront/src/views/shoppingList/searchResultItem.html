@@ -1,0 +1,70 @@
+<tr
+  data-product-id="{{product.id}}"
+  class="optionView"
+  data-product-base-sku="{{product.sku}}"
+>
+  <td class="col-checkbox">
+    <input type="checkbox" data-results-check-box
+    data-product-id="{{product.id}}" {{#if product.options}}disabled="true"
+    {{/if}}>
+  </td>
+  <td class="col-product-figure">
+    <img
+      src="{{product.image.data}}"
+      alt="{{product.image.alt}}"
+      title="{{product.image.alt}}"
+    />
+  </td>
+  <td class="col-product-info">
+    {{product.title}}
+    <div class="product-options">
+      <span data-product-sku
+        >{{#if product.sku}}SKU: {{product.sku}}{{/if}}</span
+      >
+      <div
+        class="product-price"
+        data-product-price
+        data-product-price-value="{{#if product.price.with_tax}}{{product.price.with_tax.value}}{{/if}}{{#if product.price.without_tax}}{{product.price.without_tax.value}}{{/if}}"
+      >
+      {{#if product.price.without_tax}}{{product.price.without_tax.formatted}}{{else}}{{#if product.price.with_tax}}{{product.price.with_tax.formatted}}{{/if}}{{/if}}
+      </div>
+      <form
+        class="form option-form"
+        method="post"
+        action="{{product.cart_url}}"
+        enctype="multipart/form-data"
+        data-option-form
+      >
+        <input type="hidden" name="action" value="add" />
+        <input type="hidden" name="product_id" value="{{product.id}}" />
+
+        <div data-product-option-change>
+          {{{product.optionsHTML}}}
+        </div>
+
+        {{#if product.out_of_stock}} 
+          <div class="alertBox alertBox--error">
+            <div class="alertBox-column alertBox-icon">
+                <icon glyph="ic-error" class="icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg></icon>
+            </div>
+            <p class="alertBox-column alertBox-message">
+                <span>Sold Out</span>
+            </p>
+        </div>
+        {{/if}}
+      </form>
+    </div>
+  </td>
+  {{!#if multi}}
+  <td class="product-qty-col">
+    <input
+      class="form-input"
+      type="text"
+      name="{{product.id}}"
+      autocomplete="off"
+      data-advqty-sku="{{product.sku}}"
+      value="1"
+    />
+  </td>
+  {{!/if}}
+</tr>

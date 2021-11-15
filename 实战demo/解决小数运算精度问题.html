@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解决小数运算精度问题</title>
+</head>
+
+<body>
+    <script>
+        function accMul(arg1, arg2) {
+            var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+            try { m += s1.split(".")[1].length } catch (e) { }
+            try { m += s2.split(".")[1].length } catch (e) { }
+            return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+        }
+        function accDiv(arg1, arg2) {
+            var t1 = 0, t2 = 0, r1, r2;
+            try { t1 = arg1.toString().split(".")[1].length } catch (e) { }
+            try { t2 = arg2.toString().split(".")[1].length } catch (e) { }
+            with (Math) {
+                r1 = Number(arg1.toString().replace(".", ""))
+                r2 = Number(arg2.toString().replace(".", ""))
+                return accMul((r1 / r2), pow(10, t2 - t1));
+            }
+        }
+        let a = accDiv(38.81, 10000)
+        console.log(a);//0.000381
+        console.log(38.81 / 10000);//0.0038810000000000003
+    </script>
+</body>
+
+</html>

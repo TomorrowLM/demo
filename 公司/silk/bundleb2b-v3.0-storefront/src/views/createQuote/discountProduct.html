@@ -1,0 +1,67 @@
+{{#each productList}}
+
+<tr class="product-item-tr {{classes 'b2bWrap'}}" data-item-row="" data-variant-id="{{variantId}}" data-product-id="{{productId}}" data-id="{{productId}}-{{variantId}}">
+  <td class="product-item-td {{classes 'createQuote.tbody.td'}} {{classes 'createQuote.td.product'}}" >
+      <img class="cart-item-fixed-image {{classes 'createQuote.td.product.img'}}" src="{{imageUrl}}" alt="{{productName}}" title="{{productName}}">
+  </td>
+  <td class="product-item-td {{classes 'createQuote.tbody.td'}}">
+      <p>{{productName}}</p>
+      <p>SKU: {{sku}}</p>
+  </td>
+  <td class="product-item-td product-item-price {{classes 'createQuote.tbody.td'}} {{classes 'createQuote.td.price'}}">
+     {{formatedBasePrice}}
+  </td>
+  <td class="product-item-td product-item-discount {{classes 'createQuote.tbody.td'}} {{classes 'createQuote.td.discount.container'}}">
+    <label class="quote-inline-from-field {{classes 'createQuote.td.discount.label'}}" data-row>
+        <input
+            data-change="handleInput"
+            data-name="discount"
+            data-product-id="{{productId}}"
+            name="discount"
+            data-max="100"
+            data-init-data="0"
+            data-variant-id="{{variantId}}"  
+            class="form-input form-input--small input discount-input {{classes 'createQuote.td.discount.input'}}"
+            type="text"
+            value="{{discount}}"
+        />
+        %
+    </label>
+</td>
+  <td class="product-item-td product-item-new-price {{classes 'createQuote.tbody.td'}} {{classes 'createQuote.td.newPrice.container'}}">
+    <label class="quote-inline-from-field {{classes 'createQuote.td.newPrice.label'}}" data-row>
+        {{#unless ../currencyLocationRight}} {{../money.token}} {{/unless}}
+        <input
+            data-change="handleInput"
+            name="newPrice"
+            data-name="newPrice"
+            data-max="{{basePrice}}"
+            data-min="0"
+            data-init-data="0"
+            data-variant-id="{{variantId}}"
+            data-product-id="{{productId}}"
+            class="form-input form-input--small input new-price-input {{classes 'createQuote.td.newPrice.input'}}"
+            type="text"
+            value="{{newPrice}}"
+        />
+        {{#if ../currencyLocationRight}} {{../money.token}} {{/if}}
+    </label>
+</td>
+  <td class="product-item-quantity {{classes 'createQuote.tbody.td'}} {{classes 'createQuote.td.quantity.container'}}">
+      <label class="quote-inline-from-field {{classes 'createQuote.td.quantity.label'}}">
+          <input
+            data-change="handleInput"
+            data-name="quantity"
+            data-product-id="{{productId}}"
+            name="quantity" data-init-data="1" data-min="1"  data-variant-id="{{variantId}}" class="form-input form-input--small input quantity-input {{classes 'createQuote.td.quantity.input'}}" type="text" value="{{quantity}}">
+      </label>
+  </td>
+  <td class="product-item-line-total {{classes 'createQuote.tbody.td'}} {{classes 'createQuote.td.lineTotal.container'}}">
+      <span class="line-total">{{totlePrice}}</span>
+  </td>
+  <td class="{{classes 'createQuote.tbody.td'}} {{classes 'createQuote.td.lineTotal.container'}}">
+      <i data-click="handleProductDelete" data-variant-id="{{variantId}}" data-product-id="{{productId}}" class="fa fa-trash {{classes 'createQuote.td.lineTotal.delete.icon'}}"></i>
+  </td>
+</tr>
+
+{{/each}}

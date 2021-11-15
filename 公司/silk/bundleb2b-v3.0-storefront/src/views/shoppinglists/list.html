@@ -1,0 +1,39 @@
+{{#list}}
+<tr data-status="{{status}}">
+  <td>
+    <div class="cell-line-name">{{name}} <br/> <span class="shopping-list-des">{{description}}</span></div>
+  </td>
+  {{#if ../isShowCreatedBy}}
+  <td>
+    {{customerInfo.firstName}} {{customerInfo.lastName}}
+  </td>
+  {{/if}}
+  <td class="t-align-c">
+    {{totalCount}}
+  </td>
+  <td>
+    {{displayFormat latestDate}}
+  </td>
+  <td>
+    {{statusName}}
+  </td>
+  <td class="t-align-c actions-field {{classes 'shoppinglists.td.action'}}" style="position:relative;text-align: center;">
+    <i data-click="toggleDropdown" class="fa fa-ellipsis-v td-action-dropdown {{classes 'shoppinglists.td.action.icon'}}" shopping-list-action></i>
+    <ul class="dropdown-menu {{classes 'shoppinglists.td.action.panel.container'}}">
+      <li class="button button--small dropdown-menu-item {{classes 'shoppinglists.td.action.panel.item'}}">
+        <a href="/shopping-list/?list_id={{id}}" data-list-id="{{id}}">{{text 'shopping.list.action.view'}}</a>
+      </li>
+      {{#if isShowDuplicate}}
+      <li class="button button--small dropdown-menu-item {{classes 'shoppinglists.td.action.panel.item'}}">
+        <a href="javascript:void(0);" data-stop data-click="handleDuplicateShoppingList" data-list-id="{{id}}">{{text 'shopping.list.action.duplicate'}}</a>
+      </li>
+      {{/if}}
+      {{#if isShowDelete}}
+      <li class="button button--small dropdown-menu-item {{classes 'shoppinglists.td.action.panel.item'}}">
+        <a href="javascript:void(0);" data-stop data-click="handleDeleteShoppingList" data-list-id="{{id}}">{{text 'shopping.list.action.delete'}}</a>
+      </li>
+      {{/if}}
+    </ul>
+  </td>
+</tr>
+{{/list}}

@@ -1,0 +1,33 @@
+{{#orders}}
+<tr data-product-id="{{productId}}" data-variant-id="{{variantId}}">
+  <td class="{{classes 'buyAgain.tbody.td'}}">
+    <p>{{productName}}</p>
+    <div class='options-wraper'>
+      {{#optionList}}
+        <p>{{display_name}}: {{display_value}}</p>
+      {{/optionList}}
+    </div>
+  </td>
+  <td class="t-align-c vertical-align-middle {{classes 'buyAgain.tbody.td'}}">
+    {{sku}}
+  </td>
+  <td class="t-align-c vertical-align-middle {{classes 'buyAgain.tbody.td'}}">
+    {{displayFormat lastOrderedDate}}
+  </td>
+  <td class="t-align-c vertical-align-middle {{classes 'buyAgain.tbody.td'}}">{{formativeCurrency}}</td>
+  <td class="t-align-c qty-container {{classes 'buyAgain.tbody.td'}}">
+    <div class="qty-wraper {{classes 'buyAgain.td.qty.container'}}">
+      <span class="btn-qty-decrease {{classes 'buyAgain.td.qty.decrease'}}">-</span>
+      <input class="form-input qty-input {{classes 'buyAgain.td.qty.input'}}" value='{{qty}}' />
+      <span class="btn-qty-increase {{classes 'buyAgain.td.qty.increase'}}">+</span>
+    </div>
+  </td>
+  <td class="actions-field t-align-c {{classes 'buyAgain.tbody.td'}} {{classes 'buyAgain.td.actions.container'}}">
+    <div href="javascript:void(0);" class="button button--primary button--small add-to-cart {{classes 'buyAgain.td.actions.button.addToCart'}}" {{cartBtnDisabled}}>
+      {{ text 'buyAgain.addToCart.btn' }}
+    </div>
+    <div href="javascript:void(0);" class="button button--small add-shopping-list {{classes 'buyAgain.td.actions.button.addToShoppingList'}}">
+      {{ text 'buyAgain.addToShoppingList.btn' }}
+    </div>
+  </td>
+  {{/orders}}

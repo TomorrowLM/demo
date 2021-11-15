@@ -1,0 +1,83 @@
+{
+  "name": "ingestion-engine",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "axios": "^0.19.2",
+    "clsx": "^1.1.1",
+    "cross-env": "^7.0.2",
+    "dayjs": "^1.8.33",
+    "formik": "^2.1.5",
+    "material-ui-dropzone": "^3.4.0",
+    "notistack": "^1.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "yup": "^0.29.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "./node_modules/.bin/eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "scripts": {
+    "start": "cross-env REACT_APP_MODE=development react-app-rewired start",
+    "mock": "cross-env REACT_APP_MODE=mock react-app-rewired start",
+    "build": "cross-env REACT_APP_MODE=production react-app-rewired build",
+    "build:staging": "cross-env REACT_APP_MODE=staging react-app-rewired build",
+    "build:dev": "cross-env REACT_APP_MODE=development react-app-rewired build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-angular": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-import": "^1.13.0",
+    "customize-cra": "^1.0.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "prop-types": "^15.7.2",
+    "react-app-rewired": "^2.1.6",
+    "redux-logger": "^3.0.6"
+  }
+}

@@ -1,0 +1,49 @@
+<div class="b2b-wrap {{classes 'b2bWrap'}} {{classes 'ShoppingLists'}}">
+  <div class="title-wrap">
+    <h2 class="page-title">{{text 'shopping.list.title'}}</h2>
+    <div class="title-actions">
+      <a href="#" id="shopping_list_new"
+        class="action-link button button--small">{{text 'shopping.list.create.button'}}</a>
+    </div>
+
+  </div>
+
+  <div class="table-toolbar top">
+
+    <div class="action-links">
+      {{#statusOptions}}
+      {{#if isShow}}
+      <a class="action-link button button--small" href="#" filter-status data-status-value="{{status}}">{{title}}</a>
+      {{/if}}
+      {{/statusOptions}}
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="responsive-table shopping-lists-table" id="shopping_lists_table" css-status="{{cssStatus}}">
+      <thead>
+        <tr>
+          <th>{{text 'shopping.list.thead.name'}}</th>
+          {{#if isShowCreatedBy}}
+          <th>{{text 'shopping.list.thead.createdBy'}}</th>
+          {{/if}}
+          <th class="t-align-r">{{text 'global.toolbar.unit'}}</th>
+          <th>{{text 'shopping.list.thead.latest'}}</th>
+          <th>{{text 'shopping.list.thead.status'}}</th>
+          <th class="t-align-c">{{text 'shopping.list.thead.action'}}</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-toolbar">
+    <div class="number-items {{classes 'shoppinglists.unit.container'}}">
+      <span class="{{classes 'shoppinglists.unit.num'}}" id="num_items">{{shoppingLists.length}}</span> 
+      {{text 'global.toolbar.unit'}}
+    </div>
+  </div>
+
+  <ul class="pagination-list" id="shoppingLists-pagination"></ul>
+</div>
