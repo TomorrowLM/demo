@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
-
+//注册Service Worker
+//SW可以用于消息推送，缓存管理、后台同步、拦截和处理网络请求等
 import { register } from 'register-service-worker'
-console.log(`${process.env.BASE_URL}service-worker.js`);
+
 if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready () {
