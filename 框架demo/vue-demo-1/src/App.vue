@@ -1,18 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <p>2</p>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <van-button>12324</van-button>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import {axios} from "@/utils/request";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  created() {
+    axios.get("token").then((res) => {
+      console.log(res);
+    });
+  },
+};
 </script>
+<style lang="less">
+#app{
+
+}
+</style>

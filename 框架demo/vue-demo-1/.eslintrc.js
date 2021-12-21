@@ -1,11 +1,9 @@
+
 module.exports = {
     root: true,
     env: {
       es6: true,
       node: true
-    },
-    "parserOptions": {
-      "parser": "babel-eslint"
     },
     'extends': [
       'plugin:vue/essential',
@@ -16,14 +14,18 @@ module.exports = {
       parser: 'babel-eslint'
     },
     rules: {
-      'no-console': process.env.NODE_ENV === 'development' ? 'warn' : 'warn',
-      'no-debugger': process.env.NODE_ENV === 'development' ? 'warn' : 'warn',
-      "no-unused-const": "off"
+      'no-console': process.env.NODE_ENV === 'development' ? 'off' : 'off',
+      'no-debugger': process.env.NODE_ENV === 'development' ? 'off' : 'off',
+      "no-unused-const": "off",
+      'no-unused-vars': 'off',
     },
     globals: {
       $_clone: 'readonly',
       $_moment: 'readonly'
     },
-
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
   }
   

@@ -3,13 +3,15 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var app = express();
-// var indexRouter = require("./routes/index");
+var expressJwt = require("express-jwt");
+
+
+var test = require("./routes/test");
 var usersRouter = require("./routes/users");
 var login = require("./routes/login");
 var token = require("./routes/token");
-var test = require("./routes/test");
-var expressJwt = require("express-jwt");
+
+var app = express();
 //配置ejs视图的目录
 app.set("views", path.join(__dirname, "views")); //views代表存放视图的目录
 //启动视图引擎，并指定模板文件文件类型：
@@ -54,6 +56,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //   iat: 1634103506,
 //   exp: 1634319506
 // }
+
 app.use(
   expressJwt({
     secret: "zgs_first_token",
@@ -70,11 +73,10 @@ app.use(function (err, req, res, next) {
     res.status(401).send("token失效");
   }
 });
-// app.use("/index", indexRouter);
+app.use("/test", test);
 app.use("/users", usersRouter);
 app.use("/login", login);
 app.use("/token", token);
-app.use("/test", test);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

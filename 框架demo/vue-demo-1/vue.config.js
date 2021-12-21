@@ -1,9 +1,67 @@
 const path = require("path");
 const resolve = dir => path.join(__dirname, dir);
+const pxtorem = require('postcss-pxtorem')
+const autoprefixer = require('autoprefixer')//自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
+const webpack = require('webpack')
+
+const isProd = process.env.NODE_ENV === 'production'
+
+const commonPlugin = [
+    // 扩展环境变量
+    // new webpack.DefinePlugin({
+    //   BASE_URL: JSON.stringify(process.env.BASE_URL)
+    // })
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
+    new webpack.ProvidePlugin({
+      $_clone: 'lodash.clonedeep',
+      $_moment: 'moment',
+    }),
+    // HTML文件的配置插件
+    // new HtmlWebpackPlugin({
+    //   filename: "index.html",
+    //   template: "./public/index.html",
+    //   title: "拼任务",
+    //   inject: true,
+    //   url: process.env.BASE_URL,
+    //   minify: {
+    //     removeComments: true, // 移除HTML中的注释
+    //     collapseWhitespace: true, // 删除空白符与换行符
+    //     minifyCSS: true // 压缩内联css
+    //   }
+    // })
+]
+
+const assetsCDN = {
+    // webpack build externals
+    externals: {
+      vue: 'Vue',
+      'vue-router': 'VueRouter',
+      vuex: 'Vuex',
+      axios: 'axios'
+    },
+    css: [],
+    // https://unpkg.com/browse/vue@2.6.10/
+    js: [
+      '//cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
+      '//cdn.jsdelivr.net/npm/vue-router@3.2.0/dist/vue-router.min.js',
+      '//cdn.jsdelivr.net/npm/vuex@3.4.0/dist/vuex.min.js',
+      '//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js'
+    ]
+  }
+
 module.exports = {
-    // publicPath: process.env.NODE_ENV === 'production'
-    //     ? '/vue-demo/'
-    //     : '/',
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/vue-demo/'
+        : '/',
+    //打包文件输出路径，即打包到哪里
+    outputDir: 'dist',
+    assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
+    // outputDir: 'dist',//打包的时候生成的一个文件名
+    lintOnSave: true,//boolean | 'warning' | 'default' | 'error'
+    // 生产环境是否生成 sourceMap 文件
+    productionSourceMap: false,
+    filenameHashing: true, //文件hash
     pwa: {
         name: "vue-demo",
         short_name: "vue-demo",
@@ -35,31 +93,83 @@ module.exports = {
         }
     },
     //
+    configureWebpack: (config) => {
+        // 以在浏览器开发工具的性能/时间线面板中启用对组件初始化、编译、渲染和打点
+        config.performance = {
+          hints: 'warning',
+          // 入口起点的最大体积 整数类型（以字节为单位）
+          maxEntrypointSize: 50000000,
+          // 生成文件的最大体积 整数类型（以字节为单位 300k）
+          maxAssetSize: 30000000,
+          // 只给出 js 文件的性能提示
+          assetFilter: function(assetFilename) {
+            return assetFilename.endsWith('.js');
+          }
+        }
+        // 针对不同环境进行 配置
+        if(isProd) {
+          // 配置插件
+          return {
+            // 配置插件
+            plugins: [
+              // 调用外部配置
+              ...commonPlugin,
+            ],
+            externals: assetsCDN.externals
+          }
+        } else {
+          return {
+            plugins: commonPlugin,
+            externals: {}
+          }
+        }
+      },
     chainWebpack: config => {
         config.resolve.alias
-            .set("vue$", "vue/dist/vue.esm.js")
             .set("@", resolve("src"))
-            .set("@assets", resolve("src/assets"))
-            .set("@components", resolve("src/components"))
-            .set("@views", resolve("src/views"))
-            .set("@router", resolve("src/router"))
-            .set("@store", resolve("src/store"));
-    },
-    configureWebpack: {
-        devServer: {
-            contentBase: './src',//项目基本访问目录
-            host: 'localhost',//服务器ip地址
-            port: 8088,//端口
-            hot: true,//模块热替换
-            hotOnly: true,//只有热更新不会刷新页面
+            .set("assets", resolve("src/assets"))
+            .set("components", resolve("src/components"))
+            .set("public", resolve("public"));
+        if (process.env.NODE_ENV === 'production') {
+            // 为生产环境修改配置...
+        } else {
+            console.log(config);
         }
     },
+    devServer: {
+        disableHostCheck: true,
+        contentBase: './src',//项目基本访问目录
+        host: 'localhost',//服务器ip地址
+        open: true,
+        port: 8088,//端口
+        hot: true,//模块热替换
+    },
     css: {
-        // 是否使用css分离插件 ExtractTextPlugin
-        //  extract: true,
-        // 开启 CSS source maps?
-        // sourceMap: true,
-        // // 启用 CSS modules for all css / pre-processor files.
-        // modules: false
+        extract: isProd ? true : false,
+        sourceMap: false,
+        loaderOptions: {
+            postcss: {
+                plugins: [
+                    autoprefixer(),
+                    pxtorem({
+                        rootValue: 37.5,//根元素的值，即1rem的值.rem=设计稿元素尺寸/rootValue
+                        propList: ['*'],
+                        selectorBlackList: ['van'] // 过滤掉.van-开头的class，不进行rem转换
+                    })
+                ]
+            },
+            less: {
+                // 若使用 less-loader@5，请移除 lessOptions 这一级，直接配置选项。
+                lessOptions: {
+                    // strictMath: true,
+                },
+            }
+        }
+    },
+    pluginOptions: {
+        "style-resources-loader": {
+            preProcessor: "less",
+            patterns: [path.resolve(__dirname, "src/global.less")]
+        }
     }
 }

@@ -5,11 +5,8 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
   res.send({
     code: 200,
-    message: 'success',
-    data: {
-      name: 'liming',
-      age: '23岁',
-    }
+    message: "success",
+    name: 'liming'
   });
 });
 
