@@ -1,7 +1,7 @@
 // 父组件
 import React from "react";
 import Son from "./son";
-import { Button } from "antd";
+import { Button, Divider } from "antd";
 class Father extends React.Component {
   constructor(props) {
     super(props);
@@ -19,9 +19,11 @@ class Father extends React.Component {
     return (
       <div>
         <Son onRef={this.sonRef} />
+        <br/>
         <Button type="primary" onClick={this.clearSonInput}>
-          清空子组件的H1
+          清空子组件
         </Button>
+        <Divider />
       </div>
     );
   }

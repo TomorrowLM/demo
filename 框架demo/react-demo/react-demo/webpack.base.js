@@ -30,7 +30,7 @@ module.exports = {
       template: path.join(__dirname, "./src/index.html"),
       //模板文件名
       filename: "index.html",
-      title: 'react app',
+      title: "react app",
       minify: {
         //压缩html文件
         removeComments: true, //移出html中的注释
@@ -55,11 +55,43 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],
-      }, // 如果想要启用 CSS 模块化，可以为 css-loader 添加 modules 参数即可
+        use: ["style-loader",
+          {
+            loader: 'css-loader',
+            // options: {
+            //   modules: {
+            //     // localIdentName: "[local]___[hash:base64:5]",
+            //   },
+            // }
+          },// 如果想要启用 CSS 模块化，可以为 css-loader 添加 modules 参数即可
+        ]
+      },
+      {
+        test: /\.less$/i,
+        use: [
+          {
+            loader: 'style-loader', // 从 JS 中创建样式节点
+          },
+          {
+            loader: 'css-loader', // 转化 CSS 为 CommonJS
+            options: {
+              // sourceMap: true,
+              modules: {
+                localIdentName: "[local]___[hash:base64:5]",
+              },
+              // exclude: [
+              //   path.resolve(__dirname, "node_modules")
+              // ],
+            }
+          },
+          {
+            loader: 'less-loader', // 编译 Less 为 CSS
+          },
+        ],
+      },
       {
         test: /\.(png|svg|jpeg|jpg|gif)$/,
-        type: 'asset/resource'
+        type: "asset/resource",
       },
       {
         test: /(\.jsx|\.js)$/,

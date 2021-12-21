@@ -1,7 +1,8 @@
 import React from "react";
+import styles from './dashboard.less'
 export default function Dashboard(){
   return (
-    <div>
+    <div className={styles.hello}>
         hello
     </div>
   );

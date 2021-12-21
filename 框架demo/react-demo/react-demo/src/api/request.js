@@ -3,7 +3,13 @@ import store from "../store";
 import { message, notification, Button, Space, Spin } from 'antd';
 import ReactDOM from 'react-dom';
 import React from 'react';
-const API_BASE_URLS = { 
+// import {HashRouter} from 'react-router-dom'    //如果使用的是hash路由类型，使用这个
+// const router = new HashRouter()
+
+import { BrowserRouter } from 'react-router-dom'
+const router = new BrowserRouter()
+
+const API_BASE_URLS = {
   development: "http://121.40.61.99:3600/",
   production: "http://121.40.61.99:3600/"
 };
@@ -37,7 +43,7 @@ function showLoading() {
     const dom = document.createElement('div')
     dom.setAttribute('id', 'loading')
     dom.setAttribute('style', {
-      position:"absolute",
+      position: "absolute",
 
     })
     document.body.appendChild(dom)
@@ -73,7 +79,9 @@ export const errorHandler = (error: ResponseError) => {
       } else if (status === 400) {
         message.info(errorText);
       } else if (status === 401) {
-        window.localStorage.removeItem("authorization");
+        window.localStorage.removeItem("token");
+        localStorage.removeItem('token');
+        window.location.hash = "/login"
         message.info(errorText);
       }
     }
@@ -111,6 +119,7 @@ request.interceptors.response.use(
     return resp;
   },
   (respError) => {
+    // console.log(respError, respError.response)
     errorHandler(respError)
     return respError.response;
   }

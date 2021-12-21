@@ -5,16 +5,17 @@ import { Provider } from "react-redux";
 import store from "./store";
 import Login from "./view/Loign";
 import AuthRoute from "./route/Mock-AuthRoute";
-import App from "./app.jsx";
 import "./css/global.css";
 import "antd/dist/antd.css";
+
 ReactDom.render(
+  // Provider下的所有组件可以通过connect来获取store上存储的数据
   <Provider store={store}>
     <Router>
       <Switch>
         <Route key={Login} path="/Login" component={Login} />
         {/* 检验token是否正确 */}
-        <AuthRoute path="/" component={App} />
+        <AuthRoute />
       </Switch>
     </Router>
   </Provider>,

@@ -22,6 +22,7 @@ const Different = () => {
       <button onClick={() => setRenderIndex((prev) => prev + 1)}>
         Cause re-render
       </button>
+      {refFromCreateRef.current?"可以看出useref只是赋值，而createRef则是拷贝地址":""}
     </div>
   );
 };

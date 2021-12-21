@@ -10,12 +10,12 @@ const UseRefAlert = () => {
   function handleAlert1() {
     setTimeout(() => {
       alert("you click on " + count1);
-    }, 3000);
+    }, 1000);
   }
   function handleAlert2() {
     setTimeout(() => {
       alert("you click on " + latestCount.current);
-    }, 3000);
+    }, 1000);
   }
   return (
     <div>

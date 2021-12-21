@@ -1,5 +1,7 @@
 import React from "react";
+import { Typography, Input } from "antd";
 
+const { Title, Text } = Typography;
 class Son extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +15,7 @@ class Son extends React.Component {
   //   this.props.onRef(this) // 在这将子组件的实例传递给父组件this.props.onRef()方法，函数组件不可用，它没有实例
   // }
   state = {
-    info: "父组件获取子组件的方法和属性",
+    info: "父组件获取子组件的方法和属性12",
   };
   handleChange = (e) => {
     this.setState({
@@ -28,8 +30,14 @@ class Son extends React.Component {
   render() {
     return (
       <div>
-        <h1>{this.state.info}</h1>
-        <input type="text" onChange={this.handleChange} />
+        <Title level={4}>{this.state.info}</Title>
+        <Title level={4}>{this.state.info}</Title>
+        <Input
+          style={{ width: "790px" }}
+          type="text"
+          onChange={this.handleChange}
+          value={this.state.info}
+        />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React from "react";
-import { Route, Link, Switch, Redirect } from "react-router-dom";
+import { Route, Link, Switch, Redirect, IndexRedirect } from "react-router-dom";
 import Second from "./second";
+import Child from "./Child";
 export default function Router(params) {
   return (
     <div>
@@ -14,9 +15,9 @@ export default function Router(params) {
         </li>
       </ul>
       <Switch>
-        <Route exact path="/router/second/:id" component={Second}></Route>
+        <Route exact path="/router/second/:id" component={Second}>
+        </Route>
       </Switch>
-      {/* <Route path={'/second/:id'} component={Second}/> */}
     </div>
   );
 }

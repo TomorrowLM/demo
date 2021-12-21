@@ -4,12 +4,12 @@ import thunk from 'redux-thunk'// //可以在action里传入 dispatch getState
 import reducers from './reducers'
 
 function configureStore() {
-  const logger = createLogger({})
+  // const logger = createLogger({})
 
   const middlewares = [thunk]
   //这里判断项目环境，正式的话打印的
   if (process.env.NODE_ENV === 'development') {
-    middlewares.push(logger)
+    // middlewares.push(logger)
   }
 
   const composeEnhancers =

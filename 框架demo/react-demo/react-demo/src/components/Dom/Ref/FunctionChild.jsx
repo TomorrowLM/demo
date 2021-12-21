@@ -5,7 +5,7 @@ export default function FunctionChild() {
   let textInput = React.createRef();
   const handleClick = () => {
     textInput.current.focus();
-    console.log(textInput.current.value)
+    console.log(textInput,textInput.current.value)
   }
   return (
     <div>

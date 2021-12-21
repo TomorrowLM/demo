@@ -21,6 +21,7 @@ module.exports = merge(base, {
     // contentBase: "./src", //指定托管的根目录
     static: "./src", //指定托管的根目录
     // hot: true, //启动热更新
+    hot: "only",
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),//new一个热更新的模块对象

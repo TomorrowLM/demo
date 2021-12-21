@@ -4,14 +4,9 @@ import { Route, Link, Switch, Redirect } from "react-router-dom";
 import "./css/antd.css";
 import "./css/app.css";
 import { Layout, Menu, Breadcrumb } from "antd";
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  DesktopOutlined,
-} from "@ant-design/icons";
-import Dashboard from "./view/DashBoard/Dashboard.jsx";
-import Second from "./view/Router/second.jsx";
-import Router from "./view/Router/index.jsx";
+import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
+import HomeNav from "./components/HomePage/Nav.jsx";
+
 export default function App() {
   const { SubMenu } = Menu;
   const [collapsed, setCollapsed] = useState(false);
@@ -27,17 +22,70 @@ export default function App() {
     console.log(API);
     setCollapsed(!collapsed);
   };
+  const router = [
+    [{ name: "dashboard", path: "dashboard", icon: <DesktopOutlined /> }],
+    [
+      { name: "store", path: "store", icon: <DesktopOutlined /> },
+      { name: "hox", path: "hox", icon: <DesktopOutlined /> },
+    ],
+    [
+      { name: "onRef", path: "onRef", icon: <DesktopOutlined /> },
+      { name: "findDomDode", path: "findDomDode", icon: <DesktopOutlined /> },
+      { name: "ref", path: "ref", icon: <DesktopOutlined /> },
+    ],
+    [{ name: "communicate", path: "communicate", icon: <DesktopOutlined /> }],
+    [
+      { name: "ClassHooks", path: "ClassHooks", icon: <DesktopOutlined /> },
+      {
+        name: "functionHooks",
+        path: "functionHooks",
+        icon: <DesktopOutlined />,
+      },
+      { name: "ahooks", path: "ahooks", icon: <DesktopOutlined /> },
+    ],
+    [
+      {
+        name: "reactSortable",
+        path: "reactSortable",
+        icon: <DesktopOutlined />,
+      },
+    ],
+    [{ name: "路由", path: "Router", icon: <DesktopOutlined /> }],
+  ];
+  const subTitle = ["store", "Dom", "Communicate", "Hooks", "特效", "Router"];
+  let keyIndex = 1;
+  let subIndex = 1;
+  const routerDom = router.map((subVal, index) => {
+    if (index == 0) {
+      return (
+        <Menu.Item key={index + 1} icon={subVal[0].icon}>
+          <Link to={"/" + subVal[0].path}>{subVal[0].name}</Link>
+        </Menu.Item>
+      );
+    }
+    subIndex = subIndex + 1;
+    return (
+      <SubMenu
+        key={"sub" + subIndex}
+        icon={<LaptopOutlined />}
+        title={subTitle[subIndex - 2]}
+      >
+        {subVal.map((menuVal, menuIndex) => {
+          keyIndex = keyIndex + 1;
+          return (
+            <Menu.Item key={keyIndex} icon={menuVal.icon}>
+              <Link to={"/" + menuVal.path}>{menuVal.name}</Link>
+            </Menu.Item>
+          );
+        })}
+      </SubMenu>
+    );
+  });
+  console.log(2);
   return (
     <div style={{ width: "100%,", height: "100vh", overflow: "hidden" }}>
       <Layout>
-        <Header className="header">
-          <div className="logo" />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
-        </Header>
+        <HomeNav />
         <Layout>
           <Sider width={200} className="site-layout-background">
             <Menu
@@ -46,67 +94,7 @@ export default function App() {
               defaultOpenKeys={["sub1"]}
               style={{ height: "100%", borderRight: 0 }}
             >
-              <Menu.Item key="1" icon={<DesktopOutlined />}>
-                <Link to="/dashboard">Dashboard</Link>
-              </Menu.Item>
-              <SubMenu key="sub2" icon={<LaptopOutlined />} title="store">
-                <Menu.Item key="2" icon={<DesktopOutlined />}>
-                  <Link to="/store">Store</Link>
-                </Menu.Item>
-              </SubMenu>
-              <SubMenu key="sub3" icon={<NotificationOutlined />} title="Dom">
-                <Menu.Item key="3" icon={<DesktopOutlined />}>
-                  <Link to="/onRef">OnRef</Link>
-                </Menu.Item>
-                <Menu.Item key="4" icon={<DesktopOutlined />}>
-                  <Link to="/findDomDode">FindDomDode</Link>
-                </Menu.Item>
-                <Menu.Item key="5" icon={<DesktopOutlined />}>
-                  <Link to="/ref">Ref</Link>
-                </Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="sub4"
-                icon={<NotificationOutlined />}
-                title="Communicate"
-              >
-                <Menu.Item key="6" icon={<DesktopOutlined />}>
-                  <Link to="/communicate">Communicate</Link>
-                </Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="sub5"
-                icon={<NotificationOutlined />}
-                title="ClassHooks"
-              >
-                <Menu.Item key="7" icon={<DesktopOutlined />}>
-                  <Link to="/classHooks">ClassHooks</Link>
-                </Menu.Item>
-                <Menu.Item key="8" icon={<DesktopOutlined />}>
-                  <Link to="/functionHooks">FunctionHooks</Link>
-                </Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="sub6"
-                icon={<NotificationOutlined />}
-                title="特效"
-              >
-                <Menu.Item key="9" icon={<DesktopOutlined />}>
-                  <Link to="/reactSortable">ReactSortable</Link>
-                </Menu.Item>
-                <Menu.Item key="9" icon={<DesktopOutlined />}>
-                  <Link to="/reactSortable">ReactSortable</Link>
-                </Menu.Item>
-              </SubMenu>
-              <SubMenu
-                key="sub7"
-                icon={<NotificationOutlined />}
-                title="Router"
-              >
-                <Menu.Item key="10" icon={<DesktopOutlined />}>
-                  <Link to="/router">Router</Link>
-                </Menu.Item>
-              </SubMenu>
+              {routerDom}
             </Menu>
           </Sider>
           <Layout style={{ padding: "0 24px 24px" }}>
@@ -129,13 +117,13 @@ export default function App() {
                     return (
                       <Route
                         key={path}
-                        path={"/"+path}
+                        path={"/" + path}
                         component={component}
                         exact={exact}
                       />
                     );
                   })}
-                  <Redirect to="/dashboard"  exact/>
+                  <Redirect to="/dashboard" exact />
                 </Switch>
               </div>
             </Content>

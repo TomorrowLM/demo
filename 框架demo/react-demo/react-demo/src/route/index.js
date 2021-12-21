@@ -9,6 +9,8 @@ import FunctionHooks from "../view/Hooks/FunctionHooks";
 import ReactSortable from "../view/ReactSortable"
 import Router from "../view/Router"
 import Second from "../view/Router/second";
+import AHooks from "../view/ahooks";
+import Hox from "../view/Store/Hox";
 export const routes = [
   {
     path: "dashboard",
@@ -18,6 +20,11 @@ export const routes = [
   {
     path: "store",
     component: Store,
+    exact: true,
+  },
+  {
+    path: "hox",
+    component: Hox,
     exact: true,
   },
   {
@@ -51,6 +58,11 @@ export const routes = [
     exact: true,
   },
   {
+    path: "ahooks",
+    component: AHooks,
+    exact: true,
+  },
+  {
     path: "reactSortable",
     component: ReactSortable,
     exact: true,
@@ -60,4 +72,10 @@ export const routes = [
     component: Router,
     exact: false,
   },
+  // {
+  //   path: "authority",
+  //   component: Authority,
+  //   exact: false,
+  //   authority: admin
+  // }
 ];
