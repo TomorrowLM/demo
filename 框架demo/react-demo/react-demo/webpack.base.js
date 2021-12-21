@@ -75,7 +75,7 @@ module.exports = {
           {
             loader: 'css-loader', // 转化 CSS 为 CommonJS
             options: {
-              // sourceMap: true,
+              sourceMap: true,
               modules: {
                 localIdentName: "[local]___[hash:base64:5]",
               },
@@ -111,5 +111,9 @@ module.exports = {
       // 更改配置文件时，重新缓存
       config: [__filename],
     },
+  },
+  node: {
+    Buffer: false,
+    process: false,
   },
 };

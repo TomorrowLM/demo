@@ -34,7 +34,7 @@ module.exports = merge(base, {
   module: {
     rules: [{
       test: /.s?css$/,
-      use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
     }, {
       test: /\.jpg$/,
       type: 'asset/resource'
