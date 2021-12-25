@@ -4,6 +4,7 @@ import './registerServiceWorker'
 import "./utils/index"
 import router from './router/index'
 import "./global.less"
+import 'vant/lib/index.css'
 //全部引用
 // import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
