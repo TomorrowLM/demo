@@ -39,10 +39,10 @@ const HomeNav = (props) => {
           { xs: 8, sm: 16, md: 24, lg: 32 },
         ]}
       >
-        <Col span={2}>
+        {/* <Col span={2}>
           <div className="logo" />
-        </Col>
-        <Col span={19}>
+        </Col> */}
+        <Col span={22}>
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
             <Menu.Item key="1">nav 1</Menu.Item>
             <Menu.Item key="2">nav 2</Menu.Item>

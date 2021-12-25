@@ -15,7 +15,7 @@ class Son extends React.Component {
   //   this.props.onRef(this) // 在这将子组件的实例传递给父组件this.props.onRef()方法，函数组件不可用，它没有实例
   // }
   state = {
-    info: "父组件获取子组件的方法和属性12",
+    info: "父组件获取子组件的方法和属性",
   };
   handleChange = (e) => {
     this.setState({
@@ -33,7 +33,7 @@ class Son extends React.Component {
         <Title level={4}>{this.state.info}</Title>
         <Title level={4}>{this.state.info}</Title>
         <Input
-          style={{ width: "790px" }}
+          style={{ width: "80px" }}
           type="text"
           onChange={this.handleChange}
           value={this.state.info}

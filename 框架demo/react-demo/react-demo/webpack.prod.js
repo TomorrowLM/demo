@@ -12,25 +12,11 @@ const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = merge(base, {
+  //会将 DefinePlugin 中 process.env.NODE_ENV 的值设置为 production
   mode: "production",
   devtool: 'source-map',
   // 第三方包入口
   // vendor: ['react', 'react-router', 'react-redux', 'moment', 'antd'],
-  optimization: {
-    minimizer: [
-      //压缩CSS代码
-      new OptimizeCss(),
-      //压缩js代码
-      new UglifyJsPlugin({
-        //启用文件缓存
-        cache: true,
-        //使用多线程并行运行提高构建速度
-        parallel: true,
-        //使用 SourceMaps 将错误信息的位置映射到模块
-        sourceMap: true,
-      }),
-    ],
-  },
   module: {
     rules: [{
       test: /.s?css$/,
@@ -50,7 +36,7 @@ module.exports = merge(base, {
       path: "./dist",
     }),
     new MiniCssExtractPlugin({
-      filename: `css/[name].[hash:8].css`
+      filename: `css/[name]-[contenthash].css`
     }),
     new CssMinimizerWebpackPlugin(),
   ],

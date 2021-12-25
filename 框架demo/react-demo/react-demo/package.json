@@ -53,6 +53,9 @@
     "webpackbar": "^5.0.0-3"
   },
   "dependencies": {
+    "@antv/data-set": "^0.11.8",
+    "@antv/g2": "^4.1.35",
+    "@antv/l7": "^2.6.22",
     "@material-ui/core": "^4.12.3",
     "ahooks": "^3.0.6",
     "hox": "^1.1.5",

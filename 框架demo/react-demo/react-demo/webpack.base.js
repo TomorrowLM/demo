@@ -3,7 +3,7 @@ const webpack = require("webpack");
 //生成创建Html入口文件
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 //编译进度
-// const WebpackBar = require("webpackbar");
+const WebpackBar = require("webpackbar");
 //分析编译时间
 //const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 // const smp = new SpeedMeasurePlugin();
@@ -14,6 +14,11 @@ console.log("当前环境", NODE_ENV);
 module.exports = {
   //webpack 入口文件
   entry: path.resolve(__dirname, "./src/main.js"),
+  // entry: {
+  //   pageOne: './src/pageOne/index.js',
+  //   pageTwo: './src/pageTwo/index.js',
+  //   pageThree: './src/pageThree/index.js',
+  // },
   //webpack 输出文件配置
   output: {
     //指定打包好的文件，输出到哪个目录中去
@@ -24,6 +29,7 @@ module.exports = {
   },
   //配置插件
   plugins: [
+    new WebpackBar(),
     //开发中，创建一个在内存中生成Html页面的插件。打包中，用来生成HTML文件并自动引用打包好的JS文件
     new HtmlWebpackPlugin({
       //模板文件路径
@@ -112,8 +118,10 @@ module.exports = {
       config: [__filename],
     },
   },
-  node: {
-    Buffer: false,
-    process: false,
-  },
+  //资源(asset)和入口起点超过指定文件限制
+  performance: {
+    hints: 'error',
+    maxAssetSize: 300000, // 整数类型（以字节为单位）
+    maxEntrypointSize: 500000 // 整数类型（以字节为单位）
+  }
 };

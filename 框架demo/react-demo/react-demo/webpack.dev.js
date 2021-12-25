@@ -8,7 +8,7 @@ const base = require("./webpack.base");
 const webpack = require("webpack");
 //进行合并，将webpack.base.conf.js中的配置合并到这
 module.exports = merge(base, {
-  //模块参数
+  //模块参数,会将 DefinePlugin 中 process.env.NODE_ENV 的值设置为 development
   mode: "development",
   devtool: "eval-cheap-module-source-map", // 现实对应报错文件的位置
   devServer: {

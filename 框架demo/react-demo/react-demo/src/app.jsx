@@ -3,7 +3,7 @@ import { routes } from "./route/index.js";
 import { Route, Link, Switch, Redirect } from "react-router-dom";
 import "./css/antd.css";
 import "./css/app.css";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu, Breadcrumb, Input } from "antd";
 import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
 import HomeNav from "./components/HomePage/Nav.jsx";
 
@@ -18,8 +18,6 @@ export default function App() {
     } else {
       setMenuWidth(256);
     }
-    console.log(menuWidth);
-    console.log(API);
     setCollapsed(!collapsed);
   };
   const router = [
@@ -85,14 +83,25 @@ export default function App() {
   return (
     <div style={{ width: "100%,", height: "100vh", overflow: "hidden" }}>
       <Layout>
-        <HomeNav />
+        <Header>
+          <HomeNav />
+        </Header>
+
         <Layout>
-          <Sider width={200} className="site-layout-background">
+          <Sider
+            width={200}
+            className="site-layout-background"
+            collapsible
+            onCollapse={toggleCollapsed}
+            theme={"light"}
+          >
+            {/* <div style={{ textAlign: "center" }} className="search">
+              <Input style={{ width: "100px" }} />
+            </div> */}
             <Menu
               mode="inline"
               defaultSelectedKeys={["1"]}
               defaultOpenKeys={["sub1"]}
-              style={{ height: "100%", borderRight: 0 }}
             >
               {routerDom}
             </Menu>
@@ -129,15 +138,6 @@ export default function App() {
             </Content>
           </Layout>
         </Layout>
-        {/* <Button
-          type="primary"
-          onClick={toggleCollapsed}
-          style={{ marginBottom: 16 }}
-        >
-          {React.createElement(
-            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
-          )}
-        </Button> */}
       </Layout>
     </div>
   );

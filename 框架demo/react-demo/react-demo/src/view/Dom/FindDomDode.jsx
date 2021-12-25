@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Typography, Button } from "antd";
+
+const { Title, Text } = Typography;
 const FindDomDode = function (props) {
   const handleGetDom = () => {
     let title = document.querySelector("#title");
@@ -7,8 +10,8 @@ const FindDomDode = function (props) {
   };
   return (
     <div>
-      <h1 id="title">测试节点</h1>
-      <button onClick={handleGetDom}>点击操作Dom</button>
+      <p id="title">测试节点</p>
+      <Button onClick={handleGetDom}>点击操作Dom</Button>
     </div>
   );
 };

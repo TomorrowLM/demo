@@ -7,7 +7,7 @@ import FatherWatchChild from "../../components/Dom/Ref/FatherWatchChild";
 import UseRef from "../../components/Dom/Ref/UseRef";
 import Different from "../../components/Dom/Ref/Different";
 import UseRefAlert from "../../components/Dom/Ref/UseRefAlert";
-const { Title } = Typography;
+const { Title,Text } = Typography;
 class Ref extends React.Component {
   constructor(props) {
     super(props);
