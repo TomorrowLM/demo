@@ -11,6 +11,7 @@ import Donghua from "./AntV-L7/donghua";
 export default function Dashboard() {
   return (
     <div className={styles.hello}>
+      <p>hello</p>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col span={12}>
           <Card

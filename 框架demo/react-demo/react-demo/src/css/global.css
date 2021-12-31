@@ -31,3 +31,7 @@ h1 {
 .site-layout .site-layout-background {
     background: #fff;
 }
+
+.login {
+    background: url("../img/bg.jpg")
+}

@@ -4,6 +4,7 @@ import { useHistory, Route } from "react-router-dom";
 import request from "../api/request";
 import { Row, Col } from "antd";
 import bg from "../img/bg.jpg"
+import "../css/global.css";
 const Login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
@@ -19,7 +20,7 @@ const Login = (props) => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div style={{width:"100%", height:"100vh", overflow:"hidden", background:"url("+bg+")"}}>
+    <div className="login" style={{width:"100%", height:"100vh", overflow:"hidden", }}>
       <Row style={{marginTop:'20vh', overflow:"hidden"}}>
         <Col xs={2} sm={4} md={4} lg={4} xl={4}></Col>
         <Col xs={20} sm={16} md={12} lg={12} xl={12}>

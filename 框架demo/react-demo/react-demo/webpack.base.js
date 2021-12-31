@@ -2,6 +2,9 @@ const path = require("path");
 const webpack = require("webpack");
 //生成创建Html入口文件
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+// 分离 css 到独立的文件中
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 //编译进度
 const WebpackBar = require("webpackbar");
 //分析编译时间
@@ -14,6 +17,7 @@ console.log("当前环境", NODE_ENV);
 module.exports = {
   //webpack 入口文件
   entry: path.resolve(__dirname, "./src/main.js"),
+  //多文件配置
   // entry: {
   //   pageOne: './src/pageOne/index.js',
   //   pageTwo: './src/pageTwo/index.js',
@@ -24,8 +28,11 @@ module.exports = {
     //指定打包好的文件，输出到哪个目录中去
     path: path.resolve(__dirname, "./dist"),
     //输出文件名
-    filename: "js/bundle.js",
-    // publicPath: '/static/',//publicPath是你启用服务器（webpack-dev-server/react-hot-loader）时的路径
+    filename: "js/bundle.[hash].js",
+    //静态文件打包存放的目录.静态文件是指 img 的src ,link ，script 标签等所指向的文件.静态资源最终访问路径 = output.publicPath + 资源loader或插件等配置路径
+    // publicPath: process.env.NODE_ENV === 'production'
+    // ? '/react-demo/'
+    // : '/',
   },
   //配置插件
   plugins: [
@@ -46,6 +53,10 @@ module.exports = {
       },
       hash: true,
     }),
+    new MiniCssExtractPlugin({
+      filename: `css/[name]-[hash].css`
+    }),
+    new CssMinimizerWebpackPlugin(),
     //定义全局变量
     new webpack.DefinePlugin({
       //定义全局变量
@@ -55,29 +66,30 @@ module.exports = {
   resolve: {
     modules: [path.resolve("node_modules")], //只在当前目录下查找
     extensions: [".js", ".jsx"],
+    alias: {
+      '@': path.resolve(__dirname, 'src/'),
+    },
   },
   //loader加载器模块配置
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ["style-loader",
+        use: [
+          //'style-loader', 'css-loader'
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            // options: {
-            //   modules: {
-            //     // localIdentName: "[local]___[hash:base64:5]",
-            //   },
-            // }
           },// 如果想要启用 CSS 模块化，可以为 css-loader 添加 modules 参数即可
         ]
       },
       {
         test: /\.less$/i,
         use: [
-          {
-            loader: 'style-loader', // 从 JS 中创建样式节点
-          },
+          // {
+          //   loader: 'style-loader', // 从 JS 中创建样式节点
+          // },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader', // 转化 CSS 为 CommonJS
             options: {
@@ -98,6 +110,11 @@ module.exports = {
       {
         test: /\.(png|svg|jpeg|jpg|gif)$/,
         type: "asset/resource",
+        generator: {
+          filename: 'img/[name].[hash:8].[ext]',
+          publicPath: '/react-demo/',
+        },
+
       },
       {
         test: /(\.jsx|\.js)$/,
@@ -120,8 +137,12 @@ module.exports = {
   },
   //资源(asset)和入口起点超过指定文件限制
   performance: {
-    hints: 'error',
-    maxAssetSize: 300000, // 整数类型（以字节为单位）
-    maxEntrypointSize: 500000 // 整数类型（以字节为单位）
+    hints: "error", // 枚举
+    maxAssetSize: 50000000, // 整数类型（以字节为单位）
+    maxEntrypointSize: 50000000, // 整数类型（以字节为单位）
+    assetFilter: function (assetFilename) {
+      // 提供资源文件名的断言函数
+      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+    }
   }
 };
