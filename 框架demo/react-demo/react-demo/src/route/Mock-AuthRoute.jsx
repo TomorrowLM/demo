@@ -5,28 +5,54 @@ import request from "../api/request";
 import { connect } from "react-redux";
 import { userInfo } from "../store/actions/userInfo";
 import App from "../app";
+// import { useAccess } from '../hooks/useAccess';
+import usePermissionModel from "../hox/access";
 
 const AuthRoute = (props) => {
   const { getuserInfo } = props;
   const history = useHistory();
   const [isCheckingTokenStatus, setIsCheckingTokenStatus] = useState(true);
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
-  useEffect(() => {
-    setToken(window.localStorage.getItem("token"));
+  //
+  const { set } = usePermissionModel();
+  const getUserInfo = () => {
     request.get("/users").then((res) => {
       if (res.status === 401) {
         history.push("/login");
-        setIsCheckingTokenStatus(false);
         return;
       }
+      setTimeout(() => {
+        setIsCheckingTokenStatus(false);
+      }, 10);
       const action = userInfo(res.data.data);
       getuserInfo(action);
     });
-  }, [token]);
-  return isCheckingTokenStatus ? (
-    <Route path="/" component={App} />
-  ) : (
-    <Spin tip="Loading..."></Spin>
+  };
+  const getAccess = () => {
+    request.get("/access").then((res) => {
+      console.log(res.data.data);
+      localStorage.setItem(
+        "access",
+        JSON.stringify({
+          menus: res.data.data.menus,
+          buttons: res.data.data.buttons,
+        })
+      );
+      set(res.data.data);
+    });
+  };
+  useEffect(() => {
+    getUserInfo();
+    getAccess();
+  }, []);
+  return (
+    <Spin
+      style={{ margin: "auto", position: "absolute", inset: 0, zIndex: 999 }}
+      size="large"
+      tip="loading"
+      spinning={isCheckingTokenStatus}
+    >
+      <Route path="/" component={App} />
+    </Spin>
   );
 };
 function mapStateToProps(state) {

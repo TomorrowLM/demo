@@ -8,6 +8,7 @@ var app = express();
 var usersRouter = require("./routes/users");
 var login = require("./routes/login");
 var token = require("./routes/token");
+var access = require("./routes/access");
 var test = require("./routes/test");
 var expressJwt = require("express-jwt");
 //配置ejs视图的目录
@@ -74,6 +75,7 @@ app.use(function (err, req, res, next) {
 app.use("/users", usersRouter);
 app.use("/login", login);
 app.use("/token", token);
+app.use("/access", access);
 app.use("/test", test);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

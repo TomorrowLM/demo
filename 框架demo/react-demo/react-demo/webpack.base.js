@@ -10,13 +10,16 @@ const WebpackBar = require("webpackbar");
 //分析编译时间
 //const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 // const smp = new SpeedMeasurePlugin();
+
 //配置域名环境
 const envConfig = require("./env");
 const NODE_ENV = process.env.NODE_ENV;
 console.log("当前环境", NODE_ENV);
 module.exports = {
   //webpack 入口文件
-  entry: path.resolve(__dirname, "./src/main.js"),
+  entry: {
+   app: path.resolve(__dirname, "./src/main.js"),
+  },
   //多文件配置
   // entry: {
   //   pageOne: './src/pageOne/index.js',
@@ -29,7 +32,7 @@ module.exports = {
     path: path.resolve(__dirname, "./dist"),
     //输出文件名
     filename: "js/bundle.[hash].js",
-    //静态文件打包存放的目录.静态文件是指 img 的src ,link ，script 标签等所指向的文件.静态资源最终访问路径 = output.publicPath + 资源loader或插件等配置路径
+    //静态文件打包存放的目录.静态文件是指项目中引用css，js，img等资源时候的一个基础路径.静态资源最终访问路径 = output.publicPath + 资源loader或插件等配置路径
     // publicPath: process.env.NODE_ENV === 'production'
     // ? '/react-demo/'
     // : '/',
@@ -52,6 +55,7 @@ module.exports = {
         collapseWhitespace: true, //压缩成一行，
       },
       hash: true,
+      // cdn: assetsCDN
     }),
     new MiniCssExtractPlugin({
       filename: `css/[name]-[hash].css`
@@ -110,11 +114,6 @@ module.exports = {
       {
         test: /\.(png|svg|jpeg|jpg|gif)$/,
         type: "asset/resource",
-        generator: {
-          filename: 'img/[name].[hash:8].[ext]',
-          publicPath: '/react-demo/',
-        },
-
       },
       {
         test: /(\.jsx|\.js)$/,
@@ -124,6 +123,12 @@ module.exports = {
       },
     ],
   },
+  //通过script标签外部链接引入公共库文件，减少打包速度和公共包体积
+  // externals: {
+  //   'react': 'React',
+  //   'react-dom': 'ReactDOM',
+  //   'jquery': 'jQuery',
+  // },
   //缓存生成的 webpack 模块和 chunk，能够改善构建速度
   cache: {
     type: "filesystem",
@@ -136,13 +141,13 @@ module.exports = {
     },
   },
   //资源(asset)和入口起点超过指定文件限制
-  performance: {
-    hints: "error", // 枚举
-    maxAssetSize: 50000000, // 整数类型（以字节为单位）
-    maxEntrypointSize: 50000000, // 整数类型（以字节为单位）
-    assetFilter: function (assetFilename) {
-      // 提供资源文件名的断言函数
-      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
-    }
-  }
+  // performance: {
+  //   hints: "error", // 枚举
+  //   maxAssetSize: 50000000, // 整数类型（以字节为单位）
+  //   maxEntrypointSize: 50000000, // 整数类型（以字节为单位）
+  //   assetFilter: function (assetFilename) {
+  //     // 提供资源文件名的断言函数
+  //     return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+  //   }
+  // }
 };

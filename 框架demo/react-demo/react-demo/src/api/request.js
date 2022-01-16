@@ -10,13 +10,14 @@ import { BrowserRouter } from 'react-router-dom'
 const router = new BrowserRouter()
 
 const API_BASE_URLS = {
-  development: "http://121.40.61.99:3600/",
+  development: "http://localhost:3600/",
   production: "http://121.40.61.99:3600/"
 };
-console.log(123, process.env.NODE_ENV);
+
 const request = axios.create({
   baseURL: API_BASE_URLS[process.env.NODE_ENV],
 });
+
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
   201: "新建或修改数据成功。",
@@ -47,7 +48,7 @@ function showLoading() {
 
     })
     document.body.appendChild(dom)
-    ReactDOM.render(<Spin tip="努力加载中..." delay={1000} size="large" />, dom)
+    ReactDOM.render(<Spin tip="努力加载中..." delay={2000} size="large" />, dom)
   }
   requestCount += 1;
 }

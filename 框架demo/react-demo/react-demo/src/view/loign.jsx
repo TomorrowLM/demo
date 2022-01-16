@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useHistory, Route } from "react-router-dom";
 import request from "../api/request";
 import { Row, Col } from "antd";
-import bg from "../img/bg.jpg"
 import "../css/global.css";
 const Login = (props) => {
   const history = useHistory();

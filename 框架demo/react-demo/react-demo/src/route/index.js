@@ -11,71 +11,201 @@ import Router from "../view/Router"
 import Second from "../view/Router/second";
 import AHooks from "../view/ahooks";
 import Hox from "../view/Store/Hox";
+import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
+import React  from "react";
+
+// export const routes = [
+//   {
+//     path: "dashboard",
+//     component: Dashboard,
+//     exact: true,
+//   },
+//   {
+//     path: "store",
+//     component: Store,
+//     exact: true,
+//   },
+//   {
+//     path: "hox",
+//     component: Hox,
+//     exact: true,
+//   },
+//   {
+//     path: "communicate",
+//     component: Communicate,
+//     exact: true,
+//   },
+//   {
+//     path: "onRef",
+//     component: OnRef,
+//     exact: true,
+//   },
+//   {
+//     path: "findDomDode",
+//     component: FindDomDode,
+//     exact: true,
+//   },
+//   {
+//     path: "ref",
+//     component: Ref,
+//     exact: true,
+//   },
+//   {
+//     path: "classHooks",
+//     component: ClassHooks,
+//     exact: true,
+//   },
+//   {
+//     path: "functionHooks",
+//     component: FunctionHooks,
+//     exact: true,
+//   },
+//   {
+//     path: "ahooks",
+//     component: AHooks,
+//     exact: true,
+//   },
+//   {
+//     path: "reactSortable",
+//     component: ReactSortable,
+//     exact: true,
+//   },
+//   {
+//     path: "router",
+//     component: Router,
+//     exact: false,
+//   },
+// ];
+
+
 export const routes = [
   {
-    path: "dashboard",
+    name: "首页",
+    path: "/",
     component: Dashboard,
-    exact: true,
+    icon: <DesktopOutlined />,
+    isMenu: 1
   },
   {
-    path: "store",
-    component: Store,
-    exact: true,
+    name: '状态管理器',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "store",
+        path: "/store/store",
+        component: 'Store/Store',
+        icon: <DesktopOutlined />,
+      },
+      {
+        name: "hox",
+        path: "/store/hox",
+        component: "Store/Hox",
+        icon: <DesktopOutlined />,
+      }
+    ]
   },
   {
-    path: "hox",
-    component: Hox,
-    exact: true,
+    name: 'ref',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "onRef",
+        path: "/dom/onRef",
+        component: 'Dom/OnRef',
+        icon: <DesktopOutlined />
+      },
+      {
+        name: "findDomDode",
+        path: "/dom/findDomDode",
+        component: 'Dom/FindDomDode',
+        icon: <DesktopOutlined />
+      },
+      {
+        name: "ref",
+        path: "/dom/ref",
+        component: 'Dom/Ref',
+        icon: <DesktopOutlined />
+      },
+    ]
   },
   {
-    path: "communicate",
-    component: Communicate,
-    exact: true,
+    name: '交流',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "communicate",
+        path: "/communicate",
+        component: 'Communicate/Communicate',
+        icon: <DesktopOutlined />
+      }
+    ]
   },
   {
-    path: "onRef",
-    component: OnRef,
-    exact: true,
+    name: 'hooks',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "ClassHooks",
+        path: "/hooks/classhooks",
+        component: 'Hooks/ClassHooks',
+        icon: <DesktopOutlined />
+      },
+      {
+        name: "functionHooks",
+        path: "/hooks/functionHooks",
+        component: 'Hooks/FunctionHooks',
+        icon: <DesktopOutlined />,
+      },
+      {
+        name: "ahooks",
+        path: "/hooks/ahooks",
+        component: 'Hooks/AHooks',
+        icon: <DesktopOutlined />
+      }
+    ]
   },
   {
-    path: "findDomDode",
-    component: FindDomDode,
-    exact: true,
+    name: '特效',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "reactSortable",
+        path: "/reactSortable/reactSortable",
+        component: 'ReactSortable/ReactSortable',
+        icon: <DesktopOutlined />,
+      },
+
+    ]
   },
   {
-    path: "ref",
-    component: Ref,
-    exact: true,
+    name: '路由',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "路由",
+        path: "/router",
+        component: 'Router/Router',
+        icon: <DesktopOutlined />
+      }
+    ]
   },
   {
-    path: "classHooks",
-    component: ClassHooks,
-    exact: true,
-  },
-  {
-    path: "functionHooks",
-    component: FunctionHooks,
-    exact: true,
-  },
-  {
-    path: "ahooks",
-    component: AHooks,
-    exact: true,
-  },
-  {
-    path: "reactSortable",
-    component: ReactSortable,
-    exact: true,
-  },
-  {
-    path: "router",
-    component: Router,
-    exact: false,
-  },
-  // {
-  //   path: "authority",
-  //   component: Authority,
-  //   exact: false,
-  //   authority: admin
-  // }
+    name: '权限',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "权限",
+        path: "/access",
+        component: 'Access',
+        icon: <DesktopOutlined />
+      }
+    ]
+  }
 ];

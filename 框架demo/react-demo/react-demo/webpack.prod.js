@@ -9,8 +9,6 @@ module.exports = merge(base, {
   //会将 DefinePlugin 中 process.env.NODE_ENV 的值设置为 production
   mode: "production",
   devtool: 'source-map',
-  // 第三方包入口
-  // vendor: ['react', 'react-router', 'react-redux', 'moment', 'antd'],
   plugins: [
     //使用插件定义全局变量DEV
     new webpack.DefinePlugin({
@@ -21,4 +19,19 @@ module.exports = merge(base, {
       path: "./dist",
     }),
   ],
+  // 第三方包入口
+    // 从 CDN 引入 jQuery，而不是把它打包
+    // vendor: ['react', 'react-router', 'react-redux', 'moment', 'antd'],
+  // splitChunks: {
+  //   cacheGroups: {
+  //     commons: {
+  //       test: /[\\/]node_modules[\\/]/,
+  //       name: 'vendors',
+  //       chunks: 'all',
+  //     }
+  //   }
+  // },
+  module: {
+
+  },
 });

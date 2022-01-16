@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <p>请输入</p>
+    <textarea rows="10" cols="30">
+    </textarea>
+</body>
+<script>
+  const a = 'abcdefghijklmnopqrstuvwxtz'
+  // 获取单词转化的重量
+  const exchangeNum = (val) => {
+    if(!val){
+      return -1
+    }
+    let arr = val.split('')
+    arr = arr.map((value,index) => {
+      value = value.toLocaleLowerCase()
+      //是字母
+      if(a.includes(value)){
+        return a.indexOf(value)
+      }
+      return 0
+    })
+    return arr.reduce((total, num)=>{return total + num})
+  }
+  // 获取数组中指定个数的几个最大值
+  function maxarr(arr,len){
+      var max = [];
+    arr.sort(function(a,b){
+       return a-b;
+   });
+   for(var i=0;i<len;i++){
+       max.push(arr.pop());
+   }
+   return max.reverse();
+  }
+
+  // 获取前 3 个最重的素词索引
+  const getPrimeNumArr = (val) => {
+    let arr = val.map((value,index) => {
+      // console.log(value)
+      // 计算素数
+      if(value !== 0 || value !== 1 || value !== 2 || value !== 3){
+        if((value/2)%1===0 || (value/3)%1===0){
+          return -1
+        }
+        return value
+      }else{
+        return value
+      }
+    })
+    let arrNew = [...arr]
+    let position = maxarr(arrNew,3).map((value)=>{
+      return arr.indexOf(value)
+    });
+    position = position.sort((a, b) => b - a)
+    console.log(arr,position)
+    return position
+  }
+
+  document.getElementsByTagName('textarea')[0].addEventListener('change',(e)=>{
+    console.log(e.target.value);
+    // 获取值
+    let inputVal = e.target.value
+    // 替换换行
+    inputVal = inputVal.replace(/\n/g,' ')
+    // 替换多个空格
+    inputVal = inputVal.replace(/ +/g,' ')
+    // 转化成字母数组
+    let inputArr = inputVal.split(' ')
+    console.log(inputArr);
+    // 获取单词转化的重量
+    let inputNumArr = inputArr.map((value)=>{return exchangeNum(value)})
+    // 获取前 3 个最重的素词索引值
+    let primeIndexArr = getPrimeNumArr(inputNumArr)
+    // 获取前 3 个最重的素词
+    primeIndexArr = primeIndexArr.map((value,index)=>{
+      if(inputArr[value]){
+        return inputArr[value]
+      }
+      return `没有第${index}个素数`
+    })
+    console.log(primeIndexArr);
+    alert(primeIndexArr)
+  })
+</script>
+</html>

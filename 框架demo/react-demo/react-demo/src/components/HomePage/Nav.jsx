@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
-import { Route, Link, Switch, Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Layout, Menu, Row, Col, Dropdown } from "antd";
 import { connect } from "react-redux";
-import request from "../../api/request";
-import { userInfo } from "../../store/actions/userInfo";
-import { DownOutlined } from "@ant-design/icons";
+
 const HomeNav = (props) => {
   const { Header } = Layout;
-  const { info, getuserInfo } = props;
+  const { info } = props;
   const history = useHistory()
   const signOut = () => {
-    console.log(history);
     window.localStorage.setItem('token','')
     window.location.hash = "/login"
   }
@@ -24,13 +21,6 @@ const HomeNav = (props) => {
       </Menu.Item>
     </Menu>
   );
-  // useEffect(() => {
-  //   request.get("/users").then((res) => {
-  //     const action = userInfo(res.data.data);
-  //     // store.dispatch(action);
-  //     getuserInfo(action);
-  //   });
-  // }, []);
   return (
     <Header className="header">
       <Row
@@ -39,9 +29,6 @@ const HomeNav = (props) => {
           { xs: 8, sm: 16, md: 24, lg: 32 },
         ]}
       >
-        {/* <Col span={2}>
-          <div className="logo" />
-        </Col> */}
         <Col span={22}>
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
             <Menu.Item key="1">nav 1</Menu.Item>
@@ -62,7 +49,6 @@ const HomeNav = (props) => {
 };
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     info: state.userInfo,
   };

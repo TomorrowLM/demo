@@ -6,7 +6,7 @@ import store from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import request from "../../api/request";
 import { userInfo } from "../../store/actions/userInfo";
-import useCounterModel from "../../components/Hox/CreateModal";
+import useCounterModel from "../../hox/CreateModal";
 import { Typography, Divider } from "antd";
 
 const { Title, Text } = Typography;
@@ -23,11 +23,11 @@ const Store = function (props) {
     // store.dispatch(increment())
     request.get("/users").then((res) => {
       const action = userInfo(res.data.data);
+      console.log(res.data.data);
       // getuserInfo(action);
-      store.dispatch(action);
+      // store.dispatch(action);
     });
   }, []);
-  console.log(info);
   return (
     <div>
       <Title level={4}>couter例子</Title>
@@ -60,7 +60,6 @@ const Store = function (props) {
 };
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     count: state.counter.count,
     info: state.userInfo,

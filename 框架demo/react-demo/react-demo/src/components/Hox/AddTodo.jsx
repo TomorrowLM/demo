@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useCounterModel from "./CreateModal";
+import useCounterModel from "../../hox/CreateModal";
 import { Button } from "antd";
 import { Typography, Divider } from "antd";
 
