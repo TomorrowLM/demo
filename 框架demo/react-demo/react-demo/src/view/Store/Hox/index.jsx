@@ -1,5 +1,5 @@
 import React from "react";
-import AddTodo from "../../components/Hox/AddTodo";
+import AddTodo from "./components/AddTodo";
 // import TodoList from "../../components/TodoList";
 // import VisibilityFilters from "../../components";
 export default function Hox(props) {

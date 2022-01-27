@@ -1,6 +1,6 @@
 import React from "react";
 import usePermissionModel from "../../hox/access";
-import WithAccess from '../../components/WithAccess'
+import WithAccess from './components'
 import { Row, Col, Button, Tooltip, Modal, Space, message } from 'antd';
 import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
 

@@ -5,15 +5,15 @@ import request from "../api/request";
 import { connect } from "react-redux";
 import { userInfo } from "../store/actions/userInfo";
 import App from "../app";
-// import { useAccess } from '../hooks/useAccess';
 import usePermissionModel from "../hox/access";
 
 const AuthRoute = (props) => {
   const { getuserInfo } = props;
   const history = useHistory();
   const [isCheckingTokenStatus, setIsCheckingTokenStatus] = useState(true);
-  //
+
   const { set } = usePermissionModel();
+  //保存用户信息
   const getUserInfo = () => {
     request.get("/users").then((res) => {
       if (res.status === 401) {
@@ -27,9 +27,9 @@ const AuthRoute = (props) => {
       getuserInfo(action);
     });
   };
+  //保存路由权限
   const getAccess = () => {
     request.get("/access").then((res) => {
-      console.log(res.data.data);
       localStorage.setItem(
         "access",
         JSON.stringify({

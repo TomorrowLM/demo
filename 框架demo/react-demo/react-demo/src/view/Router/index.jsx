@@ -1,7 +1,7 @@
 import React from "react";
-import { Route, Link, Switch, Redirect, IndexRedirect } from "react-router-dom";
-import Second from "./second";
-import Child from "./Child";
+import { Route, Link, Switch } from "react-router-dom";
+import Second from "./Second";
+
 export default function Router(params) {
   return (
     <div>
@@ -14,10 +14,10 @@ export default function Router(params) {
           <Link to="/router/second/12">2</Link>
         </li>
       </ul>
-      <Switch>
-        <Route exact path="/router/second/:id" component={Second}>
+      {/* <Switch>
+        <Route exact path="router/second/:id" component={Second}>
         </Route>
-      </Switch>
+      </Switch> */}
     </div>
   );
 }

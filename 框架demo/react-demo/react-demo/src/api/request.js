@@ -10,7 +10,7 @@ import { BrowserRouter } from 'react-router-dom'
 const router = new BrowserRouter()
 
 const API_BASE_URLS = {
-  development: "http://localhost:3600/",
+  development: "http://121.40.61.99:3600/",
   production: "http://121.40.61.99:3600/"
 };
 

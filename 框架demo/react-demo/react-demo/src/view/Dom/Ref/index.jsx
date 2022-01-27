@@ -1,12 +1,12 @@
 import React from "react";
-import Child from "../../components/Dom/Ref/Child";
-import FunctionChild from "../../components/Dom/Ref/FunctionChild";
+import Child from "./components/Child";
+import FunctionChild from "./components/FunctionChild";
 import { Typography } from "antd";
-import CallbackRefs from "../../components/Dom/Ref/CallbackRefs";
-import FatherWatchChild from "../../components/Dom/Ref/FatherWatchChild";
-import UseRef from "../../components/Dom/Ref/UseRef";
-import Different from "../../components/Dom/Ref/Different";
-import UseRefAlert from "../../components/Dom/Ref/UseRefAlert";
+import CallbackRefs from "./components/CallbackRefs";
+import FatherWatchChild from "./components/FatherWatchChild";
+import UseRef from "./components/UseRef";
+import Different from "./components/Different";
+import UseRefAlert from "./components/UseRefAlert";
 const { Title,Text } = Typography;
 class Ref extends React.Component {
   constructor(props) {

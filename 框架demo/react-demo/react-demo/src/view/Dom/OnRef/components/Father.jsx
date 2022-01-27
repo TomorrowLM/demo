@@ -1,6 +1,6 @@
 // 父组件
 import React from "react";
-import Son from "./son";
+import Son from "./Son";
 import { Button, Divider } from "antd";
 class Father extends React.Component {
   constructor(props) {

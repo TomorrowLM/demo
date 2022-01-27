@@ -1,19 +1,13 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
-import ReactDOM from "react-dom";
+import React, { useState, lazy, Suspense } from "react";
 import { routes } from "./route/index.js";
-import { Route, Link, Switch, Redirect } from "react-router-dom";
-import { useHistory } from "react-router-dom";
-import "./css/antd.css";
-import "./css/app.css";
-import { Layout, Menu, Breadcrumb, Input, Spin } from "antd";
-import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
+import { Route, Link, Switch } from "react-router-dom";
+import { Layout, Menu, Breadcrumb } from "antd";
+import { LaptopOutlined } from "@ant-design/icons";
 import HomeNav from "./components/HomePage/Nav.jsx";
-import request from "./api/request";
-// import { useAccess } from './hooks/useAccess';
-// import permission from "./hox/permission.js";
+import Second from "./view/Router/Child.jsx";
+import "./global.less";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
   const { SubMenu } = Menu;
   const [collapsed, setCollapsed] = useState(false);
   const [menuWidth, setMenuWidth] = useState(256);
@@ -39,11 +33,12 @@ export default function App() {
       return value.children;
     }
   });
-  const routerDom = router.map((subVal, index) => {
-    if (index == 0) {
+  console.log(router)
+  const routerDom = router.map((routerVal, index) => {
+    if (routerVal.hasOwnProperty('isMenu')) {
       return (
-        <Menu.Item key={index + 1} icon={subVal[0].icon}>
-          <Link to={subVal[0].path}>{subVal[0].name}</Link>
+        <Menu.Item key={title} icon={routerVal[0].icon}>
+          <Link to={routerVal[0].path}>{routerVal[0].name}</Link>
         </Menu.Item>
       );
     } else {
@@ -54,7 +49,7 @@ export default function App() {
           icon={<LaptopOutlined />}
           title={subTitle[subIndex - 2]}
         >
-          {subVal.map((menuVal, menuIndex) => {
+          {routerVal.map((menuVal, menuIndex) => {
             keyIndex = keyIndex + 1;
             return (
               <Menu.Item key={keyIndex} icon={menuVal.icon}>
@@ -124,8 +119,12 @@ export default function App() {
               <div style={{ width: "100%" }}>
                 <Switch>
                   <Suspense fallback={<div>Loading...</div>}>
-                    {/* < fallback={<div>Loading...</div>}> */}
                     {mapRouteMethod(routes)}
+                    <Route
+                      exact
+                      path="router/second/:id"
+                      component={Second}
+                    ></Route>
                     {/* <Redirect to="" /> */}
                   </Suspense>
                 </Switch>

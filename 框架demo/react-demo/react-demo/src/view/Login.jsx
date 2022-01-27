@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { useHistory, Route } from "react-router-dom";
 import request from "../api/request";
 import { Row, Col } from "antd";
-import "../css/global.css";
+
+import styles from './index.less'
+
 const Login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
@@ -19,7 +21,7 @@ const Login = (props) => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div className="login" style={{width:"100%", height:"100vh", overflow:"hidden", }}>
+    <div className={styles.login} style={{backgroundImage:`url(img/bg.jpg)`}}>
       <Row style={{marginTop:'20vh', overflow:"hidden"}}>
         <Col xs={2} sm={4} md={4} lg={4} xl={4}></Col>
         <Col xs={20} sm={16} md={12} lg={12} xl={12}>

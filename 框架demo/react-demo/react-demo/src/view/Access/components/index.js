@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { useAccess } from '../../hooks/useAccess';
-import usePermissionModel from '../../hox/access';
+import { useAccess } from '../../../hooks/useAccess';
+import usePermissionModel from '../../../hox/access';
 import { Row, Col, Button, Tooltip, Modal, Space, message } from 'antd';
 
 /**
