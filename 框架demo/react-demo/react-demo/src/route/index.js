@@ -72,6 +72,7 @@ export const routes = [
     name: "首页",
     title: "首页",
     path: "/",
+    exact: true,
     component: Dashboard,
     icon: <DesktopOutlined />,
     isMenu: 1
@@ -84,7 +85,6 @@ export const routes = [
       {
         name: "store",
         title: "store",
-        key: 0,
         path: "/store/store",
         component: 'Store/Store',
         icon: <DesktopOutlined />,
@@ -92,118 +92,117 @@ export const routes = [
       {
         name: "hox",
         title: "hox",
-        key: 1,
         path: "/store/hox",
         component: "Store/Hox",
         icon: <DesktopOutlined />,
       }
     ]
   },
-  // {
-  //   name: 'ref',
-  //   icon: <LaptopOutlined />,
-  //   isMenu: 1,
-  //   children: [
-  //     {
-  //       name: "onRef",
-  //       path: "/dom/onRef",
-  //       component: 'Dom/OnRef',
-  //       icon: <DesktopOutlined />
-  //     },
-  //     {
-  //       name: "findDomDode",
-  //       path: "/dom/findDomDode",
-  //       component: 'Dom/FindDomDode',
-  //       icon: <DesktopOutlined />
-  //     },
-  //     {
-  //       name: "ref",
-  //       path: "/dom/ref",
-  //       component: 'Dom/Ref',
-  //       icon: <DesktopOutlined />
-  //     },
-  //   ]
-  // },
-  // {
-  //   name: '交流',
-  //   icon: <LaptopOutlined />,
-  //   isMenu: 1,
-  //   children: [
-  //     {
-  //       name: "communicate",
-  //       path: "/communicate",
-  //       component: 'Communicate/Communicate',
-  //       icon: <DesktopOutlined />
-  //     }
-  //   ]
-  // },
-  // {
-  //   name: 'hooks',
-  //   icon: <LaptopOutlined />,
-  //   isMenu: 1,
-  //   children: [
-  //     {
-  //       name: "类组件",
-  //       path: "/hooks/classhooks",
-  //       component: 'Hooks/ClassHooks',
-  //       icon: <DesktopOutlined />
-  //     },
-  //     {
-  //       name: "函数组件",
-  //       path: "/hooks/functionHooks",
-  //       component: 'Hooks/FunctionHooks',
-  //       icon: <DesktopOutlined />,
-  //     },
-  //     {
-  //       name: "ahooks",
-  //       path: "/hooks/ahooks",
-  //       component: 'Hooks/AHooks',
-  //       icon: <DesktopOutlined />
-  //     }
-  //   ]
-  // },
-  // {
-  //   name: '特效',
-  //   icon: <LaptopOutlined />,
-  //   isMenu: 1,
-  //   children: [
-  //     {
-  //       name: "reactSortable",
-  //       path: "/specialEffects/reactSortable",
-  //       component: 'SpecialEffects/ReactSortable/index',
-  //       icon: <DesktopOutlined />,
-  //     },
-  //   ]
-  // },
-  // {
-  //   name: '路由',
-  //   icon: <LaptopOutlined />,
-  //   isMenu: 1,
-  //   children: [
-  //     {
-  //       name: "路由",
-  //       path: "/router",
-  //       component: 'Router',
-  //       icon: <DesktopOutlined />
-  //     }
-  //   ]
-  // },
-  // {
-  //   name: '权限',
-  //   icon: <LaptopOutlined />,
-  //   isMenu: 1,
-  //   children: [
-  //     {
-  //       name: "权限",
-  //       path: "/access",
-  //       component: 'Access',
-  //       icon: <DesktopOutlined />
-  //     }
-  //   ]
-  // },
   {
-    name: 'router',
-    // icon: <LaptopOutlined />,
-    isMenu: 0,
-  }
+    name: 'ref',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "onRef",
+        path: "/dom/onRef",
+        component: 'Dom/OnRef',
+        icon: <DesktopOutlined />
+      },
+      {
+        name: "findDomDode",
+        path: "/dom/findDomDode",
+        component: 'Dom/FindDomDode',
+        icon: <DesktopOutlined />
+      },
+      {
+        name: "ref",
+        path: "/dom/ref",
+        component: 'Dom/Ref',
+        icon: <DesktopOutlined />
+      },
+    ]
+  },
+  {
+    name: '交流',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "communicate",
+        path: "/communicate",
+        component: 'Communicate/Communicate',
+        icon: <DesktopOutlined />
+      }
+    ]
+  },
+  {
+    name: 'hooks',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "类组件",
+        path: "/hooks/classhooks",
+        component: 'Hooks/ClassHooks',
+        icon: <DesktopOutlined />
+      },
+      {
+        name: "函数组件",
+        path: "/hooks/functionHooks",
+        component: 'Hooks/FunctionHooks',
+        icon: <DesktopOutlined />,
+      },
+      {
+        name: "ahooks",
+        path: "/hooks/ahooks",
+        component: 'Hooks/AHooks',
+        icon: <DesktopOutlined />
+      }
+    ]
+  },
+  {
+    name: '特效',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "reactSortable",
+        path: "/specialEffects/reactSortable",
+        component: 'SpecialEffects/ReactSortable/index',
+        icon: <DesktopOutlined />,
+      },
+    ]
+  },
+  {
+    name: '路由',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "路由",
+        path: "/router",
+        component: 'Router',
+        icon: <DesktopOutlined />
+      }
+    ]
+  },
+  {
+    name: '权限',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "权限",
+        path: "/access",
+        component: 'Access',
+        icon: <DesktopOutlined />
+      }
+    ]
+  },
+  // {
+  //   name: 'router',
+  //   // icon: <LaptopOutlined />,
+  //   isMenu: 0,
+  // }
 ];

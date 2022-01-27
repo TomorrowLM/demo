@@ -4,7 +4,6 @@ import { Route, Link, Switch } from "react-router-dom";
 import { Layout, Menu, Breadcrumb } from "antd";
 import { LaptopOutlined } from "@ant-design/icons";
 import HomeNav from "./components/HomePage/Nav.jsx";
-import Second from "./view/Router/Child.jsx";
 import "./global.less";
 
 export default function App() {
@@ -25,7 +24,7 @@ export default function App() {
   const subTitle = [];
   let keyIndex = 1;
   let subIndex = 1;
-  const router = routes.map((value, index) => {
+  let router = routes.map((value, index) => {
     if (value.isMenu === 1 && !value.children) {
       return [value];
     } else if (value.isMenu === 1 && value.children) {
@@ -33,11 +32,11 @@ export default function App() {
       return value.children;
     }
   });
-  console.log(router)
+  router = router.filter((value) => value);
   const routerDom = router.map((routerVal, index) => {
-    if (routerVal.hasOwnProperty('isMenu')) {
+    if (routerVal[0].hasOwnProperty("isMenu")) {
       return (
-        <Menu.Item key={title} icon={routerVal[0].icon}>
+        <Menu.Item key={routerVal[0].title} icon={routerVal[0].icon}>
           <Link to={routerVal[0].path}>{routerVal[0].name}</Link>
         </Menu.Item>
       );
@@ -61,11 +60,13 @@ export default function App() {
       );
     }
   });
-  //权限
+
+  //生成路由dom
   const mapRouteMethod = (data) => {
-    return data.map(({ path, component, children }, index) => {
+    return data.map(({ path, component, children, exact }, index) => {
       let Component;
       if (path) {
+        //懒加载
         Component =
           typeof component !== "string"
             ? component
@@ -75,7 +76,12 @@ export default function App() {
         return mapRouteMethod(children);
       }
       return (
-        <Route key={index} exact={true} path={path} component={Component} />
+        <Route
+          key={index}
+          exact={exact ? exact : false}
+          path={path}
+          component={Component}
+        />
       );
     });
   };
@@ -120,12 +126,6 @@ export default function App() {
                 <Switch>
                   <Suspense fallback={<div>Loading...</div>}>
                     {mapRouteMethod(routes)}
-                    <Route
-                      exact
-                      path="router/second/:id"
-                      component={Second}
-                    ></Route>
-                    {/* <Redirect to="" /> */}
                   </Suspense>
                 </Switch>
               </div>
