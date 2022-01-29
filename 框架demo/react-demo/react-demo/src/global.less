@@ -21,3 +21,23 @@ a {
 h1 {
     margin: 0;
 }
+
+:global {
+    .ant-layout-sider-children {
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    .ant-layout-sider-children::-webkit-scrollbar {
+        display: none
+    }
+
+    .ant-layout-content{
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+
+    .ant-layout-content::-webkit-scrollbar {
+        display: none
+    }
+}

@@ -200,6 +200,19 @@ export const routes = [
       }
     ]
   },
+    {
+    name: 'antd',
+    icon: <LaptopOutlined />,
+    isMenu: 1,
+    children: [
+      {
+        name: "表单",
+        path: "/form",
+        component: 'Antd/Form',
+        icon: <DesktopOutlined />
+      }
+    ]
+  },
   // {
   //   name: 'router',
   //   // icon: <LaptopOutlined />,
