@@ -18,7 +18,7 @@ console.log("当前环境", NODE_ENV);
 module.exports = {
   //webpack 入口文件
   entry: {
-   app: path.resolve(__dirname, "./src/main.js"),
+    app: path.resolve(__dirname, "./src/main.js"),
   },
   //多文件配置
   // entry: {
@@ -32,10 +32,11 @@ module.exports = {
     path: path.resolve(__dirname, "./dist"),
     //输出文件名
     filename: "js/bundle.[hash].js",
-    //静态文件打包存放的目录.静态文件是指项目中引用css，js，img等资源时候的一个基础路径.静态资源最终访问路径 = output.publicPath + 资源loader或插件等配置路径
+    // 静态文件打包存放的目录.静态文件是指项目中引用css，js，img等资源时候的一个基础路径.静态资源最终访问路径 = output.publicPath + 资源loader或插件等配置路径
     // publicPath: process.env.NODE_ENV === 'production'
     // ? '/react-demo/'
     // : '/',
+    assetModuleFilename: 'img/[name].[hash:10][ext]'
   },
   //配置插件
   plugins: [
@@ -112,8 +113,45 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|svg|jpeg|jpg|gif)$/,
+        test: /\.(png|svg|jpeg|jpg|gif)$/i,
+        // use: [
+        //   {
+        //     loader: 'url-loader',
+        //     //属性配置
+        //     options: {
+        //       //图片大小小于8kb,就会被base64处理
+        //       //优点：减少请求数量（减轻服务器压力）
+        //       //缺点：图片体积会变大（文件请求速度更慢）
+        //       limit: 8 * 1024,
+        //       //问题：因为url-loader默认使用es6模块化解析，而html-loader引入图片是commonjs
+        //       //解析式会出现而问题：[object Module]
+        //       //解决：关闭url-loader的es6模块化，使用commonjs解析
+        //       esModule: true,
+        //       //[hash:10]去图片的hash的前10位,[ext]取文件原来的扩展民
+        //       // name: '[name].[hash:10].[ext]',
+        //       //设置存放图片的文件夹
+        //       outputPath: 'img'
+        //     },
+        //   }
+        // ],
+        //webpack5
         type: "asset/resource",
+        // generator: {
+        //   filename: 'img/[name].[hash:6][ext]',
+        //   publicPath: './'
+        // },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024 // 限制于 8kb
+          }
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i, //加载字体资源
+        type: 'asset/resource',
+        generator: {
+          filename: "font/[name].[hash:4][ext]"
+        },
       },
       {
         test: /(\.jsx|\.js)$/,

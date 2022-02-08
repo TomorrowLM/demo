@@ -5,9 +5,17 @@ import { Provider } from "react-redux";
 import store from "./store";
 import Login from "./view/Login";
 import AuthRoute from "./route/Mock-AuthRoute";
+import VConsole from 'vconsole';
+import { IsPC } from "./utils";
 
 import "./global.less";
 import "antd/dist/antd.css";
+
+// if (IsPC) {
+//   const vConsole = new VConsole();
+//   // 调用 console 方法输出日志
+//   console.log('Hello world');
+// }
 
 ReactDom.render(
   // Provider下的所有组件可以通过connect来获取store上存储的数据

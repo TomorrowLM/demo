@@ -66,7 +66,7 @@ const TroubleModal = (props) => {
         onCancel={setFalse}
         getContainer={false}
         width={600}
-        title='问卷全局免打扰设置'
+        title='投放设置'
         okButtonProps={{ htmlType: 'submit', form: 'editForm' }}
       >
         <div>
@@ -122,12 +122,6 @@ const TroubleModal = (props) => {
               </Space>
             </div>
           </Form>
-          <div>
-            <p>*注意：</p>
-            <div>1.问卷免打扰的设置条件在以下场景起作用：
-              短信投放、邮件投放、公众号投放</div>
-            <div>2.同一企业下的任何一个账号设置了免打扰条件，该条件对企业所有的问卷投放生效</div>
-          </div>
         </div>
       </Modal>
       <Button onClick={setTrue}>form+modal+dependencies</Button>

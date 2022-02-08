@@ -1,0 +1,1 @@
+{"version":3,"file":"js/694.bundle.3ec5e42d6ae376ae2a2a.js","mappings":"uJACe,SAAgBA,GAC7B,OAAO,6CAFT,I,OAAA,W","sources":["webpack://demo/./src/view/Hooks/AHooks.jsx"],"sourcesContent":["import React from \"react\";\r\nexport default function AHooks(props) {\r\n  return <div>child</div>;\r\n}\r\n"],"names":["props"],"sourceRoot":""}

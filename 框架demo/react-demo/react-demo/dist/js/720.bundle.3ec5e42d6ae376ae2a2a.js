@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkdemo=self.webpackChunkdemo||[]).push([[720],{41720:(e,t,u)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.default=function(e){return a.default.createElement("div",null,a.default.createElement("input",{name:"iptRef",type:"text",ref:e.iptRef}))};var l,a=(l=u(67294))&&l.__esModule?l:{default:l}}}]);
+//# sourceMappingURL=720.bundle.3ec5e42d6ae376ae2a2a.js.map

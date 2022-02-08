@@ -21,7 +21,7 @@ const Login = (props) => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div className={styles.login} style={{backgroundImage:`url(img/bg.jpg)`}}>
+    <div className={styles.login} style={{backgroundImage:`url(require(img/bg.jpg))`}}>
       <Row style={{marginTop:'20vh', overflow:"hidden"}}>
         <Col xs={2} sm={4} md={4} lg={4} xl={4}></Col>
         <Col xs={20} sm={16} md={12} lg={12} xl={12}>

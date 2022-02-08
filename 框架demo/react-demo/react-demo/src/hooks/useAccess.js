@@ -4,6 +4,7 @@ import usePermissionModel from '../hox/access';
 const type = ['menu', 'button']
 
 export const useAccess = () => {
+  // 获取菜单和按钮的标识
   const { menus, buttons } = usePermissionModel();
 
   /**
