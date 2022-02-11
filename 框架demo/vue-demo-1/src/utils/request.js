@@ -44,9 +44,6 @@ const err = (error) => {
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       failToast('Unauthorized')
-      if (location.pathname !== "/login") {
-        location.href = "/login"
-      }
     }
   } else {
     // 请求超时状态

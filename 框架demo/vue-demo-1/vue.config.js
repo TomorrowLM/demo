@@ -34,12 +34,12 @@ const commonPlugin = [
 
 const assetsCDN = {
   // webpack build externals
-  externals: {
-    vue: 'Vue',
-    'vue-router': 'VueRouter',
-    vuex: 'Vuex',
-    axios: 'axios'
-  },
+  // externals: {
+  //   vue: 'Vue',
+  //   'vue-router': 'VueRouter',
+  //   vuex: 'Vuex',
+  //   axios: 'axios'
+  // },
   css: [],
   // https://unpkg.com/browse/vue@2.6.10/
   js: [
@@ -153,6 +153,8 @@ module.exports = {
         plugins: [
           autoprefixer(),
           pxtorem({
+            // 之所以设为37.5，是为了引用像vant、mint-ui这样的第三方UI框架，
+            // 因为第三方框架没有兼容rem，用的是px单位，将rootValue的值设置为设计图宽度（这里为750px）75的一半，即可以1:1还原vant、mint-ui的组件，否则会样式会有变化，例如按钮会变小。
             rootValue: 37.5,//根元素的值，即1rem的值.rem=设计稿元素尺寸/rootValue
             propList: ['*'],
             selectorBlackList: ['van'] // 过滤掉.van-开头的class，不进行rem转换

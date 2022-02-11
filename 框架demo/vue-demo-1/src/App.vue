@@ -5,18 +5,22 @@
 </template>
 
 <script>
-import {axios} from "@/utils/request";
+import { axios } from "@/utils/request";
 export default {
   name: "App",
   created() {
-    axios.get("token").then((res) => {
-      console.log(res);
-    });
+    axios
+      .get("users")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((res) => {
+        this.$router.push("/login");
+      });
   },
 };
 </script>
 <style lang="less">
-#app{
-
+#app {
 }
 </style>

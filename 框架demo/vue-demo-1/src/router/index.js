@@ -24,8 +24,14 @@ console.log(process.env.BASE_URL)
 // 你还可以传别的配置参数, 不过先这么简单着吧。
 const router = new VueRouter({
   mode: 'history',
-  base: isProd? '/wechatpub/' : process.env.BASE_URL,
+  base: isProd ? '/vue-demo/' : process.env.BASE_URL,
+  // base: process.env.NODE_ENV === "production" ? "/app/" : "/",
   routes
 })
-
+// //获取原型对象上的push函数
+// const originalPush = router.prototype.push
+// //修改原型对象中的push方法
+// router.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 export default router

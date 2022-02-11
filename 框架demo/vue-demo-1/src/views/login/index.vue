@@ -58,7 +58,7 @@ export default {
       console.log(this.$route);
       axios.post("login", this.ruleForm).then((res) => {
         Vue.ls.set("token", res.data.token);
-        this.$router.push("/")
+        this.$router.push("/");
       });
     },
   },
@@ -76,7 +76,9 @@ export default {
   box-sizing: border-box;
 }
 .form_login {
-  width: 400px;
-  margin: auto;
+text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-left: -120px;
 }
 </style>
