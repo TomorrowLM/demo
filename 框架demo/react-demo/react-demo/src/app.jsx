@@ -5,13 +5,15 @@ import { Layout, Menu, Breadcrumb } from "antd";
 import { LaptopOutlined } from "@ant-design/icons";
 import HomeNav from "./components/HomePage/Nav.jsx";
 import "./global.less";
+// import { matchRoutes } from "react-router-config";
+import { matchRoutes } from "./utils";
 
 export default function App() {
   const { SubMenu } = Menu;
   const [collapsed, setCollapsed] = useState(false);
   const [menuWidth, setMenuWidth] = useState(256);
   const { Header, Content, Sider } = Layout;
-
+  // const { path } = route;
   const toggleCollapsed = () => {
     if (menuWidth == 256) {
       setMenuWidth("");
@@ -85,6 +87,10 @@ export default function App() {
       );
     });
   };
+  // const branch = matchRoutes(routes, window.location.hash.replace(/#\//,''))
+  // console.log(branch);
+  const branch = window.location.hash.replace(/#\//, "").split("/");
+  console.log(branch);
   return (
     <div style={{ width: "100%,", height: "100vh", overflow: "hidden" }}>
       {/* <Spin spinning={loading} delay={5000} tip="loading"> */}
@@ -110,9 +116,9 @@ export default function App() {
           </Sider>
           <Layout style={{ padding: "0 24px 24px" }}>
             <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>List</Breadcrumb.Item>
-              <Breadcrumb.Item>App</Breadcrumb.Item>
+              {branch.map((value) => {
+                return <Breadcrumb.Item>{value}</Breadcrumb.Item>;
+              })}
             </Breadcrumb>
             <Content
               className="site-layout-background"
