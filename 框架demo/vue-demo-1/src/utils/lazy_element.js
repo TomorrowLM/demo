@@ -79,7 +79,7 @@ import {
   Notification,
   Drawer
 } from 'element-ui';
-
+Vue.prototype.$ELEMENT = { size: 'large', zIndex: 3000 };
 Vue.use(Drawer);
 Vue.use(Pagination);
 Vue.use(Dialog);

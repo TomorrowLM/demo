@@ -58,7 +58,7 @@ export default {
       console.log(this.$route);
       axios.post("login", this.ruleForm).then((res) => {
         Vue.ls.set("token", res.data.token);
-        this.$router.push("/");
+        this.$router.push("/learn");
       });
     },
   },
@@ -70,15 +70,19 @@ export default {
 .login {
   width: 100vw;
   height: 100vh;
-  background: url(/assets/bg.jpg);
-  margin: auto;
-  padding-top: 40vh;
+  background: url(/assets/bg.jpg) snow -200px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .form_login {
-text-align: center;
-    display: flex;
-    justify-content: center;
-    margin-left: -120px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-left: -120px;
+}
+.el-form-item__label {
+  color: #fff;
 }
 </style>

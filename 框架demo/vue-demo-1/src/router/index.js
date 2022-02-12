@@ -25,7 +25,6 @@ console.log(process.env.BASE_URL)
 const router = new VueRouter({
   mode: 'history',
   base: isProd ? '/vue-demo/' : process.env.BASE_URL,
-  // base: process.env.NODE_ENV === "production" ? "/app/" : "/",
   routes
 })
 // //获取原型对象上的push函数
