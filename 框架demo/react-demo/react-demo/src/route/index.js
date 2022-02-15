@@ -208,7 +208,7 @@ export const routes = [
       {
         name: "表单",
         path: "/form",
-        component: 'Antd/Form',
+        component: 'Antd',
         icon: <DesktopOutlined />
       }
     ]
