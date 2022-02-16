@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "mock-component": "/components/mock-component"
+  },
+  "disableScroll": true
+}

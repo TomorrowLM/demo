@@ -1,0 +1,5 @@
+<!--index.wxml-->
+<view class="main">
+  <mock-component my-behavior-property="behavior-property" my-property="my-property">
+  </mock-component>
+</view>
