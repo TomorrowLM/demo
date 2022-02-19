@@ -17,7 +17,8 @@ const AuthRoute = (props) => {
   const getUserInfo = () => {
     request.get("/users").then((res) => {
       if (res.status === 401) {
-        history.push("/login");
+        history.push("/user/login");
+        setIsCheckingTokenStatus(false);
         return;
       }
       setTimeout(() => {
@@ -40,6 +41,7 @@ const AuthRoute = (props) => {
       set(res.data.data);
     });
   };
+
   useEffect(() => {
     getUserInfo();
     getAccess();

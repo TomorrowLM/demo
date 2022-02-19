@@ -3,7 +3,7 @@ import { Scene, PolygonLayer, LineLayer, PointLayer } from "@antv/l7";
 import { Mapbox } from "@antv/l7-maps";
 import { useEffect } from "react";
 
-export default () => {
+export default function Donghua() {
   useEffect(() => {
     const scene = new Scene({
       id: "donghua",

@@ -3,7 +3,7 @@ import { createModel } from "hox";
 
 const usePermissionModel = () => {
   const access = localStorage.getItem('access');
-  console.log(typeof access, access);
+  // console.log(typeof access, access);
   const { menus, buttons } = access ? JSON.parse(access) : { menus: [], buttons: {} }
   const initParams = { menus, buttons, visible: false };
 

@@ -9,7 +9,7 @@ const HomeNav = (props) => {
   const history = useHistory()
   const signOut = () => {
     window.localStorage.setItem('token','')
-    window.location.hash = "/login"
+    window.location.hash = "user/login"
   }
   const menu = (
     <Menu>

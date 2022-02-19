@@ -22,8 +22,7 @@ ReactDom.render(
   <Provider store={store}>
     <Router>
       <Switch>
-        <Route key={Login} path="/Login" component={Login} />
-        {/* 检验token是否正确 */}
+        <Route key={Login} path="/user/login" component={Login} exact={true} />
         <AuthRoute />
       </Switch>
     </Router>

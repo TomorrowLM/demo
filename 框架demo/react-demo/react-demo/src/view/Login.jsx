@@ -50,7 +50,7 @@ const Login = (props) => {
                 },
               ]}
             >
-              <Input />
+              <Input placeholder="账号：liming"/>
             </Form.Item>
 
             <Form.Item
@@ -63,7 +63,7 @@ const Login = (props) => {
                 },
               ]}
             >
-              <Input.Password />
+              <Input.Password placeholder="密码：1"/>
             </Form.Item>
 
             <Form.Item

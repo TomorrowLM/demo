@@ -7,7 +7,7 @@ import { Chart } from "@antv/g2";
 import DataSet from "@antv/data-set";
 import { useEffect } from "react";
 
-export default () => {
+export default function Zhuzhuang() {
   useEffect(() => {
     console.log(data);
     const ds = new DataSet();
@@ -36,7 +36,7 @@ export default () => {
     //度量（Scale）用于定义坐标轴内容的类型和展示方式
     chart.scale({
       year: {
-        alias: "时间",// 别名
+        alias: "时间", // 别名
         range: [0.05, 0.75], //设置坐标系两端留白
       },
       value: {
@@ -83,8 +83,8 @@ export default () => {
     chart.tooltip({
       showMarkers: false, // 不展示 tooltip markers
     });
-    chart.interaction('active-region'); // 使用 active-region 交互行为
-    
+    chart.interaction("active-region"); // 使用 active-region 交互行为
+
     //创建子 view
     const view1 = chart.createView();
     view1.data(data);
@@ -117,4 +117,4 @@ export default () => {
     // });
   }, []);
   return <div id="zhuzhuang"></div>;
-};
+}

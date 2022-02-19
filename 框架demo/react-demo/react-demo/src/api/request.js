@@ -82,7 +82,7 @@ export const errorHandler = (error: ResponseError) => {
       } else if (status === 401) {
         window.localStorage.removeItem("token");
         localStorage.removeItem('token');
-        window.location.hash = "/login"
+        window.location.hash = "user/login"
         message.info(errorText);
       }
     }

@@ -1,19 +1,20 @@
 import React, { useState, lazy, Suspense } from "react";
 import { routes } from "./route/index.js";
 import { Route, Link, Switch } from "react-router-dom";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu, Breadcrumb, Spin } from "antd";
 import { LaptopOutlined } from "@ant-design/icons";
 import HomeNav from "./components/HomePage/Nav.jsx";
-import "./global.less";
+import styles from "./global.less";
+
 // import { matchRoutes } from "react-router-config";
 import { matchRoutes } from "./utils";
 
-export default function App() {
+export default function App(props) {
+  console.log(props.children);
   const { SubMenu } = Menu;
   const [collapsed, setCollapsed] = useState(false);
   const [menuWidth, setMenuWidth] = useState(256);
   const { Header, Content, Sider } = Layout;
-  // const { path } = route;
   const toggleCollapsed = () => {
     if (menuWidth == 256) {
       setMenuWidth("");
@@ -26,7 +27,7 @@ export default function App() {
   const subTitle = [];
   let keyIndex = 1;
   let subIndex = 1;
-  let router = routes.map((value, index) => {
+  let router = routes[0]["children"].map((value, index) => {
     if (value.isMenu === 1 && !value.children) {
       return [value];
     } else if (value.isMenu === 1 && value.children) {
@@ -93,7 +94,6 @@ export default function App() {
   console.log(branch);
   return (
     <div style={{ width: "100%,", height: "100vh", overflow: "hidden" }}>
-      {/* <Spin spinning={loading} delay={5000} tip="loading"> */}
       <Layout>
         <Header>
           <HomeNav />
@@ -130,7 +130,7 @@ export default function App() {
             >
               <div style={{ width: "100%" }}>
                 <Switch>
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div className={styles.loading_container}><Spin></Spin></div>}>
                     {mapRouteMethod(routes)}
                   </Suspense>
                 </Switch>
@@ -139,7 +139,6 @@ export default function App() {
           </Layout>
         </Layout>
       </Layout>
-      {/* </Spin> */}
     </div>
   );
 }
