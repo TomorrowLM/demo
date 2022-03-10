@@ -1,7 +1,7 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import React, { useState } from "react";
 import { useHistory, Route } from "react-router-dom";
-import request from "../api/request";
+import request from "../utils/request";
 import { Row, Col } from "antd";
 
 import styles from './index.less'

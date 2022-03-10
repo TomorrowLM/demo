@@ -64,7 +64,10 @@ const TroubleModal = (props) => {
       });
     }
   };
-
+  const Formlayout = {
+    // labelCol: { span: 4 },
+    // wrapperCol: { span: 25 },
+  };
   return (
     <div>
       <Modal

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Route } from "react-router-dom";
 import { Spin } from "antd";
-import request from "../api/request";
+import request from "../utils/request";
 import { connect } from "react-redux";
 import { userInfo } from "../store/actions/userInfo";
 import App from "../app";

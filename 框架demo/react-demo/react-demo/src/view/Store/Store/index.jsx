@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { increment, decrement } from "../../../store/actions/counter";
 import store from "../../../store";
 import { useDispatch, useSelector } from "react-redux";
-import request from "../../../api/request";
+import request from "../../../utils/request";
 import { userInfo } from "../../../store/actions/userInfo";
 import useCounterModel from "../../../hox/CreateModal";
 import { Typography, Divider } from "antd";

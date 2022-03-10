@@ -45,8 +45,27 @@ module.exports = {
   outputDir: 'dist',
   // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
   lintOnSave: true,//boolean | 'warning' | 'default' | 'error'
-  // 生产环境是否生成 sourceMap 文件
-  productionSourceMap: false,
+  productionSourceMap: isProd ? false : true, // 生产环境是否生成 sourceMap 文件
+  devServer: {
+    disableHostCheck: true,
+    contentBase: './src',//项目基本访问目录
+    // host: 'localhost',//服务器ip地址
+    open: true,
+    port: 8088,
+    hot: true,//模块热替换
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
+    // public: 'http://192.168.10.36:8088',
+    proxy: {
+      '/dev': {
+        target: 'http://tomorrowlm.xyz:3000',
+        changeOrigin: true,
+        secure: false,
+        xfwd: false,
+      }
+    },
+  },
   pwa: {
     name: "vue-demo",
     short_name: "vue-demo",
@@ -122,22 +141,23 @@ module.exports = {
       console.log(config);
     }
   },
-  devServer: {
-    disableHostCheck: true,
-    contentBase: './src',//项目基本访问目录
-    // host: 'localhost',//服务器ip地址
-    open: true,
-    port: 8088,//端口
-    hot: true,//模块热替换
-    // public: 'http://192.168.10.36:8088',
-  },
   css: {
     extract: isProd ? true : false,
     sourceMap: false,
     loaderOptions: {
       postcss: {
         plugins: [
-          autoprefixer(),
+          autoprefixer({
+            overrideBrowserslist: [
+              "Android 4.1",
+              "iOS 7.1",
+              "Chrome > 31",
+              "ff > 31",
+              "ie >= 8",
+              "last 10 versions", // 所有主流浏览器最近10版本用
+            ],
+            grid: true
+          }),
           pxtorem({
             // 之所以设为37.5，是为了引用像vant、mint-ui这样的第三方UI框架，
             // 因为第三方框架没有兼容rem，用的是px单位，将rootValue的值设置为设计图宽度（这里为750px）75的一半，即可以1:1还原vant、mint-ui的组件，否则会样式会有变化，例如按钮会变小。

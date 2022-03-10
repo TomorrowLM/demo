@@ -12,6 +12,7 @@ import {
 } from "antd";
 import TroubleModal from "./Form/index";
 import SelectModal from "./Select";
+import UploadModal from './Upload'
 
 const AntdComponent = (props) => {
   return (
@@ -19,6 +20,8 @@ const AntdComponent = (props) => {
       <TroubleModal></TroubleModal>
       <Divider />
       <SelectModal />
+      <Divider />
+      <UploadModal />
     </div>
   );
 };

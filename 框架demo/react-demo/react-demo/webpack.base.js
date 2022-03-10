@@ -12,7 +12,7 @@ const WebpackBar = require("webpackbar");
 // const smp = new SpeedMeasurePlugin();
 
 //配置域名环境
-const envConfig = require("./env");
+const envConfig = require("./config/env");
 const NODE_ENV = process.env.NODE_ENV;
 console.log("当前环境", NODE_ENV);
 module.exports = {
