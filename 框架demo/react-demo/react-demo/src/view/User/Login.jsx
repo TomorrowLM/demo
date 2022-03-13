@@ -1,17 +1,16 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import React, { useState } from "react";
-import { useHistory, Route } from "react-router-dom";
-import request from "../utils/request";
+import { useHistory } from "react-router-dom";
+import request from "@/utils/request";
 import { Row, Col } from "antd";
 
-import styles from './index.less'
+import styles from '../index.module.less'
 
 const Login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
     let { username, password } = values;
     request.post("/login", { username, password }).then((res) => {
-      console.log(res);
       const { token } = res.data;
       window.localStorage.setItem("token", token);
       history.push("/dashboard");

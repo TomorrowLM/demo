@@ -1,14 +1,11 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { Route, HashRouter as Router, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./store";
-import Login from "./view/Login";
-import AuthRoute from "./route/Mock-AuthRoute";
+import store from "@/store";
 import VConsole from 'vconsole';
-import { IsPC } from "./utils";
-
-import "./global.less";
+import { IsPC } from "@/utils";
+import App from './app'
+import "@/global.less";
 import "antd/dist/antd.css";
 
 // if (IsPC) {
@@ -18,14 +15,8 @@ import "antd/dist/antd.css";
 // }
 
 ReactDom.render(
-  // Provider下的所有组件可以通过connect来获取store上存储的数据
   <Provider store={store}>
-    <Router>
-      <Switch>
-        <Route key={Login} path="/user/login" component={Login} exact={true} />
-        <AuthRoute />
-      </Switch>
-    </Router>
+    <App />
   </Provider>,
   document.getElementById("App")
 );

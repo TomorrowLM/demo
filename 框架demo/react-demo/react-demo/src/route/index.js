@@ -1,18 +1,25 @@
 import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
 import React from "react";
-import App from '../app.jsx'
+import Index from '@/view/index'
 import Dashboard from "@/view/DashBoard/index.jsx";
+import Second from "@/view/Router/components/Second"
+import Login from "@/view/User/Login";
 
 export const routes = [
   {
-    path: "/",
-    component: App,
+    path: "/user/login",
+    component: Login,
+    isMenu: 0,
     exact: true,
+  },
+  {
+    path: "/",
+    component: Index,
     children: [
       {
         path: "/dashboard",
         name: "面板",
-        exact: true,
+        // exact: true,
         component: Dashboard,
         icon: <DesktopOutlined />,
         isMenu: 1,
@@ -123,7 +130,22 @@ export const routes = [
             name: "路由",
             path: "/router",
             component: 'Router',
-            icon: <DesktopOutlined />
+            icon: <DesktopOutlined />,
+            children: [
+              {
+                name: "路由通配符",
+                path: "/router/:id",
+                component: Second,
+                icon: <DesktopOutlined />
+              }
+            ]
+          },
+          {
+            name: "路由渲染方式",
+            exact: true,
+            path: "/routertype",
+            component: 'Router/RouterType',
+            icon: <DesktopOutlined />,
           }
         ]
       },
