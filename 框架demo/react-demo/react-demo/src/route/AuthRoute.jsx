@@ -1,5 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
-import { useHistory, Route, Switch } from "react-router-dom";
+import { useHistory, Route, Switch, Redirect } from "react-router-dom";
 import { Spin } from "antd";
 import request from "@/utils/request";
 import { connect } from "react-redux";
@@ -77,6 +77,7 @@ const AuthRoute = (props) => {
         spinning={isCheckingTokenStatus}
       >
         {mapRouteMethod(routes)}
+        <Redirect from="/*" to="/dashboard"></Redirect>
       </Spin>
 
     </div>

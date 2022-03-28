@@ -8,7 +8,6 @@ export default function RouterType() {
   return (
     <div>
       <p>路由渲染方式1</p>
-
     </div>
   );
 }

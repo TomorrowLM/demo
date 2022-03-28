@@ -1,9 +1,10 @@
 import { Divider } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Route, Link, Switch } from "react-router-dom";
 
 export default function Router(props) {
   console.log(props.children);
+  const [count, setCount] = useState(0)
   useEffect(() => {
     console.log('渲染2');
   })
@@ -25,6 +26,10 @@ export default function Router(props) {
       {props.children}
       <Divider />
       <p>路由渲染方式</p>
+      <div>
+        Count : {count}
+        <button onClick={() => setCount(count + 1)}>我是按钮</button>
+      </div>
     </div>
   );
 }
