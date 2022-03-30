@@ -57,14 +57,14 @@ function showLoading() {
 function hideLoading() {
   requestCount -= 1;
   if (requestCount === 0) {
-    const loading: any = document.getElementById('loading');
+    const loading = document.getElementById('loading');
     document.body.removeChild(loading);
   }
 }
 /**
  * 异常处理程序
  */
-export const errorHandler = (error: ResponseError) => {
+export const errorHandler = (error) => {
   hideLoading();
   if (error.response) {
     const {

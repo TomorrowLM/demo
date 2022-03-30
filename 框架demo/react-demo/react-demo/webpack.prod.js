@@ -20,8 +20,8 @@ module.exports = merge(base, {
     }),
   ],
   // 第三方包入口
-    // 从 CDN 引入 jQuery，而不是把它打包
-    // vendor: ['react', 'react-router', 'react-redux', 'moment', 'antd'],
+  // 从 CDN 引入 jQuery，而不是把它打包
+  // vendor: ['react', 'react-router', 'react-redux', 'moment', 'antd'],
   // splitChunks: {
   //   cacheGroups: {
   //     commons: {
@@ -31,7 +31,10 @@ module.exports = merge(base, {
   //     }
   //   }
   // },
-  module: {
-
-  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 });

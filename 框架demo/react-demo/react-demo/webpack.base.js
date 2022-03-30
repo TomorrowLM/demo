@@ -70,7 +70,8 @@ module.exports = {
   ],
   resolve: {
     modules: [path.resolve("node_modules")], //只在当前目录下查找
-    extensions: [".js", ".jsx"],
+    // extensions: [".js", ".jsx"],
+    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     alias: {
       '@': path.resolve(__dirname, 'src/'),
     },
@@ -109,6 +110,11 @@ module.exports = {
           },
           {
             loader: 'less-loader', // 编译 Less 为 CSS
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
           },
         ],
       },
@@ -153,11 +159,21 @@ module.exports = {
           filename: "font/[name].[hash:4][ext]"
         },
       },
+      // {
+      //   test: /(\.jsx|\.js)$/,
+      //   use: ["babel-loader"],
+      //   // include: path.resolve(__dirname, "./src"),
+      //   exclude: /node_modules/,
+      // },
       {
-        test: /(\.jsx|\.js)$/,
-        use: ["babel-loader"],
-        // include: path.resolve(__dirname, "./src"),
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            // ...
+          },
+        },
       },
     ],
   },

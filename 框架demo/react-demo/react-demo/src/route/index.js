@@ -119,6 +119,12 @@ export const routes = [
             component: 'SpecialEffects/ReactSortable/index',
             icon: <DesktopOutlined />,
           },
+          {
+            name: "pdf",
+            path: "/specialEffects/pdf",
+            component: 'SpecialEffects/pdf/index',
+            icon: <DesktopOutlined />,
+          },
         ]
       },
       {
