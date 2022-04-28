@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Toast, Dialog } from 'vant'
+// import { VueAxios } from './axios'
 
 //单例模式，即同一时间只会存在一个 Toast
 Toast.allowMultiple();
@@ -84,9 +85,16 @@ service.interceptors.request.use(config => {
 }, err)
 // response interceptor
 service.interceptors.response.use((response) => {
-  return response
+  console.log(response);
+  return response.data
 }, err)
 
 Vue.prototype.service = service
+// const installer = {
+//   vm: {},
+//   install(Vue) {
+//     Vue.use(VueAxios, service)
+//   }
+// }
 
 export { service as axios }

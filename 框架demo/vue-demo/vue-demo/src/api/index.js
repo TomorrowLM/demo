@@ -1,5 +1,5 @@
-import service from '@/utils/request'
+import axios from '@/utils/request'
 
-export const userInfo = () => {
-  service.get('users')
+export const userInfo = (param) => {
+  return axios.get('users')
 }

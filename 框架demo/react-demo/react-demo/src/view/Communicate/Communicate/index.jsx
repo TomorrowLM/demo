@@ -2,6 +2,7 @@ import Father from "./components/Father";
 import FatherText from "./components/Father-context";
 import React from "react";
 const Communicate = function (props) {
+  
   return (
     <div>
       <div>

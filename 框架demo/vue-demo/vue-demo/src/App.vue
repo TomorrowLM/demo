@@ -14,7 +14,7 @@ export default {
     axios
       .get("users")
       .then((res) => {
-        console.log(res);
+        // console.log(res);
       })
       .catch((res) => {
         this.$router.push("/login");

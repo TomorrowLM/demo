@@ -10,7 +10,7 @@ const WebpackBar = require("webpackbar");
 //分析编译时间
 //const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 // const smp = new SpeedMeasurePlugin();
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 //配置域名环境
 const envConfig = require("./config/env");
 const NODE_ENV = process.env.NODE_ENV;
@@ -41,6 +41,19 @@ module.exports = {
   //配置插件
   plugins: [
     new WebpackBar(),
+    // 默认配置的具体配置项
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'server',
+    //   analyzerHost: '127.0.0.1',
+    //   analyzerPort: '8888',
+    //   reportFilename: 'report.html',
+    //   defaultSizes: 'parsed',
+    //   openAnalyzer: true,
+    //   generateStatsFile: false,
+    //   statsFilename: 'stats.json',
+    //   statsOptions: null,
+    //   excludeAssets: null,
+    // }),
     //开发中，创建一个在内存中生成Html页面的插件。打包中，用来生成HTML文件并自动引用打包好的JS文件
     new HtmlWebpackPlugin({
       //模板文件路径
@@ -169,7 +182,7 @@ module.exports = {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: 'babel-loader?cacheDirectory',    // 开启缓存
           options: {
             // ...
           },
@@ -188,7 +201,7 @@ module.exports = {
     type: "filesystem",
     // 默认缓存到 node_modules/.cache/webpack 中
     // 也可以自定义缓存目录
-    // cacheDirectory:path.resolve(__dirname,'node_modules/.cac/webpack')
+    // cacheDirectory: path.resolve(__dirname, '.temp_cache'),
     buildDependencies: {
       // 更改配置文件时，重新缓存
       config: [__filename],

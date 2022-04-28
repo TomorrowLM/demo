@@ -31,10 +31,4 @@ module.exports = merge(base, {
   //     }
   //   }
   // },
-  optimization: {
-    minimize: true,
-    splitChunks: {
-      chunks: 'all'
-    }
-  }
 });

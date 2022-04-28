@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkdemo=self.webpackChunkdemo||[]).push([[694],{78694:(e,u,l)=>{Object.defineProperty(u,"__esModule",{value:!0}),u.default=function(e){return d.default.createElement("div",null,"child")};var t,d=(t=l(67294))&&t.__esModule?t:{default:t}}}]);
-//# sourceMappingURL=694.bundle.daa3c3e8a80ec0008a9c.js.map
