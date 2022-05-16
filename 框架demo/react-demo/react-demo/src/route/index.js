@@ -125,6 +125,12 @@ export const routes = [
             component: 'SpecialEffects/pdf/index',
             icon: <DesktopOutlined />,
           },
+          {
+            name: "cron",
+            path: "/specialEffects/cron",
+            component: 'SpecialEffects/Cron/index',
+            icon: <DesktopOutlined />,
+          },
         ]
       },
       {
