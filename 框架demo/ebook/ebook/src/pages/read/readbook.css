@@ -1,0 +1,167 @@
+/* 底部弹出层 start */
+.page-head{
+		height: 100%;
+}
+.page{
+	height: 100%;
+	overflow-y: scroll
+}
+.fcontent{
+	white-space: pre-line;
+}
+.op-footer {
+	background-color: #333333;
+	display: flex;
+	flex-direction: row;
+	height: 50px;
+	color: #F7F7F7;
+}
+
+.foot-wrap {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 50%;
+	justify-content: center;
+	align-items: center;
+}
+
+.foot-text {
+	font-size: 12px;
+}
+
+/* 底部弹出层 end */
+/* 左侧弹出目录 start*/
+.chapterwrap {
+	display: flex;
+	flex-direction: column;
+	background-color: #FFFFFF;
+	height: 100%;
+}
+
+.zjmu {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 14px;
+	color: #f37b1d;
+	border-bottom: #f37b1d solid 1px;
+}
+
+.totalnum {
+	height: 20px;
+	padding: 10px 15px;
+	font-size: 14px;
+}
+
+.zhengwj {
+	height: 20px;
+	padding: 10px 15px;
+	font-size: 12px;
+	background-color: #F7F7F7;
+	color: #C0C0C0;
+}
+
+.clistwrap {
+	display: flex;
+	flex-direction: column;
+}
+
+.listitem {
+	font-size: 16px;
+	padding: 15px;
+	border-bottom: #E3E3E3 solid 1px;
+}
+
+/* 左侧弹出目录 end*/
+
+/* 阅读层 start*/
+.fictionwrap {
+	height: 100%;
+	width: 100%;
+	min-height: 1000px;
+	 
+	position: absolute;
+	background: url(../../static/img/skin-default-t.jpg) no-repeat center top,
+		url(../../static/img/skin-default-b.jpg) no-repeat center bottom,
+		url(../../static/img/skin-default-m.jpg) repeat-y center 217rpx;
+	/* background-size: 100%; */
+	color: #000;
+}
+
+.text-orange{
+	color:#f37b1d;
+}
+
+.fcontent {
+	padding:10px;
+	min-height: 1000px;
+	min-width: 710upx;
+	line-height: 20px;
+	position: absolute;
+	line-height: 1.8;
+	text-align: justify;
+	background: url(../../static/img/skin-default-t.jpg) no-repeat center top,
+		url(../../static/img/skin-default-b.jpg) no-repeat center bottom,
+		url(../../static/img/skin-default-m.jpg) repeat-y center 217rpx;
+}
+
+.clickview {
+	background: rgba(255, 204, 51, 0);
+	/* 点击区域设置背景透明*/
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin: -150px 0 0 -150px;
+	width: 300px;
+	height: 300px;
+	z-index: 10;
+}
+
+.fcwrap {
+	display: flex;
+	flex-direction: column;
+	background-color: #333333;
+}
+
+.fontwrap {
+	padding: 10px 0px;
+}
+
+.colorwrap {
+	border-top: #eacf93 solid 1px;
+	display: flex;
+	flex-direction: row;
+	padding-top: 10px;
+}
+
+.chcekbutton {
+	width: 130upx;
+	height: 60upx;
+	display: inline-block;
+	line-height: 60upx;
+}
+.coloritem{
+	padding: 20upx 10upx;
+}
+.default {
+	/* background: #C3B297; */
+}
+.blue {
+	background: #cad9e8;
+}
+
+.green {
+	background: #d1edd1;
+}
+
+.light {
+	background: #e6e6e6;
+
+}
+
+.night {
+	color: #CAD9E8;
+	background: #1a1a1a;
+}
+
+/* 阅读层 end*/
