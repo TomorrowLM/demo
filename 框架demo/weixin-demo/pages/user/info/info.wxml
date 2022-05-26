@@ -1,0 +1,81 @@
+<!--pages/user/info.wxml-->
+<!-- <text class="{{class_name}}" wx:if="{{!state}}">{{msg}}</text>
+<text wx:else>else</text>
+ <view wx:for="{{arr}}" wx:key="index">
+ {{item.name}}
+ <view  wx:for="{{arrs}}" wx:for-item="items" wx:for-index="indexs" wx:key="indexs">
+  {{items}}
+ </view>
+ </view>
+ <swiper 	indicator-dots="true" style="height:300px">
+        <block wx:for="{{background}}" wx:key="index">
+          <swiper-item >
+            <view class="swiper-item {{item}}"></view>
+          </swiper-item>
+        </block>
+      </swiper> -->
+<list arr="{{arr}}" bind:myfatherList="list" data-name="list"></list>
+<text class="icon-theheart"></text>
+<view ><button bindtap="check" data-id="19" data-name="张三" data-msg="{{msg}}">点击一下</button></view>
+<picker mode="region">{{msg}}</picker>
+<form bindsubmit="submit">
+  <picker mode="region" name="picker">{{msg}}</picker>
+  <switch name="switch" />
+
+  <radio-group name="radio" bindchange="radioChange">
+    <label>
+      <radio value="radio1" />选项一
+    </label>
+    <label>
+      <radio value="radio2" />选项二
+    </label>
+    <label>
+      <radio value="radio3" />选项三
+    </label>
+    <label>
+      <radio value="radio4" />选项四
+    </label>
+    <label>
+      <radio value="radio5" />选项五
+    </label>
+  </radio-group>
+  <checkbox-group name="checkbox" bindchange="checkboxChange">
+    <label>
+      <checkbox value="checkbox1" />选项一
+    </label>
+    <label>
+      <checkbox value="checkbox2" />选项二
+    </label>
+    <label>
+      <checkbox value="checkbox3" />选项三
+    </label>
+  </checkbox-group>
+  <input class="weui-input" name="input12" type="number" placeholder="这是一个输入框" />
+  <input class="weui-input"  type="number" placeholder="这是一个输入框" />
+  <button style="margin: 30rpx 0" type="primary" form-type="submit" >Submit</button>
+
+</form>
+
+
+
+
+
+
+
+<image src="/static/tt.jpg" mode="heightFix"></image>
+<!-- <page-container
+      show="true"
+      custom-style="margin-left:100px"
+      overlay-style="background-color:red"
+      position="right">
+      <view>
+<button>45</button>
+        <icon class="icon-box-img" type="waiting" size="20"></icon>
+
+        这是一个抽屉
+        这是一个抽屉
+        这是一个抽屉
+        这是一个抽屉
+        这是一个抽屉
+      </view>
+      </page-container> -->

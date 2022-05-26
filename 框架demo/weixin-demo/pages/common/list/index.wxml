@@ -1,0 +1,7 @@
+<!--pages/common/llist/index.wxml-->
+<scroll-view scroll-y scroll-into-view="id2" style="width:100vh;height:300px;background:red">
+  <view style="height:200px;" id="id{{index}}" wx:for="{{arr}}" wx:key="index" bindtap="show" data-index="{{index}}">
+    {{item.name}}
+
+  </view>
+</scroll-view>

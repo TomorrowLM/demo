@@ -1,0 +1,16 @@
+<!--pages/user/list/list.wxml-->
+ <view class="menu">
+ <view wx:for="{{list}}" bindtap="changeMenu" data-index="{{index}}" wx:key="index" class="{{current.title==item.title?'menu_current':''}}">
+ {{item.title}}</view>
+ </view>
+ <view>字母排序|推荐排序</view>
+ <scroll-view scroll-y="true" bindscroll="scroll" scroll-into-view="{{menu_id}}" class="main">
+  <view class="current">{{current.title}}</view>
+  <view wx:for="{{list}}" wx:key="index" id="id{{item.title}}" class="menu-item">
+      <view class="title">{{item.title}}</view>
+      <view class="city-item" wx:for="{{item.children}}" wx:for-item="items"  wx:for-index="indexs" wx:key="indexs">
+        {{items.name}}
+      </view>
+  </view>
+ </scroll-view>
+

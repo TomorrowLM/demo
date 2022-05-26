@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/user/info/info",
+    "pages/user/list/list",
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/home/home"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ccc",
+    "navigationBarTitleText": "Weixins",
+    "navigationBarTextStyle": "black"
+
+  },
+  "tabBar": {
+    "color":"#FF00FF",
+
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "日志"
+      }
+    ]
+  },
+  "usingComponents":{
+
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
