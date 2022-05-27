@@ -1,12 +1,10 @@
 <template>
   <div class="hello">
-    <button @click="getUsers">132</button>
     <div>{{ name }}</div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import service from "@/utils/request"
 export default {
   // name: 'HelloWorld',
@@ -15,7 +13,7 @@ export default {
   },
   data() {
     return {
-      name: 2,
+      name: 'hello,这是全局注册的组价',
     };
   },
   methods: {

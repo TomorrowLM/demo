@@ -7,36 +7,35 @@
 </template>
 
 <script>
-import { axios } from "@/utils/request";
-export default {
-  name: "App",
-  created() {
-    axios
-      .get("users")
-      .then((res) => {
-        // console.log(res);
-      })
-      .catch((res) => {
-        this.$router.push("/login");
-      });
-  },
-};
+  import { userInfo } from '@/api';
+  export default {
+    name: 'App',
+    created() {
+      userInfo()
+        .then((res) => {
+          // console.log(res);
+        })
+        .catch((res) => {
+          this.$router.push('/login');
+        });
+    },
+  };
 </script>
 <style lang="less">
-.slide-left-enter {
-  opacity: 0;
-  -webkit-transform: translate(30px, 0);
-  transform: translate(30px, 0);
-}
-.slide-left-enter-active {
-  transition: all 0.5s ease;
-}
-.slide-left-leave-to {
-  opacity: 0;
-  -webkit-transform: translate(-30px, 0);
-  transform: translate(-30px, 0);
-}
-.slide-left-leave-active {
-  transition: all 0.5s ease;
-}
+  .slide-left-enter {
+    opacity: 0;
+    -webkit-transform: translate(30px, 0);
+    transform: translate(30px, 0);
+  }
+  .slide-left-enter-active {
+    transition: all 0.5s ease;
+  }
+  .slide-left-leave-to {
+    opacity: 0;
+    -webkit-transform: translate(-30px, 0);
+    transform: translate(-30px, 0);
+  }
+  .slide-left-leave-active {
+    transition: all 0.5s ease;
+  }
 </style>

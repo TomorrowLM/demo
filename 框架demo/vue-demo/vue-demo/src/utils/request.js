@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Toast, Dialog } from 'vant'
-// import { VueAxios } from './axios'
+import { VueAxios } from './axios'
 
 //单例模式，即同一时间只会存在一个 Toast
 Toast.allowMultiple();
+
 // 创建 axios 实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
@@ -12,6 +13,7 @@ const service = axios.create({
   // baseURL: '/dev',
   timeout: 6000 // 请求超时时间
 })
+
 //code信息
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
@@ -31,6 +33,7 @@ const codeMessage = {
   503: "服务不可用，服务器暂时过载或维护。",
   504: "网关超时。",
 };
+
 let showLoading = null
 const failToast = (msg) => {
   Toast.fail({
@@ -70,10 +73,7 @@ const err = (error) => {
  */
 const handleParams = (config) => {
   console.log(config);
-  Vue.ls.get('token');
   const token = Vue.ls.get('token')
-  console.log(token);
-  console.log(token);
   const { method } = config
   config.headers.authorization =
     "Bearer " + token;
@@ -89,12 +89,17 @@ service.interceptors.response.use((response) => {
   return response.data
 }, err)
 
-Vue.prototype.service = service
-// const installer = {
-//   vm: {},
-//   install(Vue) {
-//     Vue.use(VueAxios, service)
-//   }
-// }
+// Vue.prototype.service = service
+// export { service as axios }
 
-export { service as axios }
+const installer = {
+  vm: {},
+  install(Vue) {
+    Vue.use(VueAxios, service)
+  }
+}
+
+export {
+  installer as VueAxios,
+  service as axios
+}

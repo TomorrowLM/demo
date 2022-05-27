@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve  --mode development",
+    "serve": "vue-cli-service serve && webpack-dev-server --open --mode development",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -37,7 +38,8 @@
     "vue-ls": "^4.0.0",
     "vue-router": "^3.5.3",
     "vue-template-compiler": "^2.6.11",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "webpack-dev-server": "^4.9.0"
   },
   "eslintConfig": {},
   "browserslist": [

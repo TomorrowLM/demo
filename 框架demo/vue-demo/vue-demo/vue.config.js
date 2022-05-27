@@ -47,7 +47,7 @@ module.exports = {
   lintOnSave: true,//boolean | 'warning' | 'default' | 'error'
   productionSourceMap: isProd ? false : true, // 生产环境是否生成 sourceMap 文件
   devServer: {
-    disableHostCheck: true,
+    disableHostCheck: true, //webpack4.0 开启热更新
     contentBase: './src',//项目基本访问目录
     // host: 'localhost',//服务器ip地址
     open: true,
@@ -55,6 +55,12 @@ module.exports = {
     hot: true,//模块热替换
     headers: {
       "Access-Control-Allow-Origin": "*"
+    },
+    //这个api是webpack原生的api，主要是说明监控变化是否开启轮询。
+    //通过开启轮询，来验证前后两次代码是否有变化。
+    //但是，需要说明的是，这个轮询肯定是会占据消耗资源的。慎重使用吧。
+    watchOptions: {
+      poll: 1000 // 每隔1s轮询一次
     },
     // public: 'http://192.168.10.36:8088',
     proxy: {
