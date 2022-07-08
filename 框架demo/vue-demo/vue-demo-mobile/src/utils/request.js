@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { message } from 'ant-design-vue'
+import { Toast, Dialog } from 'vant'
 import { VueAxios } from './axios'
+
+//单例模式，即同一时间只会存在一个 Toast
+Toast.allowMultiple();
 
 // 创建 axios 实例
 const service = axios.create({
@@ -31,12 +34,11 @@ const codeMessage = {
   504: "网关超时。",
 };
 
+let showLoading = null
 const failToast = (msg) => {
-  message.info({
-    top: `100px`,
-    content: msg,
-    duration: 2,
-    maxCount: 1,
+  Toast.fail({
+    duration: 2000,
+    message: msg
   })
 }
 const err = (error) => {
@@ -47,7 +49,6 @@ const err = (error) => {
       failToast('Forbidden')
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      console.log(1212313);
       failToast('Unauthorized')
     }
   } else {
@@ -61,6 +62,9 @@ const err = (error) => {
       failToast('请求失败，请检查网络是否已连接')
     }
   }
+  showLoading && showLoading.clear()
+  showLoading = null
+  console.log(location.pathname !== "/login", location.pathname);
   return Promise.reject(error)
 }
 /**
