@@ -5767,6 +5767,11 @@ open@^8.0.2, open@^8.0.9:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
+opencollective-postinstall@^2.0.2:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.3.tgz#7a0fff978f6dbfa4d006238fbac98ed4198c3259"
+  integrity sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==
+
 opener@^1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.2.tgz#5d37e1f35077b9dcac4301372271afdeb2a13598"
@@ -7606,6 +7611,13 @@ vue-loader@^17.0.0:
     chalk "^4.1.0"
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
+
+vue-ls@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/vue-ls/-/vue-ls-4.2.0.tgz#47d09a2feb6e2cd7c8de1724c657237f2e58b8ad"
+  integrity sha512-aEQvaFzIH6A0u0in4ghsxiqMgXNxf2+mtgOW8BaiLM6f3gTfvJMjZBjSrycDgdde7P5VfXOqLFGk4+Tf0Mre6Q==
+  dependencies:
+    opencollective-postinstall "^2.0.2"
 
 vue-property-decorator@^9.1.2:
   version "9.1.2"

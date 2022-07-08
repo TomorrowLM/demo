@@ -1,7 +1,7 @@
 export default [
-  // {
-  //     path: '*',
-  //     name: '404',
-  //     component: () => import('@/views/404')
-  // }
+  {
+    path: '*',
+    name: '404',
+    component: () => import('@/views/404')
+  }
 ]

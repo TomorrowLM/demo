@@ -34,12 +34,12 @@ module.exports = defineConfig({
     },
   },
   configureWebpack: {
-    resolve: {
-      alias: {
-        // 此处配置别名和实际对应路径的映射
-        '@': path.resolve(__dirname, './src')
-      }
-    }
+    // resolve: {
+    //   alias: {
+    //     // 此处配置别名和实际对应路径的映射
+    //     '@': path.resolve(__dirname, './src')
+    //   }
+    // }
   },
   chainWebpack: config => {
     config.resolve.alias

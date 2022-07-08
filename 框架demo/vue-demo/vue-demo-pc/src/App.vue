@@ -5,18 +5,15 @@
 </template>
 
 <script lang='ts'>
-import { userInfo } from "@/api";
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class App extends Vue {
   created() {
-    userInfo()
-      .then((res) => {
-        // console.log(res);
-      })
-      .catch((res) => {
-        this.$router.push("/login");
-      });
+    console.log("app");
+    this.$store.dispatch("GetUserCoreInfo").catch((res) => {
+      console.log(res, "res");
+    });
+    console.log(this.$store.getters.userInfo, "userInfo");
   }
 }
 </script>

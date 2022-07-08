@@ -9,33 +9,46 @@
       </div>
       <div class="menu">
         <a-menu mode="horizontal">
-        <a-menu-item key="menu:1">
-           首页
-          </a-menu-item>
-           <a-menu-item key="menu:2">
-           问题记录
-          </a-menu-item>
-      </a-menu>
+          <a-menu-item key="menu:1"> 首页 </a-menu-item>
+          <a-menu-item key="menu:2"> 问题记录 </a-menu-item>
+        </a-menu>
+        <div class="right">
+          <a-input placeholder="搜索"></a-input>
+          <div class="icon">
+            <a-icon type="question-circle" />
+            <a-icon type="bell" />
+            <a-icon type="setting" />
+          </div>
+          <div>
+            <a-avatar icon="user" />
+          </div>
+          <span>{{ userInfo.name === 1 ? "liming" : "" }}</span>
+        </div>
       </div>
     </a-layout-header>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class Header extends Vue {
   @Prop() private msg!: string;
   @Prop(Boolean) collapsed: boolean | undefined;
   collapsedHeader = false;
-  mounted () {
+  mounted() {
     // console.log(this.collapsed)
   }
 
-  send () {
-    this.collapsedHeader = !this.collapsedHeader
-    this.$emit('child-msg', this.collapsedHeader)
+  send() {
+    this.collapsedHeader = !this.collapsedHeader;
+    this.$emit("child-msg", this.collapsedHeader);
+  }
+
+  // 定义计算属性的 getter
+  get userInfo() {
+    return this.$store.getters.userInfo;
   }
 }
 </script>
@@ -54,21 +67,35 @@ export default class Header extends Vue {
   justify-content: center;
   align-items: center;
 }
-.anticon {
-  font-size: 30px;
-  background: #1890ff;
+.icon .anticon {
+  font-size: 20px;
+  margin: 3px;
+  // background: #1890ff;
 }
 
-.menu{
-    border-left: 1px solid #ccc;
-    margin-left: 30px;
+.menu {
+  border-left: 1px solid #ccc;
+  margin-left: 30px;
+  margin-right: 16px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 70%;
 }
 
-.ant-menu-horizontal{
-  border-bottom:0;
+.right {
+  display: flex;
+  align-items: center;
+}
+.icon {
+  display: flex;
+}
+.ant-menu-horizontal {
+  border-bottom: 0;
 }
 
-.ant-menu-horizontal .ant-menu-item, .ant-menu-horizontal .ant-menu-submenu{
-      line-height: 24px;
+.ant-menu-horizontal .ant-menu-item,
+.ant-menu-horizontal .ant-menu-submenu {
+  line-height: 24px;
 }
 </style>

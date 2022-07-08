@@ -5,8 +5,6 @@ const request = (url, params = {}, method = 'post') => {
 }
 
 export const userInfo = (params) => {
-  // console.log(12,axios);
-  // axios.get("users")
   return axios({ url: 'users', method: 'get', params: params })
 }
 

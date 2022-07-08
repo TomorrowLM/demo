@@ -1,10 +1,7 @@
 <template>
   <div class="login">
     <div class="form_login">
-      <a-form
-        :form="form"
-        @submit="handleSubmit"
-      >
+      <a-form id="coordinated" :form="form" @submit="handleSubmit">
         <a-form-item label="username">
           <a-input
             v-decorator="[
@@ -16,7 +13,7 @@
           />
         </a-form-item>
         <a-form-item label="password">
-             <a-input
+          <a-input
             v-decorator="[
               'password',
               {
@@ -46,19 +43,26 @@ interface FormState {
 
 @Component
 export default class Login extends Vue {
+  [x: string]: any;
   formState = reactive<FormState>({
     username: "limng",
     password: "1",
     remember: true,
   });
 
+  data() {
+    return {
+      form: this.$form.createForm(this, { name: "form_rule" }),
+    };
+  }
+
   handleSubmit(e: any) {
     e.preventDefault();
-    const form = this.$form.createForm(this, { name: "coordinated" });
-    form.validateFields((err: any, values: any) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
+    this.form.getFieldsValue();
+    console.log(this.form.getFieldsValue());
+    login(this.form.getFieldsValue()).then((res: any) => {
+      this.$ls.set("token", res.token);
+      this.$router.push("/");
     });
   }
 }
