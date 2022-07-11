@@ -1,13 +1,13 @@
-import HomeView from '@/views/HomeView.vue';
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import VueRouter, { RouteConfig } from 'vue-router';
+import store from '@/store';
 
 Vue.use(VueRouter);
 
 const isProd = process.env.NODE_ENV === 'production';
 const routerContext = require.context('./', true, /index\.js$/);
-const whiteList = [];
-let routes: any = [];
+//静态路由
+export let routes: any = [];
 
 routerContext.keys().forEach((route) => {
   // route就是路径
@@ -17,7 +17,6 @@ routerContext.keys().forEach((route) => {
   }
   const routerModule = routerContext(route);
   routes = [...routes, ...(routerModule.default || routerModule)];
-  // console.log(routes);
 });
 
 // 创建 router 实例，然后传 `routes` 配置
@@ -34,68 +33,46 @@ const router = new VueRouter({
   },
 });
 
-const role = 'admin';
-// const $import = require('./router/_import_' + process.env.NODE_ENV) // 引入获取组件的方法
-// 遍历后台传来的路由字符串，转换为组件对象
-function filterAsyncRouter(asyncRouterMap: any) {
-  const accessedRouters = Object.values(asyncRouterMap).filter((route: any) => {
-    // if (!route.meta.role.includes(role)) {
-    //   return false;
-    // }
-    if (route.component) {
-      console.log(route.component);
-      let a = `../views/${route.component}`;
-      route.component = () => import(a); // 导入组件
-    }
-    if (route.children && route.children.length) {
-      route.children = filterAsyncRouter(route.children);
-    }
-    return true;
-  });
-  console.log(accessedRouters);
-  return accessedRouters;
-}
-// 添加这些路由至路由器
-const mockRoute = {
-  path: '/',
-  name: 'home',
-  meta: {
-    title: '首页',
-    //纯前端去做动态路由
-    // roles: ['admin']
-  },
-  component: HomeView,
-  children: [
-    {
-      path: 'PickupTask',
-      name: 'PickupTask',
-      meta: {
-        title: 'PickupTask',
-      },
-      component: () => import('../views/Sd/PickupTask.vue'),
-    },
-    {
-      path: '/access',
-      component: () => import('../views/demo/Access.vue'),
-      meta: { role: ['admin'] },
-    },
-  ],
-};
-router.addRoute(mockRoute);
-
+let registerRouteFresh = true;
 /**
  * 全局全局前置守卫
  * to : 将要进入的目标路由对象
  * from : 即将离开的目标路由对象
  */
-router.beforeEach((to: any, from, next) => {
+router.beforeEach(async (to: any, from, next) => {
   console.log(to);
-  console.log(from);
+  // console.log(from);
   //设置当前页的title
   document.title = to.meta.title;
   if (to.path === '/login' && localStorage.getItem('token')) {
-    console.log('1scaku');
     next('/');
+  }
+  console.log(registerRouteFresh);
+  //如果首次或者刷新界面，next(...to, replace: true)会循环遍历路由，
+  //如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
+  //我们的问题在于页面刷新以后异步获取数据，直接执行next()感觉路由添加了但是在next()之后执行的，
+  //所以我们没法导航到相应的界面。这里使用变量registerRouteFresh变量做记录，直到找到相应的路由以后，把值设置为false然后走else执行next(),整个流程就走完了，路由也就添加完了。
+  if (registerRouteFresh) {
+    //设置路由
+    const accessRoutes = await store.dispatch('generateRoutes', store.getters.role);
+    let errorPage = {
+      path: '*',
+      name: '404',
+      component: () => import('../views/404.vue'),
+    };
+    // 将404添加进去
+    // 现在才添加的原因是：作为一级路由，当刷新，动态路由还未加载，路由就已经做了匹配，找不到就跳到了404
+    router.addRoute({ ...errorPage });
+    accessRoutes.forEach((item: RouteConfig) => {
+      router.addRoute(item);
+    });
+    //获取路由配置
+    console.log(router.getRoutes());
+    //通过next({...to, replace})解决刷新后路由失效的问题
+    next({ ...to, replace: true });
+    registerRouteFresh = false;
+  } else {
+    next();
   }
   next();
 });

@@ -9,7 +9,7 @@
             </transition>
           </el-main>
           <el-footer v-bind:style="{ height: '10vh' }"
-            ><van-tabbar v-model="active">
+            ><van-tabbar>
               <van-tabbar-item icon="home-o"><router-link to="/learn">学习笔记</router-link></van-tabbar-item>
               <!-- <van-tabbar-item icon="search">个人中心</van-tabbar-item>
             <van-tabbar-item icon="friends-o">标签</van-tabbar-item> -->

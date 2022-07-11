@@ -38,7 +38,7 @@
           <a-sub-menu key="sub45">
             <span slot="title"><span></span> demo</span>
             <a-menu-item key="9">
-              <router-link :to="{ path: '/access' }"></router-link>
+              <router-link :to="{ path: '/access' }">access</router-link>
             </a-menu-item>
           </a-sub-menu>
         </a-menu>

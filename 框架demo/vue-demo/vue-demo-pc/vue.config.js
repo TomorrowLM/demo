@@ -16,9 +16,10 @@ module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
   devServer: {
-    host: 'localhost',//服务器ip地址
-    open: true,
+    // contentBase: './src',//项目基本访问目录
+    // host: 'localhost',//服务器ip地址
     port: 8088,
+    open: true,// 配置自动启动浏览器
     hot: true,//模块热替换
     headers: {
       "Access-Control-Allow-Origin": "*"

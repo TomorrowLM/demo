@@ -1,3 +1,4 @@
+import store from '@/store'
 /**
  * 随机生成字符串
  * @param  len 字符串长度
@@ -43,10 +44,10 @@
  * @return obj
  */
 export function getUrl(href = '') {
-  var url =decodeURIComponent(href || window.location.href); //获取url中"?"符后的字串
+  var url = decodeURIComponent(href || window.location.href); //获取url中"?"符后的字串
   var theRequest = new Object();
   if (url.lastIndexOf("?") != -1) {
-    var str =url.substring(url.lastIndexOf("?") + 1, url.length);
+    var str = url.substring(url.lastIndexOf("?") + 1, url.length);
     const strs = str.split("&");
     for (var i = 0; i < strs.length; i++) {
       theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
@@ -58,11 +59,11 @@ export function getUrl(href = '') {
  * 获取url参数
  * @return obj
  */
- export function getUrlFirst(href = '') {
-  var url =decodeURIComponent(href || window.location.href); //获取url中"?"符后的字串
+export function getUrlFirst(href = '') {
+  var url = decodeURIComponent(href || window.location.href); //获取url中"?"符后的字串
   var theRequest = new Object();
   if (url.lastIndexOf("?") != -1) {
-    var str =url.substring(url.indexOf("?") + 1, url.length);
+    var str = url.substring(url.indexOf("?") + 1, url.length);
     const strs = str.split("&");
     for (var i = 0; i < strs.length; i++) {
       theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
@@ -88,17 +89,38 @@ export function banBack() {
   }
 }
 // 判断手机是否有下面的小黑条
-export function  isIPhoneX() {
+export function isIPhoneX() {
   var u = navigator.userAgent;
-  var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+  var isIOS = Boolean(u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)); //ios终端
   if (isIOS) {
-    if ((window.screen.height == 812 && window.screen.width == 375) || (window.screen.width === 414 && window.screen.height === 896)) {//有底部小黑条
+    if ((window.screen.height == 812 && window.screen.width == 375) || (window.screen.width === 414 && window.screen.height === 896)) { //有底部小黑条
       //是iphoneX(375*812) iphoneXR(414*896) iphoneXS max(414*896)  iphone11(414*896) iphone pro max(414*896)
       return true
-    } else {//没有底部小黑条
-      return false
-    }
-  } else {
+    } //没有底部小黑条
     return false
+
   }
+  return false
 }
+
+/**
+ * @param {Array} value
+ * @returns {Boolean}
+ * @example see @/views/permission/directive.vue
+ * 除了使用指令，也可以使用函数
+ */
+export default function checkPermission(value) {
+  if (value && value instanceof Array && value.length > 0) {
+    const roles = store.getters && store.getters.roles
+    const permissionRoles = value
+
+    const hasPermission = roles.some(role => {
+      return permissionRoles.includes(role)
+    })
+    return hasPermission
+  }
+    console.error(`need roles! Like v-permission="['admin','editor']"`)
+    return false
+
+}
+

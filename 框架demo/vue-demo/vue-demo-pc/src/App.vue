@@ -9,11 +9,10 @@ import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class App extends Vue {
   created() {
-    console.log("app");
+    console.log("app启动");
     this.$store.dispatch("GetUserCoreInfo").catch((res) => {
       this.$router.push("login");
     });
-    console.log(this.$store.getters.userInfo, "userInfo");
   }
 }
 </script>
