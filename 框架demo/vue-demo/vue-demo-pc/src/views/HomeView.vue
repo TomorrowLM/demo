@@ -3,7 +3,7 @@
     <Header @child-msg="get" :collapsed="collapsedHeader" />
     <a-layout id="components-layout-demo-custom-trigger">
       <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
-        <div class="project-name">物流智能管控应用</div>
+        <!-- <div class="project-name">物流智能管控应用</div> -->
         <a-menu
           theme="dark"
           :open-keys.sync="openKeys"
@@ -11,7 +11,7 @@
           @click="handleClick"
           mode="inline"
         >
-          <a-sub-menu key="sub1" @titleClick="titleClick">
+          <!-- <a-sub-menu key="sub1" @titleClick="titleClick">
             <span slot="title"><span></span> 运输任务管理</span>
             <a-menu-item key="1">
               <router-link :to="{ name: 'PickupTask' }"
@@ -34,7 +34,7 @@
           <a-sub-menu key="sub4">
             <span slot="title"><span></span> 列货检查管理</span>
             <a-menu-item key="8"> 列货检信息管理 </a-menu-item>
-          </a-sub-menu>
+          </a-sub-menu> -->
           <a-sub-menu key="sub45">
             <span slot="title"><span></span> demo</span>
             <a-menu-item key="9">

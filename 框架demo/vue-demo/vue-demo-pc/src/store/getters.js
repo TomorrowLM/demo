@@ -2,13 +2,12 @@
 const user = {
   userInfo: state => state.user.userInfo,
   role: state => state.user.role,
+  mockButton: state => state.user.mockButton,
 }
 
 const permission = {
   addRoutes: state => state.permission.addRoutes,
-  routes: state => {
-    return state.permission.routes
-  },
+  routes: state => state.permission.routes
 }
 
 const getters = {

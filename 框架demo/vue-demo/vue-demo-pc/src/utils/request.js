@@ -47,17 +47,15 @@ const err = (error) => {
       failToast('Forbidden')
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      console.log(1212313);
       failToast('Unauthorized')
+      window.localStorage.removeItem('token')
     }
   } else {
     // 请求超时状态
     if (error.message.includes('timeout')) {
-      console.log('超时了')
       failToast('请求超时，请检查网络是否连接正常')
     } else {
       // 可以展示断网组件
-      console.log('断网了')
       failToast('请求失败，请检查网络是否已连接')
     }
   }
@@ -68,7 +66,7 @@ const err = (error) => {
  * @param {*} config
  */
 const handleParams = (config) => {
-  console.log(config);
+  // console.log(config);
   const token = Vue.ls.get('token')
   const { method } = config
   config.headers.authorization =
@@ -81,7 +79,7 @@ service.interceptors.request.use(config => {
 }, err)
 // response interceptor
 service.interceptors.response.use((response) => {
-  console.log(response);
+  // console.log(response);
   return response.data
 }, err)
 

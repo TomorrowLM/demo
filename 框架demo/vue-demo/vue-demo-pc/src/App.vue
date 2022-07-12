@@ -11,6 +11,7 @@ export default class App extends Vue {
   created() {
     console.log("app启动");
     this.$store.dispatch("GetUserCoreInfo").catch((res) => {
+      console.log(res,'213');
       this.$router.push("login");
     });
   }

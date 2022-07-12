@@ -2,20 +2,22 @@ import store from '@/store'
 
 function checkPermission(el, binding) {
   const { value } = binding
-  const roles = store.getters && store.getters.roles
+  const roles = store.getters && store.getters.role
   // 模拟权限按钮
-  const mockButton = {
-    'btn:access:createUser': 'hidden',
-    'btn:access:editUser': 'disable'
-  }
-  if (mockButton[value] === 'disable') {
+  const mockButton = store.getters && store.getters.mockButton
+  if (mockButton[value] === 'disabled') {
     el.disabled = true
-    el.setAttribute.add('disabled', 'disabled')
+    el.setAttribute('disabled', true)
   }
+
   if (mockButton[value] === 'hidden') {
-    el.parentNode && el.parentNode.removeChild(el)
+    el.style.display = 'none'
   }
-  throw new Error(`need roles! Like v-permission="['admin','editor']"`)
+  if (mockButton[value] === 'show') {
+    el.style.display = 'block'
+    el.disabled = false
+  }
+  // throw new Error(`need roles! Like v-permission="['admin','editor']"`)
 }
 
 export default {

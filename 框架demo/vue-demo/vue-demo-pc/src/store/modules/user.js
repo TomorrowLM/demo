@@ -9,13 +9,24 @@ import {
 const user = {
   state: {
     userInfo: {},
-    role: 'admin'
+    role: 'admin',
+    mockButton: {
+      'btn:access:createUser': 'show',
+      'btn:access:editUser': 'show'
+    }
   },
   //更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
     SET_CORE_INFO: (state, data) => {
       state.userInfo = data
     },
+    change_role: (state, data) => {
+      state.role = data.role
+    },
+    change_btn: (state, data) => {
+      console.log(data);
+      state.mockButton = data.mockButton
+    }
   },
   //Action 提交的是 mutation，而不是直接变更状态。Action 可以包含任意异步操作。
   actions: {

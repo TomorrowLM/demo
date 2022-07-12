@@ -61,7 +61,7 @@ export const asyncRoutes = [
           roles: ['admin'],
           button: {
             'btn:access:createUser': 'hidden',
-            'btn:access:editUser': 'disable'
+            'btn:access:editUser': 'disabled'
           },
         },
       },
