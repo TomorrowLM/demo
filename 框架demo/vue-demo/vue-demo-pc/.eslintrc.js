@@ -106,7 +106,7 @@ module.exports = {
     'no-sparse-arrays': 2,//禁止稀疏数组， [1,,2]
     'no-sync': 0,//nodejs 禁止同步方法
     'no-ternary': 0,//禁止使用三目运算符
-    'no-trailing-spaces': 1,//一行结束后面不要有空格
+    'no-trailing-spaces': 0,//一行结束后面不要有空格
     'no-this-before-super': 0,//在调用super()之前不能使用this或super
     'no-throw-literal': 2,//禁止抛出字面量错误 throw "error";
     'no-undef': 1,//不能有未定义的变量

@@ -3,22 +3,16 @@
     <Header @child-msg="get" :collapsed="collapsedHeader" />
     <a-layout id="components-layout-demo-custom-trigger">
       <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
-        <!-- <div class="project-name">物流智能管控应用</div> -->
-        <a-menu
-          theme="dark"
-          :open-keys.sync="openKeys"
-          :default-selected-keys="['1']"
-          @click="handleClick"
-          mode="inline"
-        >
-          <!-- <a-sub-menu key="sub1" @titleClick="titleClick">
+        <div class="project-name">物流智能管控应用</div>
+        <a-menu theme="dark" :open-keys.sync="openKeys" :default-selected-keys="['1']" @click="handleClick" mode="inline">
+          <a-menu-item key="1">
+            <router-link :to="{ name: 'dashboard' }">仪表盘</router-link>
+          </a-menu-item>
+          <a-sub-menu key="sub1" @titleClick="titleClick">
             <span slot="title"><span></span> 运输任务管理</span>
-            <a-menu-item key="1">
-              <router-link :to="{ name: 'PickupTask' }"
-                >接车任务管理</router-link
-              >
+            <a-menu-item key="2">
+              <router-link :to="{ name: 'PickupTask' }">接车任务管理</router-link>
             </a-menu-item>
-            <a-menu-item key="2"> 卸车任务管理 </a-menu-item>
             <a-menu-item key="3"> 装车任务管理 </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub2">
@@ -34,8 +28,8 @@
           <a-sub-menu key="sub4">
             <span slot="title"><span></span> 列货检查管理</span>
             <a-menu-item key="8"> 列货检信息管理 </a-menu-item>
-          </a-sub-menu> -->
-          <a-sub-menu key="sub45">
+          </a-sub-menu>
+          <a-sub-menu key="sub5">
             <span slot="title"><span></span> demo</span>
             <a-menu-item key="9">
               <router-link :to="{ path: '/access' }">access</router-link>
@@ -44,14 +38,12 @@
         </a-menu>
       </a-layout-sider>
       <a-layout>
-        <a-layout-content
-          :style="{
+        <a-layout-content :style="{
             margin: '24px 16px',
             padding: '24px',
             background: '#fff',
             minHeight: '280px',
-          }"
-        >
+          }">
           <router-view />
         </a-layout-content>
       </a-layout>
@@ -71,7 +63,7 @@ import Header from "components/Header.vue";
 export default class HomeView extends Vue {
   collapsed = false;
   collapsedHeader = false;
-  openKeys = ["sub1"];
+  openKeys = [""];
 
   get(msg: boolean) {
     // console.log(msg)

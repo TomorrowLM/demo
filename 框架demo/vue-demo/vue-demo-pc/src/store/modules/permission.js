@@ -36,7 +36,7 @@ export const asyncRoutes = [
   {
     path: '/',
     name: 'home',
-    redirect: '/PickupTask',
+    redirect: '/dashboard',
     meta: {
       title: '首页',
       //纯前端去做动态路由
@@ -64,6 +64,14 @@ export const asyncRoutes = [
             'btn:access:editUser': 'disabled'
           },
         },
+      },
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        meta: {
+          title: 'dashboard',
+        },
+        component: () => import('@/views/dashboard'),
       },
     ],
   }
