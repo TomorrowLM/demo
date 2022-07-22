@@ -2,70 +2,96 @@
   <div>
     <span>dashboard</span>
     <!-- <button @click="()=>{data = data+1}">{{data}}</button> -->
-    <div class="echart" ref="echart" style="width: 600px; height: 400px"></div>
+    <div class="box">
+      <a-card title="折线图" :bordered="false" style="width: 9rem">
+        <div class="echart echart1" style="width: 9rem"></div>
+      </a-card>
+      <a-card title="省图" :bordered="false" style="width: 5rem">
+        <div class="echart echart2"></div>
+      </a-card>
+      <a-card title="国家地图" :bordered="false" style="width: 6rem">
+        <div class="echart echart3" style="width: 6rem"></div>
+      </a-card>
+      <div class="map" id="map"></div>
+    </div>
   </div>
 </template>
 
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&ak=5ieMMexWmzB9jivTq6oCRX9j&callback"></script>
 <script lang='ts'>
 import { Vue, Component, Watch } from "vue-property-decorator";
 import * as echarts from "echarts";
+import { echart1, echart2, echart3 } from "./data";
+import "./file/guangdong";
+import "./file/china";
+
 @Component({})
 export default class Access extends Vue {
-  myChart: any = null;
-  option = {
-    title: {
-      show: true,
-      text: "Main Title",
-      subtext: "Sub Title",
-      left: "right",
-      bottom: "10",
-      textStyle: {
-        fontSize: 12,
-      },
-      subtextStyle: {
-        fontSize: 20,
-      },
-    },
-    legend: {},
-    grid: {
-      show: false,
-    },
-    tooltip: {},
-    dataset: {
-      source: [
-        ["product", "2012", "2013", "2014", "2015"],
-        ["Matcha Latte", 41.1, 30.4, 65.1, 53.3],
-        ["Milk Tea", 86.5, 92.1, 85.7, 83.1],
-        ["Cheese Cocoa", 24.1, 67.2, 79.5, 86.4],
-      ],
-    },
-    xAxis: [
-      { type: "category", gridIndex: 0 },
-      { type: "category", gridIndex: 1 },
-    ],
-    yAxis: [{ gridIndex: 0 }, { gridIndex: 1 }],
-    series: [
-      // 这几个系列会出现在第一个直角坐标系中，每个系列对应到 dataset 的每一行。
-      { type: "bar", seriesLayoutBy: "row" },
-      { type: "bar", seriesLayoutBy: "row" },
-      { type: "bar", seriesLayoutBy: "row" },
-      // 这几个系列会出现在第二个直角坐标系中，每个系列对应到 dataset 的每一列。
-      { type: "bar", xAxisIndex: 1, yAxisIndex: 1 },
-      { type: "bar", xAxisIndex: 1, yAxisIndex: 1 },
-      { type: "bar", xAxisIndex: 1, yAxisIndex: 1 },
-      { type: "bar", xAxisIndex: 1, yAxisIndex: 1 },
-    ],
-  };
-
-  data = 0;
+  myChart1: any = null;
+  myChart2: any = null;
+  myChart3: any = null;
 
   mounted() {
-    this.myChart = echarts.init(document.getElementsByClassName("echart")[0]);
-    this.myChart.setOption(this.option);
+    this.myChart1 = echarts.init(document.getElementsByClassName("echart1")[0]);
+    this.myChart1.setOption(echart1());
+    this.myChart2 = echarts.init(document.getElementsByClassName("echart2")[0]);
+    this.myChart2.setOption(echart2());
+    this.myChart3 = echarts.init(document.getElementsByClassName("echart3")[0]);
+    this.myChart3.setOption(echart3());
+    //自适应
+    window.addEventListener("resize", this.onresize);
+    //绑定事件
+    this.myChart1.on("legendselectchanged", (ev: any) => {
+      console.log("ev", ev);
+    });
+
+    // 百度地图API功能
+    console.log(window);
+    let map = new BMap.Map("map"); // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11); // 初始化地图,设置中心点坐标和地图级别
+    //添加地图类型控件
+
+    map.addControl(
+      new BMap.MapTypeControl({
+        mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP],
+      })
+    );
+    var mapStyle = {
+      style: "dark",
+    };
+    map.setMapStyle(mapStyle);
+    map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);
   }
 
   updated() {
     console.log(this.$refs.echart, 20000);
   }
+
+  onresize() {
+    this.myChart1.resize();
+    this.myChart2.resize();
+    this.myChart3.resize();
+  }
 }
 </script>
+
+<style lang="scss">
+// .test {
+//   width: 5rem;
+//   height: 5rem;
+//   background: #ffe;
+// }
+.box {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.echart {
+  width: 5rem;
+  height: 5rem;
+}
+.ant-card-body {
+  padding: 0;
+}
+</style>

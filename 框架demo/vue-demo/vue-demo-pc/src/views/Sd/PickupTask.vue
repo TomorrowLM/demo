@@ -2,43 +2,19 @@
   <div>
     <div class="task-search">
       <a-form layout="inline">
-        <a-form-item
-          label="合同编号"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-          labelAlign="left"
-        >
+        <a-form-item label="合同编号" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" labelAlign="left">
           <a-input placeholder="请输入" />
         </a-form-item>
-        <a-form-item
-          label="进厂车次"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-        >
+        <a-form-item label="进厂车次" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
           <a-input placeholder="请输入" />
         </a-form-item>
-        <a-form-item
-          label="车号/集装箱号"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-          labelAlign="left"
-        >
+        <a-form-item label="车号/集装箱号" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" labelAlign="left">
           <a-input placeholder="请输入" />
         </a-form-item>
-        <a-form-item
-          label="流向号"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-          labelAlign="left"
-        >
+        <a-form-item label="流向号" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" labelAlign="left">
           <a-input placeholder="请输入" />
         </a-form-item>
-        <a-form-item
-          label="执行状态 ："
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-          labelAlign="left"
-        >
+        <a-form-item label="执行状态 ：" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol" labelAlign="left">
           <a-select default-value="123" style="width: 120px">
             <a-select-option value="123"> 全部 </a-select-option>
             <a-select-option value="2"> 待接车 </a-select-option>
@@ -46,31 +22,14 @@
             <a-select-option value="lucy"> 已完成 </a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item
-          label="接车任务号"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-        >
+        <a-form-item label="接车任务号" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
           <a-input placeholder="请输入" />
         </a-form-item>
-        <a-form-item
-          label="物料名称"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-        >
+        <a-form-item label="物料名称" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
           <a-input placeholder="请输入" />
         </a-form-item>
-        <a-form-item
-          label="进厂时间"
-          :label-col="formItemLayout.labelCol"
-          :wrapper-col="formItemLayout.wrapperCol"
-        >
-          <a-date-picker
-            show-time
-            placeholder="请输入"
-            @change="onChange"
-            @ok="onOk"
-          />
+        <a-form-item label="进厂时间" :label-col="formItemLayout.labelCol" :wrapper-col="formItemLayout.wrapperCol">
+          <a-date-picker show-time placeholder="请输入" @change="onChange" @ok="onOk" />
         </a-form-item>
         <a-form-item :wrapper-col="buttonItemLayout.wrapperCol">
           <a-button type="primary"> Submit </a-button>
@@ -94,30 +53,12 @@
             </a-select>
           </p>
         </div>
-        <a-table
-          :scroll="{ x: 1300 }"
-          :columns="columns"
-          :data-source="data"
-          :expandIconColumnIndex="-1"
-          :expandIconAsCell="false"
-          :rowKey="(record) => record.key"
-          :expandedRowKeys="curExpandedRowKeys"
-        >
-          <a
-            slot="action"
-            slot-scope="record"
-            @click="handleExpand(record.key)"
-          >
+        <a-table :scroll="{ x: 1300 }" :columns="columns" :data-source="data" :expandIconColumnIndex="-1" :expandIconAsCell="false"
+          :rowKey="(record) => record.key" :expandedRowKeys="curExpandedRowKeys">
+          <a slot="action" slot-scope="record" @click="handleExpand(record.key)">
             展开详情
           </a>
-          <a-table
-            size="small"
-            slot="expandedRowRender"
-            slot-scope="record"
-            :columns="innerColumns"
-            :data-source="innerData"
-            :pagination="false"
-          >
+          <a-table size="small" slot="expandedRowRender" :slot-scope="record" :columns="innerColumns" :data-source="innerData" :pagination="false">
             <!-- <span slot="status" slot-scope="record">
               <a-badge status="success" />Finished
             </span> -->
@@ -248,7 +189,11 @@ export default class PickupTask extends Vue {
   curExpandedRowKeys = []; //点击哪行展开数组(数组里只会存在一个值,具体逻辑在methods的点击事件里.)!!!
   selectedRowKeys = []; //列表项是否可选择数组
   columns = [
-    { title: "序号", dataIndex: "address", key: "address" },
+    {
+      title: "序号",
+      dataIndex: "address",
+      key: "address",
+    },
     {
       title: "接车任务号",
       dataIndex: "address0",
@@ -381,7 +326,7 @@ export default class PickupTask extends Vue {
     console.log("Formatted Selected Time: ", dateString);
   }
 
-  handleExpand(rowkey: any) {
+  handleExpand(rowkey: never) {
     console.log(123, rowkey);
     if (this.curExpandedRowKeys.length > 0) {
       let index = this.curExpandedRowKeys.indexOf(rowkey);

@@ -3,24 +3,20 @@
     <div class="form_login">
       <a-form id="coordinated" :form="form" @submit="handleSubmit">
         <a-form-item label="username">
-          <a-input
-            v-decorator="[
+          <a-input v-decorator="[
               'username',
               {
                 rules: [{ required: true, message: 'Please input your note!' }],
               },
-            ]"
-          />
+            ]" />
         </a-form-item>
         <a-form-item label="password">
-          <a-input
-            v-decorator="[
+          <a-input v-decorator="[
               'password',
               {
                 rules: [{ required: true, message: 'Please input your note!' }],
               },
-            ]"
-          />
+            ]" />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
           <a-button type="primary" html-type="submit"> Submit </a-button>

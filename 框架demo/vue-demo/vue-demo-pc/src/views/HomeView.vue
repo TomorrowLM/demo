@@ -42,7 +42,6 @@
             margin: '24px 16px',
             padding: '24px',
             background: '#fff',
-            minHeight: '280px',
           }">
           <router-view />
         </a-layout-content>
@@ -99,5 +98,8 @@ export default class HomeView extends Vue {
 }
 #components-layout-demo-custom-trigger {
   height: 100vh;
+}
+.ant-layout-content {
+  min-height: initial;
 }
 </style>
