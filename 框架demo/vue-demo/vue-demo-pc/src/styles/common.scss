@@ -1,0 +1,65 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background-color: #fff;
+  color: #222;
+  font-family: 'Helvetica Neue', Helvetica, sans-serif, Arial, 'PingFang SC', 'Microsoft YaHei',
+    '微软雅黑', SimHei, SimSun;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  font-weight: normal;
+}
+
+/* 滚动条的宽度 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: rgb(245, 246, 250);
+  border-radius: 3px;
+}
+
+/* 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: rgb(161, 161, 161);
+  border-radius: 6px;
+}
+
+/* 包含以下四种的链接 */
+a {
+  text-decoration: none;
+}
+
+/* 正常的未被访问过的链接 */
+a:link {
+  text-decoration: none;
+}
+
+/* 已经访问过的链接 */
+a:visited {
+  text-decoration: none;
+}
+
+/* 鼠标划过(停留)的链接 */
+a:hover {
+  text-decoration: none;
+}
+
+/* 正在点击的链接 */
+a:active {
+  text-decoration: none;
+  color: black;
+}
+
+.el-table__header {
+  width: 100% !important;
+}

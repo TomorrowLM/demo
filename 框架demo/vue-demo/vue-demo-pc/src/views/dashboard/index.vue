@@ -12,18 +12,17 @@
       <a-card title="国家地图" :bordered="false" style="width: 6rem">
         <div class="echart echart3" style="width: 6rem"></div>
       </a-card>
-      <div class="map" id="map"></div>
+      <div id="map" style="width:1200px;height:500px;"></div>
     </div>
   </div>
 </template>
 
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&ak=5ieMMexWmzB9jivTq6oCRX9j&callback"></script>
 <script lang='ts'>
-import { Vue, Component, Watch } from "vue-property-decorator";
 import * as echarts from "echarts";
+import { Component, Vue } from "vue-property-decorator";
 import { echart1, echart2, echart3 } from "./data";
-import "./file/guangdong";
 import "./file/china";
+import "./file/guangdong";
 
 @Component({})
 export default class Access extends Vue {
@@ -46,22 +45,22 @@ export default class Access extends Vue {
     });
 
     // 百度地图API功能
-    console.log(window);
-    let map = new BMap.Map("map"); // 创建Map实例
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11); // 初始化地图,设置中心点坐标和地图级别
-    //添加地图类型控件
+    let BMap = window.BMap;
+    let BMAP_NORMAL_MAP = window.BMAP_NORMAL_MAP;
+    let BMAP_HYBRID_MAP = window.BMAP_HYBRID_MAP;
 
+    let map = new BMap.Map("map"); // 创建Map实例
+    map.centerAndZoom(new BMap.Point(104.06, 30.67), 12); // 初始化地图,设置中心点坐标和地图级别
+    //添加地图类型控件
     map.addControl(
       new BMap.MapTypeControl({
         mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP],
       })
     );
-    var mapStyle = {
-      style: "dark",
-    };
-    map.setMapStyle(mapStyle);
-    map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
-    map.enableScrollWheelZoom(true);
+    map.setCurrentCity("成都"); // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+    console.log(window);
   }
 
   updated() {
@@ -93,5 +92,12 @@ export default class Access extends Vue {
 }
 .ant-card-body {
   padding: 0;
+}
+//百度logo隐藏
+.BMap_cpyCtrl {
+  display: none;
+}
+.anchorBL {
+  display: none;
 }
 </style>

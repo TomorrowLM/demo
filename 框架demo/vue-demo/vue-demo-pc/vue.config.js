@@ -35,12 +35,11 @@ module.exports = defineConfig({
     },
   },
   configureWebpack: {
-    // resolve: {
-    //   alias: {
-    //     // 此处配置别名和实际对应路径的映射
-    //     '@': path.resolve(__dirname, './src')
-    //   }
-    // }
+   // 全局常量定义
+   externals: {
+    'BMap': 'window.BMap', // 百度地图
+    'AMap': 'AMap' // 高德地图
+  }
   },
   chainWebpack: config => {
     config.resolve.alias

@@ -1,11 +1,16 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-import "@/utils/index";
-import "@/utils/rem";
-import Antd from "ant-design-vue";
-import "ant-design-vue/dist/antd.css";
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import '@/utils/index';
+import '@/utils/rem';
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+// import BaiduMap from 'vue-baidu-map';
+
+// Vue.use(BaiduMap, {
+//   ak: 'RALHVFnPxQdDB42THG2M3cUDzwSf1zV9',
+// });
 Vue.use(Antd);
 
 Vue.config.productionTip = false;
@@ -13,4 +18,4 @@ new Vue({
   router,
   store,
   render: (h) => h(App),
-}).$mount("#app");
+}).$mount('#app');
