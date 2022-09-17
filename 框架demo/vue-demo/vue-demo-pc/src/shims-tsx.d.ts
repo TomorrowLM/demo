@@ -14,3 +14,8 @@ declare global {
     }
   }
 }
+declare global {
+  // 全局变量设置
+  const $_: typeof lodash;
+  const moment: typeof import('moment');
+}

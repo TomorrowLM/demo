@@ -1,10 +1,22 @@
 const { defineConfig } = require('@vue/cli-service')
 const path = require('path')
+const webpack = require('webpack');
 // const pxtorem = require('postcss-pxtorem')
 const autoprefixer = require('autoprefixer')// 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const resolve = dir => path.join(__dirname, dir)
 const isProd = process.env.NODE_ENV === 'production'
-
+const commonPlugin = [
+  // 扩展环境变量
+  // new webpack.DefinePlugin({
+  //   BASE_URL: JSON.stringify(process.env.BASE_URL)
+  // })
+  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
+  new webpack.ProvidePlugin({
+    $_: 'lodash',
+    moment: 'moment',
+  }),
+];
 module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production'
     ? '/vue-demo/'
@@ -34,12 +46,12 @@ module.exports = defineConfig({
       }
     },
   },
-  configureWebpack: {
-   // 全局常量定义
-   externals: {
-    'BMap': 'window.BMap', // 百度地图
-    'AMap': 'AMap' // 高德地图
-  }
+  configureWebpack: config => {
+    config.plugins.push(...commonPlugin);
+    config.externals = {
+      'BMap': 'window.BMap', // 百度地图
+      'AMap': 'AMap' // 高德地图}
+    }
   },
   chainWebpack: config => {
     config.resolve.alias
