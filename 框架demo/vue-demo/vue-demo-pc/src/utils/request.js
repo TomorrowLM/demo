@@ -6,7 +6,6 @@ import { VueAxios } from './axios'
 // 创建 axios 实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
-  //代理
   // baseURL: '/dev',
   timeout: 6000 // 请求超时时间
 })
@@ -39,6 +38,7 @@ const failToast = (msg) => {
     maxCount: 1,
   })
 }
+
 const err = (error) => {
   console.log(error);
   if (error.response) {
@@ -61,6 +61,7 @@ const err = (error) => {
   }
   return Promise.reject(error)
 }
+
 /**
  * 处理参数
  * @param {*} config
