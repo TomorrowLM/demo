@@ -1,0 +1,68 @@
+{
+  "pages": [ 
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/bottom-nav/index",
+      "style": {"navigationBarTitleText": "导航页"}
+    }, 
+    {
+    	"path": "pages/bottom-nav/home/home",
+    	"style": {"navigationBarTitleText": "首页"}
+    },
+		{
+			"path": "pages/bottom-nav/person/person",
+			"style": {"navigationBarTitleText": "个人"}
+		}
+  ],
+  // 分包加载：此配置在微信小程序里为分包加载，在5+App里始终为整包
+  "subPackages": [
+    // 用户登录注册修改忘记密码页面
+    {
+      "root": "pages/user",
+      "pages": [
+        // 接root包路径
+        {
+          "path": "login/login",
+          "style": {
+            "navigationBarTitleText": "用户登录"
+          }
+        },
+        {
+          "path": "register/register",
+          "style": {
+            "navigationBarTitleText": "用户注册"
+          }
+        },
+        {
+          "path": "modify/modify",
+          "style": {
+            "navigationBarTitleText": "密码修改"
+          }
+        },
+        {
+          "path": "forgot/forgot",
+          "style": {
+            "navigationBarTitleText": "忘记密码"
+          }
+        },
+        {
+          "path": "info/info",
+          "style": {
+            "navigationBarTitleText": "信息设置"
+          }
+        }
+      ]
+    }
+  ],
+  // 全局bar样式
+  "globalStyle": {
+  	// 不显示工具栏toolbar
+  	"navigationStyle": "custom",
+  	"app-plus": {
+  		// 不显示滚动条
+  		"scrollIndicator": "none",
+  		// 页面回弹效果
+  		"bounce": "none"
+  	}
+  }
+}

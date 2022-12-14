@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style>
+		div{
+			display: inline-block;
+			transition:all 1s;
+		}
+		.rotateDiv{
+			transform:rotate(360deg);
+		}
+	</style>
+
+</head>
+
+<body>
+	<div id="zhuan"><img src="zhuan.jpg" alt=""></div>
+		<script>
+			var div1 = document.getElementById('zhuan');
+			div1.addEventListener("click", function(){
+   			div1.classList.toggle("rotateDiv");
+				});
+	</script>
+</body>
+</html>

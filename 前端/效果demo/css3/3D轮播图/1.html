@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style>
+		*{
+			margin:0;padding:0;
+		}
+		body{
+			perspective:700px;
+		}
+		ul{list-style:none;}
+		ul{
+			width: 200px;
+			height: 200px;
+			margin:100px auto;
+			position:relative;
+			transition:all 6s;
+			transform-style: preserve-3d;
+			transform:scaleX(2.5) scaleY(1.5) ;
+		}
+/*
+		ul:hover{
+			transform:scaleX(2.5) rotateX(360deg);
+		}
+*/
+		ul li{
+			width: 100%;
+			height: 100%;
+			background-color:pink;
+			text-align:center;
+			line-height:200px;
+			color:white;
+			font-size:30px;
+			position:absolute;
+/*
+			-webkit-background-size:cover;
+			background-size:cover;
+*/
+		}
+		ul li:nth-child(1){
+			transform:rotateX(0deg) translateZ(100px);
+			background:url("images/1.jpg") no-repeat;
+				background-size:cover;
+		}
+		ul li:nth-child(2){
+			transform:rotateX(-90deg) translateZ(100px);
+			background:url("images/2.jpg") no-repeat;
+				background-size:cover;
+		}
+			ul  li:nth-child(3){
+			transform:rotateX(-180deg) translateZ(100px);
+			background:url("images/3.jpg") no-repeat;
+					background-size:cover;
+		}
+			ul li:nth-child(4){
+			transform:rotateX(-270deg) translateZ(100px);
+			background:url("images/4.jpg") no-repeat;
+					background-size:cover;
+		}
+		span{
+			position:absolute;
+			width: 50px;
+			height: 50px;
+			border-top:3px solid #000;
+			border-right:3px solid #000;
+			transform: rotate(45deg);
+			top:140px;
+			left:50%;
+			margin-left:130px;
+			
+		}
+		.prev{
+			transform:rotate(-135deg);
+			margin-left:-180px;
+		}
+	
+	</style>
+	
+</head>
+
+<body>
+	<ul>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	<span class="next"></span><span class="prev"></span>
+	<script src="jquery-1.11.3.min.js"></script>
+         <script type="text/javascript">
+             $(function() {
+                 var num = 0;
+                 $(".next").on("click",function() {
+                     num++;
+                     $("ul").css("transform","scaleX(2.5) scaleY(1.5) rotateX("+num*90+"deg)")
+                 })
+                 $(".prev").on("click",function() {
+                     num--;
+                     $("ul").css("transform","scaleX(2.5) scaleY(1.5) rotateX("+num*90+"deg)")
+                 })
+             })
+     </script>
+</body>
+</html>

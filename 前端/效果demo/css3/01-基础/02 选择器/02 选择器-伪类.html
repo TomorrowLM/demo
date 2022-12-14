@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>选择器 - 伪类</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: '微软雅黑';
+			background-color: #F7F7F7;
+		}
+
+		.wrapper {
+			width: 1024px;
+			margin: 0 auto;
+		}
+
+		.wrapper > section {
+			min-height: 300px;
+			margin-bottom: 30px;
+			box-shadow: 1px 1px 4px #DDD;
+			background-color: #FFF;
+		}
+
+		.wrapper > header {
+			text-align: center;
+			line-height: 1;
+			padding: 20px;
+			margin-bottom: 10px;
+			font-size: 30px;
+		}
+
+		.wrapper section > header {
+			line-height: 1;
+			padding: 10px;
+			font-size: 22px;
+			color: #333;
+			background-color: #EEE;
+		}
+
+		.wrapper .wrap-box {
+			padding: 20px;
+		}
+
+		section:nth-of-type(4) {
+
+		}
+
+		section:nth-of-type(4) li:first-child span:only-child {
+			color: red;
+		}
+
+		section:nth-of-type(4) li:nth-child(2) span:only-of-type {
+			color: red;
+		}		
+
+		section:nth-of-type(5) li:nth-child(n) {
+
+			/*n = 2n;
+			n = n;
+			n = 3n;*/
+			color: red;
+		}
+
+		section:nth-last-of-type(2) p:empty {
+			width: 20px;
+			height: 20px;
+			background-color: blue;
+		}
+
+		section:target {
+			background-color: red;
+		}
+
+		section:last-child p:after {
+			content: 'after';
+			color: red;
+		}
+
+		section:last-child p:before {
+			content: 'before';
+			color: red;
+		}
+
+		section:last-child span:nth-child(2) {
+			color: red;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<header>CSS3-伪类选择器</header>
+		<section id="demo1">
+			<header>简介</header>
+			<div class="wrap-box">
+			</div>
+		</section>
+		<section id="demo2">
+			<header>E:first-child</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section id="demo3">
+			<header>E:last-child</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section>
+			<header>E:only-child</header>
+			<div class="wrap-box">
+				<ul>
+					<li>
+						<span>我是span</span>
+						<span>我是第2个span</span>
+					</li>
+					<li>
+						<span>我是span</span>
+						<p>我是p</p>
+					</li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</section>
+		<section>
+			<header>E:nth-child(n)</header>
+			<div class="wrap-box">
+				<p>n的取值为大于等于1，当N作为系数时N的取值可以为0 比如2n+1</p>
+
+				<ul>
+					<li>
+						<span>我是span</span>
+					</li>
+					<li>
+						<span>我是span</span>
+					</li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</section>
+		<section>
+			<header>E:nth-last-child(n)</header>
+			<div class="wrap-box">
+
+			</div>
+		</section>
+		<section>
+			<header>E:first-of-type</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section>
+			<header>E:last-of-type</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section>
+			<header>E:only-of-type</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section>
+			<header>E:nth-of-type(n)</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section>
+			<header>E:nth-last-of-type(n)</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section>
+			<header>E:empty</header>
+			<div class="wrap-box">
+				<span>E:empty 表示元素没有任何内容才被选中</span>
+				<p>111</p>
+			</div>
+		</section>
+		<section>
+			<header>E:target</header>
+			<div class="wrap-box">
+				<a href="#demo1">demo1</a>
+				<a href="#demo2">demo2</a>
+				<a href="#demo3">demo3</a>
+			</div>
+		</section>
+		<section>
+			<header>E:after</header>
+			<div class="wrap-box">
+				<p>p</p>
+				<span>span</span>
+				<p>p</p>
+				<span>span</span>
+				<p>p</p>
+				<span>span</span>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

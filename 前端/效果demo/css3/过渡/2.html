@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CSS3过渡</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: '微软雅黑';
+			background-color: #F7F7F7;
+		}
+
+		.wrapper {
+			width: 1024px;
+			margin: 0 auto;
+		}
+
+		.wrapper > section {
+			min-height: 300px;
+			margin-bottom: 30px;
+			box-shadow: 1px 1px 4px #DDD;
+			background-color: #FFF;
+		}
+
+		.wrapper > header {
+			text-align: center;
+			line-height: 1;
+			padding: 20px;
+			margin-bottom: 10px;
+			font-size: 30px;
+		}
+
+		.wrapper section > header {
+			line-height: 1;
+			padding: 10px;
+			font-size: 22px;
+			color: #333;
+			background-color: #EEE;
+		}
+
+		.wrapper .wrap-box {
+			padding: 20px;
+			position: relative;
+		}
+
+		.transition {
+			width: 200px;
+			height: 200px;
+			background-color: yellow;
+			position: absolute;
+			left: 20px;
+/*			transition: all 2s;*/
+			transition-property:all;
+			transition-duration: 1s;
+/*匀速滚动*/
+/*			transition-timing-function: linear;*/
+/*控制过渡的速度*/
+/*			transition-timing-function: ease;*/
+/*延时*/
+/*			transition-delay: 1s;*/
+
+
+			/*需要明确我要监听哪个属性的变，并且规定变化的时间*/
+		}
+
+		.move:hover .transition {
+			
+/*			left: 750px;*/
+			background-color: transparent;
+		}
+
+
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<header>CSS3-过渡详解</header>
+		<section class="move">
+			<header>移动</header>
+			<div class="wrap-box">
+				<div class="transition"></div>
+			</div>
+		</section>
+		<section class="linear">
+			<header>linear</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section class="ease">
+			<header>ease</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section class="ease-in">
+			<header>ease-in</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section class="ease-out">
+			<header>ease-out</header>
+			<div class="wrap-box"></div>
+		</section>
+		<section class="ease-in-out">
+			<header>ease-in-out</header>
+			<div class="wrap-box"></div>
+		</section>
+	</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+https://blog.csdn.net/weixin_34320159/article/details/91378613
+https://blog.csdn.net/CodingNoob/article/details/69227600
+
+<template>
+  <div class="page" ref="page">
+    <div class="tab-list flex" ref="tabList">
+      <div v-for="(item, index) in tabList">
+        <div @click="tabSwitch(index, item[1])">
+          {{ item[0] }}
+          <div
+            class="tab-bar animated bounceInLeft"
+            v-show="index == tabCul"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<script>
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll, true);
+    this.boxTop = this.$refs.tabList.offsetTop;
+  },
+
+  handleScroll(e) {
+    var scrollTop =
+      e.target.documentElement.scrollTop || e.target.body.scrollTop; // 执行代码
+    var boxTop = this.boxTop;
+    if (scrollTop > boxTop) {
+      this.$refs.tabList.classList.add("fixed");
+    } else {
+      this.$refs.tabList.classList.remove("fixed");
+    }
+  },
+</script>
+
+
+
+.tab-list {
+	justify-content: space-between;
+	width: 93%;
+	/* height: 1rem !important; */
+	margin: auto;
+	font-size: 0.3rem;
+	font-family: PingFang SC, PingFang SC-Semibold;
+	font-weight: 600;
+	text-align: center;
+	color: #333333;
+	line-height: 0.5rem;
+	margin-bottom: 0.3rem;
+	/* position: fixed; */
+	/* margin-left: 0.3rem; */
+}
+.fixed{
+    position: fixed;
+    top: 0;
+    background: #fff;
+    height: 1rem;
+    margin: auto;
+    line-height: 1rem;
+
+}

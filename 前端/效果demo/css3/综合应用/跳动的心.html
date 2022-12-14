@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style>
+		.heart{
+			width: 200px;
+			height: 200px;
+			margin:100px auto;
+			position: relative;
+			
+		}
+		.left{
+			width: 200px;
+			height: 200px;
+			background-color:red;
+			position:absolute;
+			left:-60px;
+		}
+		.right{
+			width: 200px;
+			height: 200px;
+			background-color:red;
+			position:absolute;
+			right:-70px;
+		}
+		.bottom{
+			width: 170px;
+			height: 170px;
+			background-color:red;
+			transforom:rotate(45deg);
+			position:absolute;
+			left:20px;
+			top:98px;
+			bottom:-100px;
+		}
+		.left,.right{
+			border-radius: 100px 100px;
+			
+		}
+		
+		.left, .right, .bottom {
+			animation: move 1s infinite;
+		}
+		@keyframes move{
+			0%{
+				transform: scale(0.8) rotate(45deg);
+			}
+			50%{
+				transform: scale(1.2) rotate(45deg);
+			}
+			100%{
+				transform: scale(1) rotate(45deg);
+			}
+		}
+		
+	</style>
+</head>
+
+<body>
+	<div class="heart">
+		<span class="left"></span>
+		<span class="right"></span>
+		<span class="bottom"></span>
+	</div>
+</body>
+</html>

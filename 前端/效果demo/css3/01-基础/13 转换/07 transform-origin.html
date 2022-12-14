@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style> 
+		.box {
+			height: 700px;
+			background-color: yellow;
+			text-align: center;
+			padding-top: 300px;
+		}
+
+		.box img {
+			width: 150px;
+			height: 150px;
+			transform-origin: left bottom;
+		}
+
+		.box:hover img {
+			transform: rotateZ(360deg);
+			transition: all 5s;
+			transition-timing-function: linear;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<img src="./images/test.jpeg" alt="">
+	</div>
+</body>
+</html>

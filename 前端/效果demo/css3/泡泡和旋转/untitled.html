@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<style>
+		body{
+			background-color:pink;
+		}
+		.pop{
+			width: 350px;height: 100px;
+			margin:100px auto;
+			background:url("paopao.png") no-repeat top left,
+				url("paopao.png") no-repeat right bottom #369;
+			border-radius:25px;
+			transition: all 2s;
+		}
+		.pop:hover{
+			background-position: right bottom,top left;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="pop"></div>
+</body>
+</html>

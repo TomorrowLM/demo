@@ -1,0 +1,32 @@
+.person-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 150px;
+  padding-left: 20px;
+  background: linear-gradient(to right, #365fff, #36bbff);
+}
+
+.person-head-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+
+.person-head-nickname {
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.person-head-username {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.person-list {
+  line-height: 0;
+}
