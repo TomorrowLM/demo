@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hello vue3</title>
+    <script src="../dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id='app'></div>
+    <script>
+        const { createApp, reactive, effect } = Vue;
+
+        // 声明组件
+        const App = {
+            template: `
+                <div>count: {{ count }}</div>
+            `,
+            data:{foo:'foo', bar:{a:1}},
+            setup() { 
+                const state = reactive({ count: 0 })  
+                setInterval(() => {
+                  state.count++
+                }, 1000); 
+                
+                // 副作用函数或者叫响应函数
+                // 响应效果 reactiveEffect
+                // 依赖收集：创建getter里面的key和响应函数之间映射关系
+                // 1.设置中间对象数组保存当前响应函数
+                // activeXXXXStack = []
+                // 2.如何保存key和fn之间关系
+                // {target:{key:[effect1,...]}}
+                effect(() => {
+                  console.log('count发生了变化：', state.count);
+                  
+                })
+                return state
+            }
+        }
+
+        createApp().mount(App, '#app')
+    </script>
+</body>
+</html>

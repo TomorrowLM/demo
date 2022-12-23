@@ -3,9 +3,10 @@ module.exports = {
   'env': {
     'node': true
   },
-  'globals': {
+  globals: {
     $_: 'readonly',
     moment: 'readonly',
+    pageSize: 'readonly',
   },
   'extends': [
     'plugin:vue/essential',

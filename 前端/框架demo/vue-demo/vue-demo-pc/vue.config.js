@@ -10,11 +10,17 @@ const commonPlugin = [
   // new webpack.DefinePlugin({
   //   BASE_URL: JSON.stringify(process.env.BASE_URL)
   // })
-  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  new webpack.IgnorePlugin({
+    resourceRegExp: /^\.\/locale$/,
+    contextRegExp: /moment/,
+  }),
   // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
   new webpack.ProvidePlugin({
     $_: 'lodash',
     moment: 'moment',
+  }),
+  new webpack.DefinePlugin({
+    pageSize: 15,
   }),
 ];
 module.exports = defineConfig({
@@ -29,7 +35,7 @@ module.exports = defineConfig({
   productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
   devServer: {
     // contentBase: './src',//项目基本访问目录
-    // host: 'localhost',//服务器ip地址
+    host: 'localhost',//服务器ip地址
     port: 8088,
     open: true,// 配置自动启动浏览器
     hot: true,//模块热替换
@@ -63,7 +69,7 @@ module.exports = defineConfig({
     if (process.env.NODE_ENV === 'production') {
       // 为生产环境修改配置...
     } else {
-      console.log(config);
+      // console.log(config);
     }
   },
   css: {

@@ -24,7 +24,6 @@ const user = {
       state.role = data.role
     },
     change_btn: (state, data) => {
-      console.log(data);
       state.mockButton = data.mockButton
     }
   },

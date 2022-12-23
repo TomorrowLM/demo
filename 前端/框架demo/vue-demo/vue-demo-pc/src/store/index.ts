@@ -1,17 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
 import getters from './getters';
 
+import router from './modules/router';
 import user from './modules/user';
-import permisssion from './modules/permission';
+import permission from './modules/permission';
+
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
+    router,
     user,
-    permisssion,
+    permission,
   },
   state: {},
   mutations: {},

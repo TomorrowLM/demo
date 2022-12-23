@@ -1,13 +1,13 @@
 import Vue, { VNode } from 'vue';
-// 相关 tsx 模块注入
+import * as lodash from 'lodash';
+import * as moment from 'moment';
+// declare module 'sortablejs';
+
 declare global {
-  interface Window {
-    BMap: any;
-    BMAP_NORMAL_MAP: any;
-    BMAP_HYBRID_MAP: any;
-  }
   namespace JSX {
+    // tslint:disable no-empty-interface
     interface Element extends VNode {}
+    // tslint:disable no-empty-interface
     interface ElementClass extends Vue {}
     interface IntrinsicElements {
       [elem: string]: any;
@@ -18,4 +18,10 @@ declare global {
   // 全局变量设置
   const $_: typeof lodash;
   const moment: typeof import('moment');
+  const pageSize: number;
+}
+declare module 'vue/types/options' {
+  interface ComponentOptions<V extends Vue> {
+    [propName: string]: any;
+  }
 }

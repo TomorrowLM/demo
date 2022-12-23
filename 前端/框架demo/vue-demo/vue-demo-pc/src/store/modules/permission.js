@@ -1,4 +1,4 @@
-import { routes as constantRoutes } from '@/router'
+import routes from '@/router'
 
 // 根据角色判断路由权限
 function hasPermission(roles, route) {
@@ -34,30 +34,31 @@ export function filterAsyncRoutes(routes, roles) {
 //模拟后端传过来的路由
 export const asyncRoutes = [
   {
-    path: '/',
-    name: 'home',
-    redirect: '/dashboard',
+    path: '/dashboard',
+    name: '主页',
+    menuName: '主页',
     meta: {
-      title: '首页',
-      //纯前端去做动态路由
-      roles: ['admin']
+      sidebar: true,
+      title: 'dashboard',
     },
-    component: () => import('@/views/HomeView.vue'),
+    component: () => import('@/views/dashboard'),
+  },
+  {
+    path: '/demo',
+    name: 'demo',
+    menuName: 'demo',
+    meta: {
+      sidebar: true,
+      title: 'demo',
+    },
+    component: () => import('@/views/demo/index.vue'),
     children: [
       {
-        path: 'PickupTask',
-        name: 'PickupTask',
-        meta: {
-          title: 'PickupTask',
-        },
-        component: () => import('@/views/Sd/PickupTask.vue'),
-      },
-      {
         path: 'access',
-        hidden: true,
-        component: () => import('@/views/demo/Access.vue'),
+        menuName: 'access',
+        component: () => import('@/views/demo/Access/index.vue'),
         meta: {
-          title: 'access',
+          sidebar: true,
           roles: ['admin'],
           button: {
             'btn:access:createUser': 'hidden',
@@ -65,19 +66,36 @@ export const asyncRoutes = [
           },
         },
       },
+    ],
+  },
+  {
+    path: '/task',
+    name: '案例',
+    menuName: '案例',
+    redirect: 'dashboard',
+    meta: {
+      sidebar: true,
+      title: '首页',
+      //纯前端去做动态路由
+      roles: ['admin']
+    },
+    component: () => import('@/views/task/index.vue'),
+    children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
+        path: 'PickupTask',
+        name: '物流智能管控应用',
+        menuName: '物流智能管控应用',
         meta: {
-          title: 'dashboard',
+          sidebar: true,
+          title: 'PickupTask',
         },
-        component: () => import('@/views/dashboard'),
+        component: () => import('@/views/task/Sd/index.vue'),
       },
     ],
   }
 ]
 
-const permisssion = {
+const permission = {
   // namespaced: true, -> store.dispatch('permisssion/generateRoutes', 'admin');
   state: {
     //静态路由+动态路由
@@ -88,7 +106,7 @@ const permisssion = {
   mutations: {
     SET_ROUTES: (state, routes) => {
       state.addRoutes = routes
-      state.routes = constantRoutes.concat(routes)
+      state.routes = state.routes.concat(routes)
     }
   },
   actions: {
@@ -102,4 +120,4 @@ const permisssion = {
   }
 }
 
-export default permisssion
+export default permission
