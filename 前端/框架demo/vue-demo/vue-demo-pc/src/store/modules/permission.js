@@ -34,7 +34,7 @@ export function filterAsyncRoutes(routes, roles) {
 //模拟后端传过来的路由
 export const asyncRoutes = [
   {
-    path: '/dashboard',
+    path: '/',
     name: '主页',
     menuName: '主页',
     meta: {
@@ -55,11 +55,13 @@ export const asyncRoutes = [
     children: [
       {
         path: 'access',
-        menuName: 'access',
+        name: '权限',
+        menuName: '权限',
         component: () => import('@/views/demo/Access/index.vue'),
         meta: {
           sidebar: true,
           roles: ['admin'],
+          title: 'access',
           button: {
             'btn:access:createUser': 'hidden',
             'btn:access:editUser': 'disabled'

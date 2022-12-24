@@ -73,7 +73,9 @@ module.exports = defineConfig({
     }
   },
   css: {
-    extract: Boolean(isProd),
+    extract: {
+      ignoreOrder: true, //解决组件的引入必须先后顺序一致
+    }, // 是否使用css分离插件 ExtractTextPlugin
     sourceMap: false,
     loaderOptions: {
       // postcss: {
@@ -98,8 +100,24 @@ module.exports = defineConfig({
       //     // })
       //   ]
       // },
-      less: {
-        // javascriptEnabled: true
+      sass: {
+        additionalData: `@import "@/styles/theme.scss";`,//注入全局样式
+        plugins: [
+          autoprefixer({
+            overrideBrowserslist: [
+              'Android 4.1',
+              'iOS 7.1',
+              'Chrome > 31',
+              'ff > 31',
+              'ie >= 8',
+              'last 10 versions', // 所有主流浏览器最近10版本用
+            ],
+            grid: true,
+          }),
+        ],
+      },
+      scss: {
+        additionalData: `@import "@/styles/theme.scss";`,//注入全局样式
       }
     }
   },

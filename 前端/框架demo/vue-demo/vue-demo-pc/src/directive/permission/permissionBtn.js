@@ -9,7 +9,6 @@ function checkPermission(el, binding) {
     el.disabled = true
     el.setAttribute('disabled', true)
   }
-
   if (mockButton[value] === 'hidden') {
     el.style.display = 'none'
   }

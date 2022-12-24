@@ -38,30 +38,10 @@ export default class Layout extends Vue {
   private name = 'Layout';
   private isCollapse = false;
   private ws: any = null;
-  padding = [
-    '#/message/rolling',
-    '#/message/slabManage',
-    '#/',
-    '#/carTerminal',
-    '#/work/busManage-one',
-    '#/work/busManage-two',
-  ].includes(window.location.hash)
-    ? '0'
-    : '20px';
-  // private menuData: Array<object>=[];
+  padding = '20px';
 
   async created() {
     console.log(process.env.NODE_ENV, 'process.env.NODE_ENV', moment(), pageSize);
-    // try{
-    //   const {
-    //     data,
-    //     message,
-    //     code
-    //   } = await fetchMenuList();
-    //   console.log(data)
-    // }catch(error){
-    //   this.$message.error('菜单获取数据失败！');
-    // }
     this.$nextTick(() => {
       // ws.initWebsocket();
     });

@@ -37,7 +37,7 @@ export const commonMenu = [
     meta: { sidebar: false },
     path: '*',
     name: 'NotFound',
-    component: () => import('../views/common/404.vue'),
+    component: () => import('@/views/common/404.vue'),
   },
 ];
 

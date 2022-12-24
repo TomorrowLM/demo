@@ -1,10 +1,16 @@
 <template>
   <div>
-    <Header @child-msg="get" :collapsed="collapsedHeader" />
+    <!-- <Header @child-msg="get" :collapsed="collapsedHeader" /> -->
     <a-layout id="components-layout-demo-custom-trigger">
       <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
         <div class="project-name">物流智能管控应用</div>
-        <a-menu theme="dark" :open-keys.sync="openKeys" :default-selected-keys="['1']" @click="handleClick" mode="inline">
+        <a-menu
+          theme="dark"
+          :open-keys.sync="openKeys"
+          :default-selected-keys="['1']"
+          @click="handleClick"
+          mode="inline"
+        >
           <a-menu-item key="1">
             <router-link :to="{ name: 'dashboard' }">仪表盘</router-link>
           </a-menu-item>
@@ -38,11 +44,13 @@
         </a-menu>
       </a-layout-sider>
       <a-layout>
-        <a-layout-content :style="{
+        <a-layout-content
+          :style="{
             margin: '24px 16px',
             padding: '24px',
             background: '#fff',
-          }">
+          }"
+        >
           <router-view />
         </a-layout-content>
       </a-layout>
@@ -51,18 +59,18 @@
 </template>
 <script lang="ts">
 // import Component from 'vue-class-component'
-import { Vue, Component, Watch } from "vue-property-decorator";
-import { ref } from "vue";
-import Header from "components/Header.vue";
+import { Vue, Component, Watch } from 'vue-property-decorator';
+import { ref } from 'vue';
+// import Header from "components/Header.vue";
 @Component({
   components: {
-    Header,
+    // Header,
   },
 })
 export default class HomeView extends Vue {
   collapsed = false;
   collapsedHeader = false;
-  openKeys = [""];
+  openKeys = [''];
 
   get(msg: boolean) {
     // console.log(msg)
@@ -70,24 +78,24 @@ export default class HomeView extends Vue {
   }
 
   // watch
-  @Watch("openKeys", { immediate: true })
+  @Watch('openKeys', { immediate: true })
   onOpenKeysChanged(val: string, oldVal: string) {
     // console.log(val, oldVal, 'watch');
   }
 
   handleClick(e: any) {
     // this.openKeys = ['sub1', 'sub2']
-    console.log("click", e);
+    console.log('click', e);
   }
 
   titleClick(e: any) {
-    console.log("titleClick", e);
+    console.log('titleClick', e);
   }
 }
 </script>
 <style>
 .project-name {
-  font-family: "Arial Negreta", "Arial Normal", "Arial", sans-serif;
+  font-family: 'Arial Negreta', 'Arial Normal', 'Arial', sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 16px;
