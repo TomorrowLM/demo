@@ -1,1 +1,24 @@
-$basic_text_color: red;
+@import './theme/base', './theme/mixin', './theme/variable';
+// $themes: (light: ($light),
+//   dark: ($dark),
+// );
+
+
+// // #{$theme-name}
+
+// @each $theme, $config in $themes {
+//   [data-theme="#{$theme}"] & {
+//     // $config;
+//   }
+// }
+// $color-primary: yello;
+$theme-text: var(--theme-text, yellow);
+$type: 'light';
+
+@if (#{$type} == #{$theme-text}) {
+  $text-primary-color: red !global; // border: 2px solid;
+}
+
+@else {
+  $text-primary-color: blue !global;
+}

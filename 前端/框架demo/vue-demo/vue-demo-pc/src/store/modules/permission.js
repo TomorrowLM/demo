@@ -68,6 +68,17 @@ export const asyncRoutes = [
           },
         },
       },
+      {
+        path: 'skin',
+        name: '皮肤',
+        menuName: '皮肤',
+        component: () => import('@/views/demo/Skin/index.vue'),
+        meta: {
+          sidebar: true,
+          roles: ['admin'],
+          title: '皮肤',
+        },
+      },
     ],
   },
   {
