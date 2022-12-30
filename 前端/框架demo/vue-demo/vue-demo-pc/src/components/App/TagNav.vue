@@ -23,7 +23,7 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component({})
 export default class Layout extends Vue {
   mounted() {
-    console.log(this.currentRouteInfo);
+    // console.log(this.currentRouteInfo);
   }
 
   get currentRouteInfo() {
@@ -31,7 +31,6 @@ export default class Layout extends Vue {
   }
 
   get tabNav() {
-    console.log(123, this.$store.getters.tagNav);
     return this.$store.getters.tagNav;
   }
 

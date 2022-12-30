@@ -55,7 +55,6 @@ export default class Sidebar extends Vue {
   private menuList: Array<any> = [];
   routeList = routeList;
   async created() {
-    console.log(this.routeList, 77777);
     try {
       // const { data } = await fetchMenuList();
       // this.menuList = data;
@@ -64,7 +63,6 @@ export default class Sidebar extends Vue {
       this.menuList = [...stellBilletMenu, ...commonMenu];
       // this.$message.error('菜单获取数据失败！');
     }
-    console.log(this.menuList, this.$store.getters.routes);
   }
 
   get currentRouteInfo() {

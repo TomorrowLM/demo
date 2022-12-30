@@ -1,13 +1,11 @@
-import { axios } from '@/utils/request'
+import request from '@/utils/request'
 
-const request = (url, params = {}, method = 'post') => {
-  return ['post', 'put'].includes(method) ? axios({ url, method, data: params }) : axios({ url, method, params })
-}
-
+console.log(request);
 export const userInfo = (params) => {
-  return axios({ url: 'users', method: 'get', params: params })
+  return request.get('users', params)
 }
 
-export const login = (param) => {
-  return axios({ url: 'login', method: 'post', data: param })
+export const login = (params) => {
+  console.log(params);
+  return request.post('login', params)
 }

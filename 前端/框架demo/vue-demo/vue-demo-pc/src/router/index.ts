@@ -34,10 +34,16 @@ Vue.use(VueRouter);
 //公共菜单
 export const commonMenu = [
   {
-    meta: { sidebar: false },
     path: '*',
     name: 'NotFound',
     component: () => import('@/views/common/404.vue'),
+    meta: { sidebar: false },
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login/index.vue'),
+    meta: { sidebar: true },
   },
 ];
 
@@ -76,9 +82,9 @@ router.beforeEach(async (to: any, from, next) => {
   // console.log(from);
   //设置当前页的title
   document.title = to.meta.title;
-  if (to.path === '/login' && localStorage.getItem('token')) {
-    next('/');
-  }
+  // if (to.path === '/login' && localStorage.getItem('token')) {
+  //   next('/');
+  // }
   //如果首次或者刷新界面，next(...to, replace: true)会循环遍历路由，
   //如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
   //我们的问题在于页面刷新以后异步获取数据，直接执行next()感觉路由添加了但是在next()之后执行的，

@@ -11,12 +11,12 @@ import permission from '@/directive/permission/index.js'; // 权限判断指令
 // import checkPermission from '@/utils/permission' // 权限判断函数
 @Component({})
 export default class Access extends Vue {
-  theme = 'light';
+  theme = 'dark';
   mounted() {
     // //给应用的顶层元素添加一个主题标识，用于标识当前的主题
     // document .getElementsByTagName("body")[0].setAttribute("data-theme", "light");
     // js 通过声明sass变量的key值，来找到对应变量，并修改其属性值
-    (document.querySelector(':root') as any).style.setProperty('--theme-text', 'dark');
+    (document.querySelector(':root') as any).style.setProperty('--theme-text', this.theme);
   }
 
   change() {
@@ -27,7 +27,7 @@ export default class Access extends Vue {
     }
     console.log(this.theme);
     (document.querySelector(':root') as any).style.setProperty('--theme-text', this.theme);
-    this.$forceUpdate()
+    this.$forceUpdate();
   }
 }
 </script>

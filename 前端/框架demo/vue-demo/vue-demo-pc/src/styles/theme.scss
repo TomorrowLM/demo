@@ -12,10 +12,10 @@
 //   }
 // }
 // $color-primary: yello;
-$theme-text: var(--theme-text, yellow);
+$theme: var(--theme-text);
 $type: 'light';
 
-@if (#{$type} == #{$theme-text}) {
+@if #{$theme} == 'light' {
   $text-primary-color: red !global; // border: 2px solid;
 }
 

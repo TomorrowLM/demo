@@ -85,7 +85,6 @@ export const asyncRoutes = [
     path: '/task',
     name: '案例',
     menuName: '案例',
-    redirect: 'dashboard',
     meta: {
       sidebar: true,
       title: '首页',

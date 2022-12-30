@@ -1,87 +1,65 @@
 <template>
   <div class="login">
     <div class="form_login">
-      <a-form id="coordinated" :form="form" @submit="handleSubmit">
-        <a-form-item label="username">
-          <a-input v-decorator="[
-              'username',
-              {
-                rules: [{ required: true, message: 'Please input your note!' }],
-              },
-            ]" />
-        </a-form-item>
-        <a-form-item label="password">
-          <a-input v-decorator="[
-              'password',
-              {
-                rules: [{ required: true, message: 'Please input your note!' }],
-              },
-            ]" />
-        </a-form-item>
-        <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
-          <a-button type="primary" html-type="submit"> Submit </a-button>
-        </a-form-item>
-      </a-form>
+      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="账号" prop="username">
+          <el-input type="password" v-model="ruleForm.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
 
-<script lang='ts'>
-import { login } from "@/api";
-import { defineComponent, reactive, ref } from "vue";
-import { Vue, Component, Watch } from "vue-property-decorator";
-
-interface FormState {
-  username: string;
-  password: string;
-  remember: boolean;
-}
-
-@Component
-export default class Login extends Vue {
-  [x: string]: any;
-  formState = reactive<FormState>({
-    username: "limng",
-    password: "1",
-    remember: true,
-  });
-
+<script>
+import { login } from '@/api/index';
+import Vue from 'vue';
+export default {
+  props: {
+    msg: String,
+  },
   data() {
     return {
-      form: this.$form.createForm(this, { name: "form_rule" }),
+      ruleForm: {
+        password: '',
+        username: '',
+      },
+      rules: {
+        password: [{ validator: '', trigger: 'blur' }],
+        username: [{ validator: '', trigger: 'blur' }],
+      },
     };
-  }
-
-  handleSubmit(e: any) {
-    e.preventDefault();
-    this.form.getFieldsValue();
-    console.log(this.form.getFieldsValue());
-    login(this.form.getFieldsValue()).then((res: any) => {
-      this.$ls.set("token", res.token);
-      this.$router.push("/");
-    });
-  }
-}
+  },
+  methods: {
+    submitForm() {
+      console.log(this.$route, 123);
+      login(this.ruleForm).then(
+        res => {
+          console.log(res);
+          Vue.ls.set('token', res.token);
+          this.$router.push('/');
+        },
+        err => {
+          console.log(err);
+          this.$message.error(err.message);
+        }
+      );
+    },
+  },
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less">
+<style lang="scss" scoped>
 .login {
-  width: 100vw;
-  height: 100vh;
-  // background: url(../../assets/bg.jpg) snow -200px;
-  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.form_login {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  margin-left: -120px;
-}
-.el-form-item__label {
-  color: #fff;
+  width: 100%;
 }
 </style>

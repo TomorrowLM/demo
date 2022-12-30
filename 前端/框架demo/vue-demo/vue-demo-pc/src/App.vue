@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="{ 'has-sidebar': $route.meta.sidebar, 'is-collapsed': isCollapse }">
-    <el-container>
+    <el-container v-if="isToken">
       <el-header v-if="!fullScreenStatus">
         <Header></Header>
       </el-header>
@@ -21,7 +21,7 @@
         </div>
       </el-container>
     </el-container>
-    <p class="primary">123</p>
+    <router-view v-else></router-view>
   </div>
 </template>
 
@@ -31,7 +31,7 @@ import Sidebar from '@/components/App/Sidebar.vue';
 import Header from '@/components/App/Header.vue';
 import TagNav from '@/components/App/TagNav.vue';
 // import ws from '@/utils/websocket';
-
+import { userInfo } from '@/api/index';
 @Component({
   components: { Sidebar, Header, TagNav },
 })
@@ -40,19 +40,31 @@ export default class Layout extends Vue {
   private isCollapse = false;
   private ws: any = null;
   padding = '20px';
-
+  isToken = '';
   async created() {
     console.log(process.env.NODE_ENV, 'process.env.NODE_ENV', moment(), pageSize);
     this.$nextTick(() => {
       // ws.initWebsocket();
     });
+    this.isToken = (Vue as any).ls.get('token');
+    userInfo()
+      .then(res => {
+        // console.log(res);
+      })
+      .catch(res => {
+        this.$router.push('/login');
+      });
   }
 
   mounted() {
     // //给应用的顶层元素添加一个主题标识，用于标识当前的主题
     // document .getElementsByTagName("body")[0].setAttribute("data-theme", "light");
     // js 通过声明sass变量的key值，来找到对应变量，并修改其属性值
-    (document.querySelector(':root') as any).style.setProperty('--theme-text', 'dark');
+    (document.querySelector(':root') as any).style.setProperty('--theme-text', 'light');
+  }
+
+  updated() {
+    this.isToken = (Vue as any).ls.get('token');
   }
 
   get fullScreenStatus() {
