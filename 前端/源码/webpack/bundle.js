@@ -5,6 +5,7 @@ const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 const babel = require('@babel/core')
 
+// 获取主入口文件
 const getModuleInfo = (file) => {
   // 第一步:实现获取主模块内容
   const body = fs.readFileSync(file, 'utf-8')
@@ -38,25 +39,25 @@ const getModuleInfo = (file) => {
   const { code } = babel.transformFromAst(ast, null, {
     presets: ["@babel/preset-env"]
   })
-  console.log('code', file, code);
+  // console.log('code', code);
 
   // 新增代码
   const moduleInfo = { file, deps, code } //模块的路径（file），该模块的依赖（deps），该模块转化成es5的代码
   // console.log(moduleInfo);
   return moduleInfo
 }
-getModuleInfo("./src/index.js")
+// getModuleInfo("./src/index.js")
 
 
-//递归获取所有文件依赖
-/**
-  讲解下parseModules方法：
-  我们首先传入主模块路径
-  将获得的模块信息放到temp数组里。
-  外面的循坏遍历temp数组，此时的temp数组只有主模块
-  循环里面再获得主模块的依赖deps
-  遍历deps，通过调用getModuleInfo将获得的依赖模块信息push到temp数组里。
-*/
+// //递归获取所有文件依赖
+// /**
+//   讲解下parseModules方法：
+//   我们首先传入主模块路径
+//   将获得的模块信息放到temp数组里。
+//   外面的循坏遍历temp数组，此时的temp数组只有主模块
+//   循环里面再获得主模块的依赖deps
+//   遍历deps，通过调用getModuleInfo将获得的依赖模块信息push到temp数组里。
+// */
 const parseModules = (file) => {
   const entry = getModuleInfo(file)
   // console.log(entry);
@@ -72,7 +73,7 @@ const parseModules = (file) => {
       }
     }
   }
-  // 新增代码
+  // 文件名作为属性名。包含deps和code子属性
   temp.forEach(moduleInfo => {
     depsGraph[moduleInfo.file] = {
       deps: moduleInfo.deps,
@@ -102,13 +103,13 @@ const bundle = (file) => {
         return require(graph[file].deps[relPath])
       }
       //执行add.js的code时候，会遇到exports这个还没定义的问题.因此我们可以自己定义一个exports对象。
-      var exports = {}
-        (function (require, exports, code) {
-          //执行过程会执行到require函数。
-          //这时会调用这个require，也就是我们传入的absRequire
-          console.log(1, exports)
-          eval(code);
-        })(absRequire, exports, graph[file].code)
+      var exports = {};
+      (function (require, exports, code) {
+        console.log(1, exports);
+        //code代码执行过程中会执行到require函数。
+        //这时会调用这个require，也就是我们传入的absRequire
+        eval(code);
+      })(absRequire, exports, graph[file].code)
       return exports;
     }
     require('${file}')
@@ -118,5 +119,5 @@ const content = bundle('./src/index.js')
 // console.log('content', content);
 
 //写入到我们的dist目录下
-// fs.mkdirSync('./dist');
+fs.mkdirSync('./dist');
 fs.writeFileSync('./dist/bundle.js', content)

@@ -6,8 +6,8 @@ import { minus } from "./minus.js";
 
 const sum = add(1, 2);
 const division = minus(2, 1);
-console.log(sum);
-console.log(division);
+console.log('sum', sum);
+console.log('division', division);
 // var sum = (0, _add["default"])(1, 2);
 //var division = (0, _minus.minus)(2, 1);
 //console.log(sum);

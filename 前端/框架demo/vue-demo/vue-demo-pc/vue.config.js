@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer')// 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const resolve = dir => path.join(__dirname, dir)
 const isProd = process.env.NODE_ENV === 'production'
+
 const commonPlugin = [
   // 扩展环境变量
   // new webpack.DefinePlugin({
@@ -23,9 +24,11 @@ const commonPlugin = [
     pageSize: 15,
   }),
 ];
+
+console.log(process.env.NODE_ENV, process.env.VUE_APP_API_HOST);
 module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/vue-demo/'
+    ? '/vue-demo-pc/'
     : '/',
   //打包文件输出路径，即打包到哪里
   outputDir: 'dist',
@@ -45,7 +48,7 @@ module.exports = defineConfig({
     // public: 'http://192.168.10.36:8088',
     proxy: {
       '/dev': {
-        target: 'http://tomorrowlm.xyz:3000',
+        target: process.env.VUE_APP_API_HOST,
         changeOrigin: true,
         secure: false,
         xfwd: false,
@@ -58,6 +61,10 @@ module.exports = defineConfig({
       'BMap': 'window.BMap', // 百度地图
       'AMap': 'AMap' // 高德地图}
     }
+    if (process.env.NODE_ENV === 'production') {
+      config.output.filename = `js/[name].[contenthash].js`;
+      config.output.chunkFilename = `js/[name].[contenthash].js`;
+    }
   },
   chainWebpack: config => {
     config.resolve.alias
@@ -66,8 +73,12 @@ module.exports = defineConfig({
       .set('components', resolve('src/components'))
       .set('public', resolve('public'));
 
-    if (process.env.NODE_ENV === 'production') {
-      // 为生产环境修改配置...
+    if (process.env.NODE_ENV === 'development') {
+      config.optimization.minimize(true); // 开启压缩js代码
+      config.optimization.splitChunks({
+        // 开启代码分割
+        chunks: 'all',
+      });
     } else {
       // console.log(config);
     }
