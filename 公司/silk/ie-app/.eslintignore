@@ -1,6 +1,0 @@
-*.css
-.eslintrc.js
-.prettierrc.js
-.commitlint.config.js
-.config-overrides.js
-/src/locales
