@@ -96,6 +96,9 @@ request.prototype = {
     const { url } = config;
     return request.post(url, { method: 'post', ...config });
   },
+  interval: (url: any, method: 'get', config: any) => {
+    return request.post(url, { method: method, ...config });
+  },
 };
 
 export default request;
