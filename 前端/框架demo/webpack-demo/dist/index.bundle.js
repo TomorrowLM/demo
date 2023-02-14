@@ -1,0 +1,2 @@
+(()=>{var o={52:(o,r)=>{o.exports.minus=function(o,r){return o-r},r.add=function(o,r){return o+r}}},r={};function n(t){var e=r[t];if(void 0!==e)return e.exports;var s=r[t]={exports:{}};return o[t](s,s.exports,n),s.exports}(()=>{const o=n(52);console.log(o.add(22,1)),console.log(o.minus(2,1))})()})();
+//# sourceMappingURL=index.bundle.js.map
