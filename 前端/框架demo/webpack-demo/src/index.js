@@ -1,4 +1,5 @@
-const math = require('./math');
- 
-console.log(math.add(22, 1));
-console.log(math.minus(2, 1));
+import "./math/index"
+import "./lodash/index"
+import "./dynamicImport/index"
+import "./sideEffects/index"
+import "./es6/index"
