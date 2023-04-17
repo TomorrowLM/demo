@@ -9,8 +9,7 @@ const babel = require('@babel/core')
 const getModuleInfo = (file) => {
   // 第一步:实现获取主模块内容
   const body = fs.readFileSync(file, 'utf-8')
-  // console.log('body', body);
-
+  console.log('body', body);
 
   // 第二步:将获取到的模块内容 解析成AST语法树，这个需要用到一个依赖包@babel/parser
   //parse这个API。它的主要作用是 parses the provided code as an entire ECMAScript program，也就是将我们提供的代码解析成完整的ECMAScript代码的AST。
@@ -46,21 +45,20 @@ const getModuleInfo = (file) => {
   // console.log(moduleInfo);
   return moduleInfo
 }
-// getModuleInfo("./src/index.js")
+getModuleInfo("./src/index.js")
 
 
-// //递归获取所有文件依赖
-// /**
-//   讲解下parseModules方法：
-//   我们首先传入主模块路径
-//   将获得的模块信息放到temp数组里。
-//   外面的循坏遍历temp数组，此时的temp数组只有主模块
-//   循环里面再获得主模块的依赖deps
-//   遍历deps，通过调用getModuleInfo将获得的依赖模块信息push到temp数组里。
-// */
+/**
+ *递归获取所有文件依赖,讲解下parseModules方法：
+  我们首先传入主模块路径
+  将获得的模块信息放到temp数组里。
+  外面的循坏遍历temp数组，此时的temp数组只有主模块
+  循环里面再获得主模块的依赖deps
+  遍历deps，通过调用getModuleInfo将获得的依赖模块信息push到temp数组里。
+*/
 const parseModules = (file) => {
   const entry = getModuleInfo(file)
-  // console.log(entry);
+  console.log(312,entry);
   const temp = [entry]
   const depsGraph = {} //新增代码
   for (let i = 0; i < temp.length; i++) {

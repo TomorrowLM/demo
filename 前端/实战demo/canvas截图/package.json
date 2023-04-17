@@ -1,0 +1,23 @@
+{
+  "name": "tom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint",
+    "lint:create": "eslint --init"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.30.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "webpack": "^5.43.0"
+  },
+  "dependencies": {
+    "clipboard": "^2.0.8",
+    "eslint-loader": "^4.0.2"
+  }
+}
