@@ -13,6 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 const { ipcRenderer } = require("electron");
+
 //从预加载脚本中暴露哪些 API 给渲染器
 window.myAPI = {
   desktop: true,

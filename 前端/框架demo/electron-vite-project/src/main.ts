@@ -5,10 +5,13 @@ import router from "./router/index";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import "@/style/index.scss";
+import "./uilt/emitMain.js";
+import store from "./store";
 
 export const app = createApp(App)
   .use(router)
   .use(ElementPlus)
+  .use(store)
   .mount("#app")
   .$nextTick(() => {
     postMessage({ payload: "removeLoading" }, "*");

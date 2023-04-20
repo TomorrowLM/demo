@@ -4,14 +4,12 @@ import Vuex from "vuex";
 import getters from "./getters";
 import { app } from "@/main";
 import common from "./modules/common";
-import ws from "./modules/ws";
-import map from "./modules/map";
+import mainProcess from "./modules/mainProcess";
 
 const storeOptions = {
   modules: {
     common,
-    ws,
-    map,
+    mainProcess,
   },
   state: {},
   mutations: {},
@@ -19,4 +17,4 @@ const storeOptions = {
   getters,
 };
 
-(app as any).use(createStore(storeOptions));
+export default createStore(storeOptions);
