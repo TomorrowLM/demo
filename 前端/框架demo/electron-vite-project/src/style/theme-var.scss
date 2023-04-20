@@ -1,0 +1,12 @@
+/**
+  配置全局主题变量
+*/
+html {
+  --header-bg-color: #fff;
+}
+
+html[data-theme='dark'] {
+  --header-bg-color: #000;
+}
+
+$header-bg-color:var(--header-bg-color);

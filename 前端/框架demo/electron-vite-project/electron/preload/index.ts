@@ -56,7 +56,7 @@ function useLoading() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #282c34;
+  background: red;
   z-index: 9;
 }
     `

@@ -1,19 +1,33 @@
+# 构建学习博客
+
 https://zhuanlan.zhihu.com/p/521239144
 
 https://github.com/electron-vite/electron-vite-vue
 
 https://www.electron.build/configuration/configuration
 
-+ ├─┬ electron
-+ │ ├─┬ main
-+ │ │ └── index.ts    entry of Electron-Main
-+ │ └─┬ preload
-+ │   └── index.ts    entry of Preload-Scripts
-  ├─┬ src
-  │ └── main.ts       entry of Electron-Renderer
-  ├── index.html
-  ├── package.json
-  └── vite.config.ts
+
+
+# 目录结构
+
+```
+├─┬ dist	打包
+│ ├─┬ dist-electron  electron主进程打包地址
+│ └─┬ dist-render		 electron渲染进程（vue）打包地址
+├─┬ electron				 electron主进程
+│ ├─┬ main
+│ │ └── index.ts     entry of Electron-Main
+│ └─┬ preload
+│   └── index.ts     entry of Preload-Scripts
+├─┬ src
+│ └── main.ts        entry of Electron-Renderer
+├── index.html
+├── electron-builder.json electron打包配置文件
+├── package.json
+└── vite.config.ts
+```
+
+## electron-builder文件说明
 
 
     "nsis": {
@@ -27,4 +41,11 @@ https://www.electron.build/configuration/configuration
     "createStartMenuShortcut": true, // 创建开始菜单图标
     "shortcutName": "xxxx", // 图标名称
     "include": "build/script/installer.nsh" // 包含的自定义nsis脚本
-  }
+    }
+  
+
+# 解决
+
+- 打包安装依赖下载过慢
+
+  离线下载：https://blog.csdn.net/qq_32682301/article/details/105234408

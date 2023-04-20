@@ -4,7 +4,10 @@ import vue from "@vitejs/plugin-vue";
 import electron from "vite-plugin-electron";
 import renderer from "vite-plugin-electron-renderer";
 import pkg from "./package.json";
-
+import path from "path";
+function _resolve(dir: string) {
+  return path.resolve(__dirname, dir);
+}
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   // 移除之前编译过的 electron，防止代码冲突
@@ -15,6 +18,18 @@ export default defineConfig(({ command }) => {
   const sourcemap = isServe || !!process.env.VSCODE_DEBUG;
 
   return {
+    resolve: {
+      alias: {
+        "@": _resolve("src"),
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "@/style/theme-var.scss";`, //注入全局样式
+        },
+      },
+    },
     plugins: [
       vue(),
       electron([
