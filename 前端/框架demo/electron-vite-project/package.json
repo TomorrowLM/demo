@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "main": "./dist/dist-electron/main/index.js",
   "description": "Really simple Electron + Vue + Vite boilerplate.",
-  "author": "liming",
+  "author": "cisdi",
   "license": "MIT",
   "private": true,
   "keywords": [
@@ -32,6 +32,7 @@
     "electron": "^23.1.1",
     "electron-builder": "^24.2.1",
     "eslint": "^8.38.0",
+    "lodash": "^4.17.21",
     "typescript": "^5.0.2",
     "vite": "^4.1.4",
     "vite-plugin-electron": "^0.11.2",

@@ -6,10 +6,14 @@ const common = {
 const mainProcess = {
   createProject: (state: any) => state.mainProcess.createProject,
 };
+const router = {
+  route: (state: any) => state.router.route,
+};
 
 const getters = {
   ...common,
   ...mainProcess,
+  ...router
 };
 
 export default getters;

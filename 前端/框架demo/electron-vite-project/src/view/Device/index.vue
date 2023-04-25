@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import Vue, { ref } from "vue";
+import { useRoute } from "vue-router";
 const counter = ref<number>(1);
-console.log(counter.value);
-
-console.log(
-  "[App.vue]",
-  `Hello world from Electron ${process.versions.electron}!`
-);
+const route = useRoute();
+console.log(route);
 </script>
 
-<template>child</template>
+<template>
+  {{ route.meta.title }}
+</template>
 
 <style>
 .flex-center {

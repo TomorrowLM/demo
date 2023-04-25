@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import Vue, { ref } from "vue";
+// import router from "router";
+import { useRoute } from "vue-router";
 const counter = ref<number>(1);
-console.log(counter.value);
+const route = useRoute();
+console.log(route);
 
 console.log(
   "[App.vue]",
@@ -9,7 +12,9 @@ console.log(
 );
 </script>
 
-<template>child</template>
+<template>
+  {{ route.meta.title }}
+</template>
 
 <style>
 .flex-center {

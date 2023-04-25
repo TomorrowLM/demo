@@ -1,5 +1,5 @@
 <template>
-  <el-header>
+  <el-header class="header">
     <div>header</div>
     <div class="float-right"></div>
     <div>
@@ -31,5 +31,6 @@ const onchange = (event: number) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: $header-bg-color;
 }
 </style>

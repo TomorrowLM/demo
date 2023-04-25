@@ -1,11 +1,10 @@
-
 const mainProcess = {
   state: {
     createProject: false,
   },
   //更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
-    setCreateProject(state: any,value:boolean) {
+    setCreateProject(state: any, value: boolean) {
       console.log(88);
       state.createProject = value;
       console.log(state.createProject);

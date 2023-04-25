@@ -1,10 +1,21 @@
 <script lang="ts" setup>
-import { routes } from "@/router/index";
-const menuList: any = routes;
+// import { routes } from "@/router/index";
+import { useStore, mapState } from "vuex";
+import { computed, watch, ref } from "vue";
+
+const store = useStore();
+const menuList: any = computed(() => {
+  console.log(store.state, 999);
+  return store.state.router.route;
+});
 console.log(menuList);
+const defaultProps = {
+  children: "children",
+  label: "title",
+};
 </script>
 <template>
-  <el-menu>
+  <!-- <el-menu>
     <template v-for="item in menuList">
       <el-menu-item
         v-if="
@@ -30,7 +41,6 @@ console.log(menuList);
             :key="`${item.path}/${child.path}`"
             :index="`${item.path}/${child.path}`"
           >
-            <!-- {{ `${item.path}/${child.path}` }} -->
             <router-link :to="`${item.path}/${child.path}`">
               {{ child.meta.title }}</router-link
             >
@@ -38,5 +48,24 @@ console.log(menuList);
         </el-menu-item-group>
       </el-sub-menu>
     </template>
-  </el-menu>
+  </el-menu> -->
+  <el-tree :props="defaultProps" :data="menuList" node-key="id">
+    <template #default="{ data }">
+      <!-- {{ data.name }} -->
+      <router-link :to="{ name: data.name }">
+        {{ data.title }}
+      </router-link>
+      <!-- <span>{{ node.label }}</span> -->
+      <!-- <span>
+        <router-link :to="{ name: data.title }">
+          {{ data.title }}
+        </router-link>
+      </span> -->
+    </template>
+  </el-tree>
 </template>
+<style lang="scss" scoped>
+.el-tree {
+  background: $header-bg-color;
+}
+</style>
