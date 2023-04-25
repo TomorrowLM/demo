@@ -38,7 +38,7 @@ async function createWindow() {
   });
   //创建系统托盘
   createTray(win);
-  //创建
+  //创建菜单
   createMenuBar(win)
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(url);

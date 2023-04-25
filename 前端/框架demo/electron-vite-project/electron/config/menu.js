@@ -1,4 +1,6 @@
-// 1.导入 electron 中的 Menu
+/**
+ * 菜单配置
+ */
 const { Menu, BrowserWindow, app, MenuItem } = require("electron");
 
 export default function createMenuBar(win) {
@@ -14,7 +16,7 @@ export default function createMenuBar(win) {
           submenu: [],
         },
         {
-          label: "创建一个新的窗口",
+          label: "创建项目",
           // 添加快捷键
           accelerator: "ctrl+n",
           // 添加点击事件

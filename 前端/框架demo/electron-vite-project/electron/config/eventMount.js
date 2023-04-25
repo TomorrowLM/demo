@@ -1,3 +1,4 @@
+//事件绑定
 app.on("second-instance", () => {
   if (win) {
     // Focus on the main window if the user tried to open another

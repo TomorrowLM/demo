@@ -1,3 +1,6 @@
+/**
+ * 托盘配置
+ */
 const {
   app,
   BrowserWindow,
