@@ -1,0 +1,45 @@
+{
+  "private": true,
+  "version": "1.0.0",
+  "license": "",
+  "author": "liming",
+  "homepage": "https://github.com/eclipse-theia/theia-blueprint#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eclipse-theia/theia-blueprint.git"
+  },
+  "engines": {
+    "yarn": ">=1.7.0 <2",
+    "node": ">=12.14.1"
+  },
+  "scripts": {
+    "prepare": "yarn run clean && yarn build && yarn run download:plugins",
+    "clean": "theia clean",
+    "build": "theia build --mode development",
+    "start": "theia start --plugins=local-dir:plugins",
+    "download:plugins": "theia download:plugins"
+  },
+  "dependencies": {
+    "@theia/application-manager": "^1.36.0",
+    "@theia/callhierarchy": "latest",
+    "@theia/electron": "^1.36.0",
+    "@theia/file-search": "latest",
+    "@theia/git": "latest",
+    "@theia/markers": "latest",
+    "@theia/messages": "latest",
+    "@theia/mini-browser": "latest",
+    "@theia/navigator": "latest",
+    "@theia/outline-view": "latest",
+    "@theia/plugin-ext-vscode": "latest",
+    "@theia/preferences": "latest",
+    "@theia/preview": "latest",
+    "@theia/search-in-workspace": "latest",
+    "@theia/terminal": "latest",
+    "markdown-it-anchor": "^8.6.7",
+    "react-autosize-textarea": "^7.1.0",
+    "webpack": "^5.80.0"
+  },
+  "devDependencies": {
+    "@theia/cli": "latest"
+  }
+}
