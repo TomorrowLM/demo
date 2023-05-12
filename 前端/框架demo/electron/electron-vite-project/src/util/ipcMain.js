@@ -1,4 +1,4 @@
-import store from "../store/index.js";
+import store from "../store/index.ts";
 const { ipcRenderer } = require("electron");
 
 ipcRenderer.on("mainMsg", (event, task) => {

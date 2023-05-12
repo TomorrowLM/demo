@@ -1,37 +1,23 @@
-<script setup lang="ts">
-import Vue, { ref } from "vue";
-const counter = ref<number>(1);
-console.log(counter.value);
-
-console.log(
-  "[App.vue]",
-  `Hello world from Electron ${process.versions.electron}!`
-);
-</script>
-
 <template>
   <div>
-    <a href="https://www.electronjs.org/" target="_blank">
-      <img
-        src="@/assets/electron.svg"
-        class="logo electron"
-        alt="Electron logo"
-      />
-    </a>
-    <a href="https://vitejs.dev/" target="_blank">
-      <img src="@/assets/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="@/assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <custom-form :formList="data"></custom-form>
+    <el-button @click="click">Mock动态组件</el-button>
   </div>
-  <div class="flex-center">
-    Place static files into the <code>/public</code> folder
-    <img style="width: 5em" src="@/assets/node.svg" alt="Node logo" />
-  </div>
-
 </template>
+<script setup lang="ts">
+import Vue, { reactive, ref } from "vue";
+import { getData } from "@/api/test";
+import { onMounted } from "vue";
 
+let data: any = reactive<any>({});
+function click() {
+  getData().then((res: any) => {
+    console.log(res);
+    data.value = res.data;
+    console.log(data);
+  });
+}
+</script>
 <style>
 .flex-center {
   display: flex;
