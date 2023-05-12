@@ -1,0 +1,147 @@
+<div id="app"></div>
+
+<script>
+  //监视obj中的所有属性
+  function observe(obj) {
+    Object.keys(obj).forEach((key) => {
+      defineReactive(obj, key, obj[key]);
+    });
+  }
+  //属性拦截
+  function defineReactive(obj, key, val) {
+    Object.defineProperty(obj, key, {
+      get() {
+        console.log("get", key);
+        return val;
+      },
+      set(v) {
+        if (v !== val) {
+          console.log("set", key);
+          val = v;
+          //通知更新,一般不可能名字是这个，采用依赖更新
+          myApp.update();
+        }
+      },
+    });
+  }
+  //创建vue构造函数
+  function Vue(options) {
+    //初始化
+    //1.数据响应式
+    this.$options = options;
+    this.$data = options.data();
+    //对$data对象做响应式处理
+    observe(this.$data);
+  }
+
+  Vue.prototype.createElement = function (tag, props, child) {
+    return {
+      tag,
+      props,
+      child,
+    };
+  };
+
+  Vue.prototype.createElm = function (vnode) {
+    //vnode->dom
+    const { tag, props, child: children } = vnode;
+    //el真实dom
+    const el = document.createElement(tag);
+    //递归
+    if (Array.isArray(children)) {
+      //循环递归创建
+      children.forEach((child) => {
+        el.appendChild(this.createElm(child));
+      });
+    } else {
+      //内部文本
+      el.textContent = children;
+    }
+    // vnode.$el = el;
+    return el;
+  };
+
+  Vue.prototype.patch = function (n1, n2) {
+    console.log("patch", n1, n2);
+    if (n1.nodeType) {
+      //真实dom才拥有nodeType属性
+      console.log(321123);
+      const child = this.createElm(n2);
+      n1.appendChild(child);
+      n2.$el = child;
+    } else {
+      // update
+      const el = (n2.$el = n1.$el);
+      //比对相同节点：tag,key相同
+      if (n1.tag === n2.tag) {
+        //same vnode
+        //1.同层比较：获取并比较双方子元素
+        const children1 = n1.child;
+        const children2 = n2.child;
+        if (typeof children1 === "string") {
+          if (typeof children2 === "string") {
+            //text update
+            el.textContent = children2;
+          }
+        } else {
+          if (typeof children2 === "string") {
+            //array
+          }
+        }
+      } else {
+      }
+    }
+  };
+
+  //给vue实例添加一个$mount挂载方法,将数据转化为dom
+  Vue.prototype.$mount = function (selector) {
+    this.update = function () {
+      console.log("update");
+      //重新执行渲染函数
+      const vnode = this.$options.render.call(this, this.createElement);
+      //获取宿主
+      const parent = document.querySelector(selector);
+      if (!this.isMounted) {
+        //初始化
+        //转换vnode->dom
+        this.patch(parent, vnode);
+        this.isMounted = true;
+        //生命周期
+        if (this.$options.mounted) {
+          //更新
+          this.$options.mounted.call(this);
+        }
+      } else {
+        //diff:传入上次的vnode和最新的vnode，通过比较发现需要做的dom操作
+        this.patch(this._vnode, vnode);
+      }
+      this._vnode = vnode;
+    };
+    this.update();
+  };
+
+  const myApp = new Vue({
+    data() {
+      return {
+        title: "这是一个标题",
+      };
+    },
+    mounted() {
+      setTimeout(() => {
+        this.$data.title = "这是新的标题";
+      }, 1000);
+    },
+    render(h) {
+      //渲染视图
+      //vue2渲染函数返回的是虚拟dom
+      //这里暂时返回真是dom
+      //   const h3 = document.createElement("h3");
+      //   h3.innerText = this.$data.title;
+      //   return h3;
+      //虚拟dom版本
+      return h("h3", null, this.$data.title);
+    },
+  });
+  myApp.$mount("#app");
+  //myApp.$data.title;
+</script>

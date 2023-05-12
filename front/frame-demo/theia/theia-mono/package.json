@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "prepare": "lerna run prepare",
+    "install:electron": "yarn --cwd applications/electron",
+    "install:browser": "yarn --cwd applications/browser",
+    "start:browser": "yarn rebuild:browser && yarn --cwd applications/browser-app start",
+    "start:electron": "yarn --cwd applications/electron-app start",
+    "rebuild:browser": "theia rebuild:browser",
+    "rebuild:electron": "theia rebuild:electron",
+    "watch": "lerna run --parallel watch",
+    "replace":"theia ffmpeg:check"
+  },
+  "devDependencies": {
+    "@theia/cli": "1.37.0",
+    "lerna": "^6.0.1"
+  },
+  "workspaces": [
+    "applications/*",
+    "theia-extensions/*"
+  ]
+}

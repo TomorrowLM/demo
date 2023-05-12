@@ -1,0 +1,51 @@
+{
+  "private": true,
+  "name": "electron-app",
+  "version": "0.0.0",
+  "main": "src-gen/frontend/electron-main.js",
+  "dependencies": {
+    "@theia/core": "1.37.0",
+    "@theia/editor": "1.37.0",
+    "@theia/electron": "1.37.0",
+    "@theia/filesystem": "1.37.0",
+    "@theia/markers": "1.37.0",
+    "@theia/messages": "1.37.0",
+    "@theia/monaco": "1.37.0",
+    "@theia/navigator": "1.37.0",
+    "@theia/preferences": "1.37.0",
+    "@theia/process": "1.37.0",
+    "@theia/terminal": "1.37.0",
+    "@theia/workspace": "1.37.0"
+  },
+  "devDependencies": {
+    "@theia/cli": "1.37.0",
+    "@types/js-yaml": "^3.12.0",
+    "@types/yargs": "17.0.7",
+    "@wdio/cli": "^6.10.2",
+    "@wdio/local-runner": "^6.10.2",
+    "@wdio/mocha-framework": "^6.8.0",
+    "@wdio/spec-reporter": "^6.8.1",
+    "app-builder-lib": "22.10.5",
+    "chai": "^4.2.0",
+    "concurrently": "^3.5.0",
+    "electron": "^23.2.4",
+    "electron-builder": "23.6.0",
+    "electron-chromedriver": "9.0.0",
+    "electron-mocha": "^9.3.2",
+    "js-yaml": "^3.12.0",
+    "mocha": "^8.2.1",
+    "rimraf": "^2.7.1",
+    "ts-node": "^10.0.0",
+    "wdio-chromedriver-service": "^6.0.4",
+    "webdriverio": "^6.10.2",
+    "yargs": "17.2.1"
+  },
+  "scripts": {
+    "prepare": "theia build --mode development",
+    "start": "theia start",
+    "watch": "theia build --watch --mode development"
+  },
+  "theia": {
+    "target": "electron"
+  }
+}
