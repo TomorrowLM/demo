@@ -1,4 +1,4 @@
-<template>123</template>
+<template>456</template>
 
 <script>
 export default {
