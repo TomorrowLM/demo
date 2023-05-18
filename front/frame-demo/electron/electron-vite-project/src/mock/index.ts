@@ -16,7 +16,7 @@ let configArray: any = [];
 
 // 遍历所有Mock文件
 //对于webpack来说，可以使用require.context方法来实现文件的批量导出，但是vite搭建vue3项目时，不支持require,对于这种情况可以使用import.meta.glob或者import.meta.globEager来实现
-const files = import.meta.globEager("./*/*.ts");
+const files = import.meta.globEager("./*/*.js");
 console.log(files, 2);
 // const routerContext = require.context('./', true, /index\.js$/);
 // routerContext.keys().forEach((route) => {
@@ -30,7 +30,7 @@ console.log(files, 2);
 // });
 console.log(Object.keys(files));
 Object.keys(files).forEach((key: string) => {
-  if (key === "./index.ts") return;
+  if (key === "./index.js") return;
   console.log(files[key]);
   configArray = configArray.concat((files[key] as any).default);
 });
