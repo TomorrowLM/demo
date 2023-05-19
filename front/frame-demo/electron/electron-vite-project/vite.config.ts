@@ -35,7 +35,7 @@ export default defineConfig(({ command, mode }) => {
         return {
           host: url.hostname,
           port: +url.port,
-          open: true,
+          // open: true,
         };
       })(),
     clearScreen: false,

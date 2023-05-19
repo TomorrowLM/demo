@@ -20,6 +20,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "build:vue": "tsc --noEmit && vite build",
     "build": "vue-tsc --noEmit && rimraf dist && vite build && electron-builder --config electron-builder.json",
     "win32": "vue-tsc --noEmit && rimraf dist && vite build && electron-builder --win --ia32 --config electron-builder.json",
     "win64": "vue-tsc --noEmit && rimraf dist && vite build && vite build && electron-builder --win --x64 --config electron-builder.json",

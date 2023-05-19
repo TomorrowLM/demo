@@ -1,7 +1,9 @@
 {
   "name": "root",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "clean": "lerna clean"
+  },
   "devDependencies": {
     "lerna": "^6.6.2"
   },

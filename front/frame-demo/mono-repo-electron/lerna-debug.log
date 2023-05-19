@@ -1,0 +1,19 @@
+0 silly argv {
+0 silly argv   _: [ 'bootstrap' ],
+0 silly argv   lernaVersion: '6.6.2',
+0 silly argv   '$0': 'D:\\software\\node\\node_modules\\lerna\\dist\\cli.js'
+0 silly argv }
+1 notice cli v6.6.2
+2 verbose rootPath D:\study\demo\front\frame-demo\mono-repo-electron
+3 error JSONError: Unexpected token "}" (0x7D) in JSON at position 1797 while parsing near "...ader\": \"^13.2.2\",\n  }\n}\n" in packages\electron\package.json
+3 error
+3 error [0m [90m 54 |[39m     [32m"sass"[39m[33m:[39m [32m"^1.62.0"[39m[33m,[39m[0m
+3 error [0m [90m 55 |[39m     [32m"sass-loader"[39m[33m:[39m [32m"^13.2.2"[39m[33m,[39m[0m
+3 error [0m[31m[1m>[22m[39m[90m 56 |[39m   }[0m
+3 error [0m [90m    |[39m   [31m[1m^[22m[39m[0m
+3 error [0m [90m 57 |[39m }[0m
+3 error [0m [90m 58 |[39m[0m
+3 error
+3 error     at parseJson (D:\study\demo\front\frame-demo\mono-repo-electron\node_modules\parse-json\index.js:29:21)
+3 error     at parse (D:\study\demo\front\frame-demo\mono-repo-electron\node_modules\load-json-file\index.js:15:9)
+3 error     at module.exports (D:\study\demo\front\frame-demo\mono-repo-electron\node_modules\load-json-file\index.js:18:47)

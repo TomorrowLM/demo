@@ -96,7 +96,7 @@ export default defineConfig(({ command, mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "@/style/theme-var.scss";`, //注入全局样式
+          additionalData: `@import "@packages/common/style/theme-var.scss";`, //注入全局样式
         },
       },
     },
