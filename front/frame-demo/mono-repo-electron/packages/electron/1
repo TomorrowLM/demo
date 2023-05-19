@@ -1,0 +1,286 @@
+<template>
+  <div v-if="formList.value && formList.value.panels.length">
+    <div v-for="(item, index) in formList.value.panels" :key="index">
+      <div class="header mar-b-16">{{ item.title }}</div>
+      <div class="form">
+        <el-form :rules="rules" :inline="true" :model="formData" label-width="120px">
+          <el-form-item
+            v-for="(formItem, formIndex) in item.elements"
+            :key="formIndex"
+            :label="`${formItem.label}：`"
+            :style="{ width: formItem.width }"
+            :prop="formItem.key"
+          >
+            <el-input v-if="formItem.type === 'input'" v-model="formData[formItem.key]" :placeholder="`请输入${formItem.label}`" />
+            <el-select v-else-if="formItem.type === 'select'" v-model="formData[formItem.key]" :placeholder="`请选择${formItem.label}`">
+              <el-option
+                v-for="item in formItem.options"
+                :key="item.value"
+                :label="item.key"
+                :value="item.value"
+                :placeholder="`请选择${formItem.label}`"
+              />
+            </el-select>
+            <el-input
+              type="textarea"
+              autosize
+              v-else-if="formItem.type === 'textarea'"
+              v-model="formData[formItem.key]"
+              :placeholder="`请输入${formItem.label}`"
+            />
+            <div v-else-if="formItem.type === 'checkbox'">
+              <el-checkbox
+                v-for="item in formItem.options"
+                :key="item.key"
+                :label="item.key"
+                :value="item.value"
+                :true-label="item.key"
+                :false-label="item.key"
+                v-model="formData[formItem.key]"
+              />
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+/**
+ * 自动化表单
+ */
+import { reactive, ref, toRefs, watchEffect, watch } from "vue";
+import { onMounted } from "vue";
+
+const props = defineProps<{
+  formList: any;
+}>();
+const formList = reactive(props.formList || []);
+
+const formData: any = reactive<object>({});
+
+const rules = reactive<any>({
+  // pass: [{ validator: validatePass, trigger: 'blur' }],
+  // checkPass: [{ validator: validatePass2, trigger: 'blur' }],
+  // age: [{ validator: checkAge, trigger: 'blur' }],
+});
+
+interface RuleListProps {
+  ruleType: string;
+  options?: Array<any>;
+}
+const change = (ruleList: RuleListProps) => {
+  console.log((ruleList as any).ruleType, 99);
+  return (rule: any, value: any, callback: any) => {
+    console.log(ruleList);
+    (ruleList as any).forEach((element: any) => {
+      if (element.ruleType === "changeOptions") {
+        console.log(element);
+        formList.value.panels[0]["elements"][2]["options"] = element.action.options;
+      }
+    });
+    console.log(rule, value, ruleList, 123);
+  };
+};
+
+const blur = (ruleList: RuleListProps) => {
+  console.log((ruleList as any).ruleType, 99);
+  return (rule: any, value: any, callback: any) => {
+    console.log(ruleList);
+    (ruleList as any).forEach((element: any) => {
+      if (element.ruleType === "reg") {
+        console.log(new RegExp(element.rule).test(value), value);
+        if (new RegExp(element.rule).test(value)) {
+          callback();
+        } else {
+          callback(new Error(element.ruleMessage));
+        }
+      }
+    });
+    console.log(rule, value, ruleList, 123);
+  };
+};
+
+const setData = () => {
+  console.log(999, formList.value);
+  formList.value &&
+    formList.value.panels.forEach((valP: any, indexP: Number) => {
+      console.log(valP.elements);
+      Object.keys(valP.elements).forEach((valC: any, indexC: Number) => {
+        formData[valC] = valP.elements.valC.defaultValue;
+        console.log(valC.key);
+        rules[valC.key] = [];
+        if (valC.actions) {
+          Object.keys(valC.actions).forEach((actionEvent: any) => {
+            if (actionEvent === "change") {
+              rules[valC.key].push({ trigger: "change", validator: change(valC.actions[actionEvent]) });
+            } else if (actionEvent === "blur") {
+              rules[valC.key].push({ trigger: "blur", validator: blur(valC.actions[actionEvent]) });
+            }
+          });
+        }
+      });
+    });
+  console.log(rules);
+};
+
+watch(
+  formList,
+  (newValue, oldValue) => {
+    console.log("person变化了", newValue, oldValue);
+    setData();
+  },
+  { immediate: true, deep: false }
+);
+
+onMounted(() => {
+  setData();
+});
+</script>
+
+<style lang="scss" scoped>
+form {
+  display: flex;
+  flex-wrap: wrap;
+}
+.el-form--inline .el-form-item {
+  margin-right: 0;
+  display: flex;
+  align-items: center;
+}
+</style>
+
+
+
+// export default [
+//   {
+//     url: "/getData", // 注意，这里只能是string格式
+//     method: "GET",
+//     data: () => {
+//       return {
+//         "list|5-10": [
+//           {
+//             name: "@cname",
+//             url: "choose1.png",
+//             sportsman: "足球运动员",
+//             age: "29",
+//           },
+//         ],
+//       };
+//     },
+//   },
+// ];
+export default [
+  {
+    url: "getData", //匹配到指定url
+    method: "get", //请求类型
+    response: () => {
+      return {
+        code: 0,
+        message: "ok",
+        data: {
+          name: "串口",
+          key: "com",
+          panels: [
+            {
+              title: "链路配置",
+              elements: [
+                {
+                  type: "input",
+                  label: "设备地址",
+                  key: "address1",
+                  defaultValue: "",
+                  width: "100%",
+                  actions: {
+                    blur: [
+                      {
+                        ruleType: "reg",
+                        rule: '/^1.?$/',
+                        ruleMessage: "正则匹配失败",
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: "select",
+                  label: "波特率",
+                  key: "address2",
+                  defaultValue: "",
+                  width: "100%",
+                  options: [
+                    {
+                      key: "9600",
+                      value: "9600",
+                    },
+                    {
+                      key: "4800",
+                      value: "4800",
+                    },
+                  ],
+                  actions: {
+                    
+                    change: [
+                      {
+                        ruleType: "changeOptions",
+                        rule: "formData.address === 9600",
+                        action: {
+                          actionType: "update",
+                          name: "dataBit",
+                          options: [
+                            {
+                              key: "5",
+                              value: "5",
+                            },
+                            {
+                              key: "6",
+                              value: "6",
+                            },
+                          ],
+                        },
+                        {
+                          
+                        }
+                        // ruleqew: function (formData, formList) {
+                        //   if (formData.address === 9600) {
+                        //     formList.value.options = [
+                        //       {
+                        //         key: "5",
+                        //         value: "5",
+                        //       },
+                        //       {
+                        //         key: "6",
+                        //         value: "6",
+                        //       },
+                        //     ];
+                        //   }
+                        // },
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: "select",
+                  label: "数据位",
+                  key: "dataBit",
+                  defaultValue: "",
+                  width: "100%",
+                  options: [
+                    {
+                      key: "7",
+                      value: "7",
+                    },
+                    {
+                      key: "8",
+                      value: "8",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      };
+    },
+  },
+];

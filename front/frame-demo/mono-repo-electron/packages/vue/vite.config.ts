@@ -3,7 +3,7 @@ import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import electron from "vite-plugin-electron";
 import renderer from "vite-plugin-electron-renderer";
-import pkg from "./package.json";
+import pkg from "../vue/package.json";
 import path from "path";
 function _resolve(dir: string) {
   return path.resolve(__dirname, dir);
@@ -27,6 +27,15 @@ export default defineConfig(({ command, mode }) => {
       outDir: "dist/dist-render", // 指定输出路径
       assetsDir: "static", // 指定生成静态资源的存放路径（相对于 build.outDir）。
       manifest: false, // 当设置为 true，构建后将会生成 manifest.json 文件，包含了没有被 hash 的资源文件名和 hash 后版本的映射。可以为一些服务器框架渲染时提供正确的资源引入链接。
+      rollupOptions: {
+        // external: ["vue", "element-plus", "@vswift/common"], // 很重要，定义打包时被排除的包，避免整个包被打包进来
+        output: {
+          globals: {
+            vue: "Vue", // 外部包别名，在 dist/index.umd.cjs 中会使用到
+            "element-plus": "ElementPlus", // 外部包别名
+          },
+        },
+      },
     },
     server:
       process.env.VSCODE_DEBUG &&
@@ -42,61 +51,17 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         "@": _resolve("src"),
+        "@/common": _resolve("./commone/src"),
       },
     },
     // define: {
     //   $_: JSON.stringify("lodash"),
     // },
-    plugins: [
-      vue(),
-      electron([
-        {
-          // Main-Process entry file of the Electron App.
-          entry: "electron/main/index.ts",
-          onstart(options) {
-            if (process.env.VSCODE_DEBUG) {
-              console.log(/* For `.vscode/.debug.script.mjs` */ "[startup] Electron App");
-            } else {
-              options.startup();
-            }
-          },
-          vite: {
-            build: {
-              sourcemap,
-              minify: isBuild,
-              outDir: "dist/dist-electron/main",
-              rollupOptions: {
-                external: Object.keys("dependencies" in pkg ? pkg.dependencies : {}),
-              },
-            },
-          },
-        },
-        {
-          entry: "electron/preload/index.ts",
-          onstart(options) {
-            // Notify the Renderer-Process to reload the page when the Preload-Scripts build is complete,
-            // instead of restarting the entire Electron App.
-            options.reload();
-          },
-          vite: {
-            build: {
-              sourcemap: sourcemap ? "inline" : undefined, // #332
-              minify: isBuild,
-              outDir: "dist/dist-electron/preload",
-              rollupOptions: {
-                external: Object.keys("dependencies" in pkg ? pkg.dependencies : {}),
-              },
-            },
-          },
-        },
-      ]),
-      // Use Node.js API in the Renderer-process
-      renderer(),
-    ],
+    plugins: [vue(), renderer()],
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "@/style/theme-var.scss";`, //注入全局样式
+          additionalData: `@import "@packages/common/style/theme-var.scss";`, //注入全局样式
         },
       },
     },

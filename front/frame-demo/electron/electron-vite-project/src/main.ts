@@ -5,7 +5,7 @@ import router from "./router/index";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import "@/style/index.scss";
-import "./util/ipcMain.js";
+// import "./util/ipcMain.js";
 import "./util/axios.ts";
 import store from "./store";
 import register from "./components/register.js";
