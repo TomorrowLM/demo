@@ -24,7 +24,9 @@
     "./*": "./src/*"
   },
   "devDependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "@types/lodash": "^4.14.182",
+    "@types/node": "^20.2.3",
     "@vitejs/plugin-vue": "^4.1.0",
     "axios": "^1.4.0",
     "cross-env": "^7.0.3",

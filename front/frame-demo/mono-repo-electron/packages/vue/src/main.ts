@@ -8,12 +8,16 @@ import register from "@packages/common/components/register.ts";
 import "@packages/common/mock/index.ts";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+
 // 导入mock
 // import "@packages/common"
 
 //是否mock数据
 // const isMock = process.env.VUE_APP_IS_MOCK == "true";
-const app = createApp(App).use(router as any).use(ElementPlus  as any).use(store);
+const app = createApp(App)
+  .use(router as any)
+  .use(ElementPlus as any)
+  .use(store);
 console.log(register);
 register(app);
 app.mount("#app").$nextTick(() => {

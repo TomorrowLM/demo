@@ -6,8 +6,7 @@
 </template>
 <script setup lang="ts">
 import Vue, { reactive, ref } from "vue";
-import { getData } from "@packages/common/api/test";
-import { onMounted } from "vue";
+import { getData } from "@packages/common/api/test.ts";
 
 let data: any = reactive<any>({});
 function click() {

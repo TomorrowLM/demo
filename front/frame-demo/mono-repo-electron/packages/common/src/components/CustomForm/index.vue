@@ -3,12 +3,7 @@
     <div v-for="(item, index) in formList.value.panels" :key="index">
       <div class="header mar-b-16">{{ item.title }}</div>
       <div class="form">
-        <el-form
-          :rules="rules"
-          :inline="true"
-          :model="formData"
-          label-width="120px"
-        >
+        <el-form :rules="rules" :inline="true" :model="formData" label-width="120px">
           <el-form-item
             v-for="(formItem, formIndex) in Object.keys(item.elements)"
             :key="formIndex"
@@ -16,6 +11,18 @@
             :style="{ width: item.elements[formItem].width }"
             :prop="formItem"
           >
+            <template #label>
+              <span>
+                {{ item.elements[formItem].label }}
+                <el-tooltip class="item" placement="top">
+                  <!--  问号的图标   -->
+                  <el-icon :size="15"><QuestionFilled /></el-icon>
+                  <!--  提示的内容 -->
+                  <template #content> 内容提示</template>
+                </el-tooltip>
+                <span>：</span>
+              </span>
+            </template>
             <!-- {{ formItem }} -->
             <el-input
               v-if="item.elements[formItem].type === 'input'"
@@ -28,8 +35,7 @@
               :placeholder="`请选择${item.elements[formItem].label}`"
             >
               <el-option
-                v-for="optionItem in item.elements[formItem].newOptions ||
-                item.elements[formItem].options"
+                v-for="optionItem in item.elements[formItem].newOptions || item.elements[formItem].options"
                 :key="optionItem.value"
                 :label="optionItem.key"
                 :value="optionItem.value"
@@ -71,59 +77,77 @@ const props = defineProps<{
   formList: any;
 }>();
 const formList = reactive<any>([]);
-
 const formData: any = reactive<object>({});
-
-const rules = reactive<any>({
-  // pass: [{ validator: validatePass, trigger: 'blur' }],
-  // checkPass: [{ validator: validatePass2, trigger: 'blur' }],
-  // age: [{ validator: checkAge, trigger: 'blur' }],
-});
+const rules = reactive<any>({});
 
 interface RuleListProps {
   methodType: string; //事件规则
-  actions: Array<{
-    actionType: string;
+  rules: Array<{
+    ruleType: string;
     options?: Array<any>;
-    action: any;
+    actions: any;
     rule: string;
   }>;
 }
 
+//找到对应key的数据
+const loopBack = (key: string, list: any) => {
+  console.log(list);
+  for (let i = 0; i < list.length; i++) {
+    const objKeys = Object.keys(list[i].elements);
+    console.log(objKeys);
+    for (let j = 0; j < objKeys.length; j++) {
+      console.log(objKeys[j], key);
+      if (objKeys[j] === key) {
+        console.log(list[i]["elements"][key], 88888888);
+        return list[i]["elements"][key];
+      }
+    }
+  }
+};
+
+const ruleConfig = (type: string, rule: any) => {
+  if (type === "bool") {
+    const key = rule.match(/(?<=\[)(.+?)(?=\])/g)[0];
+    const value = rule.match(/(?<====).+/g)[0];
+    if (formData[key] === value) return true;
+    return false;
+  }
+  return true;
+};
+
 const change = (ruleList: RuleListProps) => {
-  console.log(ruleList);
   return (rule: any, value: any, callback: any) => {
-    ruleList.actions.forEach((ruleItem: any) => {
-      if (ruleItem.actionType === "changeOptions" && eval(ruleItem.rule)) {
-        // console.log(formList[]);
-        let data: any = eval(ruleItem.changeKey);
-        data.newOptions = ruleItem.options;
+    ruleList.rules.forEach((ruleItem: any) => {
+      console.log(ruleConfig("bool", ruleItem.rule));
+      if (ruleItem.ruleType === "bool" && ruleConfig("bool", ruleItem.rule)) {
+        ruleItem.actions.forEach((action: any) => {
+          loopBack(action.changeKey, formList.value.panels).newOptions = action.options;
+        });
       }
-      if (
-        ruleItem.actionType === "changeOptions" &&
-        !eval(ruleItem.rule) &&
-        eval(ruleItem.changeKey).newOptions
-      ) {
-        let data: any = eval(ruleItem.changeKey);
-        data.newOptions = null;
+      //当条件不符合规则，将数据还原
+      if (ruleItem.ruleType === "bool" && !ruleConfig("bool", ruleItem.rule)) {
+        ruleItem.actions.forEach((action: any) => {
+          loopBack(action.changeKey, formList.value.panels).newOptions = null;
+        });
       }
-      if (ruleItem.actionType === "changeFormData" && eval(ruleItem.rule)) {
+      if (ruleItem.ruleType === "changeFormData" && eval(ruleItem.rule)) {
         formData[ruleItem.changeKey] = ruleItem.changeVal;
       }
     });
+    callback();
   };
 };
 
 const blur = (ruleList: RuleListProps) => {
-  console.log(ruleList);
   return (rule: any, value: any, callback: any) => {
-    ruleList.actions.forEach((element: any) => {
-      if (element.actionType === "reg") {
-        // console.log(element.rule, new RegExp(element.rule), value);
-        if (new RegExp(element.rule).test(value)) {
+    ruleList.rules.forEach((ruleItem: any) => {
+      if (ruleItem.ruleType === "reg") {
+        console.log(ruleItem.rule, new RegExp(ruleItem.rule), value);
+        if (new RegExp(ruleItem.rule).test(value)) {
           callback();
         } else {
-          callback(new Error(element.ruleMessage));
+          callback(new Error(ruleItem.ruleMessage));
         }
       }
     });
@@ -131,9 +155,7 @@ const blur = (ruleList: RuleListProps) => {
 };
 
 const setData = () => {
-  console.log(props.formList.value);
   formList.value = cloneDeep(props.formList.value);
-  console.log(formList.value, isEmpty(formList.value), formList.value);
   !isEmpty(formList.value) &&
     formList.value.panels.forEach((valP: any, indexP: Number) => {
       Object.keys(valP.elements).forEach((valC: any, indexC: Number) => {
@@ -142,7 +164,6 @@ const setData = () => {
         if (valP.elements[valC].methods) {
           valP.elements[valC].methods.forEach((actionsVal: any) => {
             if (actionsVal.methodType === "change") {
-              console.log(88888888888888, actionsVal);
               rules[valC].push({
                 trigger: "change",
                 validator: change(actionsVal),
@@ -157,7 +178,6 @@ const setData = () => {
         }
       });
     });
-  console.log(rules, formData);
 };
 
 watch(

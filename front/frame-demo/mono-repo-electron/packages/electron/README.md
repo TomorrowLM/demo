@@ -49,3 +49,7 @@ https://www.electron.build/configuration/configuration
 - 打包安装依赖下载过慢
 
   离线下载：https://blog.csdn.net/qq_32682301/article/details/105234408
+
+
+
+启动 yarn run build:dev -> yarn run dev

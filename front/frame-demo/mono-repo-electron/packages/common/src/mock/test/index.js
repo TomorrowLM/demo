@@ -1,21 +1,3 @@
-// export default [
-//   {
-//     url: "/getData", // 注意，这里只能是string格式
-//     method: "GET",
-//     data: () => {
-//       return {
-//         "list|5-10": [
-//           {
-//             name: "@cname",
-//             url: "choose1.png",
-//             sportsman: "足球运动员",
-//             age: "29",
-//           },
-//         ],
-//       };
-//     },
-//   },
-// ];
 export default [
   {
     url: "getData", //匹配到指定url
@@ -35,15 +17,15 @@ export default [
                   type: "input",
                   label: "设备地址",
                   key: "address1",
-                  defaultValue: "12",
+                  defaultValue: "",
                   width: "100%",
                   methods: [
                     {
                       methodType: "blur",
-                      actions: [
+                      rules: [
                         {
-                          actionType: "reg",
                           rule: "^1.?$",
+                          ruleType: "reg",
                           ruleMessage: "正则匹配失败",
                         },
                       ],
@@ -53,9 +35,10 @@ export default [
                 address2: {
                   type: "select",
                   label: "波特率",
+                  description: "?",
                   key: "address2",
                   defaultValue: "",
-                  width: "50%",
+                  width: "100%",
                   options: [
                     {
                       key: "9600",
@@ -69,27 +52,26 @@ export default [
                   methods: [
                     {
                       methodType: "change",
-                      actions: [
+                      rules: [
                         {
-                          rule: "formData.address2 === '9600'",
-                          actionType: "changeOptions",
-                          changeKey: "formList['value']['panels'][0]['elements']['dataBit']",
-                          options: [
+                          rule: "$[address2]===9600",
+                          // rule: "formData.address2 === '9600'",
+                          ruleType: "bool",
+                          actions: [
                             {
-                              key: "5",
-                              value: "5",
-                            },
-                            {
-                              key: "6",
-                              value: "6",
+                              changeKey: "dataBit",
+                              options: [
+                                {
+                                  key: "5",
+                                  value: "5",
+                                },
+                                {
+                                  key: "6",
+                                  value: "6",
+                                },
+                              ],
                             },
                           ],
-                        },
-                        {
-                          rule: "formData.address2 === '4800'",
-                          actionType: "changeFormData",
-                          changeKey: "address1",
-                          changeVal: 1,
                         },
                       ],
                     },
@@ -100,7 +82,7 @@ export default [
                   label: "数据位",
                   key: "dataBit",
                   defaultValue: "",
-                  width: "50%",
+                  width: "100%",
                   options: [
                     {
                       key: "7",
