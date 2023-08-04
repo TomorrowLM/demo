@@ -6,9 +6,7 @@ import createTray from "../config/tray.js";
 
 process.env.DIST_ELECTRON = join(__dirname, "..");
 process.env.DIST = join(process.env.DIST_ELECTRON, "../dist-render");
-process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
-  ? join(process.env.DIST_ELECTRON, "../public")
-  : process.env.DIST;
+process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL ? join(process.env.DIST_ELECTRON, "../public") : process.env.DIST;
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith("6.1")) app.disableHardwareAcceleration();
@@ -32,14 +30,14 @@ async function createWindow() {
     icon: join(process.env.PUBLIC, "favicon.ico"),
     webPreferences: {
       preload,
-      nodeIntegration: true,
+      nodeIntegration: true, //Node.js 集成
       contextIsolation: false,
     },
   });
   //创建系统托盘
   createTray(win);
   //创建菜单
-  createMenuBar(win)
+  createMenuBar(win);
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(url);
     win.webContents.openDevTools();
@@ -56,7 +54,6 @@ async function createWindow() {
     if (url.startsWith("https:")) shell.openExternal(url);
     return { action: "deny" };
   });
-
 }
 
 app.whenReady().then(createWindow);

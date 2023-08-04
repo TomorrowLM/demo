@@ -12,11 +12,11 @@ export default [
           panels: [
             {
               title: "链路配置",
+              description: "?",
               elements: {
                 address1: {
                   type: "input",
                   label: "设备地址",
-                  key: "address1",
                   defaultValue: "",
                   width: "100%",
                   methods: [
@@ -36,7 +36,6 @@ export default [
                   type: "select",
                   label: "波特率",
                   description: "?",
-                  key: "address2",
                   defaultValue: "",
                   width: "100%",
                   options: [
