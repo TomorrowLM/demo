@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Description" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+    />
+    <!-- <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css"
+    /> -->
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css"
+    />
+    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/buble.css"> -->
+    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css"> -->
+    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/pure.css"> -->
+    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/dolphin.css"> -->
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      window.$docsify = {
+        name: "数据采集手册", // 项目名称
+        repo: "", // 仓库地址，点击右上角的Github章鱼猫头像会跳转到此地址
+        routerMode: "history",
+        // logo: "./assets/nav-logo.png",
+        // nameLink: "/#/docs/cn/home",
+        // 按照路由切换
+        nameLink: {
+          "/docs/cn/": "/docs/cn/home",
+          "/docs/en": "/",
+          "/": "/",
+        },
+        loadNavbar: true, // 导航栏支持，默认加载的是项目根目录下的_navbar.md文件
+        loadSidebar: true, // 侧边栏支持，默认加载的是项目根目录下的_sidebar.md文件
+        alias: {
+          // "/cn": "/docs/cn/home",
+          // '/.*/_sidebar.md': '/_sidebar.md',
+        },
+        // 封面支持，默认加载的是项目根目录下的_coverpage.md文件
+        coverpage: true,
+        // coverpage: ["/", "/zh-cn/"],
+        // coverpage: {
+        //   "/": "cover.md",
+        //   "/zh-cn/": "cover.md",
+        // },
+        // 最大支持渲染的标题层级
+        maxLevel: 5,
+        // 自定义侧边栏后默认不会再生成目录，设置生成目录的最大层级（建议配置为2-4）
+        subMaxLevel: 4,
+        // 小屏设备下合并导航栏到侧边栏
+        mergeNavbar: true,
+        themeColor: "#ccc", //主题的颜色
+        externalLinkTarget: "_blank", //外链打开方式 新标签页中打开
+        formatUpdated: "{MM}/{DD} {HH}:{mm}",
+
+        // otFoundPage: 'my404.md',
+        //       notFoundPage: {
+        //   '/': '_404.md',
+        //   '/de': 'de/_404.md',
+        // },
+      };
+    </script>
+    <script>
+      console.log(1212);
+      window.onload = function () {
+        // toTop(); // 到顶部
+        // 刷新
+        refresh();
+        // document.querySelector(".mebox .refresh").onclick = function () {
+        //   refresh();
+        // };
+
+        if (!localStorage.getItem("alert")) {
+          alert(
+            "注意,本文档是用来PWA离线缓存,就是说,加载一次之后,没有网也能继续查询,但是需要注意的是,如果需要刷新请点击右下角的刷新更新新内容,不点击还是旧的内容"
+          );
+          localStorage.setItem("alert", true);
+        }
+      };
+      // 搜索配置(url：https://docsify.js.org/#/zh-cn/plugins?id=%e5%85%a8%e6%96%87%e6%90%9c%e7%b4%a2-search)
+      window.$docsify = {
+        search: {
+          maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+          paths: auto, // 注意：仅适用于 paths: 'auto' 模式
+          placeholder: {
+            "/doc/cn/": "搜索",
+            "/doc/en/": "搜索",
+          },
+          noData: {
+            "/docs/en": "找不到结果",
+            "/": "No Results",
+          },
+          depth: 6, //标题深度
+          hideOtherSidebarContent: false, //隐藏其他侧边栏内容
+          namespace: "Docsify-Guide",
+        },
+        count: {
+          countable: true,
+          fontsize: "0.9em",
+          color: "rgb(90,90,90)",
+          language: "chinese",
+        },
+      };
+    </script>
+    <script>
+      function refresh() {
+        // 刷新 清除缓存
+        localStorage.getItem("docsify.search.index")
+          ? localStorage.removeItem("docsify.search.index")
+          : "";
+        localStorage.getItem("docsify.search.expires")
+          ? localStorage.removeItem("docsify.search.expires")
+          : "";
+
+        caches.keys().then((data) => {
+          data.forEach((v) => {
+            if (v == "docsify") {
+              caches.delete("docsify");
+
+              var timeer = setInterval(() => {
+                caches.keys().then((res) => {
+                  if (res == "") {
+                    console.log("成功清除");
+                    clearInterval(timeer);
+                    location.reload(); // 刷新
+                  }
+                });
+              }, 30);
+            }
+          });
+        });
+      }
+
+      function toTop() {
+        // 返回到顶部
+        var timer = null;
+        document.querySelector(".mebox .toTop").onclick = function () {
+          cancelAnimationFrame(timer);
+          timer = requestAnimationFrame(function fn() {
+            var oTop =
+              document.body.scrollTop || document.documentElement.scrollTop;
+            if (oTop > 0) {
+              document.body.scrollTop = document.documentElement.scrollTop =
+                oTop - 400;
+              timer = requestAnimationFrame(fn);
+            } else {
+              cancelAnimationFrame(timer);
+            }
+          });
+        };
+      }
+
+    </script>
+    <!-- Docsify v4 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+    <!-- 代码高亮 -->
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
+    <!-- emoji表情支持 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+    <!-- 图片放大缩小支持 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+    <!-- 搜索功能支持 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+    <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+    <!--在所有的代码块上添加一个简单的Click to copy按钮来允许用户从你的文档中轻易地复制代码-->
+    <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+    <!-- 分页导航插件 -->
+    <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+    <!-- 字数统计插件 -->
+    <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
+  </body>
+</html>
