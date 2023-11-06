@@ -1,0 +1,62 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              12/20/2022 22:10:43 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\software\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          
+   3          #define uint unsigned int
+   4          #define uchar unsigned char
+   5            
+   6          sbit LE_D = P2^6;   //LE_D控制显示那个数字
+   7          sbit LE_W = P2^7;   //LE_W控制第几个数码管显示
+   8          
+   9          uchar num;
+  10          uchar code table[] = {      //code 数据会放在程序存储器当中，如果不用code就会放在随机�
+             -��储器当中
+  11            0x06,0x5B,0x4F,0x66,0x6D,0x7C,0x07,0x7F,0x6F//单片机的随机存储器RAM是有限的(51单片机只�
+             -�128字节)
+  12          };
+  13          void delay(uint time);
+  14          void main()
+  15          {
+  16   1        LE_W = 1;
+  17   1        P0 = 0xD5;  //打开第 1 3 5 的数码管   1101 0101 
+  18   1        LE_W = 0;
+  19   1        while(1){
+  20   2          for(num = 0; num < 9; num++){
+  21   3            LE_D = 1;
+  22   3            P0 = table[num];    //每隔1s数据变一下 从0——>9 显示
+  23   3            LE_D = 0;
+  24   3            delay(1000);  //1s
+  25   3          }
+  26   2        }
+  27   1      }
+  28          
+  29          void delay(uint time)  //delay = 1 ms 0.001s
+  30          {
+  31   1        uint y;
+  32   1        uint z;
+  33   1        for(z = time; z > 0; z--){
+  34   2            for(y = 115; y > 0; y--){}
+  35   2        }
+  36   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     74    ----
+   CONSTANT SIZE    =      9    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

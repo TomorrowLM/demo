@@ -1,0 +1,55 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              12/01/2022 21:52:31 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\software\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          void Delay(unsigned int xms)
+   4          {
+   5   1        unsigned char i, j;
+   6   1        while(xms)
+   7   1        {
+   8   2          i = 2;
+   9   2          j = 239;
+  10   2          do
+  11   2          {
+  12   3            while (--j);
+  13   3          } while (--i);
+  14   2          xms--;
+  15   2        }
+  16   1      }
+  17          
+  18          void main()
+  19          {
+  20   1        while(1)
+  21   1        {
+  22   2          if(P3_1==0)     //如果K1按键按下
+  23   2          {
+  24   3            Delay(20);    //延时消抖
+  25   3            while(P3_1==0); //松手检测
+  26   3            Delay(2000);    //延时消抖
+  27   3            
+  28   3            P1_0=~P2_0;   //LED1取反
+  29   3          }
+  30   2        }
+  31   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     47    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

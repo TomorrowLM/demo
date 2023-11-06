@@ -1,0 +1,78 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 20:57:18 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\software\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          sbit WE=P2^7;//位选
+   3          sbit DU=P2^6;//段选
+   4          #define uint unsigned int
+   5          #define uchar unsigned char
+   6            //延时函数
+   7          void delay(uint z){
+   8   1        uint x=0;
+   9   1        uint y=0;
+  10   1        for(x=z;x>0;x--)
+  11   1        for(y=114;y>0;y--);
+  12   1      }
+  13          //共阴极数码管0-9段选表
+  14          uchar board[]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
+  15          void display(uint z){
+  16   1        uint bai=z/100;//百位
+  17   1        uint shi=z%100/10;//十位
+  18   1        uint ge=z%10;//个位
+  19   1        //第1位数码管
+  20   1        P0=0xff;//清除段码
+  21   1        WE=1;//打开位选
+  22   1        P0=0xfe;//11111110
+  23   1        WE=0;//进行锁存
+  24   1        DU=1;//打开段选
+  25   1        P0=board[bai];
+  26   1        DU=0;//进行锁存
+  27   1        delay(1000);
+  28   1        //第2位数码管
+  29   1        P0=0xff;//清除段码
+  30   1        WE=1;//打开位选
+  31   1        P0=0xfd;//11111101
+  32   1        WE=0;//进行锁存
+  33   1        DU=1;//打开段选
+  34   1        P0=board[shi];
+  35   1        DU=0;//进行锁存
+  36   1        delay(5);
+  37   1        //第3位数码管
+  38   1        P0=0xff;//清除段码
+  39   1        WE=1;//打开位选
+  40   1        P0=0xfb;//11111011
+  41   1        WE=0;//进行锁存
+  42   1        DU=1;//打开段选
+  43   1        P0=board[ge];
+  44   1        DU=0;//进行锁存
+  45   1        delay(5);
+  46   1      }
+  47          void main(){
+  48   1        //显示123
+  49   1        while(1){
+  50   2        display(123); 
+  51   2        }
+  52   1      }
+
+
+C51 COMPILER V9.60.0.0   MAIN                                                              12/19/2022 20:57:18 PAGE 2   
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    185    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
