@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
 /dist
-**/node_modules
+/build
+/dash
+/前端
+/PCB
 
 # local env files
 .env.local
