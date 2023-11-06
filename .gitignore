@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
 /dist
-**/node_modules
+/build
+/dash
+/前端
+/PCB
 
 # local env files
 .env.local
@@ -23,3 +26,4 @@ pnpm-debug.log*
 *.sw?
 *.exe
 *.vc
+*前端案例
