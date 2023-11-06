@@ -1,10 +1,10 @@
-const { defineConfig } = require('@vue/cli-service')
-const path = require('path')
+const { defineConfig } = require('@vue/cli-service');
+const path = require('path');
 const webpack = require('webpack');
 // const pxtorem = require('postcss-pxtorem')
-const autoprefixer = require('autoprefixer')// 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
-const resolve = dir => path.join(__dirname, dir)
-const isProd = process.env.NODE_ENV === 'production'
+const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
+const resolve = dir => path.join(__dirname, dir);
+const isProd = process.env.NODE_ENV === 'production';
 
 const commonPlugin = [
   // 扩展环境变量
@@ -27,23 +27,21 @@ const commonPlugin = [
 
 console.log(process.env.NODE_ENV, process.env.VUE_APP_API_HOST);
 module.exports = defineConfig({
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/vue-demo-pc/'
-    : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/vue-demo-pc/' : '/',
   //打包文件输出路径，即打包到哪里
   outputDir: 'dist',
   // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
-  lintOnSave: true,//boolean | 'warning' | 'default' | 'error'
+  lintOnSave: true, //boolean | 'warning' | 'default' | 'error'
   transpileDependencies: true,
   productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
   devServer: {
     // contentBase: './src',//项目基本访问目录
-    host: 'localhost',//服务器ip地址
+    host: 'localhost', //服务器ip地址
     port: 8088,
-    open: true,// 配置自动启动浏览器
-    hot: true,//模块热替换
+    open: true, // 配置自动启动浏览器
+    hot: true, //模块热替换
     headers: {
-      "Access-Control-Allow-Origin": "*"
+      'Access-Control-Allow-Origin': '*',
     },
     // public: 'http://192.168.10.36:8088',
     proxy: {
@@ -52,15 +50,15 @@ module.exports = defineConfig({
         changeOrigin: true,
         secure: false,
         xfwd: false,
-      }
+      },
     },
   },
   configureWebpack: config => {
     config.plugins.push(...commonPlugin);
     config.externals = {
-      'BMap': 'window.BMap', // 百度地图
-      'AMap': 'AMap' // 高德地图}
-    }
+      BMap: 'window.BMap', // 百度地图
+      AMap: 'AMap', // 高德地图}
+    };
     if (process.env.NODE_ENV === 'production') {
       config.output.filename = `js/[name].[contenthash].js`;
       config.output.chunkFilename = `js/[name].[contenthash].js`;
@@ -112,7 +110,7 @@ module.exports = defineConfig({
       //   ]
       // },
       sass: {
-        additionalData: `@import "@/styles/theme.scss";`,//注入全局样式
+        additionalData: `@import "@/styles/theme.scss";`, //注入全局样式
         plugins: [
           autoprefixer({
             overrideBrowserslist: [
@@ -128,8 +126,8 @@ module.exports = defineConfig({
         ],
       },
       scss: {
-        additionalData: `@import "@/styles/theme.scss";`,//注入全局样式
-      }
-    }
+        additionalData: `@import "@/styles/theme.scss";`, //注入全局样式
+      },
+    },
   },
-})
+});

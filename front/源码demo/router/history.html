@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <a
+      href="http://127.0.0.1:5500/front/%E6%BA%90%E7%A0%81demo/router/history.html/"
+      >home</a
+    >
+    <a
+      href="http://127.0.0.1:5500/front/%E6%BA%90%E7%A0%81demo/router/history.html/about"
+      >about</a
+    >
+    <a
+      href="http://127.0.0.1:5500/front/%E6%BA%90%E7%A0%81demo/router/history.html/404"
+      >404</a
+    >
+    <button>location</button>
+    <button>pushState</button>
+  </body>
+  <script>
+    document.getElementsByTagName("button")[0].addEventListener("click", () => {
+      location.href =
+        "http://127.0.0.1:5500/front/%E6%BA%90%E7%A0%81demo/router/history.html/404";
+    });
+    document
+      .getElementsByTagName("button")[1]
+      .addEventListener("click", (e) => {
+        window.history.pushState("a", { data: "" }, "about");
+      });
+    // 先定义几个路由
+    const routes = [
+      {
+        path: "/",
+        name: "home",
+        component: "<h1>home</h1>",
+        // component: <Home />
+      },
+      {
+        path: "/about",
+        name: "about",
+        // component: <About />
+        component: "<h1>about</h1>",
+      },
+      {
+        path: "*",
+        name: "404",
+        component: "<h1>404</h1>",
+        // component: <NotFound404 />
+      },
+    ];
+    class HistoryRouter {
+      currentUrl = "";
+      handlers = {};
+
+      constructor() {
+        console.log('constructor');
+        this.refresh = this.refresh.bind(this);
+        this.addStateListener();
+        window.addEventListener("load", this.refresh, false);
+        window.addEventListener("popstate", this.refresh, false);
+        window.addEventListener("pushState", this.refresh, false);
+        window.addEventListener("replaceState", this.refresh, false);
+      }
+      addStateListener() {
+        const listener = function (type) {
+          var orig = history[type];
+          return function () {
+            console.log(orig, type, arguments);
+            var rv = orig.apply(this, arguments);
+            var e = new Event(type);
+            e.arguments = arguments;
+            window.dispatchEvent(e); 
+            return rv;
+          };
+        };
+        window.history.pushState = listener("pushState");
+        window.history.replaceState = listener("replaceState");
+      }
+      refresh(event) {
+        this.currentUrl = location.pathname;
+        console.log(location);
+        this.emit("change", location.pathname);
+        // document.querySelector("#app span").innerHTML = location.pathname;
+      }
+      on(evName, listener) {
+        this.handlers[evName] = listener;
+      }
+      emit(evName, ...args) {
+        const handler = this.handlers[evName];
+        if (handler) {
+          handler(...args);
+        }
+      }
+    }
+
+    const router = new HistoryRouter();
+    // 监听change事件
+    router.on("change", (currentUrl) => {
+      let route = null;
+      // 匹配路由
+      for (let i = 0, len = routes.length; i < len; i++) {
+        const item = routes[i];
+        console.log("/" + currentUrl.split("/").pop(), item.path);
+        if ("/" + currentUrl.split("/").pop() === item.path) {
+          route = item;
+          break;
+        }
+      }
+      if (currentUrl.split("/").pop().includes("html")) {
+        route = routes[0];
+      } else if (!route) {
+        // 若没有匹配到，则使用最后一个路由
+        route = routes[routes.length - 1];
+      }
+      // 渲染当前的组件
+      document.getElementById("app").innerHTML = route.component;
+    });
+  </script>
+</html>

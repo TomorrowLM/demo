@@ -1,1 +1,0 @@
-- [connect](docs/en/connect)

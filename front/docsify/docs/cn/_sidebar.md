@@ -1,2 +1,0 @@
-- [首页](docs/cn/home "The greatest guide in the world")
-- [连接](docs/cn/connect)
