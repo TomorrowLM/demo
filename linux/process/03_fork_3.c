@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     printf("This is a parent process\n");
 
     char buf[32] = "";
-    if (read(fd, buf, 30) == -1)
+    if (read(fd, buf, 2) == -1)
     {
       perror("fail to read");
       return -1;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     printf("This is a son process\n");
 
     char buf[32] = "";
-    if (read(fd, buf, 30) == -1)
+    if (read(fd, buf, 9) == -1)
     {
       perror("fail to read");
       return -1;

@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	if (pid == 0)
 	{
 		int i = 0;
-		for (i = 0; i < 5; i++)
+		for (i = 0; i < 2; i++)
 		{
 			printf("this is son process\n");
 			sleep(1);
@@ -35,8 +35,11 @@ int main(int argc, char *argv[])
 		// 接收子进程的退出状态，子进程中必须使用exit或者_exit函数退出进程是发送退出状态
 		int status = 0;
 		wait(&status);
-
 		if (WIFEXITED(status) != 0)
+		{
+			printf("正常退出\n");
+		}
+		if (WEXITSTATUS(status) == 2)
 		{
 			printf("The son process return status: %d\n", WEXITSTATUS(status));
 		}

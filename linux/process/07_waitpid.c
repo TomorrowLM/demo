@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	if (pid == 0)
 	{
 		int i = 0;
-		for (i = 0; i < 5; i++)
+		for (i = 0; i < 2; i++)
 		{
 			printf("this is son process\n");
 			sleep(1);
