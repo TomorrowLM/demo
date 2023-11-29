@@ -11,11 +11,14 @@ void handler(int sig)
     printf("nihao beijing\n");
     printf("welcome to 1000phone\n");
     printf("**********************\n");
-
+    printf("%p\n",ret_handler);
     if (signal(SIGINT, ret_handler) == SIG_ERR)
     {
         perror("fail to signal");
+        printf("fail to signal");
         exit(1);
+    }else{
+        printf("fail to signal11");
     }
 }
 
@@ -26,7 +29,7 @@ int main(int argc, char const *argv[])
         perror("fail to signal");
         exit(1);
     }
-
+    printf("%p\n",ret_handler);
     while (1)
     {
         printf("hello world\n");

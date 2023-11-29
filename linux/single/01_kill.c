@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
     {
         while (1)
         {
-            printf("This is parent peocess\n");
-
+            printf("This is parent process\n");
             sleep(1);
         }
     }

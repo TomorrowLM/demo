@@ -2,9 +2,9 @@
 #include <signal.h>
 #include <unistd.h>
 #include <stdlib.h>
-
+#include <sys/types.h>
 void handler(int sig);
-
+pid_t  pid;
 int main(int argc, char const *argv[])
 {
     // 以默认的方式处理信号
@@ -71,7 +71,9 @@ int main(int argc, char const *argv[])
         exit(1);
     }
 #endif
-
+    
+    pid =getpid();
+    printf("%d",pid);
     while (1)
     {
         printf("hello world\n");
@@ -86,6 +88,11 @@ void handler(int sig)
     if (sig == SIGINT)
     {
         printf("SIGINT正在处理\n");
+        printf("%d\n",pid);
+        kill(pid, SIGABRT);
+        // kill(getppid(), SIGINT);
+        // raise(SIGINT);
+        // abort();
     }
 
     if (sig == SIGQUIT)

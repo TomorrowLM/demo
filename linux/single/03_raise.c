@@ -18,6 +18,7 @@ int main(int argc, char const *argv[])
         if(num == 5)
         {
             //使用raise给当前进程本身发送信号
+            // raise(SIGINT);
             raise(SIGALRM);
             //kill(getpid(), SIGALRM);
         }
