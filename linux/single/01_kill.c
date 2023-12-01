@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
         // 使用kill给父进程发送信号，然后父进程接收到信号后直接退出就可以了
         kill(getppid(), SIGINT);
+        // kill(getppid(), SIGCHLD);
     }
 
     return 0;

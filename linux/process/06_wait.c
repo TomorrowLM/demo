@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 		// 不接收子进程的退出状态
 		// wait(NULL);
 
-		// 接收子进程的退出状态，子进程中必须使用exit或者_exit函数退出进程是发送退出状态
+		// 接收子进程的退出状态，子进程中必须使用exit或者_exit函数退出进程,发送退出状态
 		int status = 0;
 		wait(&status);
 		if (WIFEXITED(status) != 0)

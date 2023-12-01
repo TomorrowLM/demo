@@ -4,7 +4,7 @@
 
 void myfun()
 {
-    printf("nihao beijing");
+    printf("nihao beijing\n");
 
     // 使用return
     // return除了可以返回值以外，在主函数中使用可以退出进程，但是在子函数中使用只能退出当前函数
@@ -12,11 +12,11 @@ void myfun()
 
     // 使用exit
     // exit可以退出一个进程并且可以刷新缓冲区
-    exit(0);
+    // exit(0);
 
     // 使用_exit
     //_exit可以退出一个进程，但是不会刷新缓冲区
-    //_exit(0);
+    _exit(0);
 
     printf("welcome to 1000phone\n");
 }
