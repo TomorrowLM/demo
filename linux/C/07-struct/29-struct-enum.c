@@ -6,7 +6,7 @@ enum week
   mon = 8,
   tue,
   wed,
-  thu = 2,
+  thu = 5,
   fri,
   sat,
   sun
@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
 {
   //定义枚举类型的变量
   enum week day = mon;
-  printf("day = %d\n", day);
+  printf("day = %d\n", day);//8
 
   day = fri;
-  printf("day = %d\n", day);
+  printf("day = %d\n", day);//6
 
   return 0;
 }

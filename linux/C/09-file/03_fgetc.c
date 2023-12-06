@@ -4,7 +4,7 @@ int main(int argc, char *argv[])
 {
   FILE *fp;
   // fp = fopen("C:/Users/李明/Desktop/file.txt", "r");
-  fp = fopen("D:/file.txt", "r");
+  fp = fopen("./file.txt", "r");
   if (fp == NULL)
   {
     printf("fail to fopen\n");

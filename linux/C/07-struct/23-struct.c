@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
   // 在定义结构体变量的时候不用加struct
   MSG msg1, msg2 = {100, 200, 'w'};
 
-  printf("%d,%s",sizeof(zhaoliu),zhaoliu.name);
+  printf("%d,%s", sizeof(zhaoliu), zhaoliu.name);
 
   return 0;
 }
