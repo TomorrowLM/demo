@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Recent SQLite News</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: Verdana, sans-serif;
+    padding: 8px 1%;
+}
+
+a { color: #044a64 }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:300px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.menubar {
+  clear: both;
+  border-radius: 8px;
+  background: #044a64;
+  padding: 0px;
+  margin: 0px;
+  cell-spacing: 0px;
+}    
+.toolbar {
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding: 0px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #044a64; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* Things for "fancyformat" documents start here. */
+.fancy img+p {font-style:italic}
+.fancy .codeblock i { color: darkblue; }
+.fancy h1,.fancy h2,.fancy h3,.fancy h4 {font-weight:normal;color:#044a64}
+.fancy h2 { margin-left: 10px }
+.fancy h3 { margin-left: 20px }
+.fancy h4 { margin-left: 30px }
+.fancy th {white-space:nowrap;text-align:left;border-bottom:solid 1px #444}
+.fancy th, .fancy td {padding: 0.2em 1ex; vertical-align:top}
+.fancy #toc a        { color: darkblue ; text-decoration: none }
+.fancy .todo         { color: #AA3333 ; font-style : italic }
+.fancy .todo:before  { content: 'TODO:' }
+.fancy p.todo        { border: solid #AA3333 1px; padding: 1ex }
+.fancy img { display:block; }
+.fancy :link:hover, .fancy :visited:hover { background: wheat }
+.fancy p,.fancy ul,.fancy ol { margin: 1em 5ex }
+.fancy li p { margin: 1em 0 }
+/* End of "fancyformat" specific rules. */
+
+</style>
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="index.html">
+<img class="logo" src="images/sqlite370_banner.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% class="menubar"><tr>
+  <td width=100%>
+  <div class="toolbar">
+    <a href="about.html">About</a>
+    <a href="sitemap.html">Sitemap</a>
+    <a href="docs.html">Documentation</a>
+    <a href="download.html">Download</a>
+    <a href="copyright.html">License</a>
+    <a href="news.html">News</a>
+    <a href="support.html">Support</a>
+  </div>
+<script>
+  gMsg = "Search SQLite Docs..."
+  function entersearch() {
+    var q = document.getElementById("q");
+    if( q.value == gMsg ) { q.value = "" }
+    q.style.color = "black"
+    q.style.fontStyle = "normal"
+  }
+  function leavesearch() {
+    var q = document.getElementById("q");
+    if( q.value == "" ) { 
+      q.value = gMsg
+      q.style.color = "#044a64"
+      q.style.fontStyle = "italic"
+    }
+  }
+</script>
+<td>
+    <div style="padding:0 1em 0px 0;white-space:nowrap">
+    <form name=f method="GET" action="http://www.sqlite.org/search">
+      <input id=q name=q type=text
+       onfocus="entersearch()" onblur="leavesearch()" style="width:24ex;padding:1px 1ex; border:solid white 1px; font-size:0.9em ; font-style:italic;color:#044a64;" value="Search SQLite Docs...">
+      <input type=submit value="Go" style="border:solid white 1px;background-color:#044a64;color:white;font-size:0.9em;padding:0 1ex">
+    </form>
+    </div>
+  </table>
+
+<div class=startsearch></div>
+  
+
+
+<h2>Recent News</h2>
+
+<a name="2013_05_20"></a><h3>2013-05-20 - Release 3.7.17</h3><blockquote>
+  SQLite <a href="releaselog/3_7_17.html">version 3.7.17</a> is a regularly schedule maintenance release.
+  Visit the <a href="releaselog/3_7_17.html">change log</a> for a full explanation of the
+  changes in this release.</p>
+
+<p>  There are many bug fixes in version 3.7.17.  But this does not indicate
+  that 3.7.16 was a problematic release.  All of the bugs in 3.7.17 are 
+  obscure and are unlikely to impact any particular application.  And most 
+  of the bugs that are fixed in 3.7.17 predate 3.7.16 and have been in 
+  the code for years without ever before being noticed.
+  Nevertheless, due to the large number of fixes,
+  all users are encouraged to upgrade when possible.
+</blockquote><hr width="50%"><a name="2013_04_12"></a><h3>2013-04-12 - Release 3.7.16.2</h3><blockquote>
+  SQLite <a href="releaselog/3_7_16_2.html">version 3.7.16.2</a> fixes a long-standing flaw in the Windows
+  OS interface that
+  can result in database corruption under a rare race condition.
+  See <a href="http://www.sqlite.org/src/info/7ff3120e4f">http://www.sqlite.org/src/info/7ff3120e4f</a> for a full description
+  of the problem.</p>
+
+<p>  As far as we know, this bug has never been seen in the wild.  The
+  problem was discovered by the SQLite developers while writing stress tests
+  for a separate component of SQLite.  Those stress tests have not yet
+  found any problems with the component they were intended to verify, but 
+  they did find the bug which is the subject of this patch release.</p>
+
+<p>  Other than updates to version numbers, the only difference between this
+  release and 3.7.16.1 is a two-character change in a single identifier,
+  which is contained in the windows-specific OS interface logic.  There 
+  are no changes in this release (other than version numbers) for platforms
+  other than Windows.
+</blockquote><hr width="50%"><a name="2013_03_29"></a><h3>2013-03-29 - Release 3.7.16.1</h3><blockquote>
+  SQLite <a href="releaselog/3_7_16_1.html">version 3.7.16.1</a> is a bug fix release that fixes a few problems
+  that were present in the previous releases.</p>
+
+<p>  The primary motivation for version 3.7.16.1 is to fix a bug in the
+  query optimizer that was introduced as part of <a href="releaselog/3_7_15.html">version 3.7.15</a>.  The
+  query optimizer was being a little overzealous in optimizing out some
+  ORDER BY clauses, which resulted in sorting being omitted on occasions
+  where sorting is required to get the correct answer.  See
+  ticket <a href="http://www.sqlite.org/src/info/a179fe7465">a179fe7465</a> for
+  details.</p>
+
+<p>  In addition to the ORDER BY fix, several other patches to fix obscure
+  (and mostly harmless) bugs and to fix spelling errors in source code
+  comments are also included in this release.
+</blockquote><hr width="50%"><a name="2013_03_18"></a><h3>2013-03-18 - Release 3.7.16</h3><blockquote>
+  SQLite <a href="releaselog/3_7_16.html">version 3.7.16</a> is a regularly scheduled release of SQLite.
+  This release contains several langauge enhancements and improvements
+  to the query optimizer.  A list of the major enhancements and optimizations
+  can be see on the <a href="releaselog/3_7_16.html">change log</a>.</p>
+
+<p>  There was one important bug fix
+  (see <a href="http://www.sqlite.org/src/info/fc7bd6358f">Ticket fc7bd6358f</a>)
+  that addresses an incorrect query result that could have occurred in
+  a three-way join where the join constraints compared INTEGER columns
+  to TEXT columns.  This issue had been in the code for time out of mind
+  and had never before been reported, so we surmise that it is very obscure.
+  Nevertheless, all users are advised to upgrade to avoid any future problems
+  associated with this issue.
+</blockquote><hr width="50%"><a name="2013_01_09"></a><h3>2013-01-09 - Release 3.7.15.2</h3><blockquote>
+  SQLite <a href="releaselog/3_7_15_2.html">version 3.7.15.2</a> is a patch release that fixes a single bug
+  that was introduced in version <a href="releaselog/3_7_15.html">version 3.7.15</a>.  The fix is a 4-character
+  edit to a single line of code.  Other than this 4-character change and
+  the update of the version number, nothing has changed from
+  <a href="releaselog/3_7_15_1.html">version 3.7.15.1</a>.
+</blockquote><hr width="50%"><a name="2012_12_19"></a><h3>2012-12-19 - Release 3.7.15.1</h3><blockquote>
+  SQLite <a href="releaselog/3_7_15_1.html">version 3.7.15.1</a> is a patch release that fixes a single bug
+  that was introduced in version <a href="releaselog/3_7_15.html">version 3.7.15</a>.  The fix involved changing
+  two lines of code and adding a single assert().  This release also includes
+  some new test cases to prevent a regression of the bug, and the version
+  number is increased, of course.  But otherwise, nothing has changed from
+  <a href="releaselog/3_7_15.html">version 3.7.15</a>.
+</blockquote><hr width="50%"><a name="2012_12_12"></a><h3>2012-12-12 - Release 3.7.15</h3><blockquote>
+  SQLite <a href="releaselog/3_7_15.html">version 3.7.15</a> is a regularly schedule release of SQLite.  This
+  release contains several improvements to the query planner and optimizer
+  and one important bug fix.  This is the first release to officially
+  support Windows 8 Phone.</p>
+
+<p>  The important bug fix is a problem that can lead to segfaults when using
+  <a href="sharedcache.html">shared cache mode</a> on a schema that contains a <a href="lang_expr.html#collateop">COLLATE operator</a> within
+  a <a href="lang_createtable.html#ckconst">CHECK constraint</a> or within a <a href="lang_createview.html">view</a>.  Collating functions are associated
+  with individual database connections.  But a pointer to the collating function
+  was also being cached within expressions.  If an expression was part of the
+  schema and contained a cached collating function, it would point to the
+  collating function in the database connection that originally parsed the
+  schema.  If that database connection closed while other database 
+  connections using the same shared cache continued to operate, they other
+  database connections would try to use the deallocated collating function
+  in the database connection that closed.  The fix in version 3.7.15 was to
+  not cache collating function pointers in the expression structure but 
+  instead look them up each time a new statement is prepared.</p>
+
+<p>  This release also contains some important enhancements to the query planner
+  which should (we hope) make some queries run faster.  The enhancements
+  include:</p>
+
+<p>  <ol><li><p>When doing a full-table scan, try to use an index instead of
+  the original table, under the theory that indices contain less information
+  and are thus smaller and hence require less disk I/O to scan.</p></p>
+
+<p>  <li><p>Enhance the <a href="lang_expr.html#in_op">IN operator</a> to allow it to make use of 
+  indices that have <a href="datatype3.html#affinity">numeric affinity</a>.</p></p>
+
+<p>  <li><p>Do a better job of recognizing when an ORDER BY clause can be 
+  implemented using indices - especially in cases where the ORDER BY clause
+  contains terms from two or more tables in a join.</p>
+  </ol>
+</blockquote><hr width="50%"><a name="2012_10_04"></a><h3>2012-10-04 - Release 3.7.14.1</h3><blockquote>
+  SQLite <a href="releaselog/3_7_14_1.html">version 3.7.14.1</a> is a patch release.  Changes from the baseline
+  version 3.7.14 are minimal and are restricted to fixing three bugs.</p>
+
+<p>  One of the fixed bugs is a long-standing issue with the TCL interface.
+  Another is an external compiler bug that SQLite merely works around and
+  that only comes up if you are using the VisualStudio-2012 compiler to
+  generate WinRT applications on ARM with optimizations enabled.  The
+  third problem is an SQLite core bug, introduced in version 3.7.14, that
+  can cause a segfault if a query contains a LEFT JOIN that contains an OR
+  in the ON clause.
+</blockquote><hr width="50%"><a name="2012_09_03"></a><h3>2012-09-03 - Release 3.7.14</h3><blockquote>
+  SQLite <a href="releaselog/3_7_14.html">version 3.7.14</a> is a regularly scheduled maintenance release
+  of SQLite.  The previous release continues to work well.  Upgrading
+  is optional.</p>
+
+<p>  Version 3.7.14 drops native support for OS/2.  We are not aware of any
+  active projects that were using SQLite on OS/2 and since the SQLite
+  developers had no way of testing on OS/2 it seemed like it was time
+  to simply remove the OS/2 code from the SQLite tree.  If there are
+  OS/2 projects out there that still need SQLite support, they can
+  continue to maintain their own private <a href="vfs.html">VFS</a> which can be linked to
+  SQLite at start-time using the <a href="c3ref/vfs_find.html">sqlite3_vfs_register()</a> interface.</p>
+
+<p>  The <a href="c3ref/close.html">sqlite3_close_v2()</a> interface has been added.  The sqlite3_close_v2()
+  interface differs from sqlite3_close() in that it is designed to work
+  better for host language that use a garbage collector.  With the older
+  sqlite3_close() interface, the associated <a href="c3ref/stmt.html">prepared statements</a> and
+  <a href="c3ref/backup.html">sqlite3_backup</a> objects must be destroyed before the database connection.
+  With the newer sqlite3_close_v2() interface, the objects can be destroyed
+  in any order.</p>
+
+<p>  This release also includes performance improvements to the sort algorithm
+  that is used to implement ORDER BY and CREATE INDEX.  And the query planner
+  has been enhanced to better use covering indices on queries that use OR
+  terms in the WHERE clause.
+</blockquote><hr width="50%"><a name="2012_06_11"></a><h3>2012-06-11 - Release 3.7.13</h3><blockquote>
+  SQLite <a href="releaselog/3_7_13.html">version 3.7.13</a> adds support for WinRT and metro style
+  applications for Microsoft Windows 8.  The 3.7.13 release is
+  coming sooner than is usual after the previous release in order to get
+  this new capability into the hands of developers.  To use SQLite in 
+  a metro style application, compile with the -DSQLITE_OS_WINRT flag.
+  Because of the increased application security and safety requirements
+  of WinRT, all database
+  filenames should be full pathnames.  Note that SQLite is not capable
+  of accessing databases outside the installation directory and application
+  data directory.  This restriction is another security and safety feature
+  of WinRT. Apart from these restrictions, SQLite should work exactly
+  the same on WinRT as it does on every other system.</p>
+
+<p>  Also in this release: when a database is opened using <a href="uri.html">URI filenames</a>
+  and the <a href="uri.html#coreqp">mode=memory</a> query parameter 
+  then the database is an in-memory database, just as if it had
+  been named ":memory:".  But, if shared cache mode is enabled, then
+  all other database connections that specify the same URI filename
+  will connect to the same in-memory database.  This allows two or more
+  database connections (in the same process) to share the same in-memory
+  database.</p>
+
+<p>  This release also includes some corner-case performance optimizations
+  that are obscure yet significant to an important subset of SQLite users.
+  Getting these performance optimizations into circulation quickly is
+  yet another reason for making this release so soon following the previous.</p>
+
+<p>  The next release of SQLite is scheduled to occur after the usual
+  2 or 3 month interval.
+</blockquote><hr width="50%"><a name="2012_05_22"></a><h3>2012-05-22 - Patch Release 3.7.12.1</h3><blockquote>
+  SQLite <a href="releaselog/3_7_12_1.html">version 3.7.12.1</a> is a patch release for <a href="releaselog/3_7_12.html">version 3.7.12</a> that
+  fixes a <a href="http://www.sqlite.org/src/info/c2ad16f997ee9c">bug</a> that was
+  introduced in version 3.7.12 and that can
+  cause a segfault for certain obscure nested aggregate queries.
+  There are very few changes in 3.7.12.1, and upgrading is only needed for
+  applications that do nested aggregate queries.
+</blockquote><hr width="50%"><a name="2012_05_14"></a><h3>2012-05-14 - <a href="releaselog/3_7_12.html">Version 3.7.12</a></h3><blockquote>
+  SQLite <a href="releaselog/3_7_12.html">version 3.7.12</a> is a regularly scheduled maintenance release.
+  This release contains several new optimizations and bug fixes and upgrading
+  is recommended.  See the <a href="releaselog/3_7_12.html">change summary</a> for details.
+</blockquote><hr width="50%">
+
+<a href="oldnews.html">Old news...</a>
+

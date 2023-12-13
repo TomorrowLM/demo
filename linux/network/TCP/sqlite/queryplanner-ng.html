@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>The Next-Generation Query Planner</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: Verdana, sans-serif;
+    padding: 8px 1%;
+}
+
+a { color: #044a64 }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:300px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.menubar {
+  clear: both;
+  border-radius: 8px;
+  background: #044a64;
+  padding: 0px;
+  margin: 0px;
+  cell-spacing: 0px;
+}    
+.toolbar {
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding: 0px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #044a64; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* Things for "fancyformat" documents start here. */
+.fancy img+p {font-style:italic}
+.fancy .codeblock i { color: darkblue; }
+.fancy h1,.fancy h2,.fancy h3,.fancy h4 {font-weight:normal;color:#044a64}
+.fancy h2 { margin-left: 10px }
+.fancy h3 { margin-left: 20px }
+.fancy h4 { margin-left: 30px }
+.fancy th {white-space:nowrap;text-align:left;border-bottom:solid 1px #444}
+.fancy th, .fancy td {padding: 0.2em 1ex; vertical-align:top}
+.fancy #toc a        { color: darkblue ; text-decoration: none }
+.fancy .todo         { color: #AA3333 ; font-style : italic }
+.fancy .todo:before  { content: 'TODO:' }
+.fancy p.todo        { border: solid #AA3333 1px; padding: 1ex }
+.fancy img { display:block; }
+.fancy :link:hover, .fancy :visited:hover { background: wheat }
+.fancy p,.fancy ul,.fancy ol { margin: 1em 5ex }
+.fancy li p { margin: 1em 0 }
+/* End of "fancyformat" specific rules. */
+
+</style>
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="index.html">
+<img class="logo" src="images/sqlite370_banner.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% class="menubar"><tr>
+  <td width=100%>
+  <div class="toolbar">
+    <a href="about.html">About</a>
+    <a href="sitemap.html">Sitemap</a>
+    <a href="docs.html">Documentation</a>
+    <a href="download.html">Download</a>
+    <a href="copyright.html">License</a>
+    <a href="news.html">News</a>
+    <a href="support.html">Support</a>
+  </div>
+<script>
+  gMsg = "Search SQLite Docs..."
+  function entersearch() {
+    var q = document.getElementById("q");
+    if( q.value == gMsg ) { q.value = "" }
+    q.style.color = "black"
+    q.style.fontStyle = "normal"
+  }
+  function leavesearch() {
+    var q = document.getElementById("q");
+    if( q.value == "" ) { 
+      q.value = gMsg
+      q.style.color = "#044a64"
+      q.style.fontStyle = "italic"
+    }
+  }
+</script>
+<td>
+    <div style="padding:0 1em 0px 0;white-space:nowrap">
+    <form name=f method="GET" action="http://www.sqlite.org/search">
+      <input id=q name=q type=text
+       onfocus="entersearch()" onblur="leavesearch()" style="width:24ex;padding:1px 1ex; border:solid white 1px; font-size:0.9em ; font-style:italic;color:#044a64;" value="Search SQLite Docs...">
+      <input type=submit value="Go" style="border:solid white 1px;background-color:#044a64;color:white;font-size:0.9em;padding:0 1ex">
+    </form>
+    </div>
+  </table>
+
+<div class=startsearch></div>
+  
+
+
+<h1 align="center">The Next Generation Query Planner</h1>
+
+<blockquote>
+<p style="border:1px solid black; color: red;"><i><b>
+This article is about proposed enhancements to SQLite that have not yet
+been implemented.  Everything mentioned here is preliminary and subject
+to change.  If and when the plans outlined in this document are
+completed, this document will be revised into something along the lines
+of "How The Query Planner Works".</b></i></p>
+</blockquote>
+
+<h2>Introduction</h2>
+
+<p>
+"TPC-H Q8" is a test query from the
+<a href="http://www.tpc.org/tpch/">Transaction Processing Performance
+Council</a>.  SQLite version 3.7.17 and earlier do not choose a good
+query plan for TPC-H Q8.  This article explains why that is and what
+we intend to do about it for SQLite version 3.7.18 and later.
+</p>
+
+<h2>The Query</h2>
+
+<p>
+TPC-H Q8 is an eight-way join.
+As SQLite uses only loop joins, the main task of the query planner is
+to figure out the best nesting order of the 8 loops in order to minimize
+the amount of CPU time and I/O required to complete the join.
+A simplified model of this problem for the case of TPC-H Q8 is shown
+by the following (hand drawn) diagram:
+</p>
+
+<center>
+<img src="images/qp/tpchq8.gif">
+</center>
+
+<p>
+In the diagram, each of the 8 terms in the FROM clause of the query is
+identified by a large circle with the label of the FROM-clause term:
+N2, S, L, P, O, C, N1 and R.
+The arcs in the graph represent the cost of computing each term assuming
+that the origin of the arc is in an outer loop.  For example, the
+cost of running the S loop as an inner loop to L is 2.30 whereas the
+cost of running the S loop as an outer loop to L is 9.17.</p>
+
+<p>The "cost" is these cases is logarithmic.  With nested loops, the CPU time
+and I/O is multiplied, not added.  But it easier to think of a
+graph with additive weights and so the graph shows the logarithm of the
+various costs.  The graph shows a cost advantage of S being inside of
+L of about 6.87, but this translates into the query running about
+963 times faster when S loop is inside of the L loop rather than
+being outside of it.</p>
+
+<p>The arrows from the small circles labeled with "*" indicate the cost
+of running each loop with no dependencies.  The outer loop must use this
+*-cost.  Inner loops have the option of using the *-cost or a cost assuming
+one of the other terms is in an outer loop, whichever gives the best
+result.</p>
+
+<p>The problem of finding the best query plan is equivalent to finding
+a minimum-cost path through the graph shown above that visits each node
+exactly once.</p>
+
+<h3>Complications</h3>
+
+<p>The presentation of the query planner problem above is a simplification.
+Keep in mind, first of all, that the costs are merely estimates.  We cannot
+know what the true cost of running a loop is until we actually run the loop.
+SQLite makes guesses for the cost of running a loop based on
+the availability of indices and constraints found in the WHERE
+clause.  These guesses are usually pretty good, but they can sometimes be
+off.  Using the <a href="lang_analyze.html">ANALYZE</a> command to collect additional statistical
+information about the database can sometimes enable SQLite to make better
+guesses about the cost.  But sometimes <a href="lang_analyze.html">ANALYZE</a> does not help.</p>
+
+<p>Further, the costs are not really a single number as shown above.
+SQLite computes several different costs for each loop that apply at
+different times.  For example, there is a "setup" cost that is incurred
+just once when the query starts.  The setup cost is the cost of computing
+an <a href="optoverview.html#autoindex">automatic index</a> for a table that does not already
+have an index.  There is an additional startup cost which is the cost of
+initializing the loop for each iteration of the outer loop.  Then there
+is the cost of running each step of the loop.  Finally, there is an estimate
+of the number rows generated by the loop, which is information needed in
+estimating the costs of inner loops.</p>
+
+<p>A general query need not be a simple graph as shown above.
+Dependencies need not be on a single other loop.  For example, you might
+have a query where a particular loop depends on two or more other terms
+being in outer loops, instead of just a single term.  We cannot really
+draw a graph for these kinds of queries since there is no way for an
+arc to originate at two or more nodes at once.</p>
+
+<p>In the TPC-H Q8 query, the setup and startup costs are all negligible
+and all dependencies are from a single other node. So for this case, at least,
+the graph above is a reasonable representation of what needs to be computed.
+The general case involves a lot of extra complication.
+But the point of this article is to explain what is going on, and that
+extra complication does not aid in the explanation, and is therefore
+omitted.</p>
+
+<h2>Finding The Best Query Plan</h2>
+
+<p>Since its inception, SQLite has always used the rough equilvalent of
+the "Nearest Neighbor" or "NN" heuristic when searching for the best query plan
+for a particular query.  The NN heuristic chooses the lowest-cost arc
+to follow next.  The NN heuristic works surprisingly well in most cases.
+And NN is fast, so that SQLite is able to quickly find good query plans
+for even large 64-way joins.  In contrast, other SQL database engines such
+as Oracle, PostgreSQL, MySQL, and SQL Server tend to bog down when the
+number of tables in a join goes above 10 or 15.</p>
+
+<p>However, the query plan computed by NN for TPC-H Q8 is not optimal.
+The plan computed using NN is R-N1-N2-S-C-O-L-P with a cost of 36.92.  
+The notation
+in the previous sentence means that the R table is run in the outer loop,
+N1 is in the next inner loop, N2 is in the third loop, and so forth down
+to P which is in the inner-most loop.  But the shortest path through the
+graph (as found via exhaustive search) is  P-L-O-C-N1-R-S-N2
+with a cost of 27.38.  This might not seem like much, but remember that
+the costs are logarithmic, so the shortest path is nearly 14,000 times
+faster than that path found using the NN heuristic.</p>
+
+<p>One solution to this problem is to change SQLite to do an exhaustive
+search for the best query plan.  But the SQLite developers are unwilling
+to do this because an exhaustive search requires time proportional to
+K! (where K is the number of tables in the join) and so when you get 
+beyond a 10-way join, then time
+to run <a href="c3ref/prepare.html">sqlite3_prepare()</a> becomes very large.</p>
+
+<h3>N Nearest Neighbors</h3>
+
+<p>The proposed solution to this dilemma 
+is to recode the SQLite query planner use a new
+heuristic: "N Nearest Neighbors" (or "NNN").  With NNN, instead of
+choosing just one nearest neighbor for each step, the algorithm keeps
+track of the N bests paths at each step.</p>
+
+<p>Suppose N==4.  Then for the TPC-H Q8 graph, the first step would find
+the four shortest paths to visit any single node in the graph:
+
+<blockquote>
+    R (cost: 3.56) <br>
+    N1 (cost: 5.52) <br>
+    N2 (cost: 5.52) <br>
+    P (cost: 7.71) <br>
+</blockquote>
+
+<p>The second step would find the four shortest paths to visit two nodes 
+and that begin with one of the four paths from the previous step.  In the
+case where two or more paths are equivalent (they have the same set of
+visited nodes, though possibly in a different order) then only the
+first and lowest cost path is retained.  We have:</p>
+
+<blockquote>
+    R-N1 (cost: 7.03) <br>
+    R-N2 (cost: 9.08) <br>
+    N2-N1 (cost: 11.04) <br>
+    R-P {cost: 11.27} <br>
+</blockquote>
+
+<p>The third stop starts with the four shortest two-node paths and finds
+the four shortest non-equivalent three-node paths:</p>
+
+<blockquote>
+    R-N1-N2 (cost: 12.55) <br>
+    R-N1-C (cost: 13.43) <br>
+    R-N1-P (cost: 14.74) <br>
+    R-N2-S (cost: 15.08) <br>
+</blockquote>
+
+<p>And so forth.  There are 8 nodes in the TPC-H Q8 query, 
+so this process repeats a total of 8
+times.  In the general case of a K-way join, the storage requirements
+is O(N) and the computation time is O(K*N).  That is a lot less than an
+exact solution which requires O(2**K) time.</p>
+
+<p>But what value to choose for N?  We might make N==K.  This makes the
+algorithm O(N**2) which is actually still quite efficient, since the
+maximum value of K is 64.  But that is not enough for the TPC-H Q8
+problem.  With N==8 on TPC-H Q8 the NNN algorithm finds 
+the solution R-N1-C-O-L-S-N2-P with a cost of 29.78.  
+That is an improvement over NN, but it is still
+not optimal.</p>
+
+<p>NNN finds the optimal solution for TPC-H Q8 when N is 10 or greater.</p>
+
+<p>The current thinking is to make N a parameter with a default
+value of 15 or so.  This will likely find at least a very good plan in most
+circumstances.  We think you will need to work very hard to
+construct a query where NNN with N==15 does not find the optimal plan.
+Remember that the all SQLite versions prior to 3.7.18 do
+an excellent job with N==1.  The value of N==15 would be the compile-time
+default, but can be changed using a PRAGMA.</p>
+
+<p>Another idea begin considered is to initially attempt to find a query
+plan using N==1 and then fall back and make a second attempt with a larger
+N if the first attempt fails to find a provably optimal plan.  A provably
+optimal plan is one that uses the lowest-cost arc into each node.</p>
+
