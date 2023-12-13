@@ -1,4 +1,6 @@
 (function (graph) {
+    console.log(222222
+);
     function require(file) {
       //转化成绝对路径
       function absRequire(relPath) {
@@ -7,7 +9,7 @@
       //执行add.js的code时候，会遇到exports这个还没定义的问题.因此我们可以自己定义一个exports对象。
       var exports = {};
       (function (require, exports, code) {
-        console.log(1, exports);
+        console.log(11111111, exports);
         //code代码执行过程中会执行到require函数。
         //这时会调用这个require，也就是我们传入的absRequire
         eval(code);
