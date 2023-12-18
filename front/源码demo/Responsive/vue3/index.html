@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 定义一个“仓库”，用于存储触发函数
+      let store = new Set();
+      // 定义一个对象
+      let data = {
+        name: "pino",
+        age: 18,
+      };
+      // 使用proxy进行代理
+      let data_proxy = new Proxy(data, {
+        // 拦截读取操作
+        get(target, key) {
+          // 收集依赖函数
+          store.add(() => {
+            console.log(target, key, 88);
+          });
+          return target[key];
+        },
+        // 拦截设置操作
+        set(target, key, newVal) {
+          target[key] = newVal;
+          console.log(store);
+          // 取出所有的依赖函数，执行
+          store.forEach((fn) => fn());
+        },
+      });
+      // 待绑定函数
+      // function effect(target, key) {
+      //   // 依赖函数在这里被收集
+      //   console.log(target, key, 88);
+      // }
+      // 执行依赖函数
+      data_proxy.age++;
+
+      setTimeout(() => {
+        // 使用proxy进行代理后，使用代理后的对象名
+        // 触发设置操作，此时会取出effect函数进行执行
+        data_proxy.age++; // 2秒后输出 20
+      }, 2000);
+    </script>
+  </body>
+</html>
