@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        width: 100px;
+        height: 100px;
+        background: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <script>
+      // 手写节流函数
+      let div = document.querySelector("div");
+      let i = 1;
+      function move() {
+        div.innerHTML = i++;
+      }
+      function throttle(fn, time) {
+        let timer = null; //声明一个定时器
+        return function () {
+          if (!timer) {
+            timer = setTimeout(function () {
+              fn();
+              // 清楚定时器
+              timer = null;
+            }, time);
+          }
+        };
+      }
+      div.addEventListener("mousemove", throttle(move, 1000));
+    </script>
+  </body>
+</html>
