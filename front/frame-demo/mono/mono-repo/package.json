@@ -1,0 +1,13 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start:vue": "lerna --scope @mono-repo-demo/vue run serve"
+  },
+  "devDependencies": {
+    "lerna": "^6.6.1"
+  }
+}

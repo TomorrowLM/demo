@@ -130,6 +130,7 @@ export default class MonacoEditor implements MonacoEditorProps {
           variables: sqlLanguage.builtinVariables
         },
         monarchTokens: {
+          ignoreCase: true,
           tokenizer: {
             root: [[/\[(.+?)\]/, 'custom-point']]
           }
@@ -150,13 +151,19 @@ export default class MonacoEditor implements MonacoEditorProps {
         }
       })
     }
-    // self.onmessage = (e) => {
-    //   console.log(669, e, monacoWorker.initialize);
+    // self.onmessage = () => {
+    //   // console.log(669, monacoWorker.initialize);
     //   monacoWorker.initialize((ctx) => {
     //     return new TodoLangWorker(ctx)
-    //   });
-    // };
-
+    //   })
+    // }
+    await monaco.languages.onLanguage(this.config?.languageConfig?.name, () => {
+      const client = new WorkerManager(this.config?.languageConfig?.name)
+      const worker = (...uris: monaco.Uri[]) => {
+        return client.getLanguageServiceWorker(...uris)
+      }
+      this.DiagnosticsAdapter = new DiagnosticsAdapter(worker)
+    })
     ;(window as any).MonacoEnvironment = {
       getWorker: function (moduleId, label) {
         console.log(moduleId, label === 'AviatorScript', 2, label)
@@ -171,14 +178,6 @@ export default class MonacoEditor implements MonacoEditorProps {
         return new monacoWorker()
       }
     }
-
-    monaco.languages.onLanguage(this.config?.languageConfig?.name, () => {
-      const client = new WorkerManager(this.config?.languageConfig?.name)
-      const worker = (...uris: monaco.Uri[]) => {
-        return client.getLanguageServiceWorker(...uris)
-      }
-      this.DiagnosticsAdapter = new DiagnosticsAdapter(worker)
-    })
 
     // monaco.languages.registerHoverProvider(this.config?.languageConfig?.name || 'AviatorScript', {
     //   // that: this,

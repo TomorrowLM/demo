@@ -1,0 +1,1 @@
+export type WorkerAccessor = (...uris: monaco.Uri[]) => Promise<TodoLangWorker>;
