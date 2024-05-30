@@ -1,0 +1,9 @@
+bind_port = 7000 #与客户端绑定的进行通信的端口
+bind_addr = 0.0.0.0
+
+#服务器的前端控制界面(仪表盘)
+dashboard_user = root #控制台用户名
+dashboard_pwd = 123 #控制台密码
+dashboard_port = 7500 #控制台的端口
+
+vhost_http_port = 6081     #访问客户端web服务自定义的端口号

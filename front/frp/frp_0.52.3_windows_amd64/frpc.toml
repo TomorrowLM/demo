@@ -1,0 +1,19 @@
+# frpc.toml
+transport.tls.enable = true        # 从 v0.50.0版本开始，transport.tls.enable的默认值为 true
+serverAddr = "121.40.61.99"
+serverPort = 7000                 # 公网服务端通信端口
+
+
+[[proxies]]
+name = "test-http"
+type = "tcp"  # 协议类型
+localIP = "127.0.0.1"            # 需要暴露的服务的IP
+localPort = 8080                # 将本地8080端口的服务暴露在公网的4100端口
+remotePort = 4100                 # 暴露服务的公网入口
+
+[[proxies]]
+name = "ssh"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 22
+remotePort = 6000

@@ -1,17 +1,21 @@
 const fs = require("fs");
 const path = require("path");
-const parser = require("@babel/parser");
-const traverse = require("@babel/traverse").default;
-const babel = require("@babel/core");
+const parser = require("@babel/parser"); //解析成AST语法树
+const traverse = require("@babel/traverse").default; //获取依赖
+const babel = require("@babel/core"); //ES6的AST转化成ES5
 
 // 获取主入口文件
 const getModuleInfo = (file) => {
-  // 第一步:实现获取主模块内容
+  /**
+  第一步:实现获取主模块内容
+  */
   const body = fs.readFileSync(file, "utf-8");
   // console.log('body', body);
 
-  // 第二步:将获取到的模块内容 解析成AST语法树，这个需要用到一个依赖包@babel/parser
-  //parse这个API。它的主要作用是 parses the provided code as an entire ECMAScript program，也就是将我们提供的代码解析成完整的ECMAScript代码的AST。
+  /**
+   第二步:将获取到的模块内容 解析成AST语法树，这个需要用到一个依赖包@babel/parser
+  parse这个API。它的主要作用是 parses the provided code as an entire ECMAScript program，也就是将我们提供的代码解析成完整的ECMAScript代码的AST。
+  */
   const ast = parser.parse(body, {
     sourceType: "module", //表示我们要解析的是ES模块
   });
@@ -19,7 +23,9 @@ const getModuleInfo = (file) => {
   //当前我们解析出来的不单单是index.js文件里的内容，它也包括了文件的其他信息。 而它的内容其实是它的属性program里的body里
   // console.log("ast.program.body", ast.program.body);
 
-  // 第三步:需要遍历AST，将用到的依赖收集起来。就是将用import语句引入的文件路径收集起来。我们将收集起来的路径放到deps里。
+  /**
+   *   第三步:需要遍历AST，将用到的依赖收集起来。就是将用import语句引入的文件路径收集起来。我们将收集起来的路径放到deps里。
+   */
   const deps = {};
   traverse(ast, {
     //ImportDeclaration方法代表的是对ast中type类型为ImportDeclaration的节点的处理。
@@ -31,9 +37,11 @@ const getModuleInfo = (file) => {
       deps[node.source.value] = abspath;
     },
   });
-  console.log("getModuleInfo:deps", deps); //{ './add.js': './src\\add.js', './minus.js': './src\\minus.js' }
+  // console.log("getModuleInfo:deps", deps); //{ './add.js': './src\\add.js', './minus.js': './src\\minus.js' }
 
-  //第四步:把获得的ES6的AST转化成ES5，import -> require.依赖包 @babel/core @babel/preset-env
+  /**
+   * 第四步:把获得的ES6的AST转化成ES5，import -> require.依赖包 @babel/core @babel/preset-env
+   */
   const { code } = babel.transformFromAst(ast, null, {
     presets: ["@babel/preset-env"],
   });
@@ -59,20 +67,17 @@ const parseModules = (file) => {
   // console.log('entry', entry);
   const temp = [entry];
   const depsGraph = {}; //新增代码
-  console.log(temp.length);
   for (let i = 0; i < temp.length; i++) {
     const deps = temp[i].deps;
     console.log("parseModules:deps", deps);
     if (deps) {
       for (const key in deps) {
-        console.log(55, key);
         if (deps.hasOwnProperty(key)) {
           temp.push(getModuleInfo(deps[key]));
         }
       }
     }
   }
-  // console.log("temp", temp);
   // 文件名作为属性名。包含deps和code子属性
   temp.forEach((moduleInfo) => {
     depsGraph[moduleInfo.file] = {
@@ -80,16 +85,14 @@ const parseModules = (file) => {
       code: moduleInfo.code,
     };
   });
-  // console.log(depsGraph);
   return depsGraph;
 };
-// parseModules("./src/index.js");
+// const depsGraph = parseModules("./src/index.js");
+// console.log("depsGraph", depsGraph);
 
 //浏览器不会识别执行require和exports
 const bundle = (file) => {
-  // console.log(parseModules(file))
   const depsGraph = JSON.stringify(parseModules(file)); //返回一个整合完整的字符串代码
-  // console.log("depsGraph", depsGraph);
   /**
    * 把保存下来的depsGraph，传入一个立即执行函数。
     将主模块路径传入require函数执行
@@ -116,9 +119,9 @@ const bundle = (file) => {
     require('${file}')
   })(${depsGraph})`;
 };
-const content = bundle("./src/index.js");
-console.log("content", content);
+// const content = bundle("./src/index.js");
+// console.log("content", content);
 
 //写入到我们的dist目录下
-fs.mkdirSync("./dist");
-fs.writeFileSync("./dist/bundle.js", content);
+// fs.mkdirSync("./dist");
+// fs.writeFileSync("./dist/bundle.js", content);

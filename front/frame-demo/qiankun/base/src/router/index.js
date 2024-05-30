@@ -1,0 +1,31 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import Web1 from "../page/web1.jsx";
+import Empty from "../page/404.jsx";
+import Home from "../page/Home.jsx";
+export const router = createBrowserRouter([
+  {
+    path: "/home",
+    element: <Home></Home>,
+  },
+  {
+    path: "/web1",
+    element: <Web1 />,
+    children: [
+      {
+        path: "learn",
+      },
+      {
+        path: "user",
+      },
+    ],
+  },
+  // {
+  //   path: '/:catchAll(.*)*',
+  //   // name: 'error',
+  //   // meta: {
+  //   //   name: '404',
+  //   // },
+  //   component: () => import('../page/404.jsx'),
+  // }
+]);
