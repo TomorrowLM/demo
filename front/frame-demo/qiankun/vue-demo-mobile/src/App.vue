@@ -1,9 +1,7 @@
 <template>
-  <div id="web1">
-    <transition v-if="aa" name="slide-left" mode="out-in">
-      <router-view></router-view>
-    </transition>
-  </div>
+  <transition v-if="aa" name="slide-left" mode="out-in">
+    <router-view></router-view>
+  </transition>
 </template>
 
 <script>

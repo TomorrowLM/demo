@@ -1,20 +1,24 @@
 const path = require("path");
+const webpack = require("webpack");
 const packageName = require("./package.json").name;
 //生成创建Html入口文件
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-console.log(process.env.NODE_ENV);
 const isDev = process.env.NODE_ENV === "development" ? true : false;
+const globalConstants = require('../config/envConfig/env.dev.js')
+const { PUBLIC_URL } = globalConstants;
+console.log(PUBLIC_URL, globalConstants);
 module.exports = () => {
   const config = {
     mode: process.env.NODE_ENV,
-    // devtool: "source-map", // 开发中配置的辅助工具
+    devtool: isDev ? "eval-cheap-module-source-map" : 'source-map',
     entry: {
       app: path.resolve(__dirname, "./src/main.js"),
     },
     output: {
       path: path.resolve(__dirname, "./dist"),
       filename: "js/[name].[hash].js", //输出文件名
+      publicPath: isDev ? '' : '/qiankun', //资源访问根路径
       // library: `${packageName}-[name]`,
       // libraryTarget: "umd",
       // chunkLoadingGlobal: `webpackJsonp_${packageName}`,
@@ -72,6 +76,9 @@ module.exports = () => {
         filename: "css/[name].[hash].css", // 定义抽离的入口文件的文件名
         chunkFilename: "css/[name].[hash].css", // 定义非入口块文件的名称，如动态导入的文件
       }),
+      new webpack.DefinePlugin({
+        API: JSON.stringify(globalConstants)
+      })
     ],
     module: {
       rules: [

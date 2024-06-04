@@ -1,12 +1,12 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import { createHashRouter, createBrowserRouter,RouterProvider } from "react-router-dom";
 import Web1 from "../page/web1.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home.jsx";
+
 export const router = createBrowserRouter([
   {
     path: "/home",
-    element: <Home></Home>,
+    element: <Home />,
   },
   {
     path: "/web1",

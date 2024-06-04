@@ -6,7 +6,7 @@ const webpack = require("webpack");
 const packageName = require("./package.json").name;
 const name = require("./package.json").name;
 const isProd = process.env.NODE_ENV === "production";
-
+const isDev = process.env.NODE_ENV === "development" ? true : false;
 const commonPlugin = [
   // 扩展环境变量
   // new webpack.DefinePlugin({
@@ -39,7 +39,8 @@ const assetsCDN = {
 };
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/vue-demo/" : "/",
+  //
+  publicPath: isProd ? "/qiankun/child/web1" : "/",
   //打包文件输出路径，即打包到哪里
   outputDir: "dist",
 
@@ -102,7 +103,7 @@ module.exports = {
       swDest: "service-worker.js", //  此处输出的service-worker.js文件位置, 会相对于 outputDir 目录进行存放
     },
   },
-  //
+
   configureWebpack: {
     output: {
       library: `${name}-[name]`,

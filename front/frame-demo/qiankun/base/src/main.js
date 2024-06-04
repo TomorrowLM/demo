@@ -6,15 +6,17 @@ import App from "./App.js";
 import { router } from "./router/index.js";
 import { RouterProvider } from "react-router-dom";
 import { registerMicroApps, start } from "qiankun";
-
-
+const isDev = process.env.NODE_ENV === 'development';
+console.log(process.env.NODE_ENV, API,);
+const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
 registerMicroApps(
   [
     {
-      name: "Web1", // app name registered
-      entry: "//localhost:8088",
+      name: "web1", // app name registered
+      entry: isDev ? "//localhost:8088" : '/qiankun/child/web1',//配置微应用访问入口
       container: "#web1",
-      activeRule: "/Web1",
+      activeRule: "/web1",
+      // activeRule: getActiveRule('#/web1'),
     },
   ],
   {
