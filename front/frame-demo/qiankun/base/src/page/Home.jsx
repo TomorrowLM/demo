@@ -2,7 +2,8 @@
 function Home() {
   return (
     <div className="home">
-      123
+      <div id='vue2-mobile' style={{ width: '100%', height: '100%' }}>
+      </div>
     </div>
   );
 }

@@ -12,11 +12,11 @@ const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
 registerMicroApps(
   [
     {
-      name: "web1", // app name registered
-      entry: isDev ? "//localhost:8088" : '/qiankun/child/web1',//配置微应用访问入口
-      container: "#web1",
-      activeRule: "/web1",
-      // activeRule: getActiveRule('#/web1'),
+      name: "vue2-mobile", // app name registered
+      entry: isDev ? "//localhost:8001" : '/qiankun/child/vue2-mobile/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+      container: "#vue2-mobile",
+      activeRule: "/qiankun/vue2-mobile",
+      // activeRule: getActiveRule('#/vue2-mobile'),
     },
   ],
   {

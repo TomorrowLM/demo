@@ -1,25 +1,39 @@
-import { createHashRouter, createBrowserRouter,RouterProvider } from "react-router-dom";
+import { createHashRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
 import Web1 from "../page/web1.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home.jsx";
 
 export const router = createBrowserRouter([
   {
-    path: "/home",
+    path: "/qiankun",
     element: <Home />,
-  },
-  {
-    path: "/web1",
-    element: <Web1 />,
     children: [
       {
-        path: "learn",
+        path: "vue2-mobile",
+        element: <Web1 />,
+        children: [
+          {
+            path: "learn",
+          },
+          {
+            path: "user",
+          },
+        ],
       },
-      {
-        path: "user",
-      },
-    ],
+    ]
   },
+  // {
+  //   path: "vue2-mobile",
+  //   element: <Web1 />,
+  //   children: [
+  //     {
+  //       path: "learn",
+  //     },
+  //     {
+  //       path: "user",
+  //     },
+  //   ],
+  // },
   // {
   //   path: '/:catchAll(.*)*',
   //   // name: 'error',

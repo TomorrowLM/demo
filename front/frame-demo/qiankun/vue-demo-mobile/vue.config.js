@@ -40,7 +40,7 @@ const assetsCDN = {
 
 module.exports = {
   //
-  publicPath: isProd ? "/qiankun/child/web1" : "/",
+  publicPath: isProd ? "/qiankun/child/vue2-mobile/" : "/",
   //打包文件输出路径，即打包到哪里
   outputDir: "dist",
 
@@ -52,7 +52,7 @@ module.exports = {
     contentBase: "./src", //项目基本访问目录
     // host: 'localhost',//服务器ip地址
     open: true,
-    port: 8088,
+    port: 8001,
     hot: true, //模块热替换
     headers: {
       "Access-Control-Allow-Origin": "*",
