@@ -20,8 +20,8 @@ app.set("port", port);
  */
 
 var server = http.createServer(app);
-const hostname = "localhost";
-// const hostname = '0.0.0.0';
+// const hostname = "localhost";
+const hostname = '0.0.0.0';
 
 /**
  * Listen on provided port, on all network interfaces.
