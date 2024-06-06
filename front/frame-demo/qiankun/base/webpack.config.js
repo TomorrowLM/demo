@@ -19,8 +19,6 @@ module.exports = () => {
       path: path.resolve(__dirname, "./dist"),
       filename: "js/[name].[hash].js", //输出文件名
       publicPath: isDev ? '/' : '/qiankun', //资源访问根路径
-      // publicPath: '/qiankun', //资源访问根路径
-      
       // library: `${packageName}-[name]`,
       // libraryTarget: "umd",
       // chunkLoadingGlobal: `webpackJsonp_${packageName}`,

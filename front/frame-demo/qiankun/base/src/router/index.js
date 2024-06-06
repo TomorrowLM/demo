@@ -23,18 +23,6 @@ export const router = createBrowserRouter([
     ]
   },
   // {
-  //   path: "vue2-mobile",
-  //   element: <Web1 />,
-  //   children: [
-  //     {
-  //       path: "learn",
-  //     },
-  //     {
-  //       path: "user",
-  //     },
-  //   ],
-  // },
-  // {
   //   path: '/:catchAll(.*)*',
   //   // name: 'error',
   //   // meta: {

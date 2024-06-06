@@ -18,7 +18,7 @@ routerContext.keys().forEach((route) => {
   console.log(routes);
 });
 
-console.log(window.__POWERED_BY_QIANKUN__,123);
+console.log(window.__POWERED_BY_QIANKUN__, 123);
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 // 你还可以传别的配置参数, 不过先这么简单着吧。
@@ -27,8 +27,8 @@ const router = new VueRouter({
   base: window.__POWERED_BY_QIANKUN__
     ? "/qiankun/vue2-mobile/" //配置子应用的路由根路径
     : isProd
-    ? "/vue2-mobile/"
-    : process.env.BASE_URL,
+      ? "/vue2-mobile/"//单一项目下的访问路径
+      : process.env.BASE_URL,
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
