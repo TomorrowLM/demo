@@ -9,9 +9,9 @@ router.post("/", function (req, res) {
   params[0] = req.body.username;
   params[1] = req.body.password;
   console.log(params[0]);
-  if (params[0] === "" || params[1] === "") {
+  if (!params[0] || !params[1]) {
     return res.send({
-      code: 1,
+      code: -1,
       message: "账户或密码不能为空",
     });
   } else {

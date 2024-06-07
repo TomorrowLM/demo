@@ -5,13 +5,14 @@ import { VueAxios } from './axios'
 
 //单例模式，即同一时间只会存在一个 Toast
 Toast.allowMultiple();
-
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 // 创建 axios 实例
 const service = axios.create({
-  baseURL:'./', // api base_url
-  //代理
-  // baseURL: '/dev',
-  timeout: 6000 // 请求超时时间
+  baseURL: '/api', // api base_url
+  timeout: 6000,// 请求超时时间
+  headers: {
+    'Content-Type': 'application/json',
+  }
 })
 
 //code信息
@@ -75,8 +76,10 @@ const handleParams = (config) => {
   console.log(config);
   const token = Vue.ls.get('token')
   const { method } = config
-  config.headers.authorization =
-    "Bearer " + token;
+  if (token) {
+    config.headers.authorization =
+      "Bearer " + token;
+  }
   return config
 }
 // request interceptor

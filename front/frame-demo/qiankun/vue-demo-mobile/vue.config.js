@@ -39,11 +39,9 @@ const assetsCDN = {
 };
 
 module.exports = {
-  //
   publicPath: isProd ? "/qiankun/child/vue2-mobile/" : "/",
   //打包文件输出路径，即打包到哪里
   outputDir: "dist",
-
   // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
   lintOnSave: true, //boolean | 'warning' | 'default' | 'error'
   productionSourceMap: isProd ? false : true, // 生产环境是否生成 sourceMap 文件
@@ -63,13 +61,14 @@ module.exports = {
     watchOptions: {
       poll: 1000, // 每隔1s轮询一次
     },
-    // public: 'http://192.168.10.36:8088',
     proxy: {
-      "/dev": {
-        target: "http://tomorrowlm.xyz:3000",
+      "/api": {
+        target: "http://lm-web.top:3600",
+        // target: "http://localhost:3600",
         changeOrigin: true,
         secure: false,
         xfwd: false,
+        pathRewrite: { '^/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
       },
     },
   },
