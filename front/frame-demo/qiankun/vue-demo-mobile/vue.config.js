@@ -102,7 +102,6 @@ module.exports = {
       swDest: "service-worker.js", //  此处输出的service-worker.js文件位置, 会相对于 outputDir 目录进行存放
     },
   },
-
   configureWebpack: {
     output: {
       library: `${name}-[name]`,
