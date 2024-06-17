@@ -19,6 +19,9 @@ declare global {
   const $_: typeof lodash;
   const moment: typeof import('moment');
   const pageSize: number;
+  interface Window {
+    __POWERED_BY_QIANKUN__: any;
+  }
 }
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {

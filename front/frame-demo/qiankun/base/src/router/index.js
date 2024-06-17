@@ -2,18 +2,28 @@ import { createHashRouter, createBrowserRouter, RouterProvider } from "react-rou
 import Web1 from "../page/web1.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home.jsx";
-
+import React, { lazy } from "react";
 export const router = createBrowserRouter([
   {
     path: "/qiankun",
-    element: <Home />,
+    element: <Home></Home>,
     children: [
       {
         path: "vue2-mobile",
-        element: <Web1 />,
         children: [
           {
             path: "learn",
+          },
+          {
+            path: "user",
+          },
+        ],
+      },
+      {
+        path: "vue2-pc",
+        children: [
+          {
+            path: "login",
           },
           {
             path: "user",

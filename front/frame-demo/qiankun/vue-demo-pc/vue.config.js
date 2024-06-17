@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const resolve = dir => path.join(__dirname, dir);
 const isProd = process.env.NODE_ENV === 'production';
-
+const name = require("./package.json").name;
 const commonPlugin = [
   // 扩展环境变量
   // new webpack.DefinePlugin({
@@ -37,7 +37,7 @@ module.exports = defineConfig({
   devServer: {
     // contentBase: './src',//项目基本访问目录
     host: 'localhost', //服务器ip地址
-    port: 8088,
+    port: 8002,
     open: true, // 配置自动启动浏览器
     hot: true, //模块热替换
     headers: {
@@ -45,8 +45,8 @@ module.exports = defineConfig({
     },
     // public: 'http://192.168.10.36:8088',
     proxy: {
-      '/dev': {
-        target: process.env.VUE_APP_API_HOST,
+      '/api': {
+        target: 'http://lm-web.top:3600/',
         changeOrigin: true,
         secure: false,
         xfwd: false,
@@ -58,19 +58,26 @@ module.exports = defineConfig({
     config.externals = {
       BMap: 'window.BMap', // 百度地图
       AMap: 'AMap', // 高德地图}
-    };
+    }
+    config.output.library = `${name}-[name]`;
+    config.output.libraryTarget = "umd"; // 把微应用打包成 umd 库格式
+    config.output.chunkLoadingGlobal = `webpackJsonp_${name}`;// webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
     if (process.env.NODE_ENV === 'production') {
       config.output.filename = `js/[name].[contenthash].js`;
       config.output.chunkFilename = `js/[name].[contenthash].js`;
+
     }
   },
+
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src'))
       .set('assets', resolve('src/assets'))
       .set('components', resolve('src/components'))
       .set('public', resolve('public'));
-
+    config.output.library = `${name}-[name]`;
+    config.output.libraryTarget = "umd";// 把微应用打包成 umd 库格式
+    config.output.jsonpFunction = `webpackJsonp_${name}`;// webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
     if (process.env.NODE_ENV === 'development') {
       config.optimization.minimize(true); // 开启压缩js代码
       config.optimization.splitChunks({

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <template>
       <div v-bind:style="{ height: '100vh' }">
         <el-container>

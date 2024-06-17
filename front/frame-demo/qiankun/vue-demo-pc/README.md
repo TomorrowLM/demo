@@ -1,28 +1,5 @@
-# vue-demo-sd
+因为使用的node-sass>8,node>18
 
-## Project setup
-```
-yarn install
-```
+node-sass安装问题：https://blog.csdn.net/db3664/article/details/126555729
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
-技术栈
-ant-design-vue->1.78，vue2, ts,
+若不成：下载node-sass还需要安装python，visual studio 环境，同时npm config 还需要配置环境变量

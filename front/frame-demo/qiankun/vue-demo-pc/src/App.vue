@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="{ 'has-sidebar': $route.meta.sidebar, 'is-collapsed': isCollapse }">
+  <div :class="{ 'has-sidebar': $route.meta.sidebar, 'is-collapsed': isCollapse }">
     <el-container v-if="isToken">
       <el-header v-if="!fullScreenStatus">
         <Header></Header>
@@ -47,13 +47,14 @@ export default class Layout extends Vue {
       // ws.initWebsocket();
     });
     this.isToken = (Vue as any).ls.get('token');
-    userInfo()
-      .then(res => {
-        // console.log(res);
-      })
-      .catch(res => {
-        this.$router.push('/login');
-      });
+    console.log(556);
+    // userInfo()
+    //   .then(res => {
+    //     // console.log(res);
+    //   })
+    //   .catch(res => {
+    //     // this.$router.push('/login');
+    //   });
   }
 
   mounted() {

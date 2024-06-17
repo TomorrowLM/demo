@@ -5,7 +5,7 @@ import { VueAxios } from './axios';
 
 // 创建 axios 实例
 const request = axios.create({
-  baseURL: process.env.VUE_APP_API_HOST, // api base_url
+  baseURL: '/api', // api base_url
   // baseURL: '/dev',
   timeout: 6000, // 请求超时时间
 });
@@ -58,7 +58,7 @@ const err = (error: any) => {
  * @param {*} config
  */
 const handleRequest = (config: any) => {
-  // console.log(config);
+  console.log(config,991239);
   const token = (Vue as any).ls.get('token');
   config.headers.authorization = 'Bearer ' + token;
   return config;

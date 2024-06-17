@@ -39,7 +39,7 @@ function render(props = {}) {
     router,
     store,
     render: (h) => h(App),
-  }).$mount(container ? document.getElementById("app") : "#app");
+  }).$mount(container ? document.getElementById("#app") : "#app");
   console.log(instance);
 }
 // 独立运行时

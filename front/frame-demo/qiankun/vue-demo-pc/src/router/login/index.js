@@ -1,6 +1,6 @@
 export default [
     {
-        path: '/login',
+        path: 'login',
         name: 'login',
         component: () => import('@/views/login')
     }
