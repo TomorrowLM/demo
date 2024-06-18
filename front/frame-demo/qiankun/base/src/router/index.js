@@ -1,5 +1,6 @@
 import { createHashRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
 import Web1 from "../page/web1.jsx";
+import Web2 from "../page/web2.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home.jsx";
 import React, { lazy } from "react";
@@ -10,6 +11,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "vue2-mobile",
+        element: <Web1></Web1>,
         children: [
           {
             path: "learn",
@@ -20,7 +22,8 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "vue2-pc",
+        path: "vue2-pc", 
+        element: <Web2></Web2>,
         children: [
           {
             path: "login",
