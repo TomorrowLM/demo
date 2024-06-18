@@ -7,8 +7,7 @@ const request = (url, params = {}, method = 'post') => {
 export const userInfo = (params) => {
   // console.log(12,axios);
   // axios.get("users")
-  // axios({ url: 'users', method: 'get', params: params })
-  return 1
+  return axios({ url: 'users', method: 'get', params: params })
 }
 
 export const login = (param) => {

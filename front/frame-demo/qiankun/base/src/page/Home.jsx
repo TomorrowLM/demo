@@ -4,8 +4,7 @@ import { NavLink, Outlet } from "react-router-dom";
 function Home() {
   return (
     <div className="home" style={{ width: "100vw", height: "100vh" }}>
-      <div style={{ display: "flex" }}>
-        1234
+      <div style={{ display: "flex",width: "100vw", height: "100vh" }}>
         <Outlet></Outlet>
       </div>
       {/* <div id="vue2-mobile" style={{ width: "100%", height: "100%" }}></div>

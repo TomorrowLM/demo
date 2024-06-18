@@ -38,7 +38,7 @@ router.post("/", function (req, res) {
         }
       )
     } else {
-      res.status(401).send("账号或者密码错误");
+      res.status(200).send("账号或者密码错误");
     }
   }
 });

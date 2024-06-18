@@ -5,7 +5,7 @@ import { VueAxios } from './axios';
 
 // 创建 axios 实例
 const request = axios.create({
-  baseURL: '/api', // api base_url
+  baseURL: '/vue2-pc/api', // api base_url
   // baseURL: '/dev',
   timeout: 6000, // 请求超时时间
 });

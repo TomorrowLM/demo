@@ -15,13 +15,13 @@ export default {
   },
   created() {
     // this.axios("user");
-    // userInfo()
-    //   .then((res) => {
-    //     // console.log(res);
-    //   })
-    //   .catch((res) => {
-    //     this.$router.push("/login");
-    //   });
+    userInfo()
+      .then((res) => {
+        // console.log(res);
+      })
+      .catch((res) => {
+        this.$router.push("/login");
+      });
   },
   mounted() {
     this.aa = true;

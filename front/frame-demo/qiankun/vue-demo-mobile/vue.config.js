@@ -58,17 +58,17 @@ module.exports = {
     //这个api是webpack原生的api，主要是说明监控变化是否开启轮询。
     //通过开启轮询，来验证前后两次代码是否有变化。
     //但是，需要说明的是，这个轮询肯定是会占据消耗资源的。慎重使用吧。
-    watchOptions: {
-      poll: 1000, // 每隔1s轮询一次
-    },
+    // watchOptions: {
+    //   poll: 1000, // 每隔1s轮询一次
+    // },
     proxy: {
-      "/api": {
-        target: "http://lm-web.top:3600",
-        // target: "http://localhost:3600",
+      "/vue2-mobile/api": {
+        // target: "http://lm-web.top:3600",
+        target: "http://localhost:3600",
         changeOrigin: true,
         secure: false,
         xfwd: false,
-        pathRewrite: { '^/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
+        pathRewrite: { '/vue2-mobile/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
       },
     },
   },

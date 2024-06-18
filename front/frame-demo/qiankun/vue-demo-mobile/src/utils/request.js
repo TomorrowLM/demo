@@ -8,7 +8,7 @@ Toast.allowMultiple();
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: '/api', // api base_url
+  baseURL: '/vue2-mobile/api', // api base_url
   timeout: 6000,// 请求超时时间
   headers: {
     'Content-Type': 'application/json',

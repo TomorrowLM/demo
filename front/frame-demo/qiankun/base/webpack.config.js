@@ -34,6 +34,22 @@ module.exports = () => {
       open: true, //自动打开浏览器
       port: 3500,
       static: "./public", //指定静态资源目录
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      proxy: [
+        {
+          context: ['/vue2-mobile/api'],
+          target: 'http://localhost:8001',
+          // changeOrigin: true,
+          // secure: false,
+          // xfwd: false,
+          // pathRewrite: { '^/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
+        }, {
+          context: ['/vue2-pc/api'],
+          target: 'http://localhost:8002',
+        }
+      ]
     },
     optimization: {
       // moduleIds: isDev ? 'named' : 'deterministic',

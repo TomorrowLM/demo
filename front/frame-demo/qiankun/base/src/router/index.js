@@ -18,11 +18,14 @@ export const router = createBrowserRouter([
           },
           {
             path: "user",
+          }, 
+          {
+            path: "login",
           },
         ],
       },
       {
-        path: "vue2-pc", 
+        path: "vue2-pc",
         element: <Web2></Web2>,
         children: [
           {

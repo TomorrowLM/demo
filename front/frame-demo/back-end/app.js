@@ -58,7 +58,7 @@ app.use(
     secret: "zgs_first_token",
     algorithms: ["HS256"],
   }).unless({
-    path: ["/api/login", "/api/users"], //除了这个地址，其他的URL都需要验证
+    path: ["/login", "/api/login"], //除了这个地址，其他的URL都需要验证
   })
 );
 
@@ -70,8 +70,8 @@ app.use(function (err, req, res, next) {
     res.status(401).send("token失效");
   }
 });
-app.use("/api/users", usersRouter);
-app.use("/api/login", login);
+app.use("/users", usersRouter);
+app.use("/login", login);
 app.use("/api/token", token);
 app.use("/api/access", access);
 app.use("/api/test", test);
