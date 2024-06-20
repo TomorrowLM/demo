@@ -138,11 +138,15 @@ const permission = {
           commit('change_role', {
             role: res.data.role,
           });
+          commit('SET_USER_INFO', {
+            type: 'name',
+            data: res.data.name
+          })
           permissionRoutes = res.data.routes
           role = res.data.role
         })
       return new Promise(resolve => {
-        let accessedRoutes = filterAsyncRoutes(asyncRoutes, permissionRoutes, role)   
+        let accessedRoutes = filterAsyncRoutes(asyncRoutes, permissionRoutes, role)
         //设置静态路由+动态路由
         commit('SET_ROUTES', [...accessedRoutes, ...state.commonMenu, {
           path: '*',

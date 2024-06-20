@@ -82,9 +82,9 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   //设置当前页的title
   document.title = to.meta.title;
   console.log('router.beforeEach:', store.getters.routes, router.getRoutes(), store.getters.registerRouteFresh);
-  // if (to.path === '/login' && localStorage.getItem('token')) {
-  //   next('/');
-  // }
+  if (to.path !== '/login' && !localStorage.getItem('token')) {
+    next('/login');
+  }
 
   //如果首次或者刷新界面，next(...to, replace: true)会循环遍历路由，
   //如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，

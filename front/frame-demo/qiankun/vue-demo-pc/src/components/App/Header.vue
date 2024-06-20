@@ -11,20 +11,36 @@
       <div>
         <a-avatar icon="user" />
       </div>
-      <span>{{ userInfo.name ? userInfo.name : 'liming' }}</span>
+      <span style="margin: 0 8px"> {{ userInfo.name }}</span>
+      <el-button @click="out" type="text" link>退出登录</el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, PropSync } from 'vue-property-decorator';
+import { Component, Vue, PropSync, Watch } from 'vue-property-decorator';
 
-@Component
+@Component({})
 export default class Sidebar extends Vue {
   @PropSync('collapse') isCollapse!: boolean;
-  // 定义计算属性的 getter
-  get userInfo() {
-    return this.$store.getters.userInfo;
+  private state: any = {};
+  userInfo: any = {};
+  count = 1;
+  // get userInfo() {
+  //   return this.state.userInfo;
+  // }
+  //TODO: 嵌套太深，只能watch
+  @Watch('state', { immediate: true, deep: true })
+  public onMsgChanged(newValue: string, oldValue: string) {
+    this.$set(this.userInfo, 'name', this.$store.state.user.userInfo.name);
+  }
+  mounted() {
+    this.state = this.$store.state;
+    this.$set(this.userInfo, 'name', this.$store.state.user.userInfo.name);
+  }
+  out() {
+    localStorage.removeItem('token');
+    this.$router.push('/login');
   }
 }
 </script>

@@ -28,8 +28,8 @@ export default {
   data() {
     return {
       ruleForm: {
-        password: '',
-        username: '',
+        password: '1',
+        username: 'admin',
       },
       rules: {
         password: [{ validator: '', trigger: 'blur' }],

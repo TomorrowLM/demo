@@ -37,7 +37,14 @@ export const router = createBrowserRouter([
             path: "demo",
             children: [{
               path: 'access'
-            },{
+            }, {
+              path: 'skin'
+            }]
+          }, {
+            path: "task",
+            children: [{
+              path: 'PickupTask'
+            }, {
               path: 'skin'
             }]
           },
