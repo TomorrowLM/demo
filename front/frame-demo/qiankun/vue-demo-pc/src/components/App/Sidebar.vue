@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { Component, Vue, PropSync, Watch } from 'vue-property-decorator';
-import { commonMenu, stellBilletMenu, routeList } from '@/router/index';
+
 @Component({
   watch: {
     $route(to: any, from: any) {
@@ -47,23 +47,17 @@ import { commonMenu, stellBilletMenu, routeList } from '@/router/index';
       this.$store.commit('setTagNav', { path: to.path, name: to.name });
     },
   },
+  computed: {
+    routeList() {
+      return this.$store.getters.routes;
+    },
+  },
 })
 export default class Sidebar extends Vue {
   @PropSync('collapse') isCollapse!: boolean;
 
   private readonly name = 'Sidebar';
   private menuList: Array<any> = [];
-  routeList = routeList;
-  async created() {
-    try {
-      // const { data } = await fetchMenuList();
-      // this.menuList = data;
-      this.menuList = [...stellBilletMenu, ...commonMenu];
-    } catch (error) {
-      this.menuList = [...stellBilletMenu, ...commonMenu];
-      // this.$message.error('菜单获取数据失败！');
-    }
-  }
 
   get currentRouteInfo() {
     return this.$store.getters.currentRouteInfo;

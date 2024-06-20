@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "user",
-          }, 
+          },
           {
             path: "login",
           },
@@ -33,6 +33,13 @@ export const router = createBrowserRouter([
           },
           {
             path: "user",
+          }, {
+            path: "demo",
+            children: [{
+              path: 'access'
+            },{
+              path: 'skin'
+            }]
           },
         ],
       },

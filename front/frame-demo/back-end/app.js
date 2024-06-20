@@ -58,13 +58,15 @@ app.use(
     secret: "zgs_first_token",
     algorithms: ["HS256"],
   }).unless({
-    path: ["/login", "/api/login"], //除了这个地址，其他的URL都需要验证
+    path: ["/login", "/users"], //除了这个地址，其他的URL都需要验证
   })
 );
 
 //token失效返回信息
 // 如果token过期或者 错误的处理
 app.use(function (err, req, res, next) {
+  console.log(req.cookies);
+
   if (err.name === "UnauthorizedError") {
     //  这个需要根据自己的业务逻辑来处理（ 具体的err值 请看下面）
     res.status(401).send("token失效");

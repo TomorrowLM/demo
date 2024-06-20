@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'has-sidebar': $route.meta.sidebar, 'is-collapsed': isCollapse }">
-    <el-container v-if="isToken">
+    <el-container v-if="isToken && $route.path !== '/login'">
       <el-header v-if="!fullScreenStatus">
         <Header></Header>
       </el-header>
@@ -47,10 +47,13 @@ export default class Layout extends Vue {
       // ws.initWebsocket();
     });
     this.isToken = (Vue as any).ls.get('token');
-    console.log(556);
     // userInfo()
     //   .then(res => {
-    //     // console.log(res);
+    //     console.log(res.data);
+    //     this.$store.commit('change_role', {
+    //       role: res.data.role,
+    //     });
+    //     this.$store.commit('SET_ROUTES', res.data.routes);
     //   })
     //   .catch(res => {
     //     // this.$router.push('/login');
@@ -73,7 +76,6 @@ export default class Layout extends Vue {
   }
 }
 </script>
-
 
 <style lang="scss">
 :root {

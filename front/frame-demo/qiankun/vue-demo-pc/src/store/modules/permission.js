@@ -1,37 +1,36 @@
 import routes from '@/router'
+import { userInfo } from '@/api/index';
+import store from '..';
 
-// 根据角色判断路由权限
-function hasPermission(roles, route) {
-  if (route.meta && route.meta.roles) {
-    return route.meta.roles.some(val => val === roles)
-  }
-  return true
-}
 
 /**
  * 递归动态路由
- * @param routes 动态路由
- * @param roles 角色
+ * @param routes 前端动态路由
+ * @param permissionRoutes 后端权限路由
+ * @param role 角色
  */
-export function filterAsyncRoutes(routes, roles) {
-  const res = []
-  routes.forEach(route => {
-    const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
-      if (tmp.children) {
-        //后台传来的路由字符串，转换为组件对象
-        //       let a = `../views/${route.component}`;
-        //       route.component = () => import(a); // 导入组件
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+export function filterAsyncRoutes(asyncRoutes, permissionRoutes, role) {
+  // console.log(asyncRoutes, permissionRoutes, role);
+  asyncRoutes.forEach((element, index) => {
+    // console.log(element);
+    if (permissionRoutes[index]?.meta) {
+      //默认没有roles或者包含role时拼接meta
+      console.log(123, permissionRoutes[index], permissionRoutes[index]?.meta?.roles && permissionRoutes[index]?.meta?.roles.includes(role), role);
+      if (permissionRoutes[index]?.meta?.roles && permissionRoutes[index]?.meta?.roles.includes(role)) {
+        element.meta = { ...element.meta, ...permissionRoutes[index]?.meta }
+      } else {
+        console.log(994, asyncRoutes[index]);
+        asyncRoutes.splice(index, 1)
       }
-      res.push(tmp)
     }
-  })
-
-  return res
+    if (element.children && permissionRoutes[index]) {
+      filterAsyncRoutes(element.children, permissionRoutes[index].children, role)
+    }
+  });
+  console.log(asyncRoutes);
+  return asyncRoutes
 }
 
-//模拟后端传过来的路由
 export const asyncRoutes = [
   {
     path: '/',
@@ -60,12 +59,7 @@ export const asyncRoutes = [
         component: () => import('@/views/demo/Access/index.vue'),
         meta: {
           sidebar: true,
-          roles: ['admin'],
           title: 'access',
-          button: {
-            'btn:access:createUser': 'hidden',
-            'btn:access:editUser': 'disabled'
-          },
         },
       },
       {
@@ -75,7 +69,6 @@ export const asyncRoutes = [
         component: () => import('@/views/demo/Skin/index.vue'),
         meta: {
           sidebar: true,
-          roles: ['admin'],
           title: '皮肤',
         },
       },
@@ -110,22 +103,53 @@ export const asyncRoutes = [
 const permission = {
   // namespaced: true, -> store.dispatch('permisssion/generateRoutes', 'admin');
   state: {
+    //静态路由
+    commonMenu: [
+      {
+        path: '/login',
+        name: 'login',
+        component: () => import('@/views/login/index.vue'),
+        meta: { sidebar: false },
+      },
+    ],
+    //动态路由
+    asyncRoutes: [],
     //静态路由+动态路由
     routes: [],
-    //动态路由
-    addRoutes: []
+    //动态路由注册状态，账号切换，路由需要更新
+    registerRouteFresh: true
   },
   mutations: {
     SET_ROUTES: (state, routes) => {
-      state.addRoutes = routes
-      state.routes = state.routes.concat(routes)
+      console.log('SET_ROUTES：', routes);
+      state.routes = routes
+    },
+    SET_PERMISSION: (state, data) => {
+      state[data.type] = data.data
     }
   },
   actions: {
-    generateRoutes({ commit }, roles) {
+    async generateRoutes({ commit, state }, roles) {
+      let permissionRoutes = []
+      let role = ''
+      await userInfo()
+        .then(res => {
+          console.log(res.data);
+          commit('change_role', {
+            role: res.data.role,
+          });
+          permissionRoutes = res.data.routes
+          role = res.data.role
+        })
       return new Promise(resolve => {
-        let accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-        commit('SET_ROUTES', accessedRoutes)
+        let accessedRoutes = filterAsyncRoutes(asyncRoutes, permissionRoutes, role)   
+        //设置静态路由+动态路由
+        commit('SET_ROUTES', [...accessedRoutes, ...state.commonMenu, {
+          path: '*',
+          name: 'NotFound',
+          component: () => import('@/views/common/404.vue'),
+          meta: { sidebar: false },
+        }])
         resolve(accessedRoutes)
       })
     }

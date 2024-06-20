@@ -27,14 +27,12 @@ Vue.config.productionTip = false;
 
 let instance: any = null;
 function render(props: any = {}) {
-  console.log(55,props);
   const { container } = props;
   instance = new Vue({
     router,
     store,
     render: h => h(App),
   }).$mount(container ? container.querySelector('#vue2-pc') : '#vue2-pc');
-  console.log(instance);
 }
 // 独立运行时
 if (!window.__POWERED_BY_QIANKUN__) {

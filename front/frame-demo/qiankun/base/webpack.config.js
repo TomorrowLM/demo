@@ -45,7 +45,8 @@ module.exports = () => {
           // secure: false,
           // xfwd: false,
           // pathRewrite: { '^/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
-        }, {
+        },
+        {
           context: ['/vue2-pc/api'],
           target: 'http://localhost:8002',
         }

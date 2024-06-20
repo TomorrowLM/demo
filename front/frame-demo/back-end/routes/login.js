@@ -15,9 +15,14 @@ router.post("/", function (req, res) {
       message: "账户或密码不能为空",
     });
   } else {
-    if (params[0] === "liming" && params[1] === "1") {
+    if ((params[0] === "admin" || params[0] === "没有权限" || params[0] === "liming") && params[1] === "1") {
       vertoken.setToken(params[0], params[1]).then(
         (token) => {
+          res.cookie("USER", params[0], {
+            domain: "localhost", // 设置生效域名
+            httpOnly: true, // 只运行Http访问
+            maxAge: 1000 * 60 * 60 * 8, // 2个小时过期
+          });
           return res.send({
             code: 200,
             message: "登录成功",

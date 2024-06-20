@@ -58,7 +58,6 @@ const err = (error: any) => {
  * @param {*} config
  */
 const handleRequest = (config: any) => {
-  console.log(config,991239);
   const token = (Vue as any).ls.get('token');
   config.headers.authorization = 'Bearer ' + token;
   return config;

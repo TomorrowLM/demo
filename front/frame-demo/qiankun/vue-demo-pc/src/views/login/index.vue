@@ -20,6 +20,7 @@
 <script>
 import { login } from '@/api/index';
 import Vue from 'vue';
+import { resetRouter } from '@/router';
 export default {
   props: {
     msg: String,
@@ -43,6 +44,8 @@ export default {
         res => {
           console.log(res);
           Vue.ls.set('token', res.token);
+          // resetRouter();
+          this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
           this.$router.push('/');
         },
         err => {
