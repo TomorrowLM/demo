@@ -10,8 +10,12 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/styles/common.scss';
 import './public-path';
+import { themeSetup } from './loadTheme';
 // import BaiduMap from 'vue-baidu-map';
 
+// require('@/styles/themes/light.scss'); //引入
+// import './styles/themes/light.scss';
+// themeSetup('theme_0')
 Vue.use(ElementUI);
 // Vue.use(BaiduMap, {
 //   ak: 'RALHVFnPxQdDB42THG2M3cUDzwSf1zV9',

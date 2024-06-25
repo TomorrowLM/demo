@@ -245,7 +245,7 @@ export function echart2() {
       {
         name: '数据名称',
         type: 'map',
-        map: '广东', //使用 registerMap 注册的地图名称。
+        map: 'guangdong', //使用 registerMap 注册的地图名称。
         selectedMode: 'multiple',
         tooltip: {
           trigger: 'item',

@@ -1,24 +1,67 @@
-@import './theme/base', './theme/mixin', './theme/variable';
-// $themes: (light: ($light),
-//   dark: ($dark),
-// );
+// @import './theme/base', './theme/mixin', './theme/variable';
 
 
-// // #{$theme-name}
 
-// @each $theme, $config in $themes {
-//   [data-theme="#{$theme}"] & {
-//     // $config;
-//   }
+//方案一
+:root {
+  --text: #cece59;
+}
+
+:root[theme='dark'] {
+  --text: blue;
+
+}
+
+$text: var(--text);
+
+
+//方案二
+// 浅色
+$colors-light: (text: red);
+// 深色
+$colors-dark: (text:blue);
+
+@mixin themify() {
+  [theme='light'] & {
+    $theme: 'light' !global;
+    @content;
+  }
+
+  [theme='dark'] & {
+    $theme: 'dark' !global;
+    @content;
+  }
+}
+
+@function themed($key) {
+  @if $theme=="light" {
+    @return map-get($colors-light, $key);
+  }
+
+  @else {
+    @return map-get($colors-dark, $key);
+  }
+}
+
+
+
+
+
+//方案三
+// [theme='light'] {
+//   $theme: 'light' !global;
+//   $text : light.$text !global;
 // }
-// $color-primary: yello;
-$theme: var(--theme-text);
-$type: 'light';
 
-@if #{$theme} == 'light' {
-  $text-primary-color: red !global; // border: 2px solid;
-}
+// [theme='dark'] {
+//   $theme: 'dark' !global;
+//   $text : dark.$text !global;
+// }
+// @use './themes/light';
+// @use './themes/dark';
+// $text: var(--theme-name)=='light' ?light.$text:'red' !global;
 
-@else {
-  $text-primary-color: blue !global;
-}
+
+// @debug var(--text-primary-color)123#{$text};
+
+// is-superselector("html", "dark")

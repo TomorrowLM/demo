@@ -68,7 +68,6 @@ module.exports = defineConfig({
     if (process.env.NODE_ENV === 'production') {
       config.output.filename = `js/[name].[contenthash].js`;
       config.output.chunkFilename = `js/[name].[contenthash].js`;
-
     }
   },
 
@@ -78,6 +77,8 @@ module.exports = defineConfig({
       .set('assets', resolve('src/assets'))
       .set('components', resolve('src/components'))
       .set('public', resolve('public'));
+
+    //TODO
     config.output.library = `${name}-[name]`;
     config.output.libraryTarget = "umd";// 把微应用打包成 umd 库格式
     config.output.jsonpFunction = `webpackJsonp_${name}`;// webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
@@ -133,6 +134,7 @@ module.exports = defineConfig({
             ],
             grid: true,
           }),
+
         ],
       },
       scss: {

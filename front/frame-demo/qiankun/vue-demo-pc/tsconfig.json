@@ -37,7 +37,8 @@
       "components*": ["src/components/*"],
     },
     // 编译过程中需要引入的库文件的列表
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "resolveJsonModule": true,
   },
   // ts 管理的文件
   "include": [

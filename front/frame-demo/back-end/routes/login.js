@@ -15,7 +15,7 @@ router.post("/", function (req, res) {
       message: "账户或密码不能为空",
     });
   } else {
-    if ((params[0] === "admin" || params[0] === "没有权限" || params[0] === "liming") && params[1] === "1") {
+    if ((params[0] === "admin" || params[0] === "third" || params[0] === "liming") && params[1] === "1") {
       vertoken.setToken(params[0], params[1]).then(
         (token) => {
           res.cookie("USER", params[0], {

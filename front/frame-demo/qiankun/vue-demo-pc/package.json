@@ -17,7 +17,8 @@
     "core-js": "^3.8.3",
     "echarts": "^5.3.3",
     "node-gyp": "^8.4.0",
-    "node-sass": "^8.0.0",
+    "node-sass": "^6.0.1",
+    "sass": "^1.77.6",
     "vue": "^2.6.14",
     "vue-baidu-map": "^0.21.22",
     "vue-class-component": "^7.2.3",
@@ -46,7 +47,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^8.0.3",
-    "sass-loader": "^13.0.2",
+    "sass-loader": "^10.0.1",
     "typescript": "~4.5.5",
     "vue-template-compiler": "^2.6.14"
   },

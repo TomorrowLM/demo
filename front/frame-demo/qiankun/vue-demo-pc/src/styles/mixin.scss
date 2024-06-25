@@ -1,6 +1,6 @@
 //定义mixin方法的文件
 @charset "utf-8";
-@import "./variable";/*引入配置*/
+// @import "./variable";/*引入配置*/
 @mixin font_size($size){/*通过该函数设置字体大小，后期方便统一管理；*/
   @include font-dpr($size);
 }

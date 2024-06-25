@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'has-sidebar': $route.meta.sidebar, 'is-collapsed': isCollapse }">
+  <div :class="{ 'has-sidebar': $route.meta.sidebar, 'is-collapsed': isCollapse }" id="vue2-pc">
     <el-container v-if="isToken && $route.path !== '/login'">
       <el-header v-if="!fullScreenStatus">
         <Header></Header>
@@ -64,7 +64,14 @@ export default class Layout extends Vue {
     // //给应用的顶层元素添加一个主题标识，用于标识当前的主题
     // document .getElementsByTagName("body")[0].setAttribute("data-theme", "light");
     // js 通过声明sass变量的key值，来找到对应变量，并修改其属性值
-    (document.querySelector(':root') as any).style.setProperty('--theme-text', 'light');
+    if (JSON.stringify(window.localStorage.getItem('skin'))) {
+      document.documentElement.setAttribute('theme', window.localStorage.getItem('skin') || 'light');
+      document.documentElement.style.setProperty('--theme-name', window.localStorage.getItem('skin') || 'light');
+      document.documentElement.setAttribute('class', window.localStorage.getItem('skin') || 'light');
+    } else {
+      window.localStorage.setItem('skin', 'light');
+      (document.querySelector(':root') as any).style.setProperty('--theme-name', 'light');
+    }
   }
 
   updated() {
@@ -98,4 +105,5 @@ export default class Layout extends Vue {
 .h100 {
   height: 100%;
 }
+
 </style>

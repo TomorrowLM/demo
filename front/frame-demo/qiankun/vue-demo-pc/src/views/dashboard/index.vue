@@ -2,15 +2,17 @@
   <div>
     <span>dashboard</span>
     <!-- <button @click="()=>{data = data+1}">{{data}}</button> -->
-    <div class="box">
-      <a-card title="国家地图" :bordered="false" style="width: 15rem">
-        <div class="echart echart3" style="width: 15rem"></div>
-      </a-card>
+    <div>
       <a-card title="折线图" :bordered="false" style="width: 9rem">
         <div class="echart echart1" style="width: 9rem"></div>
       </a-card>
+    </div>
+    <div class="box">
       <a-card title="省图" :bordered="false" style="width: 5rem">
         <div class="echart echart2"></div>
+      </a-card>
+      <a-card title="国家地图" :bordered="false" style="width: 15rem">
+        <div class="echart echart3" style="width: 15rem"></div>
       </a-card>
       <a-card title="国家分布图" :bordered="false" style="width: 6rem">
         <div class="echart echart4" style="width: 6rem"></div>
@@ -20,7 +22,7 @@
   </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import * as echarts from 'echarts';
 import 'echarts/extension/bmap/bmap';
 // 请确保在引入百度地图扩展之前已经引入百度地图 JS API 脚本并成功加载
@@ -38,14 +40,13 @@ export default class Access extends Vue {
   myChart4: any = null;
 
   mounted() {
-    console.log(document.getElementsByClassName('echart1'));
-
+    //注册地图到echarts中  这里的 "china" 要与地图数据的option中的geo中的map对应
     this.myChart1 = echarts.init(document.getElementsByClassName('echart1')[0] as any);
     this.myChart1.setOption(echart1());
     this.myChart2 = echarts.init(document.getElementsByClassName('echart2')[0] as any);
     this.myChart2.setOption(echart2());
-    this.myChart3 = echarts.init(document.getElementsByClassName('echart3')[0] as any);
-    this.myChart3.setOption(echart3());
+    // this.myChart3 = echarts.init(document.getElementsByClassName('echart3')[0] as any);
+    // this.myChart3.setOption(echart3());
     // this.myChart4 = echarts.init(document.getElementsByClassName('echart4')[0] as any);
     // this.myChart4.setOption(echart3());
     //自适应
@@ -82,8 +83,8 @@ export default class Access extends Vue {
   onresize() {
     this.myChart1.resize();
     this.myChart2.resize();
-    this.myChart3.resize();
-    this.myChart4.resize();
+    // this.myChart3.resize();
+    // this.myChart4.resize();
   }
 }
 </script>

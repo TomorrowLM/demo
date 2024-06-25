@@ -62,6 +62,6 @@ export default class Access extends Vue {
 
 <style lang="scss" scoped>
 span {
-  color: $basic_text_color;
+  // color: $basic_text_color;
 }
 </style>

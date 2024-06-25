@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
       role: 'second',
       routes: []
     } : {
-      name: '没有权限',
+      name: 'third',
       role: 'third',
       routes: []
     }
