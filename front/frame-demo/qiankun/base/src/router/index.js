@@ -1,6 +1,7 @@
 import { createHashRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
 import Web1 from "../page/web1.jsx";
 import Web2 from "../page/web2.jsx";
+import Web3 from "../page/web3.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home.jsx";
 import React, { lazy } from "react";
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
             }]
           },
         ],
+      },
+      {
+        path: "vue3",
+        element: <Web3></Web3>,
       },
     ]
   },
