@@ -1,0 +1,10 @@
+:root[theme='light'] {
+  --text: #cece59;
+}
+
+:root[theme='dark'] {
+  --text: blue;
+
+}
+
+$text: var(--text);

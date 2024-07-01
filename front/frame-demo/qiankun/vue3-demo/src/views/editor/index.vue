@@ -28,21 +28,21 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 canvas {
   border: none !important;
 }
 .box {
   width: 20%;
   height: 20%;
-  background-color: #3f8e50;
+  background-color: $box-bg;
   color: #fff;
 }
 @media (max-width: 1024px) {
   .box {
     width: 100px;
     height: 100px;
-    background-color: #3f8e50;
+    background-color: $box-bg;
     color: #fff;
   }
 }

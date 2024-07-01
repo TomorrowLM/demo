@@ -1,8 +1,6 @@
-import './assets/main.css'
 import './public-path'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
 import App from './App.vue'
 import router from './router'
 import { history } from './router'
@@ -11,6 +9,7 @@ import {
   qiankunWindow,
   type QiankunProps
 } from 'vite-plugin-qiankun/dist/helper'
+// import './style.scss';
 
 let instance: any = null
 function render(props: any = {}) {
@@ -19,8 +18,8 @@ function render(props: any = {}) {
   instance.use(createPinia())
   instance.use(router)
   instance.use(router)
-  instance.mount(container ? container.querySelector('#vue3-page') : '#vue3-page')
-
+  instance.mount(container ? container.querySelector('#vue3-page') : '#vue3-page');
+  document.documentElement.setAttribute('theme', window.localStorage.getItem('skin') || 'light')
 }
 
 // 独立运行时

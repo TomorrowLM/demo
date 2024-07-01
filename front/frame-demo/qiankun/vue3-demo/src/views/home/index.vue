@@ -1,11 +1,8 @@
 <template>
-  <header
-    class="h100 flex-center"
-    style="display: flex; align-items: center; justify-content: space-around"
-  >
-    <div class="box flex-center" @click="jump(1)">3D</div>
-    <div class="box flex-center" @click="jump(2)">editor</div>
-  </header>
+  <div class="content d-center">
+    <div class="box d-center m-12" @click="jump(1)">3D</div>
+    <div class="box d-center m-12" @click="jump(2)">editor</div>
+  </div>
 </template>
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
@@ -21,19 +18,23 @@ const jump = (e) => {
 }
 </script>
 
-<style scoped>
-.box {
-  width: 20%;
-  height: 20%;
-  background-color: #3f8e50;
-  color: #fff;
-}
-@media (max-width: 1024px) {
+<style lang="scss" scoped>
+.content {
+  height: calc(100% - 48px);
   .box {
-    width: 100px;
-    height: 100px;
-    background-color: #3f8e50;
-    color: #fff;
+    width: 20%;
+    height: 20%;
+    background-color: $box-bg;
+    color: $text;
+    font-size: 24px;
+  }
+  @media (max-width: 1024px) {
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: $box-bg;
+      color: #fff;
+    }
   }
 }
 </style>

@@ -6,7 +6,7 @@
         <RouterLink to="/3D/webgl/basic">webgl:webgl</RouterLink>
         <RouterLink to="/3D/webgl/attribute">webgl:attribute</RouterLink>
         <RouterLink to="/3D/webgl/uniform">webgl:uniform:点击画布</RouterLink>
-        <RouterLink to="/3D/three/坐标轴">坐标轴</RouterLink>
+        <RouterLink to="/3D/three/axis">坐标轴</RouterLink>
         <RouterLink to="/3D/three/cube">坐标轴:正方体</RouterLink>
       </nav>
     </div>

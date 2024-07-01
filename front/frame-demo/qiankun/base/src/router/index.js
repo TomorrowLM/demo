@@ -54,6 +54,26 @@ export const router = createBrowserRouter([
       {
         path: "vue3",
         element: <Web3></Web3>,
+        children: [
+          {
+            path: "3D/canvas/moon",
+          },
+          {
+            path: "3D/webgl/basic",
+          },
+          {
+            path: "3D/webgl/attribute",
+          },
+          {
+            path: "3D/webgl/uniform",
+          },
+          {
+            path: "3D/three/axis",
+          },
+          {
+            path: "3D/three/cube",
+          },
+        ],
       },
     ]
   },

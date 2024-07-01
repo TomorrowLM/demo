@@ -43,7 +43,7 @@ const router = createRouter({
           component: () => import('../views/3D/webgl/03-uniform.vue')
         },
         {
-          path: 'three/坐标轴',
+          path: 'three/axis',
           name: '坐标轴',
           component: () => import('../views/3D/three/01-zhuobiaozhou.vue')
         },

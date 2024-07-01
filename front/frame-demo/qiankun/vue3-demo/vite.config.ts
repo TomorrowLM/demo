@@ -35,6 +35,8 @@ export default defineConfig(({ mode }) => {
     '  proxyTarget = ',
     proxyTarget
   )
+  const qiankunPath = path.resolve(__dirname, '../').replace(/\\/g, '/')
+  console.log(1234, qiankunPath)
   return {
     define: {
       // __APP_VERSION__: `'${process.env.npm_package_version}${sprintVersion ? `.${sprintVersion}` : ''}'`,
@@ -46,8 +48,7 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          // additionalData: '@use "@/styles/main.scss" as *;',
-          additionalData: '@use "@/styles/element/theme/index.scss" as *;'
+          additionalData: `@use "${qiankunPath}/shared/styles/index.scss" as *;`
         }
       }
     },
