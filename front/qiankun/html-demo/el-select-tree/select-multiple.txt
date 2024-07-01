@@ -1,0 +1,104 @@
+<template>
+  <div class="input_tree_select">
+    <el-select
+      v-model="filterText"
+      multiple
+      placeholder="请选择"
+      :popper-append-to-body="false"
+      @remove-tag="removetag"
+      collapse-tags
+      @clear="clearall"
+      clearable
+    >
+      <el-option style="height: 500px" :value="selectTree" class="setstyle" disabled>
+        <el-tree
+          :data="treeData"
+          :props="{ label: 'label', children: 'children' }"
+          ref="tree"
+          show-checkbox
+          :expand-on-click-node="false"
+          node-key="label"
+          check-on-click-node
+          @check-change="handleNodeClick"
+        ></el-tree>
+      </el-option>
+    </el-select>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Prop, PropSync, Watch } from 'vue-property-decorator';
+
+@Component({
+  components: {},
+})
+export default class Layout extends Vue {
+  @Prop({
+    default: '100%',
+  })
+  width!: any;
+  @Prop({
+    type: String,
+    default: '请输入',
+  })
+  public placeholder!: any;
+  @Prop() public treeData!: any; //查询展示列表
+  @Prop() public label!: any;
+  @Prop() public showCheckbox!: any;
+  @PropSync('inputVal') public syncedInputVal!: any;
+  @Watch('inputValCurrnt')
+  onSyncedInputValChanged(val: any) {
+    this.syncedInputVal = val;
+  }
+  inputValCurrnt = [];
+  selectTree = [];
+  value = [];
+  filterText = '';
+  handleNodeClick(data, self, child) {
+    const datalist = (this.$refs.tree as any).getCheckedNodes();
+    this.selectTree = []; //置空
+    this.inputValCurrnt = []; //置空
+    this.value = [];
+    datalist.forEach(item => {
+      this.selectTree.push({ label: item.label });
+      this.value.push(item.label);
+      if (!item.children) {
+        this.inputValCurrnt.push(item.label);
+        this.inputValCurrnt.push(item.label);
+        this.filterText = this.inputValCurrnt.join();
+      }
+    });
+  }
+
+  removetag() {
+    this.selectTree.splice(0, 1);
+    const setlist = (this.$refs.tree as any).getCheckedNodes();
+    setlist.splice(0, 1);
+    console.log(setlist);
+    this.$nextTick(() => {
+      (this.$refs.tree as any).setCheckedNodes(setlist);
+    });
+  }
+
+  clearall() {
+    this.selectTree = [];
+    this.inputValCurrnt = [];
+    console.log(this.treeData, this.$refs.tree as any);
+    this.$nextTick(() => {
+      (this.$refs.tree as any).setCheckedNodes([]);
+    });
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.tree {
+  height: 300px;
+  display: block;
+  overflow-y: auto;
+}
+
+/deep/.el-input--suffix .el-input__inner {
+  padding-right: 12px;
+}
+</style>

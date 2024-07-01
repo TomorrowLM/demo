@@ -1,0 +1,4 @@
+.main-content {
+  @extend .d-center;
+  height: calc(100% - 48px);
+}

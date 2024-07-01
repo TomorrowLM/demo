@@ -1,0 +1,82 @@
+<template>
+  <div class="tree">
+    <el-cascader
+      v-model="test"
+      :options="treeData"
+      collapse-tags
+      clearable
+      :props="{ multiple: true }"
+      filterable
+    ></el-cascader>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Prop, PropSync, Watch } from 'vue-property-decorator';
+
+@Component({
+  components: {},
+})
+export default class Layout extends Vue {
+  @Prop({
+    default: '100%',
+  })
+  width!: any;
+  @Prop({
+    default: '100%',
+  })
+  maxWidth!: any;
+  @Prop() public treeData!: any; //查询展示列表
+  @Prop() public label!: any;
+  @Prop() public showCheckbox!: any;
+
+  @Prop({
+    type: String,
+    default: '请输入',
+  })
+  public placeholder!: any;
+  @PropSync('inputVal') public syncedInputVal!: any;
+
+  test = [];
+  @Watch('test')
+  fn() {
+    console.log(this.test);
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.tree {
+  /deep/ .el-cascader__tags {
+    position: absolute;
+    left: 0;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-wrap: nowrap !important;
+    line-height: normal;
+    text-align: left;
+    box-sizing: border-box;
+    overflow: scroll;
+    margin-left: 5px;
+  }
+  /deep/ .el-cascader__search-input {
+    margin: 2px 0 2px 8px;
+  }
+  ::-webkit-scrollbar {
+    width: 0; /* 纵向滚动条 宽度 */
+    height: 0; /* 横向滚动条 高度 */
+    // background: pink; /* 整体背景 */
+    border-radius: 10px; /* 整体 圆角 */
+  }
+  ::scrollbar {
+    width: 0; /* 纵向滚动条 宽度 */
+    height: 0; /* 横向滚动条 高度 */
+  }
+}
+
+/deep/.el-input--suffix .el-input__inner {
+  padding-right: 12px;
+}
+</style>
