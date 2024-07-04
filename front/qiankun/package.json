@@ -2,6 +2,8 @@
   "scripts": {
     "start:base": "cd base && npm run start",
     "start:web1": "cd vue-demo-mobile && npm run start",
+    "start:web2": "cd vue-demo-pc && npm run start",
+    "start:web3": "cd vue3-demo && npm run start",
     "build": "npm-run-all --serial build:*",
     "build:base": "cd base && rm -rf dist && npm run build"
   },

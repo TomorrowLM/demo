@@ -22,6 +22,8 @@ let theme = window.localStorage.getItem('skin') || 'light'
 //   window.localStorage.setItem('skin', 'light')
 // }
 onBeforeMount(() => {
+  // console.log(jquery('#vue3-page'))
+  console.log($('#vue3-page'))
   // document.documentElement.setAttribute('theme', window.localStorage.getItem('skin') || 'light')
 })
 const goHome = () => {

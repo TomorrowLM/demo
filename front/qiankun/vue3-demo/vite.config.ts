@@ -7,13 +7,19 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-// import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
-// import Inspect from 'vite-plugin-inspect'; //可以让开发者在浏览器端就可以看到vue文件编译后的代码、vue文件的相互依赖关系
 import dayjs from 'dayjs'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import path from 'path'
 import { nodePolyfills } from 'vite-plugin-node-polyfills' //允许你在浏览器环境中直接require或import Node.js的内置模块。通过这个插件，您可以轻松地在Web应用中使用诸如process、events、http和stream等常用的Node.js模块
 import qiankun from 'vite-plugin-qiankun'
+import { visualizer } from 'rollup-plugin-visualizer'
+import importToCDN, { cdn } from 'vite-plugin-cdn-import'
+import $ from 'jquery'
+import inject from '@rollup/plugin-inject'
+
+// import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';// 引入rollup-plugin-visualizer模块
+// import Inspect from 'vite-plugin-inspect'; //可以让开发者在浏览器端就可以看到vue文件编译后的代码、vue文件的相互依赖关系
+
 export default defineConfig(({ mode }) => {
   const buildDate = dayjs().format('YYYY-MM-DD HH:mm:ss')
   const env = loadEnv(mode, process.cwd(), 'CONFIG')
@@ -26,6 +32,9 @@ export default defineConfig(({ mode }) => {
   const appBuildDir = env.CONFIG_APP_BUILD_DIR || 'dist'
   const isDev = mode === 'development' || mode === 'elecDev'
   const name = require('./package.json').name
+  const externals = {
+    jquery: 'jQuery'
+  }
   console.log(
     '========> mode = ',
     mode,
@@ -38,13 +47,6 @@ export default defineConfig(({ mode }) => {
   const qiankunPath = path.resolve(__dirname, '../').replace(/\\/g, '/')
   console.log(1234, qiankunPath)
   return {
-    define: {
-      // __APP_VERSION__: `'${process.env.npm_package_version}${sprintVersion ? `.${sprintVersion}` : ''}'`,
-      __APP_VERSION__: "'1.0'",
-      // __APP_BUILD_COMMIT__: `'${buildCommit}'`,
-      // __APP_BUILD_BRANCH__: `'${buildBranch}'`,
-      __APP_BUILD_DATE__: `'${buildDate}'`
-    },
     css: {
       preprocessorOptions: {
         scss: {
@@ -54,7 +56,7 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: [
-        'monaco-editor/esm/vs/editor/editor.worker'
+        'monaco-editor/esm/vs/editor/editor.worker' // 预构建
         // './src/components/monacoEditor/language-service/todoLangWorker.ts',
       ]
     },
@@ -121,16 +123,81 @@ export default defineConfig(({ mode }) => {
         //   console.log(name, props);
         // },
       }),
-      // vue3微应用名字，与主应用注册的微应用名字保持一致
-      // 如果是在主应用中加载子应用vite,必须打开useDevMode,否则vite加载不成功, 单独运行没影响
-      qiankun('vue3', { useDevMode: true })
+      /**
+       * vue3微应用名字，与主应用注册的微应用名字保持一致
+       * 如果是在主应用中加载子应用vite,必须打开useDevMode,否则vite加载不成功, 单独运行没影响
+       */
+      qiankun('vue3', { useDevMode: true }),
+      visualizer({
+        open: true, //注意这里要设置为true，否则无效
+        filename: 'stats.html', //分析图生成的文件名
+        gzipSize: true, // 收集 gzip 大小并将其显示
+        brotliSize: true // 收集 brotli 大小并将其显示
+      }),
+      inject({
+        $: "jquery",  // 这里会自动载入 node_modules 中的 jquery
+        jQuery: "jquery",
+        "windows.jQuery": "jquery"
+      }),
+      importToCDN({
+        // prodUrl：可选，默认指向 https://cdn.jsdelivr.net/npm/{name}@{version}/{path}
+        modules: [
+          {
+            name: 'jquery',
+            var: 'jQuery',
+            version: '3.6.4',
+            path: 'dist/jquery.min.js'
+          }
+          // {
+          //   name: 'element-plus',
+          //   // ElementPlus 为什么不是同下面第二种配置的elementPlus是因为这个配置同CDN资源一致，而下面的配置同需同main.ts的引入名称一致
+          //   var: 'ElementPlus', // 外部化的依赖提供一个全局变量 同rollupOptions配置中的globals的值
+          //   // https://unpkg.com/element-plus@2.2.32/dist/index.full.js 或者 dist/index.full.js
+          //   path: 'dist/index.full.js',
+          //   // 可选
+          //   css: 'dist/index.css'
+          // },
+          // {
+          //   name: 'vue-i18n',
+          //   var: 'VueI18n',
+          //   path: 'dist/vue-i18n.global.prod.js',
+          // },
+          // {
+          //   name: 'vue-router',
+          //   var: 'VueRouter',
+          //   path: 'dist/vue-router.global.js'
+          // },
+          // // VueDemi这个是pinia用来判断是vue2还是vue3所需要的，要额外引入一下
+          // {
+          //   name: 'vue-demi',
+          //   var: 'VueDemi',
+          //   path: 'https://unpkg.com/vue-demi@0.13.1/lib/index.iife.js'
+          // },
+          // {
+          //   name: 'pinia',
+          //   var: 'Pinia',
+          //   path: 'dist/pinia.iife.js'
+          // },
+          // // echarts，只有配置全局的时候有效，不然构建的时候还是会打包执行。也可以把echarts处理成按需引入
+          // {
+          //   name: 'echarts',
+          //   var: 'echarts',
+          //   path: 'dist/echarts.js'
+          // },
+          // // echarts 内使用了
+          // {
+          //   name: 'zrender',
+          //   var: 'zrender ',
+          //   path: 'dist/zrender.js'
+          // },
+        ]
+      })
       // VueI18nPlugin({
       //   /* options */
       //   // locale messages resource pre-compile option
       //   include: resolve(srcPath, './i18n/locales/**'),
       // }),
       // Inspect(),
-      // new MonacoWebpackPlugin()
     ],
     resolve: {
       alias: {
@@ -139,37 +206,46 @@ export default defineConfig(({ mode }) => {
     },
     transpileDependencies: true,
     publicPath: appPublicPath,
-    // buildPath: './',
     base: basePath,
-    // base: 'D:/work/cidsi/data-plat/assets/asset-fe/gui/assets',
-    // base: './',
     // assetsPublicPath: './',
     // productionSourceMap: true,
+    external: ['jquery'],
     output: {
       // 把子应用打包成 umd 库格式
       library: `${name}-[name]`,
       libraryTarget: 'umd', // 把微应用打包成 umd 库格式
       jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
     },
+    define: {
+
+      __APP_VERSION__: "'1.0'",
+      __APP_BUILD_DATE__: `'${buildDate}'`
+      // $: $
+      // __APP_VERSION__: `'${process.env.npm_package_version}${sprintVersion ? `.${sprintVersion}` : ''}'`,
+      // __APP_BUILD_COMMIT__: `'${buildCommit}'`,
+      // __APP_BUILD_BRANCH__: `'${buildBranch}'`,
+    },
     build: {
       outDir: appBuildDir,
       // emptyOutDir: true,
       // chunkSizeWarningLimit: 1000,
       rollupOptions: {
+        chunkFileNames: 'static/js/[name]-[hash].js',
         output: {
+          globals: {
+            moment: "moment",
+            uuid: "uuid",
+            lodash: "lodash",
+            jquery: "$"
+          },
           // 分包
-          // manualChunks(id) {
-          //   if (id.includes("node_modules")) {
-          //     return id
-          //       .toString()
-          //       .split("node_modules/")[1]
-          //       .split("/")[0]
-          //       .toString();
-          //   }
-          // },
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString()
+            }
+          }
         }
       }
-      // outDir: 'build_electron/release',
     },
     server: {
       host: true,
