@@ -26,6 +26,8 @@ export default defineConfig(({ mode }) => {
   const proxyTarget = `http://${env.CONFIG_API_PROXY}`
   const sprintVersion = env.CONFIG_SPRINT_VERSION || ''
   const srcPath = fileURLToPath(new URL('./src', import.meta.url))
+
+ 
   const typingsPath = resolve(srcPath, 'typings')
   const appPublicPath = mode === 'elecPro' ? '../' : env.CONFIG_APP_PUBLIC || '/'
   const basePath = mode === 'elecPro' ? './' : env.CONFIG_APP_PUBLIC || '/'
@@ -44,8 +46,11 @@ export default defineConfig(({ mode }) => {
     '  proxyTarget = ',
     proxyTarget
   )
-  const qiankunPath = path.resolve(__dirname, '../').replace(/\\/g, '/')
+  const qiankunPath = path.resolve(__dirname, '../').replace(/\\/g, '//');
+
+  // path.resolve(__dirname, '../').replace(/\\/g, '/')
   console.log(1234, qiankunPath)
+  console.log(srcPath,1234)
   return {
     css: {
       preprocessorOptions: {
@@ -135,9 +140,9 @@ export default defineConfig(({ mode }) => {
         brotliSize: true // 收集 brotli 大小并将其显示
       }),
       inject({
-        $: "jquery",  // 这里会自动载入 node_modules 中的 jquery
-        jQuery: "jquery",
-        "windows.jQuery": "jquery"
+        $: 'jquery', // 这里会自动载入 node_modules 中的 jquery
+        jQuery: 'jquery',
+        'windows.jQuery': 'jquery'
       }),
       importToCDN({
         // prodUrl：可选，默认指向 https://cdn.jsdelivr.net/npm/{name}@{version}/{path}
@@ -201,7 +206,8 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@': srcPath
+        '@': srcPath,
+        '@shared': qiankunPath + '\\shared'
       }
     },
     transpileDependencies: true,
@@ -217,10 +223,9 @@ export default defineConfig(({ mode }) => {
       jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
     },
     define: {
-
       __APP_VERSION__: "'1.0'",
-      __APP_BUILD_DATE__: `'${buildDate}'`
-      // $: $
+      __APP_BUILD_DATE__: `'${buildDate}'`,
+      qiankunPath: `'${qiankunPath}'`
       // __APP_VERSION__: `'${process.env.npm_package_version}${sprintVersion ? `.${sprintVersion}` : ''}'`,
       // __APP_BUILD_COMMIT__: `'${buildCommit}'`,
       // __APP_BUILD_BRANCH__: `'${buildBranch}'`,
@@ -233,10 +238,10 @@ export default defineConfig(({ mode }) => {
         chunkFileNames: 'static/js/[name]-[hash].js',
         output: {
           globals: {
-            moment: "moment",
-            uuid: "uuid",
-            lodash: "lodash",
-            jquery: "$"
+            moment: 'moment',
+            uuid: 'uuid',
+            lodash: 'lodash',
+            jquery: '$'
           },
           // 分包
           manualChunks(id) {
