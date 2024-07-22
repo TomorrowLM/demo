@@ -1,11 +1,10 @@
-<!--
- * @Author: zhangke ke.zhang29@gientech.com
- * @Date: 2023-11-29 14:20:57
- * @LastEditors: zhangke ke.zhang29@gientech.com
- * @LastEditTime: 2023-12-07 11:19:02
- * @FilePath: \three_vue_project\src\App.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
+<template>
+  <div class="main-content">
+    <div id="statsId" class="stats-content"></div>
+    <div id="webgl"></div>
+  </div>
+</template>
+
 <script setup>
 import * as THREE from 'three'
 //引入性能监视器stats.js
@@ -14,7 +13,7 @@ import Stats from 'three/addons/libs/stats.module.js'
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 // 引入轨道控制器扩展库OrbitControls.js
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import { onMounted, render } from 'vue'
+import { onMounted } from 'vue'
 console.log('THREE.Scene', THREE.Scene)
 
 // 创建3D场景对象Scene
@@ -96,14 +95,35 @@ controls.enableDamping = true
 // 设置阻尼系数
 controls.dampingFactor = 0.01
 
-function animate() {
-  requestAnimationFrame(animate)
+// 旋转
+// function animate() {
+//   requestAnimationFrame(animate)
+//   controls.update()
+//   renderer.render(scene, camera)
+// }
+// animate()
+
+const stats = new Stats()
+// 渲染帧率  刷新频率,一秒渲染次数
+stats.setMode(0) // 默认模式FPS
+// 渲染周期 渲染一帧多长时间
+// stats.setMode(1);
+
+// requestAnimationFrame实现周期性循环执行
+// requestAnimationFrame默认每秒钟执行60次，但不一定能做到，要看代码的性能
+// 渲染循环
+const clock = new THREE.Clock()
+function render() {
+  stats.update()
   controls.update()
-  renderer.render(scene, camera)
+  const spt = clock.getDelta() * 1000 //毫秒
+  // console.log('两帧渲染时间间隔(毫秒)',spt);
+  // console.log('帧率FPS',1000/spt);
+  renderer.render(scene, camera) //执行渲染操作
+  mesh.rotateY(0.01) //每次绕y轴旋转0.01弧度
+  requestAnimationFrame(render) //请求再次执行渲染函数render，渲染下一帧
 }
-
-animate()
-
+render()
 // 随机创建大量的模型,测试渲染性能
 // const num = 1000; //控制长方体模型数量
 // for (let i = 0; i < num; i++) {
@@ -119,27 +139,6 @@ animate()
 //     mesh.position.set(x, y, z)
 //     scene.add(mesh); // 模型对象插入场景中
 // }
-
-const stats = new Stats()
-// 渲染帧率  刷新频率,一秒渲染次数
-stats.setMode(0) // 默认模式
-// 渲染周期 渲染一帧多长时间
-// stats.setMode(1);
-
-// requestAnimationFrame实现周期性循环执行
-// requestAnimationFrame默认每秒钟执行60次，但不一定能做到，要看代码的性能
-// 渲染循环
-// const clock = new THREE.Clock();
-// function render() {
-//   stats.update();
-//   const spt = clock.getDelta()*1000;//毫秒
-//   // console.log('两帧渲染时间间隔(毫秒)',spt);
-//   // console.log('帧率FPS',1000/spt);
-//   renderer.render(scene, camera); //执行渲染操作
-//   mesh.rotateY(0.01);//每次绕y轴旋转0.01弧度
-//   requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
-// }
-// render();
 
 // renderer.render(scene, camera); //执行渲染操作
 
@@ -236,22 +235,6 @@ onMounted(() => {
   document.getElementById('statsId').appendChild(stats.domElement)
 })
 </script>
-
-<template>
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-  <main>
-    <TheWelcome />
-  </main> -->
-  <div class="main-content">
-    <div id="statsId" class="stats-content"></div>
-    <div id="webgl"></div>
-  </div>
-</template>
 
 <style scoped>
 header {

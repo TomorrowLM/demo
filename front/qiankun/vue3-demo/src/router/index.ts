@@ -47,17 +47,46 @@ export const routes = [
         component: () => import('../views/3D/webgl/03-uniform.vue')
       },
       {
-        path: 'three/axis',
-        name: '坐标轴',
-        component: () => import('../views/3D/three/01-zhuobiaozhou.vue')
+        path: 'three/camera',
+        name: 'camera',
+        component: () => import('../views/3D/three/00-camera.vue')
+      },
+      {
+        path: 'three/01-axis',
+        name: '坐标轴-01',
+        component: () => import('../views/3D/three/01-axis-01.vue')
+      },
+      {
+        path: 'three/02-axis',
+        name: '坐标轴-02',
+        component: () => import('../views/3D/three/01-axis-02.vue')
       },
       {
         path: 'three/cube',
-        name: 'cube',
-        component: () => import('../views/3D/three/02-cube.vue')
+        name: 'scence',
+        component: () => import('../views/3D/three/02-geometry-cube.vue')
+      },
+      {
+        path: 'three/line',
+        name: 'line',
+        component: () => import('../views/3D/three/02-geometry-line.vue')
+      },
+      {
+        path: 'three/text',
+        name: 'text',
+        component: () => import('../views/3D/three/02-geometry-text.vue')
+      },
+      {
+        path: 'three/light',
+        name: 'light',
+        component: () => import('../views/3D/three/03-light.vue')
+      },{
+        path: 'three/OrbitControls',
+        name: 'OrbitControls',
+        component: () => import('../views/3D/three/04-OrbitControls.vue')
       }
     ]
-  },
+  }
   // {
   //   path: '/editor',
   //   name: 'editor',
