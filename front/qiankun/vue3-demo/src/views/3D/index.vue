@@ -3,7 +3,7 @@
     <div class="wrapper">
       <nav>
         <RouterLink v-for="item in routes3d" :key="item.path" :to="'/3D/' + item.path">{{
-          item.path
+          item.name
         }}</RouterLink>
         <!-- <RouterLink to="/3D/canvas/moon">canvas:moon</RouterLink>
         <RouterLink to="/3D/webgl/basic">webgl:webgl</RouterLink>

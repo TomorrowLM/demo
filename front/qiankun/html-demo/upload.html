@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="file" id="file"></input>
+</body>
+<script>
+  var fileDom = document.getElementById('file')
+  fileDom.addEventListener('change',()=>{
+    console.log(fileDom.files);
+    var file = fileDom.files[0]
+    var formData = new FormData();
+    formData.append('file', file);
+    console.log(formData.get('file'));
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/upload', true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        alert('文件上传成功');
+      } else {
+        alert('文件上传失败');
+      }
+    }
+    xhr.send(formData);
+  })
+</script>
+</html>

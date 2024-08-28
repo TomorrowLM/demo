@@ -58,7 +58,7 @@ export const routes = [
       },
       {
         path: 'three/02-axis',
-        name: '坐标轴-02',
+        name: '坐标轴+OrbitControls+gui',
         component: () => import('../views/3D/three/01-axis-02.vue')
       },
       {
@@ -78,13 +78,14 @@ export const routes = [
       },
       {
         path: 'three/light',
-        name: 'light',
-        component: () => import('../views/3D/three/03-light.vue')
-      },{
-        path: 'three/OrbitControls',
-        name: 'OrbitControls',
-        component: () => import('../views/3D/three/04-OrbitControls.vue')
+        name: 'light+OrbitControls',
+        component: () => import('../views/3D/three/03-light-OrbitControls.vue')
       }
+      // {
+      //   path: 'three/OrbitControls',
+      //   name: 'OrbitControls',
+      //   component: () => import('../views/3D/three/04-OrbitControls.vue')
+      // }
     ]
   }
   // {

@@ -9,7 +9,9 @@ onMounted(() => {
   const height = 400 //高度
   // 实例化一个透视投影相机对象
   const camera = new THREE.PerspectiveCamera(100, width / height, 0.1, 3000) // width / height配置相机的画布大小
-  const renderer = new THREE.WebGLRenderer()
+  const renderer = new THREE.WebGLRenderer({
+  antialias:true,
+})
   renderer.setSize(window.innerWidth / 2, window.innerHeight / 2) //设置渲染器（图层）的宽高
   document.querySelector('.content').appendChild(renderer.domElement)
   //创建立方体
