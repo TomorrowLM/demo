@@ -1,54 +1,25 @@
-import * as monaco from 'monaco-editor'
-import type { IDisposable } from 'monaco-editor'
-import * as monacoWorker from 'monaco-editor/esm/vs/editor/editor.worker.js'
-import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
-import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
-import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
-import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+import * as monaco from 'monaco-editor';
+import type { IDisposable } from 'monaco-editor';
+import * as monacoWorker from 'monaco-editor/esm/vs/editor/editor.worker.js';
+
+// import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+// import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
+// import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
+// import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 // import initialize from 'monaco-editor/esm/vs/editor/editor.worker?worker';
-import type { MonacoEditorProps, ConfigProps } from './index.d'
-import { language as sqlLanguage } from 'monaco-editor/esm/vs/basic-languages/sql/sql.js'
+
+import type { MonacoEditorProps, ConfigProps } from './index.d';
+import { language as sqlLanguage } from 'monaco-editor/esm/vs/basic-languages/sql/sql.js';
 // import { format } from 'sql-formatter'
-// import { WorkerManager } from './aviatorscript/worker';
-import aviSuggestions from './aviatorscript/suggestions.js'
-import aviMonarchs from './aviatorscript/monarch'
-// import { registerWorker } from 'monaco-editor';
-import { WorkerManager } from './language-service/worker'
-import DiagnosticsAdapter from './language-service/DiagnosticsAdapter'
-import TodoLangWorker from './language-service/todoLangWorker.ts?worker'
-import { reactive } from 'vue'
 
-monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true)
-monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true)
-monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-  target: monaco.languages.typescript.ScriptTarget.ES2016,
-  allowNonTsExtensions: true,
-  moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-  module: monaco.languages.typescript.ModuleKind.CommonJS,
-  noEmit: true,
-  typeRoots: ['node_modules/@types']
-})
+import aviSuggestions from './aviatorscript/suggestions.js';
+import aviMonarchs from './aviatorscript/monarch';
 
-// //在初始化之前，先设置MonacoEnvironment
-// self.MonacoEnvironment = {
-//   //一定要导入对应的代码提示文件,不然页面代码输入没有代码提示
-//   getWorker(_workerId: string, label: string) {
-//     console.log(_workerId,'AviatorScript', label, 'getWorker');
-//     if (label === 'json') {
-//       return new jsonWorker()
-//     }
-//     if (label === 'css' || label === 'scss' || label === 'less') {
-//       return new cssWorker()
-//     }
-//     if (label === 'html') {
-//       return new htmlWorker()
-//     }
-//     if (label === 'typescript' || label === 'javascript') {
-//       return new tsWorker()
-//     }
-//     return new monacoWorker();
-//   }
-// }
+import { WorkerManager } from './language-service/worker';
+import DiagnosticsAdapter from './language-service/DiagnosticsAdapter';
+import TodoLangWorker from './language-service/todoLangWorker.ts?worker';
+import { reactive } from 'vue';
+
 
 monaco.editor.defineTheme('myTheme', {
   base: 'vs',
@@ -69,56 +40,56 @@ monaco.editor.defineTheme('myTheme', {
       //注释
       token: 'comment',
       foreground: 'ffa500',
-      fontStyle: 'italic underline'
+      fontStyle: 'italic underline',
     },
     {
       //操作符
       token: 'operator',
       foreground: 'ffa500',
-      fontStyle: 'italic underline'
+      fontStyle: 'italic underline',
     },
     { token: 'comment.js', foreground: '008800', fontStyle: 'bold' },
-    { token: 'comment.css', foreground: '0000ff' } // will inherit fontStyle from `comment` above
-  ]
-})
+    { token: 'comment.css', foreground: '0000ff' }, // will inherit fontStyle from `comment` above
+  ],
+});
 
 export default class MonacoEditor implements MonacoEditorProps {
-  protected editorInstance: any
-  protected editorInsideInstance: any
-  protected editorOldInstance: any
-  protected aviWorker: any
-  protected htmlBox: HTMLElement
-  protected htmlInsideBox: HTMLElement
-  protected config: ConfigProps
-  protected DiagnosticsAdapter: any
-  protected suggestInstance: IDisposable
+  protected editorInstance: any;
+  protected editorInsideInstance: any;
+  protected editorOldInstance: any;
+  protected aviWorker: any;
+  protected htmlBox: HTMLElement;
+  protected htmlInsideBox: HTMLElement;
+  protected config: ConfigProps;
+  protected DiagnosticsAdapter: any;
+  protected suggestInstance: IDisposable;
   public codeInfo: {
-    oldCode: '' //保存删除的脚本
-    insideOldCode: any[]
-    undoList: any[] // 回退列表
-    insideCodeSnip?: any //inside片段
+    oldCode: '', //保存删除的脚本
+    insideOldCode: any[],
+    undoList: any[], // 回退列表
+    insideCodeSnip?: any, //inside片段
     outsideCodeSnip?: any
     insideCode?: string //inside脚本
-  } //inside脚本
+  };//inside脚本
   // private pointPosition: [];
-  private status: string
-  public connectRef: any
+  private status: string;
+  public connectRef: any;
 
   constructor(config: ConfigProps) {
-    this.htmlBox = document.getElementById(config.tag) as HTMLElement
+    this.htmlBox = document.getElementById(config.tag) as HTMLElement;
     // this.htmlInsideBox = document.getElementById(config.insideTag) as HTMLElement;
     // this.editorOldInstance = ;
-    this.config = config
+    this.config = config;
     this.codeInfo = { insideCode: '', insideOldCode: [], undoList: [], oldCode: '' }
     this.status = 'init'
-    this.suggestInstance = null
+    this.suggestInstance = null;
     this.connectRef = reactive({
       status: 'init'
     })
   }
 
   async init() {
-    await this.setTheme()
+    await this.setTheme();
     if (this.config?.languageConfig?.name === 'sql') {
       await this.registerLanguage({
         name: 'sql',
@@ -127,15 +98,17 @@ export default class MonacoEditor implements MonacoEditorProps {
           keywords: sqlLanguage.keywords,
           operators: sqlLanguage.operators,
           // functions: sqlLanguage.builtinFunctions,
-          variables: sqlLanguage.builtinVariables
+          variables: sqlLanguage.builtinVariables,
         },
         monarchTokens: {
           ignoreCase: true,
           tokenizer: {
-            root: [[/\[(.+?)\]/, 'custom-point']]
+            root: [
+              [/\[(.+?)\]/, 'custom-point'],
+            ]
           }
         }
-      })
+      });
     } else {
       await this.registerLanguage({
         name: 'AviatorScript',
@@ -144,40 +117,61 @@ export default class MonacoEditor implements MonacoEditorProps {
           functions: aviSuggestions,
           keywords: aviMonarchs.keywords,
           typeKeywords: aviMonarchs.typeKeywords,
-          operators: aviMonarchs.operators
+          operators: aviMonarchs.operators,
         },
         monarchTokens: {
           ...aviMonarchs
         }
       })
     }
-    // self.onmessage = () => {
-    //   // console.log(669, monacoWorker.initialize);
-    //   monacoWorker.initialize((ctx) => {
-    //     return new TodoLangWorker(ctx)
-    //   })
+    self.onmessage = () => {
+      // console.log(669, monacoWorker.initialize);
+      monacoWorker.initialize((ctx) => {
+        return new TodoLangWorker(ctx)
+      });
+    };
+    // //在初始化之前，先设置MonacoEnvironment
+    // self.MonacoEnvironment = {
+    //   //一定要导入对应的代码提示文件,不然页面代码输入没有代码提示
+    //   getWorker(_workerId: string, label: string) {
+    //     console.log(_workerId,'AviatorScript', label, 'getWorker');
+    //     if (label === 'json') {
+    //       return new jsonWorker()
+    //     }
+    //     if (label === 'css' || label === 'scss' || label === 'less') {
+    //       return new cssWorker()
+    //     }
+    //     if (label === 'html') {
+    //       return new htmlWorker()
+    //     }
+    //     if (label === 'typescript' || label === 'javascript') {
+    //       return new tsWorker()
+    //     }
+    //     return new monacoWorker();
+    //   }
     // }
-    await monaco.languages.onLanguage(this.config?.languageConfig?.name, () => {
-      const client = new WorkerManager(this.config?.languageConfig?.name)
-      const worker = (...uris: monaco.Uri[]) => {
-        return client.getLanguageServiceWorker(...uris)
-      }
-      this.DiagnosticsAdapter = new DiagnosticsAdapter(worker)
-    })
-    ;(window as any).MonacoEnvironment = {
+    (window as any).MonacoEnvironment = {
       getWorker: function (moduleId, label) {
-        console.log(moduleId, label === 'AviatorScript', 2, label)
+        console.log(moduleId, label === 'AviatorScript', 2, label);
         if (label === 'AviatorScript') {
           // return './language-service/todoLangWorker.js';
           const worker = new TodoLangWorker()
-          return worker
+          return worker;
         } else if (label === 'sql') {
           const worker = new TodoLangWorker()
-          return worker
+          return worker;
         }
-        return new monacoWorker()
+        return new monacoWorker();
       }
     }
+
+    monaco.languages.onLanguage(this.config?.languageConfig?.name, () => {
+      const client = new WorkerManager(this.config?.languageConfig?.name);
+      const worker = (...uris: monaco.Uri[]) => {
+        return client.getLanguageServiceWorker(...uris);
+      };
+      this.DiagnosticsAdapter = new DiagnosticsAdapter(worker);
+    });
 
     // monaco.languages.registerHoverProvider(this.config?.languageConfig?.name || 'AviatorScript', {
     //   // that: this,
@@ -259,14 +253,15 @@ export default class MonacoEditor implements MonacoEditorProps {
       folding: true, // 是否启用代码折叠
       links: true, // 是否点击链接
       ...this.config?.prettier,
-      scrollbar: {}
-    })
+      scrollbar: {
+      },
+    });
     // this.editorInsideInstance = monaco.editor.create(this.htmlInsideBox, {
     //   value: this.codeInfo.insideCode
     // })
     // this.editorOldInstance = monaco.editor.createModel(this.codeInfo.oldCode);
     // // const that = this;
-    const model = this.editorInstance.getModel()
+    const model = this.editorInstance.getModel();
     // const insideModel = this.editorInsideInstance.getModel();
     // let reg = new RegExp('\\[(.+?)\\]', 'g')
     //只读列
@@ -415,6 +410,7 @@ export default class MonacoEditor implements MonacoEditorProps {
     //   return;
     // });
 
+
     // // 你也可以监听补全面板的改变事件，以便在面板出现或隐藏时做出反应
     // this.editorInstance.onDidShowSuggestWidget(() => {
     //   console.log('补全面板显示');
@@ -423,13 +419,13 @@ export default class MonacoEditor implements MonacoEditorProps {
     //   console.log(e);
     // })
 
+
     model.onDidChangeContent((e) => {
       setTimeout(() => {
-        if (this.status === 'init') {
-          //编辑初始化的时候需要退出逻辑
-          console.log(this.status)
-          this.status = 'change'
-          return
+        if (this.status === 'init') { //编辑初始化的时候需要退出逻辑
+          console.log(this.status);
+          this.status = 'change';
+          return;
         }
         this.connectRef.status = 'init'
         // console.log(this.editorInstance.getSuggestWidget());
@@ -464,7 +460,7 @@ export default class MonacoEditor implements MonacoEditorProps {
         // console.log('inside:', insideModel.getValue());
         // console.log('insideCodeSnip：', this.codeInfo.insideCodeSnip);
         // console.log('insertText：', insertText);
-        // if (insertText) {//新增
+        // if (insertText) {//新增 
         //   console.log('新增');
         //   modelMatch.forEach((element, index) => {
         //     if (endLineNumber >= element.range.endLineNumber && endColumn >= element.range.endColumn) {
@@ -698,47 +694,51 @@ export default class MonacoEditor implements MonacoEditorProps {
         // this.codeInfo.outsideCodeSnip = '';
         // this.codeInfo.oldCode = this.getValue();
         // this.editorOldInstance.setValue(this.codeInfo.oldCode)
-      }, 10)
+      }, 10);
     })
   }
 
   isChinese(text) {
-    const pattern = /[\u4E00-\u9FA5\uF900-\uFA2D]/
-    return pattern.test(text)
+    const pattern = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+    return pattern.test(text);
   }
 
   //获取具体位置
   getCodePosition(line, column) {
-    let a = 0
+    let a = 0;
     new Array(line).fill(0).forEach((val, index) => {
-      a += this.editorInstance.getModel().getLineLength(index + 1) + 1 //加1是换行符也算一个字符
+      a += this.editorInstance.getModel().getLineLength(index + 1) + 1;//加1是换行符也算一个字符
     })
     return a
   }
 
-  handleConnect(e) {}
+
+  handleConnect(e) {
+
+  }
 
   //销毁实例
   destroyed() {
-    this.editorInstance.dispose()
-    this.suggestInstance.dispose()
+    this.editorInstance.dispose();
+    this.suggestInstance.dispose();
   }
 
   //更新配置选项
   updateOptions(e: any) {
-    this.editorInstance.updateOptions(e)
+    this.editorInstance.updateOptions(e);
   }
 
+
   public dispose() {
-    this.editorInstance.dispose()
+    this.editorInstance.dispose();
   }
   /**
-   *
-   * @param e1
+   * 
+   * @param e1 
    * @param e2 insideCode
    */
   initSetValue(e1: string) {
-    this.editorInstance.setValue(e1)
+    this.editorInstance.setValue(e1);
   }
 
   getValue() {
@@ -751,71 +751,65 @@ export default class MonacoEditor implements MonacoEditorProps {
 
   insertText(e1: any, e2?: any) {
     let readOnlyStatus = false
-    this.config.readOnlyArr &&
-      this.config.readOnlyArr.forEach((element) => {
-        if (this.getPosition().lineNumber === element.lineNumber) {
-          readOnlyStatus = true
-        }
-      })
-    if (readOnlyStatus) return
+    this.config.readOnlyArr && this.config.readOnlyArr.forEach(element => {
+      if (this.getPosition().lineNumber === element.lineNumber) {
+        readOnlyStatus = true
+      }
+    });
+    if (readOnlyStatus) return;
 
-    const position = this.getPosition()
-    const range = new monaco.Range(
-      position.lineNumber,
-      position.column,
-      position.lineNumber,
-      position.column
-    )
+    const position = this.getPosition();
+    const range = new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column);
     this.editorInstance.executeEdits('需要插入的代码/string', [
       {
         range: range,
         // text: e1 + (e2 ? e2 : '')
         text: e1
       }
-    ])
-    console.log(e1, e2)
+    ]);
+    console.log(e1, e2);
     this.codeInfo.outsideCodeSnip = e1
     this.codeInfo.insideCodeSnip = e2
-    this.editorInstance.focus()
+    this.editorInstance.focus();
   }
 
   copyToClipboard(text: string) {
-    const textarea = document.createElement('textarea')
-    textarea.style.position = 'fixed'
-    textarea.style.opacity = 0
-    textarea.value = text
-    document.body.appendChild(textarea)
-    textarea.select()
-    document.execCommand('copy')
-    document.body.removeChild(textarea)
+    const textarea = document.createElement('textarea');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = 0;
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
   }
 
   copy() {
     // this.editorInstance.getAction('editor.action.clipboardCopyAction')
-    this.editorInstance.trigger('editor', 'editor.action.clipboardCutAction')
+    this.editorInstance.trigger('editor', 'editor.action.clipboardCutAction');
     this.copyToClipboard(this.editorInstance.getValue())
   }
 
   //获取光标位置
   getPosition() {
-    return this.editorInstance.getPosition()
+    return this.editorInstance.getPosition();
   }
 
   setPosition(lineNumber: number, column: number) {
-    console.log(lineNumber, column)
+    console.log(lineNumber, column);
     // console.log(this.getPosition());
-    this.editorInstance.setPosition({ lineNumber, column })
+    this.editorInstance.setPosition({ lineNumber, column });
     // console.log(this.getPosition());
   }
 
   setLanguage(val: any) {
-    console.log(val)
+    console.log(val);
     this.clearMistake(this.editorInstance.getModel()?.getLanguageId())
     monaco.editor.setModelLanguage(this.editorInstance.getModel(), val || 'javascript')
   }
 
   setTheme() {
-    monaco.editor.setTheme('myTheme')
+    monaco.editor.setTheme('myTheme');
     // //长度
     // monaco.languages.registerCodeLensProvider('javascript', {
     //   provideCodeLenses: function (model, token) {
@@ -847,7 +841,7 @@ export default class MonacoEditor implements MonacoEditorProps {
 
   // 标记错误信息
   markMistake(data: any) {
-    console.log(data)
+    console.log(data);
     monaco.editor.setModelMarkers(
       this.editorInstance.getModel(),
       'AviatorScript',
@@ -870,8 +864,12 @@ export default class MonacoEditor implements MonacoEditorProps {
   }
 
   clearMistake(e: string) {
-    console.log(545, this.editorInstance.getModel())
-    monaco.editor.setModelMarkers(this.editorInstance.getModel(), e, [])
+    console.log(545, this.editorInstance.getModel());
+    monaco.editor.setModelMarkers(
+      this.editorInstance.getModel(),
+      e,
+      []
+    )
   }
 
   //   格式化代码 getAction
@@ -882,49 +880,42 @@ export default class MonacoEditor implements MonacoEditorProps {
   formatCode() {
     const formatFn = () => {
       try {
-        return format(this.getValue(), {
-          language: 'mysql',
-          tabWidth: 2,
-          keywordCase: 'upper',
-          linesBetweenQueries: 2
-        })
+        // return format(this.getValue(), {
+        //   language: 'mysql',
+        //   tabWidth: 2,
+        //   keywordCase: 'upper',
+        //   linesBetweenQueries: 2,
+        // });
       } catch (e: any) {
         const { message } = e
-        console.log(message)
+        console.log(message);
         const list = message.split(' ')
         const line = list.indexOf('line')
         const column = list.indexOf('column')
-        this.markMistake(
-          {
-            startLineNumber: Number(list[line + 1]),
-            endLineNumber: Number(list[line + 1]),
-            startColumn: Number(list[column + 1]),
-            endColumn: Number(list[column + 1])
-          },
-          'Error',
-          message
-        )
+        this.markMistake({
+          startLineNumber: Number(list[line + 1]),
+          endLineNumber: Number(list[line + 1]),
+          startColumn: Number(list[column + 1]),
+          endColumn: Number(list[column + 1])
+        }, 'Error', message)
       }
     }
     monaco.languages.registerDocumentFormattingEditProvider('sql', {
       provideDocumentFormattingEdits(model): any {
-        return [
-          {
-            text: formatFn(),
-            range: model.getFullModelRange()
-          }
-        ]
+        return [{
+          text: formatFn(),
+          range: model.getFullModelRange()
+        }]
       }
     })
   }
 
   async getFileContent(e: string) {
-    let libSource
+    let libSource;
     await fetch(e, {
-      mode: 'no-cors'
+      mode: 'no-cors',
     })
-      .then((response) => response.text())
-      .then((response) => {
+      .then(response => response.text()).then(response => {
         libSource = response
       })
     // console.log(libSource);
@@ -933,29 +924,29 @@ export default class MonacoEditor implements MonacoEditorProps {
 
   //代码自动补全
   async setAutoComplete(languageConfig: ConfigProps['languageConfig']) {
-    const { suggestions, autoCompleteType }: any = languageConfig
+    const { suggestions, autoCompleteType }: any = languageConfig;
     if (autoCompleteType === 0) {
       this.suggestInstance = monaco.languages.registerCompletionItemProvider(languageConfig.name, {
         //   triggerCharacters: ['$'],
         //   replaceTriggerChar: true,
         provideCompletionItems: function () {
-          const newSuggestions: any = []
+          let newSuggestions: any = [];
           Object.keys(suggestions as any).forEach((item: any) => {
-            newSuggestions.push(...suggestions[item])
+            newSuggestions.push(...suggestions[item]);
           })
           return {
             suggestions: newSuggestions.map((item: any) => {
-              return {
-                label: item.label ? item.label : item, // 显示的提示内容
-                kind: item?.kind ? item.kind : monaco.languages.CompletionItemKind.Function, // 用来显示提示内容后的不同的图标
-                insertText: item.label ? item.label : item // 选择后粘贴到编辑器中的文字
+              return ({
+                label: item.label ? item.label : item,// 显示的提示内容
+                kind: item?.kind ? item.kind : monaco.languages.CompletionItemKind.Function,// 用来显示提示内容后的不同的图标
+                insertText: item.label ? item.label : item, // 选择后粘贴到编辑器中的文字
                 // detail: '123', // 提示内容后的说明
                 // insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-              }
+              });
             })
-          }
-        }
-      })
+          };
+        },
+      });
       // monaco.languages.registerCompletionItemProvider('AviatorScript', {
       //   provideCompletionItems: () => {
       //     aviSuggestions.forEach(suggestion => {
@@ -1023,6 +1014,8 @@ export default class MonacoEditor implements MonacoEditorProps {
     //   }
     // });
     // console.log(worker);
+
+
     // self.onmessage = (message: any) => {
     //   // worker.parse(this.editorInstance)
     //   //使用内置的worker.initialize初始化我们的 worker，并使用TodoLangWorker进行必要的方法代理
@@ -1038,7 +1031,7 @@ export default class MonacoEditor implements MonacoEditorProps {
   async monarchToken(languageConfig: ConfigProps['languageConfig']) {
     //语法高亮-和theme搭配
     // console.log(languageConfig.monarchTokens, languageConfig.name, 11221122212229);
-    monaco.languages.setMonarchTokensProvider(languageConfig.name, languageConfig.monarchTokens)
+    monaco.languages.setMonarchTokensProvider(languageConfig.name, languageConfig.monarchTokens);
     // await monaco.languages.setMonarchTokensProvider(languageConfig.name, {
     //   tokenizer: {
     //     root: [
@@ -1052,8 +1045,9 @@ export default class MonacoEditor implements MonacoEditorProps {
   }
 
   async registerLanguage(languageConfig: ConfigProps['languageConfig']): void {
-    await monaco.languages.register({ id: languageConfig.name })
+    await monaco.languages.register({ id: languageConfig.name });
     await this.setAutoComplete(languageConfig)
-    ;(await languageConfig.monarchTokens) && this.monarchToken(languageConfig)
+    await languageConfig.monarchTokens && this.monarchToken(languageConfig)
   }
 }
+

@@ -87,12 +87,12 @@ export const routes = [
       //   component: () => import('../views/3D/three/04-OrbitControls.vue')
       // }
     ]
+  },
+  {
+    path: '/editor',
+    name: 'editor',
+    component: () => import('../views/editor/index.vue')
   }
-  // {
-  //   path: '/editor',
-  //   name: 'editor',
-  //   component: () => import('../views/editor/index.vue')
-  // }
 ]
 
 const router = createRouter({

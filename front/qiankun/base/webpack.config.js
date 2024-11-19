@@ -5,9 +5,9 @@ const packageName = require("./package.json").name;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const isDev = process.env.NODE_ENV === "development" ? true : false;
-const globalConstants = require('../config/envConfig/env.dev.js')
-const { PUBLIC_URL } = globalConstants;
-console.log(PUBLIC_URL, globalConstants);
+// const globalConstants = require('../config/envConfig/env.dev.js')
+// const { PUBLIC_URL } = globalConstants;
+// console.log(PUBLIC_URL, globalConstants);
 module.exports = () => {
   const config = {
     mode: process.env.NODE_ENV,
@@ -94,7 +94,7 @@ module.exports = () => {
         chunkFilename: "css/[name].[hash].css", // 定义非入口块文件的名称，如动态导入的文件
       }),
       new webpack.DefinePlugin({
-        API: JSON.stringify(globalConstants)
+        // API: JSON.stringify(globalConstants)
       })
     ],
     module: {

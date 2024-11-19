@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UNICODE" ?>
+<topo version="1.3.00.200T">
+    <devices>
+        <dev id="756D1938-D542-4a7d-B182-DD0291977802" name="AR1" poe="0" model="AR1220" settings="" system_mac="00-E0-FC-EE-4C-A8" com_port="2000" bootmode="0" cx="173.000000" cy="260.000000" edit_left="200" edit_top="314">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="2" />
+                <interface sztype="Ethernet" interfacename="Ethernet" count="8" />
+            </slot>
+        </dev>
+        <dev id="AC2E9C6A-20D1-45c2-9B16-AB718CB45FF2" name="LSW1" poe="0" model="S5700" settings="" system_mac="4C-1F-CC-EC-20-07" com_port="2002" bootmode="0" cx="358.000000" cy="259.000000" edit_left="385" edit_top="313">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="24" />
+            </slot>
+        </dev>
+        <dev id="763BC9F0-F82E-47ac-B315-E8B58019BF94" name="AR2" poe="0" model="AR1220" settings="" system_mac="00-E0-FC-63-52-E5" com_port="2001" bootmode="0" cx="540.000000" cy="259.000000" edit_left="567" edit_top="313">
+            <slot number="slot17" isMainBoard="1">
+                <interface sztype="Ethernet" interfacename="GE" count="2" />
+                <interface sztype="Ethernet" interfacename="Ethernet" count="8" />
+            </slot>
+        </dev>
+    </devices>
+    <lines>
+        <line srcDeviceID="756D1938-D542-4a7d-B182-DD0291977802" destDeviceID="AC2E9C6A-20D1-45c2-9B16-AB718CB45FF2">
+            <interfacePair lineName="Copper" srcIndex="0" srcBoundRectIsMoved="1" srcBoundRect_X="243.183136" srcBoundRect_Y="286.766571" srcOffset_X="-5.000000" srcOffset_Y="7.000000" tarIndex="0" tarBoundRectIsMoved="1" tarBoundRect_X="341.816864" tarBoundRect_Y="286.233429" tarOffset_X="-23.000000" tarOffset_Y="7.000000" />
+        </line>
+        <line srcDeviceID="AC2E9C6A-20D1-45c2-9B16-AB718CB45FF2" destDeviceID="763BC9F0-F82E-47ac-B315-E8B58019BF94">
+            <interfacePair lineName="Copper" srcIndex="1" srcBoundRectIsMoved="0" srcBoundRect_X="428.183777" srcBoundRect_Y="286.000000" srcOffset_X="0.000000" srcOffset_Y="0.000000" tarIndex="0" tarBoundRectIsMoved="0" tarBoundRect_X="523.816223" tarBoundRect_Y="286.000000" tarOffset_X="0.000000" tarOffset_Y="0.000000" />
+        </line>
+    </lines>
+    <shapes />
+    <txttips>
+        <txttip left="170" top="205" right="310" bottom="237" content="g0/0/0 192.168.1.1&#x0D;&#x0A;loopback 1.1.1.1" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+        <txttip left="527" top="205" right="667" bottom="237" content="g0/0/0 192.168.1.2&#x0D;&#x0A;loopback 2.2.2.2" fontname="Consolas" fontstyle="0" editsize="100" txtcolor="-16777216" txtbkcolor="-7278960" charset="1" />
+    </txttips>
+</topo>
