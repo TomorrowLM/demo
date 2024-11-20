@@ -6,7 +6,7 @@ function loadScript(url) {
   script.src = url;
   document.body.appendChild(script);
 }
- 
+
 // 动态加载CSS样式表
 function loadCSS(url) {
   var link = document.createElement('link');
@@ -15,7 +15,7 @@ function loadCSS(url) {
   link.href = url;
   document.head.appendChild(link);
 }
- 
+
 // 使用示例
 loadScript('https://example.com/my-script.js');
 loadCSS('https://example.com/my-style.css');
@@ -110,3 +110,28 @@ copyCode([[
     "required": true
   }
 ]])
+
+/**
+ * 保留对象格式并复制
+ * @param 
+ */
+export const copy = (codeData) => {
+  const textarea = document.createElement('textarea'); // 直接构建textarea  「注意：这里为了实现换行，需要创建textarea，如果用input的话，实现不了换行。」
+  const str = JSON.stringify(codeData, null, 2);//第三个参数2表示使用两个空格进行缩进，以保留对象内部的结构
+  console.log(str)
+  textarea.value = str; // 设置内容    「注意： \r\n 是 换行 符号」
+  document.body.appendChild(textarea); // 添加临时实例
+  textarea.select(); // 选择实例内容
+  document.execCommand('Copy'); // 执行复制
+  document.body.removeChild(textarea); // 删除临时实例
+  console.log('复制成功!');
+}
+const exampleObject = {
+  key1: "value1",
+  key2: "value2",
+  key3: [
+    "item1",
+    "item2"
+  ]
+};
+copy(exampleObject);

@@ -2,6 +2,7 @@
   "name": "vue2-mobile",
   "version": "0.1.0",
   "private": true,
+  "node": "14",
   "scripts": {
     "start": "vue-cli-service serve --mode development",
     "serve": "vue-cli-service serve && webpack-dev-server --open --mode development",

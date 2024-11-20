@@ -63,12 +63,12 @@ module.exports = {
     // },
     proxy: {
       "/vue2-mobile/api": {
-        // target: "http://lm-web.top:3600",
-        target: "http://localhost:3600",
+        target: "121.40.61.99:3600",
+        // target: "http://localhost:3600/",
         changeOrigin: true,
         secure: false,
         xfwd: false,
-        pathRewrite: { '/vue2-mobile/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
+        pathRewrite: { '/vue2-mobile/': '' }  //重点：重写资源访问路径，避免转发请求 404问题
       },
     },
   },
