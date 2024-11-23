@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 //引入token
-var vertoken = require("../token/index");
+var vertoken = require("../../token/index");
 /* user login. */
 router.post("/", function (req, res) {
   //获取参数

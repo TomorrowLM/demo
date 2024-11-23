@@ -4,9 +4,9 @@
   "private": true,
   "node": "14",
   "scripts": {
-    "start": "vue-cli-service serve --mode development",
-    "serve": "vue-cli-service serve && webpack-dev-server --open --mode development",
-    "build": "vue-cli-service build",
+    "start": "vue-cli-service serve --mode local",
+    "serve": "vue-cli-service serve --mode dev",
+    "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

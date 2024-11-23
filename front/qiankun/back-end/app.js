@@ -4,11 +4,12 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const app = express();
-const usersRouter = require("./routes/users");
-const login = require("./routes/login");
-const token = require("./routes/token");
-const access = require("./routes/access");
-const test = require("./routes/test");
+const {routes,commonPath} = require("./utils/getRoutes")
+// const usersRouter = require("./routes/users");
+// const login = require("./routes/login");
+// const token = require("./routes/token");
+// const access = require("./routes/access");
+// const test = require("./routes/test");
 const expressJwt = require("express-jwt");
 //配置ejs视图的目录
 app.set("views", path.join(__dirname, "views")); //views代表存放视图的目录
@@ -44,23 +45,16 @@ app.all("*", function (req, res, next) {
 //设置托管静态目录; 项目根目录+ public.可直接访问public文件下的文件eg:http://localhost:3000/images/url.jpg
 app.use(express.static(path.join(__dirname, "public")));
 
-//验证token是否过期并规定哪些路由不用验证
-//不理解请看jwt源码，会在req中添加token解析后的user对象
-// {
-//   user_name: '1',
-//   user_password: '1',
-//   iat: 1634103506,
-//   exp: 1634319506
-// }
-
+// console.log(routes.common,'routes.common');
 app.use(
   expressJwt({
     secret: "zgs_first_token",
     algorithms: ["HS256"],
   }).unless({
-    path: ["/login", "/users"], //除了这个地址，其他的URL都需要验证
+    path: commonPath, //除了这个地址，其他的URL都需要验证
   })
 );
+
 
 //token失效返回信息
 // 如果token过期或者 错误的处理
@@ -72,11 +66,35 @@ app.use(function (err, req, res, next) {
     res.status(401).send("token失效");
   }
 });
-app.use("/users", usersRouter);
-app.use("/login", login);
-app.use("/api/token", token);
-app.use("/api/access", access);
-app.use("/api/test", test);
+
+// const commonConfig = {
+//   proxyPath: '/common',
+//   path: ['login','users']
+// }
+
+// commonConfig.path.forEach(val=>{
+//   app.use(`${commonConfig.proxyPath}/${val}`,)
+// })
+
+// const proxy = ['/common','/vue2-mobile']
+
+
+
+// proxy.forEach(val => {
+//   app.use("/api/users", usersRouter);
+//   app.use(`${val}/api/login`, login);
+// })
+
+Object.keys(routes).forEach(base=>{
+  routes[base].forEach(item=>{
+    console.log(item.path);
+    app.use(item.path, item.importVal);
+  })
+})
+
+// app.use("/api/token", token);
+// app.use("/api/access", access);
+// app.use("/api/test", test);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

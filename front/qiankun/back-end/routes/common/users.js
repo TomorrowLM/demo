@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  console.log(11);
+  console.log('users');
   console.log(req.cookies);
   const data = req.cookies.USER === 'admin' ?
     {

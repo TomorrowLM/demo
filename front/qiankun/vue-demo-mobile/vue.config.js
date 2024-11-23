@@ -37,7 +37,7 @@ const assetsCDN = {
     "//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js",
   ],
 };
-
+console.log(process.env.NODE_ENV,process.env.VUE_APP_API_BASE_URL);
 module.exports = {
   publicPath: isProd ? "/qiankun/child/vue2-mobile/" : "/",
   //打包文件输出路径，即打包到哪里
@@ -62,14 +62,14 @@ module.exports = {
     //   poll: 1000, // 每隔1s轮询一次
     // },
     proxy: {
-      "/vue2-mobile/api": {
-        target: "121.40.61.99:3600",
-        // target: "http://localhost:3600/",
+      "/api": {
+        // target: process.env.VUE_APP_API_BASE_URL,
+        target: 'http://localhost:3600',
         changeOrigin: true,
         secure: false,
         xfwd: false,
-        pathRewrite: { '/vue2-mobile/': '' }  //重点：重写资源访问路径，避免转发请求 404问题
-      },
+        pathRewrite: { '/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
+      }
     },
   },
   pwa: {
@@ -155,7 +155,7 @@ module.exports = {
     if (process.env.NODE_ENV === "production") {
       // 为生产环境修改配置...
     } else {
-      console.log(config);
+      // console.log(config);
     }
   },
   css: {
