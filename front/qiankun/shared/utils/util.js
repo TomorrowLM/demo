@@ -135,3 +135,23 @@ const exampleObject = {
   ]
 };
 copy(exampleObject);
+
+/**
+ * 监听滚动
+ */
+const watchBottom = () =>{ 
+  function isScrollAtBottom(container) { 
+    return container.scrollHeight - container.scrollTop - container.clientHeight<10; 
+  } 
+  // 假设你有一个具有id="container"的容器 
+  const container = document.getElementById('list'); 
+  container.addEventListener('scroll', ()=> { 
+  console.log(isScrollAtBottom(container)) 
+      if (isScrollAtBottom(container)) { 
+        console.log('滚动到底部了！'); 
+          // 在这里执行你需要的操作 
+          this.pagination.pageSize = this.pagination.pageSize + 10 ; 
+          this.getUserWork() 
+      } 
+  }); 
+}

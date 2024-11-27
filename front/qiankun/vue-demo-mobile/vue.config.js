@@ -176,26 +176,15 @@ module.exports = {
             grid: true,
           }),
           pxtorem({
-            // 之所以设为37.5，是为了引用像vant、mint-ui这样的第三方UI框架，
-            // 因为第三方框架没有兼容rem，用的是px单位，将rootValue的值设置为设计图宽度（这里为750px）75的一半，即可以1:1还原vant、mint-ui的组件，否则会样式会有变化，例如按钮会变小。
-            rootValue: 37.5, //根元素的值，即1rem的值.rem=设计稿元素尺寸/rootValue
-            propList: ["*"],
-            selectorBlackList: ["van"], // 过滤掉.van-开头的class，不进行rem转换
+            rootValue: 100, // 以375的设计稿尺寸，通过设置根元素fontsize=100px=1rem作为标准。将rootValue设置为100，这样16px就会转化成0.16rem。方便计算
+            propList: ["*"],// 表示转换所有属性中的px单位
+            selectorBlackList: ["van-"], // 过滤掉.van-开头的class，不进行rem转换. Vant 组件内部已经处理好了尺寸。
           }),
         ],
       },
-      less: {
-        // 若使用 less-loader@5，请移除 lessOptions 这一级，直接配置选项。
-        lessOptions: {
-          // strictMath: true,
-        },
-      },
-    },
-  },
-  pluginOptions: {
-    "style-resources-loader": {
-      preProcessor: "less",
-      patterns: [path.resolve(__dirname, "src/global.less")],
+      sass: {
+        additionalData: `@import "@/styles/global.scss";`
+      }
     },
   },
 };

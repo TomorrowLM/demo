@@ -1,25 +1,30 @@
 // @import './theme/base', './theme/mixin', './theme/variable'
+
+//
+
+
+
 //方案一
-html[theme='light'] {
-  // #b2c204
-  --header-bg: #d8d8d6;
-  --box-bg: #fafafa;
-  --text: #ce9c80;
-  --primary-font-size: 16px;
-  --shadow: #ccc;
-}
+// html[theme='light'] {
+//   // #b2c204
+//   --header-bg: #d8d8d6;
+//   --box-bg: #fafafa;
+//   --text: #ce9c80;
+//   --primary-font-size: 16px;
+//   --shadow: #ccc;
+// }
 
-:root[theme='dark'] {
-  --text: blue;
+// :root[theme='dark'] {
+//   --text: blue;
+// }
 
-}
+// $header-bg: var(--header-bg);
+// $box-bg: var(--box-bg);
+// $text: var(--text);
+// $primary-font-size: var(--primary-font-size);
+// $shadow: var(--shadow);
 
-$header-bg: var(--header-bg);
-$box-bg: var(--box-bg);
-$text: var(--text);
-$primary-font-size: var(--primary-font-size);
-$shadow: var(--shadow);
-
+// @debug #{var(--header-bg)}"woooooooooooooo:#{var(--text)}var(--text)";
 
 //方案二
 // 浅色

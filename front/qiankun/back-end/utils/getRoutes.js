@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const filePath = path.join(__dirname, '../routes'); // 替换为你的文件目录
+console.log(fs.readdirSync(filePath),1);
 
 const getFiles = dir =>
   fs.readdirSync(dir).reduce((files, file) => {

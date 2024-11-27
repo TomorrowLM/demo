@@ -1,5 +1,5 @@
 <template>
-  <transition v-if="aa" name="slide-left" mode="out-in">
+  <transition name="slide-left" mode="out-in">
     <router-view></router-view>
   </transition>
 </template>
@@ -10,7 +10,6 @@ export default {
   name: "App",
   data() {
     return {
-      aa: false,
     };
   },
   created() {
@@ -24,7 +23,6 @@ export default {
       });
   },
   mounted() {
-    this.aa = true;
   },
 };
 </script>

@@ -5,7 +5,9 @@ function setRem() {
   // 得到html的Dom元素
   let htmlDom = document.getElementsByTagName('html')[0];
   // 设置根元素字体大小
-  htmlDom.style.fontSize = (htmlWidth / 20) > 25 ? '25px' : htmlWidth / 20 + 'px';
+  htmlDom.style.fontSize =  htmlWidth / 3.75 + 'px'; 
+  // 设计稿元素尺寸=375，是为了引用像vant、mint-ui这样的第三方UI框架，
+  // 以375的设计稿作为基准,设置fontsize为100。方便计算，方便定位
 }
 
 // 初始化

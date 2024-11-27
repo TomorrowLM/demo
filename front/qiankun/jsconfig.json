@@ -1,0 +1,20 @@
+// //路径提示
+// {
+//     "compilerOptions": {
+//         "baseUrl": "./",
+//         "paths": {
+//             "@demo/*": [
+//                 "./vue-demo-mobile/src/*"
+//             ],
+//             // "components*": [
+//             //     "src/components/*"
+//             // ],
+//         },
+//         //TypeScript智能感知在模板中是禁用的,可以使用"preserve"来启用
+//         "jsx": "preserve"
+//     },
+//     "exclude": [
+//         "node_modules",
+//         "dist"
+//     ]
+// }

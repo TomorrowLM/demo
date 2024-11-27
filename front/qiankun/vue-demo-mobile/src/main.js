@@ -5,7 +5,6 @@ import "./utils/index";
 import "./components";
 import router from "./router/index";
 import store from "./store";
-import "./global.less";
 import "vant/lib/index.css";
 import "./public-path";
 //全部引用
