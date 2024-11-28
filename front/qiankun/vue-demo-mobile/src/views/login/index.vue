@@ -41,7 +41,9 @@ export default {
       console.log(this.$route, 123);
       login(this.ruleForm).then((res) => {
         Vue.ls.set("token", res.token);
-        this.$router.push("/learn");
+        if(res.code==200){
+          this.$router.push("/learn");
+        }else{}
       });
     },
   },

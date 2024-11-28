@@ -11,5 +11,5 @@ export const userInfo = (params) => {
 }
 
 export const login = (params) => {
-  return axios({ url: 'common/login', method: 'post', data: params })
+  return axios({ url: '/white/login', method: 'post', data: params })
 }

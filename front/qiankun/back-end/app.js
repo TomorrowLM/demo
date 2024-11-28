@@ -4,7 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const app = express();
-const {routes,commonPath} = require("./utils/getRoutes")
+const { routes, whitePaths } = require("./utils/getRoutes")
 // const usersRouter = require("./routes/users");
 // const login = require("./routes/login");
 // const token = require("./routes/token");
@@ -51,7 +51,7 @@ app.use(
     secret: "zgs_first_token",
     algorithms: ["HS256"],
   }).unless({
-    path: commonPath, //除了这个地址，其他的URL都需要验证
+    path: whitePaths, //除了这个地址，其他的URL都需要验证
   })
 );
 
@@ -85,8 +85,8 @@ app.use(function (err, req, res, next) {
 //   app.use(`${val}/api/login`, login);
 // })
 
-Object.keys(routes).forEach(base=>{
-  routes[base].forEach(item=>{
+Object.keys(routes).forEach(base => {
+  routes[base].forEach(item => {
     console.log(item.path);
     app.use(item.path, item.importVal);
   })

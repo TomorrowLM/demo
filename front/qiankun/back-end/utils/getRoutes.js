@@ -1,7 +1,8 @@
 const path = require('path');
 const fs = require('fs');
+const { log } = require('console');
 const filePath = path.join(__dirname, '../routes'); // 替换为你的文件目录
-console.log(fs.readdirSync(filePath),1);
+console.log('files',fs.readdirSync(filePath));
 
 const getFiles = dir =>
   fs.readdirSync(dir).reduce((files, file) => {
@@ -13,7 +14,9 @@ const getFiles = dir =>
 const importAll = (filePath) => {
   const files = getFiles(filePath);
   const modules = {
-    'common': []
+    'common': [],
+    'vue-mobile':[],
+    'white':[]
   };
   for (const file of files) {
     if (file.endsWith('.js')) {
@@ -25,20 +28,19 @@ const importAll = (filePath) => {
           })
         }
       })
-
-      // const file = '123'
-      // const [file] = await require(file);
-      // modules.push(module);
     }
   }
   return modules;
 };
 
 const routes = importAll(filePath)
-const commonPath = routes.common.map(val=>val.path)
-console.log('routes:',routes,commonPath);
+console.log('routes:',routes);
+const commonRoutes = routes.common.map(val=>val.path)
+const whiteRoutes = routes.white.map(val=>val.path)
+const whitePaths = routes.white.map(val=>val.path)
+console.log(whitePaths);
 
 module.exports = {
   routes,
-  commonPath
+  whitePaths
 }
