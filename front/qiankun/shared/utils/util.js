@@ -137,7 +137,7 @@ const exampleObject = {
 copy(exampleObject);
 
 /**
- * 监听滚动
+ * 监听滚动到底部
  */
 const watchBottom = () =>{ 
   function isScrollAtBottom(container) { 
@@ -155,3 +155,20 @@ const watchBottom = () =>{
       } 
   }); 
 }
+
+// 将浏览器的前进按钮禁止
+// import $ from "jquery";
+// $(function () {
+//   if (window.history && window.history.pushState) {
+//     $(window).on('popstate', function () {
+//       // console.log(window.location.href)
+//       if (window.location.href.indexOf(window.location.origin + "/wechatpub/surveyOne")>-1) {
+//         // console.log(window.location.href,"==========================")
+//         window.history.pushState('forward', null, '#');
+//         window.history.forward(1);
+//       }
+//     });
+//   }
+//   // window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+//   // window.history.forward(1);
+// })

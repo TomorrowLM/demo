@@ -109,42 +109,42 @@ module.exports = {
       jsonpFunction: `webpackJsonp_${name}`, // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
     },
   },
-  // configureWebpack: (config) => {
-  //   // 以在浏览器开发工具的性能/时间线面板中启用对组件初始化、编译、渲染和打点
-  //   config.performance = {
-  //     hints: "warning",
-  //     // 入口起点的最大体积 整数类型（以字节为单位）
-  //     maxEntrypointSize: 50000000,
-  //     // 生成文件的最大体积 整数类型（以字节为单位 300k）
-  //     maxAssetSize: 30000000,
-  //     // 只给出 js 文件的性能提示
-  //     assetFilter: function (assetFilename) {
-  //       return assetFilename.endsWith(".js");
-  //     },
-  //   };
-  //   // config.output = {
-  //   //   library: `${name}-[name]`,
-  //   //   libraryTarget: "umd", // 把微应用打包成 umd 库格式
-  //   //   jsonpFunction: `webpackJsonp_${name}`, // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-  //   // };
-  //   // 针对不同环境进行 配置
-  //   if (isProd) {
-  //     // 配置插件
-  //     return {
-  //       // 配置插件
-  //       plugins: [
-  //         // 调用外部配置
-  //         ...commonPlugin,
-  //       ],
-  //       externals: assetsCDN.externals,
-  //     };
-  //   } else {
-  //     return {
-  //       plugins: commonPlugin,
-  //       externals: {},
-  //     };
-  //   }
-  // },
+  configureWebpack: (config) => {
+    // 以在浏览器开发工具的性能/时间线面板中启用对组件初始化、编译、渲染和打点
+    config.performance = {
+      hints: "warning",
+      // 入口起点的最大体积 整数类型（以字节为单位）
+      maxEntrypointSize: 50000000,
+      // 生成文件的最大体积 整数类型（以字节为单位 300k）
+      maxAssetSize: 30000000,
+      // 只给出 js 文件的性能提示
+      assetFilter: function (assetFilename) {
+        return assetFilename.endsWith(".js");
+      },
+    };
+    // config.output = {
+    //   library: `${name}-[name]`,
+    //   libraryTarget: "umd", // 把微应用打包成 umd 库格式
+    //   jsonpFunction: `webpackJsonp_${name}`, // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
+    // };
+    // 针对不同环境进行 配置
+    if (isProd) {
+      // 配置插件
+      return {
+        // 配置插件
+        plugins: [
+          // 调用外部配置
+          ...commonPlugin,
+        ],
+        externals: assetsCDN.externals,
+      };
+    } else {
+      return {
+        plugins: commonPlugin,
+        externals: {},
+      };
+    }
+  },
   chainWebpack: (config) => {
     config.resolve.alias
       .set("@", resolve("src"))

@@ -1,8 +1,8 @@
 export default [
     {
         path: '/',
-        name: 'menu',
-        component: () => import('@/views/index'),
+        name: 'home',
+        component: () => import('@/views/frame/index'),
         children: [
             {
                 path: 'user',

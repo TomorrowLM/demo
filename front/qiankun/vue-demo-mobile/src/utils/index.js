@@ -1,4 +1,4 @@
-import "./lazy_vant"
+// import "./lazy_vant"
 import './rem'
 import './base.js'
 import "./storage"

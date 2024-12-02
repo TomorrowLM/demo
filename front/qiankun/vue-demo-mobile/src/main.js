@@ -5,32 +5,22 @@ import "./utils/index";
 import "./components";
 import router from "./router/index";
 import store from "./store";
-import "vant/lib/index.css";
 import "./public-path";
-//全部引用
-// import ElementUI from 'element-ui';
-import "element-ui/lib/theme-chalk/index.css";
-//size 用于改变组件的默认尺寸，zIndex 设置弹框的初始 z-index（默认值：2000）
-// Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
-Vue.config.productionTip = false;
+import "../../shared/element/config/index"
 
-// 将浏览器的前进按钮禁止
-// import $ from "jquery";
-// $(function () {
-//   if (window.history && window.history.pushState) {
-//     $(window).on('popstate', function () {
-//       // console.log(window.location.href)
-//       if (window.location.href.indexOf(window.location.origin + "/wechatpub/surveyOne")>-1) {
-//         // console.log(window.location.href,"==========================")
-//         window.history.pushState('forward', null, '#');
-//         window.history.forward(1);
-//       }
-//     });
-//   }
-//   // window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
-//   // window.history.forward(1);
-// })
-console.log(process.env.BASE_URL,window.__POWERED_BY_QIANKUN__);
+import Vant from 'vant';
+import 'vant/lib/index.css';
+Vue.use(Vant);
+// //全部引用
+// //import ElementUI from 'element-ui';
+// import "element-ui/lib/theme-chalk/index.css";
+// //size 用于改变组件的默认尺寸，zIndex 设置弹框的初始 z-index（默认值：2000）
+// Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
+// Vue.config.productionTip = false;
+import "../../shared/vue/sdk/index"
+
+
+console.log(process.env.BASE_URL, window.__POWERED_BY_QIANKUN__);
 let instance = null;
 function render(props = {}) {
   const { container } = props;
@@ -41,6 +31,7 @@ function render(props = {}) {
   }).$mount(container ? document.getElementById("app") : "#app");
   console.log(instance);
 }
+
 // 独立运行时
 if (!window.__POWERED_BY_QIANKUN__) {
   render();

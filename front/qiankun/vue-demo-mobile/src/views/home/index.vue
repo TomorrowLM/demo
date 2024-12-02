@@ -2,10 +2,8 @@
   <div class="learn">
     <div class="learn_header">
       <hello-world></hello-world>
-      <van-button class="tool_btn" @click="" type="primary"> 功能 </van-button>
+      <van-button class="tool_btn" @click="sdk" type="primary"> 功能 </van-button>
       <el-drawer direction="ltr" title="我是标题" :visible.sync="drawer" :with-header="false">
-
-
       </el-drawer>
     </div>
     <div class="learn_body">
@@ -28,6 +26,22 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    async sdk() {
+      console.log(this.$messageSdk);
+
+      await this.$messageSdk({
+        type: 'notify',
+        title: '',
+        msg: '!!!!',
+        footer: null,
+        position: 'top',
+      }).then(() => {
+        console.log('yes')
+      })
+        .catch(() => {
+          console.log('cancel')
+        });
+    }
   },
 };
 </script>

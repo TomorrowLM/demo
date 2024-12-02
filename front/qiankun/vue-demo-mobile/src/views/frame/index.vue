@@ -1,15 +1,15 @@
 <template>
-  <div v-bind:style="{ height: '100vh' }">
+  <div class="container" :style="{ height: '100vh' }">
     <el-container>
       <el-header>
-        <menu></menu>
+        <header-com></header-com>
       </el-header>
-      <el-main v-bind:style="{ height: '90vh' }">
+      <el-main :style="{ height: 'calc(100vh - 0.82rem)' }">
         <transition name="slide-left">
           <router-view></router-view>
         </transition>
       </el-main>
-      <el-footer v-bind:style="{ height: '10vh' }">
+      <el-footer :style="{ height: '0.5rem' }">
         <van-tabbar>
           <van-tabbar-item icon="home-o"><router-link to="/learn">学习笔记</router-link></van-tabbar-item>
           <!-- <van-tabbar-item icon="search">个人中心</van-tabbar-item>
@@ -21,12 +21,17 @@
   </div>
 </template>
 <script>
-import menu from '@/components/menu.vue'
+import headerCom from './header.vue'
 export default {
+  name: 'home',
   data() {
     return {};
   },
-  components:[menu]
+  components: { headerCom }
 };
 </script>
-<style lang="less"></style>
+<style lang="scss">
+.el-header {
+  height: 0.32rem !important;
+}
+</style>

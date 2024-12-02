@@ -1,4 +1,4 @@
-
+//因为单应用会访问外部shared文件，所有最外层使用eslint去检测
 module.exports = {
   root: true,
   env: {
@@ -15,7 +15,6 @@ module.exports = {
     parser: 'babel-eslint'
   },
   rules: {
-    "max-lines": ["warn", 120],
     'no-console': process.env.NODE_ENV === 'development' ? 'off' : 'off',
     'no-debugger': process.env.NODE_ENV === 'development' ? 'off' : 'off',
     "no-unused-const": "off",

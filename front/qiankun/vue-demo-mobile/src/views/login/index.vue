@@ -1,25 +1,24 @@
 <template>
-  <div class="login">
-    <div class="form_login">
-      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0.6rem" class="demo-ruleForm">
-        <el-form-item label="账号" prop="username">
-          <el-input type="password" v-model="ruleForm.username" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+  <div class="form_login">
+    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0.6rem" class="demo-ruleForm">
+      <el-form-item label="账号" prop="username">
+        <el-input v-model="ruleForm.username" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+      </el-form-item>
+      <div class="flex flex-center">
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+      </div>
+    </el-form>
   </div>
 </template>
 
 <script>
 import { login } from "@/api";
 import Vue from "vue";
+import { Notify } from 'vant';
 export default {
   props: {
     msg: String,
@@ -41,9 +40,11 @@ export default {
       console.log(this.$route, 123);
       login(this.ruleForm).then((res) => {
         Vue.ls.set("token", res.token);
-        if(res.code==200){
+        if (res.code == 200) {
           this.$router.push("/learn");
-        }else{}
+        } else {
+          Notify({ type: 'danger', message: res.message })
+        }
       });
     },
   },
@@ -51,8 +52,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
-.login {
+<style lang="scss" scoped>
+.form_login {
   width: 100vw;
   height: 100vh;
   background: url(../../assets/bg.jpg) snow -200px;
@@ -60,20 +61,22 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.form_login {
   text-align: center;
   display: flex;
   justify-content: center;
-  width: 280px;
-}
 
-.el-form-item__label {
-  color: #fff;
-}
+  ::v-deep(.el-form) {
+    .el-form-item__label {
+      color: #fff;
+    }
 
-.el-form-item__content{
-  display: flex;
+    .el-form-item__content {
+      display: flex;
+    }
+
+    .el-form-item__content {
+      margin-left: 0.2rem !important;
+    }
+  }
 }
 </style>

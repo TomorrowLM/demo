@@ -2,7 +2,7 @@ export default [
     {
         path: '/',
         name: '',
-        component: () => import('@/views/index'),
+        component: () => import('@/views/frame/index'),
         children: [
             {
                 path: 'learn',

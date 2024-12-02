@@ -8,7 +8,7 @@ router.post("/", function (req, res) {
   const params = [];
   params[0] = req.body.username;
   params[1] = req.body.password;
-  console.log(params[0]);
+  console.log('user:', params[0]);
   if (!params[0] || !params[1]) {
     return res.send({
       code: -1,
@@ -43,7 +43,10 @@ router.post("/", function (req, res) {
         }
       )
     } else {
-      res.status(200).send("账号或者密码错误");
+      res.status(200).send({
+        code: -1,
+        message: "账户或密码不正确",
+      });
     }
   }
 });
