@@ -1,0 +1,54 @@
+{
+  "name": "vue2-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "node": "14",
+  "scripts": {
+    "start": "vue-cli-service serve --mode local",
+    "serve": "vue-cli-service serve --mode dev",
+    "build": "vue-cli-service build --mode production",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@lm/lint": "workspace:^",
+    "callapp-lib": "^3.5.1",
+    "core-js": "^3.6.5",
+    "echarts": "^5.3.3",
+    "less": "^4.1.2",
+    "less-loader": "^6.0.0",
+    "node-sass": "^6.0.1",
+    "postcss-loader": "^6.2.1",
+    "register-service-worker": "^1.7.1",
+    "sass": "^1.77.6",
+    "sass-loader": "^10.0.1",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-pwa": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "autoprefixer": "^9.8.4",
+    "axios": "^0.24.0",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-component": "^1.1.1",
+    "element-ui": "^2.15.6",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "moment": "^2.29.1",
+    "postcss-pxtorem": "5.1.1",
+    "register-service-worker": "^1.7.2",
+    "vant": "^2.12.35",
+    "vue-ls": "^4.0.0",
+    "vue-router": "^3.5.3",
+    "vue-template-compiler": "^2.6.11",
+    "vuex": "^3.6.2",
+    "webpack-dev-server": "^4.9.0"
+  },
+  "eslintConfig": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

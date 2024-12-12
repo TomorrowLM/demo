@@ -8,7 +8,7 @@ var setToken = function (user_name, user_password) {
     const token = jwt.sign(
       { user_name: user_name, user_password: user_password },
       jwtScrect,
-      { expiresIn: 60*20 }
+      { expiresIn: 60*120 }
     );
     resolve(token);
   });

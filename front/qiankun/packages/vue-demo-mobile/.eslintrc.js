@@ -1,4 +1,3 @@
-
 module.exports = {
   root: true,
   env: {
@@ -7,7 +6,8 @@ module.exports = {
   },
   'extends': [
     'plugin:vue/essential',
-    'eslint:recommended'
+    'eslint:recommended',
+    ''
   ],
   plugins: ['vue'],
   parserOptions: {
@@ -16,12 +16,12 @@ module.exports = {
   rules: {
     // "max-lines": ["warn", 80],
     // 'no-console': process.env.NODE_ENV === 'development' ? 'off' : 'off',
-    // 'no-debugger': process.env.NODE_ENV === 'develoPpment' ? 'off' : 'off',
+    // 'no-debugger': process.env.NODE_ENV === 'development' ? 'off' : 'off',
     // "no-unused-const": "off",
     // 'no-unused-vars': 'off',
 
     'no-alert': 2,
-    "quotes": ['error', "single"],
+    "quotes": [1, "single"],
     // "vue/multi-word-component-names": [
     //   "error",
     //   {
