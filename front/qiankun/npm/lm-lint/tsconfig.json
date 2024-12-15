@@ -3,6 +3,7 @@
     "target": "ESNext",
     "module": "CommonJS",
     "outDir": "./lib",
+    "lib": ["es6"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

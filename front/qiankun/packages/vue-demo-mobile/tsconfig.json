@@ -2,6 +2,10 @@
     //路径提示
     "compilerOptions": {
         // "baseUrl": "./",
+        "outDir": "./lib",
+        "lib": [
+            "es6"
+        ],
         "paths": {
             "@/*": [
                 "./src/*"

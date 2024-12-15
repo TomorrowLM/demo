@@ -23,7 +23,7 @@ export default {
       show: false,
       name: "123",
       name11: '123'
-    };
+    }
   },
   beforeCreate() {
     console.log('beforeCreate', 123)
