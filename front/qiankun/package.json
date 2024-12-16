@@ -1,11 +1,11 @@
 {
   "scripts": {
-    "start:base": "cd base && npm run start",
-    "start:web1": "cd vue-demo-mobile && npm run start",
+    "start:base": "cd packages/base && npm run start",
+    "start:web1": "cd packages/vue-demo-mobile && npm run start",
     "start:web1:nodemon": "nodemon",
-    "start:web2": "cd vue-demo-pc && npm run start",
-    "start:web3": "cd vue3-demo && npm run start",
-    "start:backend": "cd back-end && npm run devstart",
+    "start:web2": "cd packages/vue-demo-pc && npm run start",
+    "start:web3": "cd packages/vue3-demo && npm run start",
+    "start:backend": "cd packages/back-end && npm run devstart",
     "build:npm": "pnpm --filter \"{npm/**}\" build",
     "build": "npm-run-all --serial build:*",
     "build:base": "cd base && rm -rf dist && npm run build"

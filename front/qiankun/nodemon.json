@@ -3,8 +3,8 @@
     "node_modules",
     "dist"
   ],
-  "exec": "cd ./vue-demo-mobile && npm run serve",
+  "exec": "cd ./packages/vue-demo-mobile && npm run serve",
   "watch": [
-    "./vue-demo-mobile/vue.config.js"
+    "./packages/vue-demo-mobile/vue.config.js"
   ]
 }

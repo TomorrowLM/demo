@@ -25,12 +25,11 @@ export default {
       name11: '123'
     }
   },
-  beforeCreate() {
+  beforeCreate () {
     console.log('beforeCreate', 123)
   },
-  methods: {},
-
-};
+  methods: {}
+}
 </script>
 
 <style lang="scss" scoped>
