@@ -1,7 +1,7 @@
 {
   "name": "@lm/eslint-plugin-lint",
   "version": "1.0.0",
-  "main": "lib/index.js",
+  "main": "lib/",
   "directories": {
     "lib": "lib"
   },

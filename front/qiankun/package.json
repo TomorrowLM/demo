@@ -16,5 +16,9 @@
     "sass": "^1.77.6",
     "themes-switch": "^1.1.0",
     "vite-plugin-qiankun": "^1.0.15"
+  },
+  "dependencies": {
+    "@babel/preset-env": "7.24.6",
+    "@lm/eslint-plugin-lint": "workspace:^"
   }
 }

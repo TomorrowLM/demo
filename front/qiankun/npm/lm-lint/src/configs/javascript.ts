@@ -20,14 +20,15 @@ module.exports = {
   },
   rules: {
     'standard/no-callback-literal': 'off',
-    quotes: [
-      'error',
-      'single',
-      {
-        avoidEscape: true,
-        allowTemplateLiterals: false
-      }
-    ],
+    'quotes': [0, 'single'],
+    // quotes: [
+    //   'error',
+    //   'single',
+    //   {
+    //     avoidEscape: true,
+    //     allowTemplateLiterals: false
+    //   }
+    // ],
     'n/handle-callback-err': 'off',
     'n/no-callback-literal': 'off'
   }
