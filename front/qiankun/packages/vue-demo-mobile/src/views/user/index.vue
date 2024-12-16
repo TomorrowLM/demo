@@ -31,7 +31,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less">
+<style lang="scss">
   .el-header {
     background-color: #fff;
     color: #333;

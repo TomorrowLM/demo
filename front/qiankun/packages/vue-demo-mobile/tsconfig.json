@@ -2,21 +2,20 @@
     //路径提示
     "compilerOptions": {
         // "baseUrl": "./",
-        "outDir": "./lib",
         "lib": [
             "es6"
         ],
-        "paths": {
-            "@/*": [
-                "./src/*"
-            ],
-            "shared/*": [
-                "../shared/*"
-            ]
-            // "components/*": [
-            //     "src/components/*"
-            // ],
-        },
+        // "paths": {
+        //     "@/*": [
+        //         "./src/*"
+        //     ],
+        //     "shared/*": [
+        //         "../shared/*"
+        //     ]
+        //     // "components/*": [
+        //     //     "src/components/*"
+        //     // ],
+        // },
         //TypeScript智能感知在模板中是禁用的,可以使用"preserve"来启用
         "jsx": "preserve"
     },

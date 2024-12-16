@@ -6,7 +6,7 @@ import "./components";
 import router from "./router/index";
 import store from "./store";
 import "./public-path";
-import "../../shared/element/config/index"
+import "@lm/shared/element/config/index"
 
 import Vant from 'vant';
 import 'vant/lib/index.css';
@@ -17,7 +17,7 @@ Vue.use(Vant);
 // //size 用于改变组件的默认尺寸，zIndex 设置弹框的初始 z-index（默认值：2000）
 // Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
 // Vue.config.productionTip = false;
-import "../../shared/vue/sdk/index"
+import "@lm/shared/vue/sdk/index"
 
 
 console.log(process.env.BASE_URL, window.__POWERED_BY_QIANKUN__);

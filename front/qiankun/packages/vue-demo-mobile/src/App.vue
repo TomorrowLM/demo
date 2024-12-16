@@ -26,7 +26,7 @@ export default {
   },
 };
 </script>
-<style lang="less">
+<style lang="scss">
 .slide-left-enter {
   opacity: 0;
   -webkit-transform: translate(30px, 0);

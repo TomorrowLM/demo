@@ -2,8 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@base": ["./*"],
-      "@shared": ["./shared/*"],
+      "@lm/shared": ["npm/shared/*"],
     },
     //TypeScript智能感知在模板中是禁用的,可以使用"preserve"来启用
     "jsx": "preserve"
