@@ -6,7 +6,9 @@ Vue.use(VueRouter);
 let routes = [];
 const isProd = process.env.NODE_ENV === "production";
 const routerContext = require.context("./", true, /index\.js$/);
+console.log(routerContext.keys());
 
+export let menuRoutes = []
 routerContext.keys().forEach((route) => {
   // route就是路径
   // 如果是根目录的index不做处理
@@ -14,11 +16,15 @@ routerContext.keys().forEach((route) => {
     return;
   }
   const routerModule = routerContext(route);
+  console.log('routerModule', routerModule.default);
+  if (routerModule.default[0].name === 'menu') {
+    menuRoutes = routerModule.default[0].children
+  }
   routes = [...routes, ...(routerModule.default || routerModule)];
   console.log(routes);
 });
 
-console.log(window.__POWERED_BY_QIANKUN__, 123);
+console.log('QIANKUN', window.__POWERED_BY_QIANKUN__);
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 // 你还可以传别的配置参数, 不过先这么简单着吧。
@@ -59,4 +65,5 @@ const router = new VueRouter({
 // router.prototype.push = function push(location) {
 //   return originalPush.call(this, location).catch(err => err)
 // }
+
 export default router;

@@ -1,23 +1,21 @@
 <template>
-  <div class="">
-  </div>
+  <div class="" />
 </template>
 
 <script>
-import service from "@/utils/request"
+
 export default {
-  name: 'menu',
+  name: 'MENU',
   props: {
 
   },
   data() {
     return {
-    };
+    }
   },
   methods: {
-  },
-};
+  }
+}
 </script>
-
 
 <style lang="scss" scoped></style>

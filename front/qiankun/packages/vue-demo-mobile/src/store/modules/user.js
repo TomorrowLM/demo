@@ -13,7 +13,6 @@ const user = {
   //更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
     SET_CORE_INFO: (state, data) => {
-      console.log(data);
       state.userInfo = data
     },
   },
@@ -21,7 +20,6 @@ const user = {
   actions: {
     async GetUserCoreInfo({ commit, rootState }) {
       const result = await userInfo()
-      console.log(result);
       commit('SET_CORE_INFO', result)
     },
   }

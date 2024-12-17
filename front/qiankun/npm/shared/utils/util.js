@@ -1,4 +1,4 @@
-
+import lodash from 'lodash'
 // 动态加载JavaScript文件
 function loadScript(url) {
   var script = document.createElement('script');

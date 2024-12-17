@@ -1,19 +1,10 @@
 <template>
   <div class="learn">
     <div class="learn_header">
-      <van-button
-        class="tool_btn"
-        type="primary"
-        @click="sdk"
-      >
+      <van-button class="tool_btn" type="primary" @click="sdk">
         功能
       </van-button>
-      <el-drawer
-        direction="ltr"
-        title="我是标题"
-        :visible.sync="drawer"
-        :with-header="false"
-      />
+      <el-drawer direction="ltr" title="我是标题" :visible.sync="drawer" :with-header="false" />
     </div>
     <div class="learn_body">
       <router-view />
@@ -24,18 +15,18 @@
 <script>
 
 export default {
-  components: { },
-  data () {
+  name: 'SDK-message',
+  data() {
     return { drawer: false }
   },
   methods: {
-    handleOpen (key, keyPath) {
+    handleOpen(key, keyPath) {
       console.log(key, keyPath)
     },
-    handleClose (key, keyPath) {
+    handleClose(key, keyPath) {
       console.log(key, keyPath)
     },
-    async sdk () {
+    async sdk() {
       console.log(this.$messageSdk)
 
       await this.$messageSdk({
