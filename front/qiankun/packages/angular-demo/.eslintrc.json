@@ -1,0 +1,135 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json",
+          "e2e/tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "airbnb-typescript/base",
+        "prettier",
+        "plugin:prettier/recommended"
+      ],
+      "plugins": [
+        "eslint-plugin-import"
+      ],
+      "rules": {
+        "import/extensions": "off",
+        "import/no-extraneous-dependencies": "off",
+        "import/order": [
+          "error",
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "parent",
+              "sibling",
+              "index",
+              "object",
+              "type"
+            ],
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
+            "newlines-between": "never"
+          }
+        ],
+        "import/newline-after-import": ["error", { "count": 1 }],
+        "@typescript-eslint/no-use-before-define": "off",
+        "eqeqeq": "error",
+        "spaced-comment": [
+          "warn",
+          "always",
+          {
+            "block": {
+              "balanced": true
+            }
+          }
+        ],
+        "dot-notation": "warn",
+        "no-case-declarations": "error",
+        "no-fallthrough": "error",
+        "for-direction": "error",
+        "no-async-promise-executor": "error",
+        "no-class-assign": "error",
+        "no-compare-neg-zero": "error",
+        "no-cond-assign": "error",
+        "no-constant-condition": "error",
+        "no-control-regex": "error",
+        "no-debugger": "error",
+        "no-delete-var": "error",
+        "no-dupe-else-if": "error",
+        "no-duplicate-case": "error",
+        "no-empty": "error",
+        "no-empty-character-class": "error",
+        "no-empty-pattern": "error",
+        "no-ex-assign": "error",
+        "no-extra-boolean-cast": "error",
+        "no-global-assign": "error",
+        "no-inner-declarations": "error",
+        "no-invalid-regexp": "error",
+        "no-irregular-whitespace": "error",
+        "no-misleading-character-class": "error",
+        "no-mixed-spaces-and-tabs": "error",
+        "no-octal": "error",
+        "no-prototype-builtins": "error",
+        "no-regex-spaces": "error",
+        "no-self-assign": "error",
+        "no-shadow-restricted-names": "error",
+        "no-sparse-arrays": "error",
+        "no-unexpected-multiline": "error",
+        "no-unsafe-finally": "error",
+        "no-unused-labels": "error",
+        "no-useless-catch": "error",
+        "no-useless-escape": "error",
+        "no-with": "error",
+        "require-yield": "error",
+        "use-isnan": "error",
+        "max-lines": [
+          "error",
+          2000
+        ],
+        "@angular-eslint/no-output-on-prefix": "off",
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "prefix": "mm",
+            "style": "kebab-case",
+            "type": "element"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "prefix": "mm",
+            "style": "camelCase",
+            "type": "attribute"
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {}
+    }
+  ]
+}
