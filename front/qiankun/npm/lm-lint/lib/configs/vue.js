@@ -142,7 +142,6 @@ module.exports = {
     rules: {},
     globals: {
         h: true,
-        defineProps: true,
-        defineEmits: true
+        $: 'readonly' // 或者 'writable' 如果你需要修改 $,
     }
 };

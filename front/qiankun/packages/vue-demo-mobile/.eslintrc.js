@@ -1,4 +1,4 @@
-const globals = require('@lm/lint/vue').globals
+const globals = require('@lm/eslint-plugin-lint/vue').globals
 module.exports = {
   root: true,
   env: {
