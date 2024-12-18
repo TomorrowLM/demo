@@ -5,6 +5,7 @@
     "start:web1:nodemon": "nodemon",
     "start:web2": "cd packages/vue-demo-pc && npm run start",
     "start:web3": "cd packages/vue3-demo && npm run start",
+    "start:angular": "cd packages/angular-demo-1 && npm run start",
     "start:backend": "cd back-end && npm run devstart",
     "build:npm": "pnpm --filter \"{npm/**}\" build",
     "build": "npm-run-all --serial build:*",
