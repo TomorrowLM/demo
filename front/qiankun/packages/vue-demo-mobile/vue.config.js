@@ -1,5 +1,4 @@
 const path = require("path");
-const resolve = (dir) => path.join(__dirname, dir);
 const pxtorem = require("postcss-pxtorem");
 const autoprefixer = require("autoprefixer"); //自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const webpack = require("webpack");
@@ -7,18 +6,21 @@ const packageName = require("./package.json").name;
 const name = require("./package.json").name;
 const isProd = process.env.NODE_ENV === "production";
 const isDev = process.env.NODE_ENV === "development" ? true : false;
-const commonPlugin = [
-  // 扩展环境变量
-  // new webpack.DefinePlugin({
-  //   BASE_URL: JSON.stringify(process.env.BASE_URL)
-  // })
-  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-  // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
-  new webpack.ProvidePlugin({
-    $_clone: "lodash.clonedeep",
-    $_moment: "moment",
-  }),
-];
+const { commonPlugin } = require("../../npm/shared/config/vue");
+const resolve = (dir) => path.join(__dirname, dir);
+console.log("commonPlugin", commonPlugin);
+// const commonPlugin = [
+//   // 扩展环境变量
+//   // new webpack.DefinePlugin({
+//   //   BASE_URL: JSON.stringify(process.env.BASE_URL)
+//   // })
+//   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+//   // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
+//   new webpack.ProvidePlugin({
+//     $_clone: "lodash.clonedeep",
+//     $_moment: "moment",
+//   }),
+// ];
 
 const assetsCDN = {
   // webpack build externals
@@ -37,7 +39,7 @@ const assetsCDN = {
     "//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js",
   ],
 };
-console.log(process.env.NODE_ENV,process.env.VUE_APP_API_BASE_URL);
+console.log(process.env.NODE_ENV, process.env.VUE_APP_API_BASE_URL);
 module.exports = {
   publicPath: isProd ? "/qiankun/child/vue2-mobile/" : "/",
   //打包文件输出路径，即打包到哪里
@@ -184,7 +186,7 @@ module.exports = {
         ],
       },
       sass: {
-        additionalData: `@import "@/styles/global.scss";`
+        additionalData: `@use "@/styles/global.scss";`
       }
     },
   },

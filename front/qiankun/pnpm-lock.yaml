@@ -17,6 +17,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      webpack:
+        specifier: 4.44.2
+        version: 4.44.2
     devDependencies:
       nodemon:
         specifier: ^3.1.7
@@ -29,12 +32,93 @@ importers:
         version: 1.83.0
       themes-switch:
         specifier: ^1.1.0
-        version: 1.1.0(html-webpack-plugin@5.6.3(webpack@5.97.1))(mini-css-extract-plugin@2.9.2(webpack@5.97.1))(webpack@5.97.1)
+        version: 1.1.0(html-webpack-plugin@5.6.3(webpack@4.44.2))(mini-css-extract-plugin@2.9.2(webpack@4.44.2))(webpack@4.44.2)
       vite-plugin-qiankun:
         specifier: ^1.0.15
         version: 1.0.15(typescript@5.4.5)(vite@5.4.11(@types/node@20.17.10)(sass@1.83.0)(terser@5.37.0))
 
   npm/lm-lint:
+    dependencies:
+      '@babel/eslint-parser':
+        specifier: ^7.13.14
+        version: 7.25.9(@babel/core@7.26.0)(eslint@8.22.0)
+      '@typescript-eslint/eslint-plugin':
+        specifier: 5.43.0
+        version: 5.43.0(@typescript-eslint/parser@5.62.0(eslint@8.22.0)(typescript@5.4.5))(eslint@8.22.0)(typescript@5.4.5)
+      '@typescript-eslint/parser':
+        specifier: ^5.30.0
+        version: 5.62.0(eslint@8.22.0)(typescript@5.4.5)
+      '@vue/eslint-config-prettier':
+        specifier: ^7.0.0
+        version: 7.1.0(eslint@8.22.0)(prettier@2.8.8)
+      '@vue/eslint-config-typescript':
+        specifier: ^11.0.0
+        version: 11.0.3(eslint-plugin-vue@9.32.0(eslint@8.22.0))(eslint@8.22.0)(typescript@5.4.5)
+      eslint:
+        specifier: ~8.22.0
+        version: 8.22.0
+      eslint-config-prettier:
+        specifier: ^8.5.0
+        version: 8.10.0(eslint@8.22.0)
+      eslint-config-standard:
+        specifier: ^17.0.0
+        version: 17.1.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.22.0)(typescript@5.4.5))(eslint@8.22.0))(eslint-plugin-n@15.7.0(eslint@8.22.0))(eslint-plugin-promise@6.6.0(eslint@8.22.0))(eslint@8.22.0)
+      eslint-config-standard-jsx:
+        specifier: ^11.0.0
+        version: 11.0.0(eslint-plugin-react@7.37.2(eslint@8.22.0))(eslint@8.22.0)
+      eslint-config-standard-react:
+        specifier: ^11.0.1
+        version: 11.0.1(eslint-plugin-react@7.37.2(eslint@8.22.0))(eslint@8.22.0)
+      eslint-define-config:
+        specifier: ^1.7.0
+        version: 1.24.1
+      eslint-plugin-import:
+        specifier: ^2.22.1
+        version: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.22.0)(typescript@5.4.5))(eslint@8.22.0)
+      eslint-plugin-jsonc:
+        specifier: ^2.3.0
+        version: 2.18.2(eslint@8.22.0)
+      eslint-plugin-markdown:
+        specifier: ^3.0.0
+        version: 3.0.1(eslint@8.22.0)
+      eslint-plugin-n:
+        specifier: ^15.1.0
+        version: 15.7.0(eslint@8.22.0)
+      eslint-plugin-prettier:
+        specifier: ^4.1.0
+        version: 4.2.1(eslint-config-prettier@8.10.0(eslint@8.22.0))(eslint@8.22.0)(prettier@2.8.8)
+      eslint-plugin-prettier-vue:
+        specifier: ^4.2.0
+        version: 4.2.0
+      eslint-plugin-promise:
+        specifier: ^6.0.0
+        version: 6.6.0(eslint@8.22.0)
+      eslint-plugin-react:
+        specifier: ^7.21.5
+        version: 7.37.2(eslint@8.22.0)
+      eslint-plugin-react-hooks:
+        specifier: ^4.2.0
+        version: 4.6.2(eslint@8.22.0)
+      eslint-plugin-unicorn:
+        specifier: ^42.0.0
+        version: 42.0.0(eslint@8.22.0)
+      eslint-plugin-vue:
+        specifier: ^9.3.0
+        version: 9.32.0(eslint@8.22.0)
+      jsonc-eslint-parser:
+        specifier: ^2.1.0
+        version: 2.4.0
+      prettier:
+        specifier: ^2.7.1
+        version: 2.8.8
+      typescript:
+        specifier: ^5.1.6
+        version: 5.4.5
+      yaml-eslint-parser:
+        specifier: ^1.0.1
+        version: 1.2.3
+
+  npm/shared:
     dependencies:
       '@babel/eslint-parser':
         specifier: ^7.13.14
@@ -10837,6 +10921,19 @@ packages:
   webpack-virtual-modules@0.4.6:
     resolution: {integrity: sha512-5tyDlKLqPfMqjT3Q9TAqf2YqjwmnUleZwzJi1A5qXnlBCdj2AtOJ6wAWdglTIDOPgOiOrXeBeFcsQ8+aGQ6QbA==}
 
+  webpack@4.44.2:
+    resolution: {integrity: sha512-6KJVGlCxYdISyurpQ0IPTklv+DULv05rs2hseIXer6D7KrUicRDLFb4IUM1S6LUAKypPM/nSiVSuv8jHu1m3/Q==}
+    engines: {node: '>=6.11.5'}
+    hasBin: true
+    peerDependencies:
+      webpack-cli: '*'
+      webpack-command: '*'
+    peerDependenciesMeta:
+      webpack-cli:
+        optional: true
+      webpack-command:
+        optional: true
+
   webpack@4.47.0:
     resolution: {integrity: sha512-td7fYwgLSrky3fI1EuU5cneU4+pbH6GgOfuKNS1tNPcfdGinGELAqsb/BP4nnvZyKSG2i/xFGU7+n2PvZA8HJQ==}
     engines: {node: '>=6.11.5'}
@@ -18652,6 +18749,16 @@ snapshots:
       util.promisify: 1.0.0
       webpack: 4.47.0
 
+  html-webpack-plugin@5.6.3(webpack@4.44.2):
+    dependencies:
+      '@types/html-minifier-terser': 6.1.0
+      html-minifier-terser: 6.1.0
+      lodash: 4.17.21
+      pretty-error: 4.0.0
+      tapable: 2.2.1
+    optionalDependencies:
+      webpack: 4.44.2
+
   html-webpack-plugin@5.6.3(webpack@5.97.1):
     dependencies:
       '@types/html-minifier-terser': 6.1.0
@@ -20316,6 +20423,12 @@ snapshots:
       schema-utils: 1.0.0
       webpack: 4.47.0
       webpack-sources: 1.4.3
+
+  mini-css-extract-plugin@2.9.2(webpack@4.44.2):
+    dependencies:
+      schema-utils: 4.3.0
+      tapable: 2.2.1
+      webpack: 4.44.2
 
   mini-css-extract-plugin@2.9.2(webpack@5.97.1):
     dependencies:
@@ -23355,6 +23468,19 @@ snapshots:
       ansi-escapes: 4.3.2
       supports-hyperlinks: 2.3.0
 
+  terser-webpack-plugin@1.4.6(webpack@4.44.2):
+    dependencies:
+      cacache: 12.0.4
+      find-cache-dir: 2.1.0
+      is-wsl: 1.1.0
+      schema-utils: 1.0.0
+      serialize-javascript: 4.0.0
+      source-map: 0.6.1
+      terser: 4.8.1
+      webpack: 4.44.2
+      webpack-sources: 1.4.3
+      worker-farm: 1.7.0
+
   terser-webpack-plugin@1.4.6(webpack@4.47.0):
     dependencies:
       cacache: 12.0.4
@@ -23399,12 +23525,12 @@ snapshots:
 
   text-table@0.2.0: {}
 
-  themes-switch@1.1.0(html-webpack-plugin@5.6.3(webpack@5.97.1))(mini-css-extract-plugin@2.9.2(webpack@5.97.1))(webpack@5.97.1):
+  themes-switch@1.1.0(html-webpack-plugin@5.6.3(webpack@4.44.2))(mini-css-extract-plugin@2.9.2(webpack@4.44.2))(webpack@4.44.2):
     dependencies:
       fs-extra: 8.1.0
-      html-webpack-plugin: 5.6.3(webpack@5.97.1)
-      mini-css-extract-plugin: 2.9.2(webpack@5.97.1)
-      webpack: 5.97.1(webpack-cli@5.1.4)
+      html-webpack-plugin: 5.6.3(webpack@4.44.2)
+      mini-css-extract-plugin: 2.9.2(webpack@4.44.2)
+      webpack: 4.44.2
 
   thenify-all@1.6.0:
     dependencies:
@@ -24567,6 +24693,34 @@ snapshots:
   webpack-sources@3.2.3: {}
 
   webpack-virtual-modules@0.4.6: {}
+
+  webpack@4.44.2:
+    dependencies:
+      '@webassemblyjs/ast': 1.9.0
+      '@webassemblyjs/helper-module-context': 1.9.0
+      '@webassemblyjs/wasm-edit': 1.9.0
+      '@webassemblyjs/wasm-parser': 1.9.0
+      acorn: 6.4.2
+      ajv: 6.12.6
+      ajv-keywords: 3.5.2(ajv@6.12.6)
+      chrome-trace-event: 1.0.4
+      enhanced-resolve: 4.5.0
+      eslint-scope: 4.0.3
+      json-parse-better-errors: 1.0.2
+      loader-runner: 2.4.0
+      loader-utils: 1.4.2
+      memory-fs: 0.4.1
+      micromatch: 3.1.10(supports-color@6.1.0)
+      mkdirp: 0.5.6
+      neo-async: 2.6.2
+      node-libs-browser: 2.2.1
+      schema-utils: 1.0.0
+      tapable: 1.1.3
+      terser-webpack-plugin: 1.4.6(webpack@4.44.2)
+      watchpack: 1.7.5
+      webpack-sources: 1.4.3
+    transitivePeerDependencies:
+      - supports-color
 
   webpack@4.47.0:
     dependencies:

@@ -6,7 +6,7 @@
     />
     <div>{{ currentRoute.name }}</div>
     <!-- <div>{{ currentRoute.name.replace(/-\w+/,'') }}</div> -->
-    <div></div>
+    <div />
     <el-drawer
       title="菜单"
       :visible.sync="show"
@@ -16,11 +16,11 @@
     >
       <van-sidebar v-model="activeKey">
         <van-sidebar-item
-          v-for="(item) in menuRoutes"
+          v-for="item in menuRoutes"
           :key="item.name"
           :title="item.name"
           :to="{ name: item.children[0].name }"
-          @click="show=false"
+          @click="show = false"
         />
         <!-- <van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" />
         <van-sidebar-item title="标签名称" />
@@ -45,9 +45,10 @@ export default {
   },
 
   mounted () {
-    this.menuRoutes = menuRoutes;
+    this.menuRoutes = menuRoutes
     console.log(this.$route, menuRoutes, 2222)
-    this.$route.matched.forEach(item => {
+    console.log($.lodash.cloneDeep, 999)
+    this.$route.matched.forEach((item) => {
       if (item.name === this.$route.name) {
         this.currentRoute = item
         console.log(this.currentRoute)
@@ -69,7 +70,6 @@ export default {
 }
 
 ::v-deep(.menu) {
-
   //height: 3rem;
   .el-drawer__header {
     padding: 0.08rem 0.12rem;
