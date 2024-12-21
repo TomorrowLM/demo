@@ -7,9 +7,13 @@ const request = (url, params = {}, method = 'post') => {
 export const userInfo = (params) => {
   // console.log(12,axios);
   // axios.get("users")
-  return axios({ url: '/common/users', method: 'get', params: params })
+  return axios({ url: '/common/users', method: 'get', params })
 }
 
 export const login = (params) => {
   return axios({ url: '/white/login', method: 'post', data: params })
+}
+
+export const getList = (data) => {
+  return axios({ url: data.api, method: data.method ? data.method : 'get', params: data.data })
 }

@@ -46,7 +46,7 @@ export default {
   mounted () {
     this.menuRoutes = menuRoutes
     console.log(this.$route, menuRoutes, 2222)
-    console.log($.lodash.cloneDeep, ss, 999, $.lodash.cloneDeep(menuRoutes))
+    console.log($.lodash.cloneDeep, 999, $.lodash.cloneDeep(menuRoutes))
     this.$route.matched.forEach((item) => {
       if (item.name === this.$route.name) {
         this.currentRoute = item

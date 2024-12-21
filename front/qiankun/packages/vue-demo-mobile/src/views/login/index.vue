@@ -1,58 +1,88 @@
 <template>
   <div class="form_login">
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="0.6rem" class="demo-ruleForm">
-      <el-form-item label="账号" prop="username">
-        <el-input v-model="ruleForm.username" autocomplete="off"></el-input>
+    <el-form
+      ref="ruleForm"
+      :model="ruleForm"
+      status-icon
+      :rules="rules"
+      label-width="0.6rem"
+      class="demo-ruleForm"
+    >
+      <el-form-item
+        label="账号"
+        prop="username"
+      >
+        <el-input
+          v-model="ruleForm.username"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+      <el-form-item
+        label="密码"
+        prop="password"
+      >
+        <el-input
+          v-model="ruleForm.password"
+          type="password"
+          autocomplete="off"
+        />
       </el-form-item>
       <div class="flex flex-center">
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button
+          type="primary"
+          @click="submitForm('ruleForm')"
+        >
+          提交
+        </el-button>
+        <el-button @click="resetForm('ruleForm')">
+          重置
+        </el-button>
       </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import { login } from "@/api";
-import Vue from "vue";
-import { Notify } from 'vant';
+import Vue from 'vue'
+
+import { Notify } from 'vant'
+
+import { login } from '@/api'
 export default {
   props: {
-    msg: String,
+
   },
-  data() {
+
+  data () {
     return {
-      name: "123",
+      name: '123',
       ruleForm: {
-        password: "",
-        username: "",
+        password: '',
+        username: ''
       },
       rules: {
-        password: [{ validator: "", trigger: "blur" }],
-        username: [{ validator: "", trigger: "blur" }],
-      },
-    };
+        password: [{ validator: '', trigger: 'blur' }],
+        username: [{ validator: '', trigger: 'blur' }]
+      }
+    }
   },
-  beforeCreate() {
+  beforeCreate () {
     console.log('beforeCreate', this.name, 123)
   },
   methods: {
-    submitForm() {
-      console.log(this.$route, 123);
+    submitForm () {
+      console.log(this.$route, 123)
       login(this.ruleForm).then((res) => {
-        Vue.ls.set("token", res.token);
+        Vue.ls.set('token', res.token)
         if (res.code == 200) {
-          this.$router.push("/learn");
+          this.$router.push('/learn')
         } else {
           Notify({ type: 'danger', message: res.message })
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

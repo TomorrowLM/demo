@@ -138,21 +138,42 @@ copy(exampleObject);
 /**
  * 监听滚动到底部
  */
-const watchBottom = () =>{ 
-  function isScrollAtBottom(container) { 
-    return container.scrollHeight - container.scrollTop - container.clientHeight<10; 
-  } 
-  // 假设你有一个具有id="container"的容器 
-  const container = document.getElementById('list'); 
-  container.addEventListener('scroll', ()=> { 
-  console.log(isScrollAtBottom(container)) 
-      if (isScrollAtBottom(container)) { 
-        console.log('滚动到底部了！'); 
-          // 在这里执行你需要的操作 
-          this.pagination.pageSize = this.pagination.pageSize + 10 ; 
-          this.getUserWork() 
-      } 
-  }); 
+const watchBack = () => {
+  window.addEventListener('popstate', (e) => {
+    console.log('popstate', this.type, e)
+    if (this.type == 'page') {
+      this.type = 'page'
+    }
+  }, false)// false阻止默认事件
+}
+
+const watchBottom = () => {
+  function isScrollAtBottom(container) {
+    return container.scrollHeight - container.scrollTop - container.clientHeight < 10
+  }
+  // 假设你有一个具有id="container"的容器
+  const container = document.querySelector('#list')
+  console.log(container, 'container')
+  container.addEventListener('scroll', $.lodash.debounce(() => {
+    console.log(isScrollAtBottom(container))
+    if (isScrollAtBottom(container)) {
+      console.log('scroll：滚动到底部了！')
+      // 在这里执行你需要的操作
+      // this.pagination.pageSize = this.pagination.pageSize + 10 ;
+      this.getUserWork()
+    }
+  }, 200))
+  container.addEventListener('touchmove', $.lodash.debounce(
+    () => {
+      console.log(isScrollAtBottom(container))
+      if (isScrollAtBottom(container)) {
+        console.log('touchmove：滚动到底部了！')
+        // 在这里执行你需要的操作
+        // this.pagination.pageSize = this.pagination.pageSize + 10 ;
+        this.getUserWork()
+      }
+    }
+    , 200))
 }
 
 // 将浏览器的前进按钮禁止
