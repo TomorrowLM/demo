@@ -11,7 +11,7 @@
       </el-main>
       <el-footer :style="{ height: '0.5rem' }">
         <van-tabbar>
-          <van-tabbar-item icon="home-o"><router-link to="/learn">学习笔记</router-link></van-tabbar-item>
+          <van-tabbar-item icon="home-o"><router-link to="/learn">首页</router-link></van-tabbar-item>
           <!-- <van-tabbar-item icon="search">个人中心</van-tabbar-item>
             <van-tabbar-item icon="friends-o">标签</van-tabbar-item> -->
           <van-tabbar-item icon="setting-o"><router-link to="/user">个人中心</router-link></van-tabbar-item>

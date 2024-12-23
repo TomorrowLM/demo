@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', (req, res, next) => {
-  console.log(req.cookies.USER)
+router.post('/', (req, res, next) => {
+
   const list = [];
-  for (let i = 0; i < 10; i++) {
+  const { pageSize, pageNum } = req.body.pagination
+  console.log(pageSize, pageNum);
+
+  for (let i = (pageNum - 1) * pageSize; i < pageSize * pageNum; i++) {
     list.push({
       id: i,
       name: `name${i}`

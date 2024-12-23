@@ -1,7 +1,14 @@
 <template>
   <div class="">
-    <van-tabs v-model="active" class="pb-8">
-      <van-tab v-for="(item, index) in currentRoute" :title="item.name" :key="index" />
+    <van-tabs
+      v-model="active"
+      class="pb-8"
+    >
+      <van-tab
+        v-for="(item, index) in currentRoute"
+        :key="index"
+        :title="item.name"
+      />
     </van-tabs>
     <router-view />
   </div>
@@ -15,16 +22,25 @@ export default {
   props: {
 
   },
-  data() {
+  data () {
     return {
       active: 0,
-      currentRoute: [],
+      currentRoute: []
     }
   },
-  mounted() {
+  watch: {
+    $route () {
+      console.log(this.$route, menuRoutes, 2222) // 监听路由变化
+      menuRoutes.forEach(item => {
+        if (this.$route.name.includes(item.name)) {
+          this.currentRoute = item.children
+        }
+      })
+    }
+  },
+  mounted () {
     console.log(this.$route, menuRoutes, 2222)
     menuRoutes.forEach(item => {
-      console.log(item, 333)
       if (this.$route.name.includes(item.name)) {
         this.currentRoute = item.children
       }

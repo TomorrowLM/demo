@@ -15,5 +15,5 @@ export const login = (params) => {
 }
 
 export const getList = (data) => {
-  return axios({ url: data.api, method: data.method ? data.method : 'get', params: data.data })
+  return axios({ url: data.api, method: data.method ? data.method : 'post', data: data.data })
 }

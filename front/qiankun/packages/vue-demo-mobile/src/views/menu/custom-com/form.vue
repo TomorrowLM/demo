@@ -193,14 +193,6 @@
         >
           提交
         </van-button>
-        <van-button
-          round
-          type="primary"
-          class="w-200px"
-          @click="submit"
-        >
-          重新发起派工
-        </van-button>
       </div>
     </div>
   </div>
@@ -240,15 +232,12 @@ export default {
             required: true,
             mes: '请选择派工类型'
           }],
-          renderItemConfig: {
-            apiType: 'sql'
-          },
           init (_, index) {
-            _.setList({ api: '/common/list', data: {} }, index)
+            _.setList({ api: '/common/typeList', data: {} }, index)
           },
           onConfirm: (value, index) => {
             this.pickerComfirm(value, index)
-            //this.util().resetData(this.formData, ['useId', 'dispName', 'dispPlace', 'dispBudget'])
+            // this.util().resetData(this.formData, ['useId', 'dispName', 'dispPlace', 'dispBudget'])
           },
           link: (data) => {
             console.log(data, data.name === '零星派工', 123123, data)
@@ -278,14 +267,12 @@ export default {
             mes: '请选择用工单号'
           }],
           renderItemConfig: {
-            apiType: 'api',
             requestConfig: {
               pagination: {
                 pageSize: 10,
                 pageNum: 1
               }
-            },
-            isPagination: true
+            }
           },
           init (_, index) {
             console.log(_, index)
@@ -305,7 +292,6 @@ export default {
         }, {
           label: '合同号',
           prop: 'contractId',
-          fieldProp: 'contractId.pickerCode',
           searchProp: 'contractIdSearch',
           render: 'picker-split-search',
           pickerTitle: '合同号选择',
@@ -315,14 +301,12 @@ export default {
             mes: '请选择合同号'
           }],
           renderItemConfig: {
-            apiType: 'api',
             requestConfig: {
               pagination: {
                 pageSize: 10,
                 pageNum: 1
               }
-            },
-            isPagination: true
+            }
           },
           async init (_, index) {
             _.setList({ api: '/common/list', data: { ..._.renderItemConfig[index].requestConfig, key: _.formData.contractIdSearch } }, index)
@@ -372,7 +356,6 @@ export default {
         }, {
           label: '计划开工时间',
           prop: 'dispStartTime',
-          fieldProp: 'dispStartTime',
           render: 'picker-time-all',
           pickerTitle: '计划开工时间选择',
           rule: [{
@@ -394,7 +377,6 @@ export default {
         }, {
           label: '计划竣工时间',
           prop: 'dispEndTime1',
-          fieldProp: 'dispEndTime',
           render: 'picker-time-all',
           pickerTitle: '计划竣工时间选择',
           rule: [{
@@ -448,7 +430,6 @@ export default {
     this.initRender()
   },
   beforeDestroy () {
-
   },
   methods: {
     util () {
@@ -525,12 +506,12 @@ export default {
     async setList (httpData, renderIndex) {
       console.log(httpData, renderIndex)
       const renderItem = this.renderList[renderIndex]
-      const typeList = []
-      const defaultIndex = 0// 默认定位
+      let typeList = []
+      let defaultIndex = 0// 默认定位
       const prop = renderItem.prop
       const render = renderItem.render
       const { data } = await getList(httpData)
-      console.log(data, 111)
+      console.log(data, 111, this.renderItemConfig[renderIndex].defaultPickerIndex)
 
       data.forEach((val, index) => {
         typeList[index] = {
@@ -539,52 +520,39 @@ export default {
           name: val.name
         }
       })
-      console.log(data, typeList)
-      this.$set(this.renderList[renderIndex], 'pickerColumns', [{ values: typeList, defaultIndex }])
-      // if (!this.renderItemConfig[renderIndex].defaultPickerIndex) { // 进入picker
-      //   if (!this.renderList[renderIndex].pickerColumns.length) { // pickerColumns没有值
-      //     typeList.forEach((val, index) => {
-      //       if (this.formData[prop].code === (val.id || val.code)) {
-      //         defaultIndex = index
-      //       }
-      //     })
-      //     if (render.includes('picker-')) {
-      //       this.$set(this.renderList[renderIndex], 'pickerColumns', [{ values: typeList, defaultIndex }])
-      //       this.$set(this.renderList[renderIndex], 'initPickerColumns', [{ values: typeList }])
-      //     } else {
-      //       this.$set(this.renderList[renderIndex], 'pickerColumns', typeList)
-      //     }
-      //   } else { // pickerColumns有值
-      //     console.log(this.renderList[renderIndex].apiType, this.renderList[renderIndex].pickerColumns, 22224)
-      //     if (this.renderList[renderIndex].renderItemConfig.apiType === 'api') {
-      //       this.renderList[renderIndex].pickerColumns[0].values.forEach((val, index) => {
-      //         console.log(this.formData[prop].id, val.code, val.id)
-      //         if (this.formData[prop].id === val.id) {
-      //           defaultIndex = index
-      //         }
-      //       })
-      //     }
-      //     this.renderList[renderIndex].pickerColumns[0].defaultIndex = defaultIndex
-      //   }
-      // } else { // 滚动picker
-      //   defaultIndex = this.renderItemConfig[renderIndex].defaultPickerIndex
-      //   typeList = [...this.renderList[index].pickerColumns[0].values, ...typeList]
-      //   if (this.renderList[index].apiType === 'api') {
-      //     typeList.forEach((val, index) => {
-      //       if (this.formData[prop].code === (val.id || val.code)) {
-      //         defaultIndex = index
-      //       }
-      //     })
-      //   }
-      //   if (render.includes('picker-')) {
-      //     console.log(22, typeList, defaultIndex)
-      //     // this.$set(this.renderList[index],'pickerColumns',[{values:typeList}])
-      //     this.renderList[index].pickerColumns = [{ values: typeList, defaultIndex }]
-      //     // this.$set(this.renderList[index],'initPickerColumns',[{values:typeList}])
-      //   } else {
-      //     this.$set(this.renderList[index], 'pickerColumns', typeList)
-      //   }
-      // }
+      // console.log(data, typeList)
+      // this.$set(this.renderList[renderIndex], 'pickerColumns', [{ values: typeList, defaultIndex }])
+
+      if (!this.renderItemConfig[renderIndex].defaultPickerIndex) { // 进入picker
+        if (!this.renderList[renderIndex].pickerColumns.length) { // pickerColumns没有值
+          typeList.forEach((val, index) => {
+            if (this.formData[prop].id === val.id) {
+              defaultIndex = index
+            }
+          })
+          this.$set(this.renderList[renderIndex], 'pickerColumns', [{ values: typeList, defaultIndex }])
+        } else { // pickerColumns有值
+          console.log(this.renderList[renderIndex].apiType, this.renderList[renderIndex].pickerColumns, 22224)
+          if (this.renderList[renderIndex].renderItemConfig.apiType === 'api') {
+            this.renderList[renderIndex].pickerColumns[0].values.forEach((val, index) => {
+              console.log(this.formData[prop].id, val.code, val.id)
+              if (this.formData[prop].id === val.id) {
+                defaultIndex = index
+              }
+            })
+          }
+          this.renderList[renderIndex].pickerColumns[0].defaultIndex = defaultIndex
+        }
+      } else { // 滚动picker
+        defaultIndex = this.renderItemConfig[renderIndex].defaultPickerIndex
+        typeList = [...this.renderList[renderIndex].pickerColumns[0].values, ...typeList]
+        typeList.forEach((val, index) => {
+          if (this.formData[prop].id === (val.id || val.code)) {
+            defaultIndex = index
+          }
+        })
+        this.$set(this.renderList[renderIndex], 'pickerColumns', [{ values: typeList, defaultIndex }])
+      }
     },
     // picker搜索
     search (value, index) {
@@ -594,7 +562,7 @@ export default {
     searchClear (value, index) {
     },
     pickerChange (val, index) {
-      if (val.changePicke)val.changePicker(val, index)
+      if (val.changePicker)val.changePicker(val, index)
       this.pickerScrollBottom(val, index)
     },
     pickerComfirm (value, index) {
@@ -796,4 +764,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.popup-header{
+  padding: 0.2rem 0;
+}
+</style>

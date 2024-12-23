@@ -1,6 +1,19 @@
 <div>
   <h3>我是组件：ComA</h3>
-  <p>在输入框中尝试输入：</p>
-  <p>姓名：<input type="text" [(ngModel)]="firstName"></p>
-  <p>你输入的为： {{ firstName }}</p>
+  <div>
+    <p>在输入框中尝试输入：</p>
+    <p>姓名：<input type="text" [(ngModel)]="firstName"></p>
+    <p>你输入的为： {{ firstName }}</p>
+  </div>
+  <div>
+    ngIf:<p *ngIf="isAbailable">该商品现在可供购买。</p>
+  </div>
+  <div>
+    ngFor:
+    <li *ngFor="let item of items">{{ item.name }}</li>
+  </div>
+  <div>
+    事件
+    <button (click)="doSomething()">点击我</button>
+  </div>
 </div>

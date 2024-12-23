@@ -22,9 +22,6 @@
           :to="{ name: item.children[0].name }"
           @click="show = false"
         />
-        <!-- <van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" /><van-sidebar-item title="标签名称" />
-        <van-sidebar-item title="标签名称" />
-        <van-sidebar-item title="标签名称" /> -->
       </van-sidebar>
     </el-drawer>
   </div>
