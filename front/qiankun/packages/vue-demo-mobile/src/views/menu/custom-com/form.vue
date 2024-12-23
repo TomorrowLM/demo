@@ -23,6 +23,7 @@
                 :readonly="disabled[index]"
                 :label="val.label"
                 :placeholder="val.placeholder ? val.placeholder : `请输入${val.label}`"
+                @blur="$forceUpdate()"
               />
               <van-field
                 v-show="showItem[index]"
@@ -269,7 +270,8 @@ export default {
           onConfirm: (value, index) => {
             this.pickerComfirm(value, index)
           }
-        }, {
+        },
+        {
           label: '施工区域',
           prop: 'dispPlace',
           render: 'field'
@@ -277,7 +279,8 @@ export default {
           label: '预估费用（元）',
           prop: 'dispBudget',
           render: 'field'
-        }, {
+        },
+        {
           label: '合同号',
           prop: 'contractId',
           searchProp: 'contractIdSearch',
@@ -410,6 +413,11 @@ export default {
       access: {
         builder: true// 施工单位人员权限控制，隐藏新增、删除、编辑、打印按钮
       }
+    }
+  },
+  watch: {
+    formData () {
+      console.log(this.formData,123)
     }
   },
   created () {
@@ -617,7 +625,7 @@ export default {
       if (value.render.includes('picker-time-') && this.formData[value.prop]) {
         this.$set(this.formData, value.prop, new Date(this.formData[value.fieldProp]))
       }
-      value.init && await value.init(this, index, 'isEnter')
+      value.init && await value.init(this, index)
       this.$set(this.showPicker, index, true)
     },
     pickerScrollBottom (value, index) {
