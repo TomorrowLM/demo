@@ -24,11 +24,6 @@
                 :label="val.label"
                 :placeholder="val.placeholder ? val.placeholder : `请输入${val.label}`"
               />
-              <!--  :value="val.fieldProp ?
-                  val?.fieldProp.includes('.') ?
-                    formData[val.fieldProp.split('.')[0]][val.fieldProp.split('.')[1]]
-                    : formData[val.fieldProp]
-                  : formData[val.prop]?.text" -->
               <van-field
                 v-show="showItem[index]"
                 v-if="val.render.includes('picker')"
@@ -40,32 +35,6 @@
                 :placeholder="val.placeholder ? val.placeholder : `请输入${val.label}`"
                 @click="!disabled[index] && pickerClick(val, index)"
               />
-              <!-- !disabled[index]&& -->
-              <!-- <van-popup
-                v-show="showItem[index]"
-                v-if="val.render === 'picker'"
-                v-model="showPicker[index]"
-                round
-                position="bottom"
-              >
-                <van-picker
-                  :ref="`item${index}`"
-                  :title="val.pickerTitle"
-                  show-toolbar
-                  :columns="val.pickerColumns"
-                  value-key="name"
-                  @cancel="pickerCancel(index)"
-                  @confirm="value => val.onConfirm(val, index, value)"
-                >
-                  <template #option="option">
-                    <div class="flex-row w-full flex-center">
-                      <div class="pl-20px pr-20px">
-                        {{ option.name }}
-                      </div>
-                    </div>
-                  </template>
-                </van-picker>
-              </van-popup> -->
               <van-popup
                 v-show="showItem[index]"
                 v-if="val.render.includes('picker')"
@@ -101,14 +70,27 @@
                   </van-col>
                 </van-row>
                 <van-search
-                  v-if="val.render === 'picker-search'"
                   v-model="formData[val.searchProp]"
                   placeholder="请输入搜索关键词"
                   @search="search(val, index)"
                   @blur="search(val, index)"
                   @clear="searchClear(val, index)"
                 />
+                <div v-if="val.render === 'picker-tree'">
+                  <el-tree
+                    :ref="`tree${index}`"
+                    class="filter-tree"
+                    :data="val.pickerColumns"
+                    :props="val.treeProps?val.treeProps:treeProps"
+                    default-expand-all
+                    :filter-node-method="val.filterNode"
+                    node-key="id"
+                    :show-checkbox="type !== 'detail' ? true : false"
+                  />
+                  <!-- @check-change="val.handleCheckChange(val, index)" -->
+                </div>
                 <van-picker
+                  v-else
                   :ref="`picker${index}`"
                   :title="val.pickerTitle"
                   :show-toolbar="false"
@@ -116,21 +98,8 @@
                   @change="pickerChange(val, index)"
                 >
                   <template #option="option">
-                    <div class="flex-row w-full">
-                      <div class="pl-20px pr-20px">
-                        {{ option.name }}
-                      </div>
-                    </div>
-                    <!-- <div
-                      v-if="!val.render.includes('split')"
-                      class="flex-row w-full"
-                    >
-                      <div class="pl-20px pr-20px">
-
-                      </div>
-                    </div>
                     <div
-                      v-else-if="val.render.includes('split')"
+                      v-if="val.render.includes('split')"
                       class="flex-row w-full picker-split-item"
                     >
                       <div style="word-wrap: break-word;">
@@ -140,18 +109,15 @@
                         {{ option.name }}
                       </div>
                     </div>
-                    <el-tree
-                      v-else-if="val.render === 'picker-tree'"
-                      :ref="`tree${index}`"
-                      class="filter-tree"
-                      :data="val.pickerColumns"
-                      :props="val.treeProps"
-                      default-expand-all
-                      :filter-node-method="val.filterNode"
-                      node-key="id"
-                      :show-checkbox="type !== 'detail' ? true : false"
-                      @check-change="val.handleCheckChange(val, index)"
-                    /> -->
+
+                    <div
+                      v-else
+                      class="flex-row w-full"
+                    >
+                      <div class="pl-20px pr-20px">
+                        {{ option.name }}
+                      </div>
+                    </div>
                   </template>
                 </van-picker>
               </van-popup>
@@ -213,6 +179,10 @@ export default {
       disabled: [],
       showPicker: [false, false],
       formData: {},
+      treeProps: {
+        children: 'children',
+        label: 'name'
+      },
       renderList: [
         {
           label: '工程名称',
@@ -277,6 +247,24 @@ export default {
           init (_, index) {
             console.log(_, index)
             _.setList({ api: '/common/list', data: { ..._.renderItemConfig[index].requestConfig, key: _.formData.useIdSearch } }, index)
+          },
+          onConfirm: (value, index) => {
+            this.pickerComfirm(value, index)
+          }
+        }, {
+          label: '组织',
+          prop: 'orgId',
+          render: 'picker-tree',
+          searchProp: 'orgIdSearch',
+          fieldPropFormat: (value, index, data) => {
+            let str = ''
+            data.forEach(val => {
+              str = `${str + val.name},`
+            })
+            return str
+          },
+          init (_, index) {
+            _.setTreeList({ api: '/common/treeList', data: { key: _.formData[`${this.prop}Search`] } }, index)
           },
           onConfirm: (value, index) => {
             this.pickerComfirm(value, index)
@@ -482,6 +470,7 @@ export default {
             id: ''
           }
           this.formData[`${val.prop}Model`] = ''
+          this.formData[`${val.prop}Search`] = ''
         } else if (val.render.includes('time')) {
           this.formData[val.prop] = ''
           this.formData[`${val.prop}Model`] = ''
@@ -502,6 +491,12 @@ export default {
     },
     fieldPropFormat (val) {
       return val.name
+    },
+    async setTreeList (httpData, renderIndex) {
+      const { data } = await getList(httpData)
+      console.log(data)
+      // this.renderList[renderIndex].pickerColumns = data;
+      this.$set(this.renderList[renderIndex], 'pickerColumns', data)
     },
     async setList (httpData, renderIndex) {
       console.log(httpData, renderIndex)
@@ -532,15 +527,13 @@ export default {
           })
           this.$set(this.renderList[renderIndex], 'pickerColumns', [{ values: typeList, defaultIndex }])
         } else { // pickerColumns有值
-          console.log(this.renderList[renderIndex].apiType, this.renderList[renderIndex].pickerColumns, 22224)
-          if (this.renderList[renderIndex].renderItemConfig.apiType === 'api') {
-            this.renderList[renderIndex].pickerColumns[0].values.forEach((val, index) => {
-              console.log(this.formData[prop].id, val.code, val.id)
-              if (this.formData[prop].id === val.id) {
-                defaultIndex = index
-              }
-            })
-          }
+          console.log(this.renderList[renderIndex].pickerColumns, 22224)
+          this.renderList[renderIndex].pickerColumns[0].values.forEach((val, index) => {
+            console.log(this.formData[prop].id, val.code, val.id)
+            if (this.formData[prop].id === val.id) {
+              defaultIndex = index
+            }
+          })
           this.renderList[renderIndex].pickerColumns[0].defaultIndex = defaultIndex
         }
       } else { // 滚动picker
@@ -566,13 +559,20 @@ export default {
       this.pickerScrollBottom(val, index)
     },
     pickerComfirm (value, index) {
-      const ref = value.render.includes('time') ? `time${index}` : `picker${index}`
-      console.log(value, index, ref)
-      const data = value.render.includes('time') ? this.formData[value.prop] : this.$refs[ref][0].getValues()[0]
-      if (!value.render.includes('time')) {
-        console.log(this.$refs[ref][0].getValues())
+      let data
+      if (value.render.includes('time')) {
+        data = this.formData[value.prop]
+      } else if (value.render.includes('picker-tree')) {
+        data = this.$refs[`tree${index}`][0].getCheckedNodes()
+        console.log(data, 3333)
         this.$set(this.formData, value.prop, data)
+      } else if (value.render.includes('picker')) {
+        data = this.$refs[`picker${index}`][0].getValues()[0]
       }
+      // const ref = value.render.includes('time') ? `time${index}` :value.render.includes('picker-time')?`tree${index}`: `picker${index}`
+      // console.log(value, index, ref)
+      // const data = value.render.includes('time') ? this.formData[value.prop] : this.$refs[ref][0].getValues()[0]
+      // this.$set(this.formData, value.prop, data)
       this.$set(this.formData, `${value.prop}Model`, value.fieldPropFormat ? value.fieldPropFormat(value, index, data) : this.fieldPropFormat(data))
       console.log(this.formData)
       value.link && value.link(data)
@@ -582,26 +582,32 @@ export default {
     pickerCancel (index) {
       console.log('pickerCancel', index)
       const renderItem = this.renderList[index]
-      const apiType = renderItem.renderItemConfig.apiType
       this.$set(this.showPicker, index, false)
-      if (apiType === 'api') {
-        const curIndex = this.$refs[`picker${index}`][0].getIndexes()[0]
-        const pagination = this.renderItemConfig[index].requestConfig.pagination
-        const total = pagination.pageSize * pagination.pageNum
-        console.log(pagination, curIndex, total)
-        if (curIndex === total - 1) {
-          pagination.pageNum = pagination.pageNum + 1
-          this.renderItemConfig[index].defaultPickerIndex = curIndex
-        }
-      } else {
-        const curIndex = this.$refs[`picker${index}`][0].getIndexes()[0]
-        const pagination = this.renderItemConfig[index].requestConfig.pagination
-        const total = pagination.pageSize * pagination.pageNum
-        if (curIndex === total - 1) {
-          this.renderItemConfig[index].requestConfig.pagination.pageSize = total + pagination.pageSize
-          this.renderItemConfig[index].defaultPickerIndex = curIndex
-        }
+      const curIndex = this.$refs[`picker${index}`][0].getIndexes()[0]
+      const pagination = this.renderItemConfig[index].requestConfig.pagination
+      const total = pagination.pageSize * pagination.pageNum
+      if (curIndex === total - 1) {
+        this.renderItemConfig[index].requestConfig.pagination.pageSize = total + pagination.pageSize
+        this.renderItemConfig[index].defaultPickerIndex = curIndex
       }
+      // if (apiType === 'api') {
+      //   const curIndex = this.$refs[`picker${index}`][0].getIndexes()[0]
+      //   const pagination = this.renderItemConfig[index].requestConfig.pagination
+      //   const total = pagination.pageSize * pagination.pageNum
+      //   console.log(pagination, curIndex, total)
+      //   if (curIndex === total - 1) {
+      //     pagination.pageNum = pagination.pageNum + 1
+      //     this.renderItemConfig[index].defaultPickerIndex = curIndex
+      //   }
+      // } else {
+      //   const curIndex = this.$refs[`picker${index}`][0].getIndexes()[0]
+      //   const pagination = this.renderItemConfig[index].requestConfig.pagination
+      //   const total = pagination.pageSize * pagination.pageNum
+      //   if (curIndex === total - 1) {
+      //     this.renderItemConfig[index].requestConfig.pagination.pageSize = total + pagination.pageSize
+      //     this.renderItemConfig[index].defaultPickerIndex = curIndex
+      //   }
+      // }
     },
     async pickerClick (value, index) {
       console.log(value, index, 11, this.formData)
@@ -667,11 +673,6 @@ export default {
           data[val] = data[val].id
         }
       })
-      if (data.dispType === '1844266869661548544') {
-        // 零星
-        data.dispAssign = ''
-        data.dispPlace = ''
-      }
       // const res = !data.id ? await this.runApi('1846352029743759360', data) : await this.runApi('1846351757223051264', data)
       // console.log(res)
       // if (res.data.code === 200) {
