@@ -1,26 +1,17 @@
-const path = require("path");
-const pxtorem = require("postcss-pxtorem");
-const autoprefixer = require("autoprefixer"); //自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
-const webpack = require("webpack");
-const packageName = require("./package.json").name;
-const name = require("./package.json").name;
-const isProd = process.env.NODE_ENV === "production";
-const isDev = process.env.NODE_ENV === "development" ? true : false;
-const { commonPlugin } = require("../../npm/shared/config/vue");
+const path = require('path');
+
+const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
+const pxtorem = require('postcss-pxtorem');
+const webpack = require('webpack');
+
+const packageName = require('./package.json').name;
+const name = require('./package.json').name;
+
+const isProd = process.env.NODE_ENV === 'production';
+const isDev = process.env.NODE_ENV === 'development';
+const { commonPlugin } = require('../../npm/shared/config/vue');
 const resolve = (dir) => path.join(__dirname, dir);
-console.log("commonPlugin", commonPlugin);
-// const commonPlugin = [
-//   // 扩展环境变量
-//   // new webpack.DefinePlugin({
-//   //   BASE_URL: JSON.stringify(process.env.BASE_URL)
-//   // })
-//   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-//   // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
-//   new webpack.ProvidePlugin({
-//     $_clone: "lodash.clonedeep",
-//     $_moment: "moment",
-//   }),
-// ];
+console.log('commonPlugin', commonPlugin);
 
 const assetsCDN = {
   // webpack build externals
@@ -33,96 +24,96 @@ const assetsCDN = {
   css: [],
   // https://unpkg.com/browse/vue@2.6.10/
   js: [
-    "//cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js",
-    "//cdn.jsdelivr.net/npm/vue-router@3.2.0/dist/vue-router.min.js",
-    "//cdn.jsdelivr.net/npm/vuex@3.4.0/dist/vuex.min.js",
-    "//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js",
-  ],
+    '//cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
+    '//cdn.jsdelivr.net/npm/vue-router@3.2.0/dist/vue-router.min.js',
+    '//cdn.jsdelivr.net/npm/vuex@3.4.0/dist/vuex.min.js',
+    '//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js'
+  ]
 };
 console.log(process.env.NODE_ENV, process.env.VUE_APP_API_BASE_URL);
 module.exports = {
-  publicPath: isProd ? "/qiankun/child/vue2-mobile/" : "/",
-  //打包文件输出路径，即打包到哪里
-  outputDir: "dist",
+  publicPath: isProd ? '/qiankun/child/vue2-mobile/' : '/',
+  // 打包文件输出路径，即打包到哪里
+  outputDir: 'dist',
   // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
-  lintOnSave: true, //boolean | 'warning' | 'default' | 'error'
-  productionSourceMap: isProd ? false : true, // 生产环境是否生成 sourceMap 文件
+  lintOnSave: true, // boolean | 'warning' | 'default' | 'error'
+  productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
   devServer: {
-    disableHostCheck: true, //webpack4.0 开启热更新
-    contentBase: "./src", //项目基本访问目录
+    disableHostCheck: true, // webpack4.0 开启热更新
+    contentBase: './src', // 项目基本访问目录
     // host: 'localhost',//服务器ip地址
     open: true,
     port: 8001,
-    hot: true, //模块热替换
+    hot: true, // 模块热替换
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      'Access-Control-Allow-Origin': '*'
     },
-    //这个api是webpack原生的api，主要是说明监控变化是否开启轮询。
-    //通过开启轮询，来验证前后两次代码是否有变化。
-    //但是，需要说明的是，这个轮询肯定是会占据消耗资源的。慎重使用吧。
+    // 这个api是webpack原生的api，主要是说明监控变化是否开启轮询。
+    // 通过开启轮询，来验证前后两次代码是否有变化。
+    // 但是，需要说明的是，这个轮询肯定是会占据消耗资源的。慎重使用吧。
     // watchOptions: {
     //   poll: 1000, // 每隔1s轮询一次
     // },
     proxy: {
-      "/api": {
+      '/api': {
         // target: process.env.VUE_APP_API_BASE_URL,
         target: 'http://localhost:3600',
         changeOrigin: true,
         secure: false,
         xfwd: false,
-        pathRewrite: { '/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
+        pathRewrite: { '/api': '' } // 重点：重写资源访问路径，避免转发请求 404问题
       }
-    },
+    }
   },
   pwa: {
-    name: "vue-demo",
-    short_name: "vue-demo",
-    themeColor: "#2F54EB", //  （index.html文件中也要设置）主题颜色，强烈建议和ui主题颜色保持一致，看起来更有原生app的感觉
-    msTileColor: "#fff",
+    name: 'vue-demo',
+    short_name: 'vue-demo',
+    themeColor: '#2F54EB', //  （index.html文件中也要设置）主题颜色，强烈建议和ui主题颜色保持一致，看起来更有原生app的感觉
+    msTileColor: '#fff',
     skipWaiting: true,
     clientsClaim: true,
-    display: "standalone", // 启动画面
-    appleMobileWebAppCapable: "yes",
-    appleMobileWebAppStatusBarStyle: "black",
+    display: 'standalone', // 启动画面
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
     icons: [],
-    //这个对象用来生成manifest.json
+    // 这个对象用来生成manifest.json
     manifestOptions: {
-      short_name: "system",
-      description: "一个测试的项目",
+      short_name: 'system',
+      description: '一个测试的项目',
       // 这个值是生存在manifest文件中, 如果需要网页显示添加到主屏功能的话, 这个地方一定得设置对
       // 这个start_url因该和你得manifest文件存放得相对路径一致, 比如此项目的manifest文件存放在/admin/目录下
       // 结尾的 / 务必写上
-      start_url: "/src/",
-      background_color: "#fff",
-      display: "standalone",
+      start_url: '/src/',
+      background_color: '#fff',
+      display: 'standalone'
     },
     //  此处使用的模式是 InjectManifest 这意味着我们可以通过serviceworker实现更多的功能
-    workboxPluginMode: "InjectManifest",
+    workboxPluginMode: 'InjectManifest',
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
-      swSrc: "src/registerServiceWorker.js",
-      swDest: "service-worker.js", //  此处输出的service-worker.js文件位置, 会相对于 outputDir 目录进行存放
-    },
+      swSrc: 'src/registerServiceWorker.js',
+      swDest: 'service-worker.js' //  此处输出的service-worker.js文件位置, 会相对于 outputDir 目录进行存放
+    }
   },
   configureWebpack: {
     output: {
       library: `${name}-[name]`,
-      libraryTarget: "umd", // 把微应用打包成 umd 库格式
-      jsonpFunction: `webpackJsonp_${name}`, // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-    },
+      libraryTarget: 'umd', // 把微应用打包成 umd 库格式
+      jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
+    }
   },
   configureWebpack: (config) => {
     // 以在浏览器开发工具的性能/时间线面板中启用对组件初始化、编译、渲染和打点
     config.performance = {
-      hints: "warning",
+      hints: 'warning',
       // 入口起点的最大体积 整数类型（以字节为单位）
       maxEntrypointSize: 50000000,
       // 生成文件的最大体积 整数类型（以字节为单位 300k）
       maxAssetSize: 30000000,
       // 只给出 js 文件的性能提示
-      assetFilter: function (assetFilename) {
-        return assetFilename.endsWith(".js");
-      },
+      assetFilter (assetFilename) {
+        return assetFilename.endsWith('.js');
+      }
     };
     // config.output = {
     //   library: `${name}-[name]`,
@@ -136,58 +127,58 @@ module.exports = {
         // 配置插件
         plugins: [
           // 调用外部配置
-          ...commonPlugin,
+          ...commonPlugin
         ],
-        externals: assetsCDN.externals,
+        externals: assetsCDN.externals
       };
     } else {
       return {
         plugins: commonPlugin,
-        externals: {},
+        externals: {}
       };
     }
   },
   chainWebpack: (config) => {
     config.resolve.alias
-      .set("@", resolve("src"))
-      .set("@lm/shared", resolve("../../npm/shared"))
-      .set("assets", resolve("src/assets"))
-      .set("components", resolve("src/components"))
-      .set("public", resolve("public"));
+      .set('@', resolve('src'))
+      .set('@lm/shared', resolve('../../npm/shared'))
+      .set('assets', resolve('src/assets'))
+      .set('components', resolve('src/components'))
+      .set('public', resolve('public'));
 
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       // 为生产环境修改配置...
     } else {
       // console.log(config);
     }
   },
   css: {
-    extract: isProd ? true : false,
+    extract: !!isProd,
     sourceMap: false,
     loaderOptions: {
       postcss: {
         plugins: [
           autoprefixer({
             overrideBrowserslist: [
-              "Android 4.1",
-              "iOS 7.1",
-              "Chrome > 31",
-              "ff > 31",
-              "ie >= 8",
-              "last 10 versions", // 所有主流浏览器最近10版本用
+              'Android 4.1',
+              'iOS 7.1',
+              'Chrome > 31',
+              'ff > 31',
+              'ie >= 8',
+              'last 10 versions' // 所有主流浏览器最近10版本用
             ],
-            grid: true,
+            grid: true
           }),
           pxtorem({
             rootValue: 100, // 以375的设计稿尺寸，通过设置根元素fontsize=100px=1rem作为标准。将rootValue设置为100，这样16px就会转化成0.16rem。方便计算
-            propList: ["*"],// 表示转换所有属性中的px单位
-            selectorBlackList: ["van-"], // 过滤掉.van-开头的class，不进行rem转换. Vant 组件内部已经处理好了尺寸。
-          }),
-        ],
+            propList: ['*'], // 表示转换所有属性中的px单位
+            selectorBlackList: ['van-'] // 过滤掉.van-开头的class，不进行rem转换. Vant 组件内部已经处理好了尺寸。
+          })
+        ]
       },
       sass: {
-        additionalData: `@use "@/styles/global.scss";`
+        additionalData: '@use "@/styles/global.scss";'
       }
-    },
-  },
+    }
+  }
 };

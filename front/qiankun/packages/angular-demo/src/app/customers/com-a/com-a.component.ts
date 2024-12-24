@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 function readonly(target:any) {
   console.log(target.firstName,123123);
-  Object.defineProperty(target, 'firstName', {
+  Object.defineProperty(target.prototype, 'firstName', {
     writable: false
   });
 }
@@ -23,6 +23,7 @@ export class ComAComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('com-a init');
+    // this.firstName = 'dd'
   }
 
   doSomething() {

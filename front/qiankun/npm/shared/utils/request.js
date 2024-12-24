@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { Toast, Dialog } from 'vant'
-import { VueAxios } from './axios'
+import { VueAxios } from '../../../packages/vue-demo-mobile/src/utils/axios'
 
 //单例模式，即同一时间只会存在一个 Toast
 Toast.allowMultiple();

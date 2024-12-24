@@ -1,4 +1,4 @@
-import { axios } from '@/utils/request'
+import { axios } from '@lm/shared/utils/request'
 
 const request = (url, params = {}, method = 'post') => {
   return ['post', 'put'].includes(method) ? axios({ url, method, data: params }) : axios({ url, method, params })
