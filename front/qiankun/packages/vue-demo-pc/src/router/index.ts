@@ -84,6 +84,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   console.log('router.beforeEach:', store.getters.routes, router.getRoutes(), store.getters.registerRouteFresh);
   if (to.path !== '/login' && !localStorage.getItem('token')) {
     next('/login');
+    return;
   }
 
   //如果首次或者刷新界面，next(...to, replace: true)会循环遍历路由，
@@ -107,6 +108,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   } else {
     next();
   }
+  next();
 });
 
 export default router;

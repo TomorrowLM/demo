@@ -1,5 +1,5 @@
 module.exports = {
   root: true,
-  extends: ['plugin:@lm/lint/js'],
+  extends: ['plugin:@lm/eslint-plugin-lint/javascript'],
   rules: {},
 }

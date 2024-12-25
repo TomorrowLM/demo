@@ -1,26 +1,18 @@
 {
-    //路径提示
+    "extends": "../../tsconfig.base.json",
+    "references": [
+        {
+            "path": "../../tsconfig.base.json"
+        }
+    ],
     "compilerOptions": {
-        // "baseUrl": "./",
-        "lib": [
-            "es6"
-        ],
-        // "paths": {
-        //     "@/*": [
-        //         "./src/*"
-        //     ],
-        //     "shared/*": [
-        //         "../shared/*"
-        //     ]
-        //     // "components/*": [
-        //     //     "src/components/*"
-        //     // ],
-        // },
-        //TypeScript智能感知在模板中是禁用的,可以使用"preserve"来启用
-        "jsx": "preserve"
-    },
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "components/*": [
+                "src/components/*"
+            ]
+        }
+    }
 }

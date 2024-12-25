@@ -6,7 +6,7 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:@lm/lint/vue'
+    'plugin:@lm/eslint-plugin-lint/vue'
   ],
   globals
 }

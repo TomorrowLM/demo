@@ -1,8 +1,8 @@
 packages:
   - 'npm/**'
   - 'packages/*'
-  - '!**/npm/lm-lint/src'
-overrides:
-  '**/npm/lm-lint/src':
-    link: false
+#   - '!**/npm/lm-lint/src'
+# overrides:
+#   '**/npm/lm-lint/src':
+#     link: false
   # '**/.gitignore':
