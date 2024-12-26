@@ -1,16 +1,6 @@
 import lodash from "lodash";
-// console.log(lodash)
-const name:string = 'lodash'
+import moment from "moment";
 export default {
   lodash: lodash,
-  name
+  moment
 }
-
-
-// function add() {
-//   console.log("add");
-// }
-// function add2() {
-//   console.log("add2");
-// }
-// export { add, add2 };

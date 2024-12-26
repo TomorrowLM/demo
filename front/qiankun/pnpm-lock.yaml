@@ -120,84 +120,31 @@ importers:
 
   npm/shared:
     dependencies:
-      '@babel/eslint-parser':
-        specifier: ^7.13.14
-        version: 7.25.9(@babel/core@7.26.0)(eslint@8.22.0)
-      '@typescript-eslint/eslint-plugin':
-        specifier: 5.43.0
-        version: 5.43.0(@typescript-eslint/parser@5.62.0(eslint@8.22.0)(typescript@5.4.5))(eslint@8.22.0)(typescript@5.4.5)
-      '@typescript-eslint/parser':
-        specifier: ^5.30.0
-        version: 5.62.0(eslint@8.22.0)(typescript@5.4.5)
-      '@vue/eslint-config-prettier':
-        specifier: ^7.0.0
-        version: 7.1.0(eslint@8.22.0)(prettier@2.8.8)
-      '@vue/eslint-config-typescript':
-        specifier: ^11.0.0
-        version: 11.0.3(eslint-plugin-vue@9.32.0(eslint@8.22.0))(eslint@8.22.0)(typescript@5.4.5)
-      eslint:
-        specifier: ~8.22.0
-        version: 8.22.0
-      eslint-config-prettier:
-        specifier: ^8.5.0
-        version: 8.10.0(eslint@8.22.0)
-      eslint-config-standard:
-        specifier: ^17.0.0
-        version: 17.1.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.22.0)(typescript@5.4.5))(eslint@8.22.0))(eslint-plugin-n@15.7.0(eslint@8.22.0))(eslint-plugin-promise@6.6.0(eslint@8.22.0))(eslint@8.22.0)
-      eslint-config-standard-jsx:
-        specifier: ^11.0.0
-        version: 11.0.0(eslint-plugin-react@7.37.2(eslint@8.22.0))(eslint@8.22.0)
-      eslint-config-standard-react:
-        specifier: ^11.0.1
-        version: 11.0.1(eslint-plugin-react@7.37.2(eslint@8.22.0))(eslint@8.22.0)
-      eslint-define-config:
-        specifier: ^1.7.0
-        version: 1.24.1
-      eslint-plugin-import:
-        specifier: ^2.22.1
-        version: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.22.0)(typescript@5.4.5))(eslint@8.22.0)
-      eslint-plugin-jsonc:
-        specifier: ^2.3.0
-        version: 2.18.2(eslint@8.22.0)
-      eslint-plugin-markdown:
-        specifier: ^3.0.0
-        version: 3.0.1(eslint@8.22.0)
-      eslint-plugin-n:
-        specifier: ^15.1.0
-        version: 15.7.0(eslint@8.22.0)
-      eslint-plugin-prettier:
-        specifier: ^4.1.0
-        version: 4.2.1(eslint-config-prettier@8.10.0(eslint@8.22.0))(eslint@8.22.0)(prettier@2.8.8)
-      eslint-plugin-prettier-vue:
-        specifier: ^4.2.0
-        version: 4.2.0
-      eslint-plugin-promise:
-        specifier: ^6.0.0
-        version: 6.6.0(eslint@8.22.0)
-      eslint-plugin-react:
-        specifier: ^7.21.5
-        version: 7.37.2(eslint@8.22.0)
-      eslint-plugin-react-hooks:
-        specifier: ^4.2.0
-        version: 4.6.2(eslint@8.22.0)
-      eslint-plugin-unicorn:
-        specifier: ^42.0.0
-        version: 42.0.0(eslint@8.22.0)
-      eslint-plugin-vue:
-        specifier: ^9.3.0
-        version: 9.32.0(eslint@8.22.0)
-      jsonc-eslint-parser:
-        specifier: ^2.1.0
-        version: 2.4.0
-      prettier:
-        specifier: ^2.7.1
-        version: 2.8.8
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       typescript:
         specifier: ^5.1.6
         version: 5.4.5
-      yaml-eslint-parser:
-        specifier: ^1.0.1
-        version: 1.2.3
+    devDependencies:
+      css-loader:
+        specifier: ^6.5.0
+        version: 6.11.0(webpack@5.97.1)
+      mini-css-extract-plugin:
+        specifier: ^2.9.2
+        version: 2.9.2(webpack@5.97.1)
+      moment:
+        specifier: ^2.29.1
+        version: 2.30.1
+      style-loader:
+        specifier: ^3.3.1
+        version: 3.3.4(webpack@5.97.1)
+      webpack:
+        specifier: ^5.97.1
+        version: 5.97.1(webpack-cli@6.0.1)
+      webpack-cli:
+        specifier: ^6.0.1
+        version: 6.0.1(webpack@5.97.1)
 
   packages/angular-demo:
     dependencies:
@@ -589,6 +536,9 @@ importers:
       '@lm/eslint-plugin-lint':
         specifier: workspace:^
         version: link:../../npm/lm-lint
+      '@lm/shared':
+        specifier: workspace:^
+        version: link:../../npm/shared
       ant-design-vue:
         specifier: ^1.7.8
         version: 1.7.8(vue-template-compiler@2.7.16)(vue@2.7.16)
@@ -2024,6 +1974,10 @@ packages:
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
+
+  '@discoveryjs/json-ext@0.6.3':
+    resolution: {integrity: sha512-4B4OijXeVNOPZlYA2oEwWOTkzyltLao+xbotHQeqN++Rv27Y6s818+n2Qkp8q+Fxhn0t/5lA5X1Mxktud8eayQ==}
+    engines: {node: '>=14.17.0'}
 
   '@emotion/hash@0.8.0':
     resolution: {integrity: sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==}
@@ -3994,6 +3948,13 @@ packages:
       webpack: 5.x.x
       webpack-cli: 5.x.x
 
+  '@webpack-cli/configtest@3.0.1':
+    resolution: {integrity: sha512-u8d0pJ5YFgneF/GuvEiDA61Tf1VDomHHYMjv/wc9XzYj7nopltpG96nXN5dJRstxZhcNpV1g+nT6CydO7pHbjA==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      webpack: ^5.82.0
+      webpack-cli: 6.x.x
+
   '@webpack-cli/info@1.5.0':
     resolution: {integrity: sha512-e8tSXZpw2hPl2uMJY6fsMswaok5FdlGNRTktvFk2sD8RjH0hE2+XistawJx1vmKteh4NmGmNUrp+Tb2w+udPcQ==}
     peerDependencies:
@@ -4005,6 +3966,13 @@ packages:
     peerDependencies:
       webpack: 5.x.x
       webpack-cli: 5.x.x
+
+  '@webpack-cli/info@3.0.1':
+    resolution: {integrity: sha512-coEmDzc2u/ffMvuW9aCjoRzNSPDl/XLuhPdlFRpT9tZHmJ/039az33CE7uH+8s0uL1j5ZNtfdv0HkfaKRBGJsQ==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      webpack: ^5.82.0
+      webpack-cli: 6.x.x
 
   '@webpack-cli/serve@1.7.0':
     resolution: {integrity: sha512-oxnCNGj88fL+xzV+dacXs44HcDwf1ovs3AuEzvP7mqXw7fQntqIhQ1BRmynh4qEKQSSSRSWVyXRjmTbZIX9V2Q==}
@@ -4021,6 +3989,17 @@ packages:
     peerDependencies:
       webpack: 5.x.x
       webpack-cli: 5.x.x
+      webpack-dev-server: '*'
+    peerDependenciesMeta:
+      webpack-dev-server:
+        optional: true
+
+  '@webpack-cli/serve@3.0.1':
+    resolution: {integrity: sha512-sbgw03xQaCLiT6gcY/6u3qBDn01CWw/nbaXl3gTdTFuJJ75Gffv3E3DBpgvY2fkkrdS1fpjaXNOmJlnbtKauKg==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      webpack: ^5.82.0
+      webpack-cli: 6.x.x
       webpack-dev-server: '*'
     peerDependenciesMeta:
       webpack-dev-server:
@@ -5111,6 +5090,10 @@ packages:
   commander@10.0.1:
     resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
     engines: {node: '>=14'}
+
+  commander@12.1.0:
+    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
 
   commander@2.17.1:
     resolution: {integrity: sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==}
@@ -13293,6 +13276,20 @@ packages:
       webpack-dev-server:
         optional: true
 
+  webpack-cli@6.0.1:
+    resolution: {integrity: sha512-MfwFQ6SfwinsUVi0rNJm7rHZ31GyTcpVE5pgVA3hwFRb7COD4TzjUUwhGWKfO50+xdc2MQPuEBBJoqIMGt3JDw==}
+    engines: {node: '>=18.12.0'}
+    hasBin: true
+    peerDependencies:
+      webpack: ^5.82.0
+      webpack-bundle-analyzer: '*'
+      webpack-dev-server: '*'
+    peerDependenciesMeta:
+      webpack-bundle-analyzer:
+        optional: true
+      webpack-dev-server:
+        optional: true
+
   webpack-dev-middleware@3.7.3:
     resolution: {integrity: sha512-djelc/zGiz9nZj/U7PTBi2ViorGJXEWo/3ltkPbDyxCXhhEXkW0ce99falaok4TPj+AsxLiXJR0EBOb0zh9fKQ==}
     engines: {node: '>= 6'}
@@ -13366,6 +13363,10 @@ packages:
   webpack-merge@5.8.0:
     resolution: {integrity: sha512-/SaI7xY0831XwP6kzuwhKWVKDP9t1QY1h65lAFLbZqMPIuYcD9QAW4u9STIbU9kaJbPBB/geU/gLr1wDjOhQ+Q==}
     engines: {node: '>=10.0.0'}
+
+  webpack-merge@6.0.1:
+    resolution: {integrity: sha512-hXXvrjtx2PLYx4qruKl+kyRSLc52V+cCvMxRjmKwoA+CBbbF5GfIBtR6kCvl0fYGqTUPKB+1ktVmTHqMOzgCBg==}
+    engines: {node: '>=18.0.0'}
 
   webpack-sources@1.4.3:
     resolution: {integrity: sha512-lgTS3Xhv1lCOKo7SA5TjKXMjpSM4sBjNV5+q2bqesbSPs5FjGmU6jjtBSkX9b4qW87vDIsCIlUPOEhbZrMdjeQ==}
@@ -16013,6 +16014,8 @@ snapshots:
   '@discoveryjs/json-ext@0.5.6': {}
 
   '@discoveryjs/json-ext@0.5.7': {}
+
+  '@discoveryjs/json-ext@0.6.3': {}
 
   '@emotion/hash@0.8.0': {}
 
@@ -18902,6 +18905,11 @@ snapshots:
       webpack: 5.97.1(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@4.15.2)(webpack@5.97.1)
 
+  '@webpack-cli/configtest@3.0.1(webpack-cli@6.0.1)(webpack@5.97.1)':
+    dependencies:
+      webpack: 5.97.1(webpack-cli@6.0.1)
+      webpack-cli: 6.0.1(webpack@5.97.1)
+
   '@webpack-cli/info@1.5.0(webpack-cli@4.10.0)':
     dependencies:
       envinfo: 7.14.0
@@ -18911,6 +18919,11 @@ snapshots:
     dependencies:
       webpack: 5.97.1(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@4.15.2)(webpack@5.97.1)
+
+  '@webpack-cli/info@3.0.1(webpack-cli@6.0.1)(webpack@5.97.1)':
+    dependencies:
+      webpack: 5.97.1(webpack-cli@6.0.1)
+      webpack-cli: 6.0.1(webpack@5.97.1)
 
   '@webpack-cli/serve@1.7.0(webpack-cli@4.10.0)(webpack-dev-server@4.15.2)':
     dependencies:
@@ -18924,6 +18937,11 @@ snapshots:
       webpack-cli: 5.1.4(webpack-dev-server@4.15.2)(webpack@5.97.1)
     optionalDependencies:
       webpack-dev-server: 4.15.2(webpack-cli@5.1.4)(webpack@5.97.1)
+
+  '@webpack-cli/serve@3.0.1(webpack-cli@6.0.1)(webpack@5.97.1)':
+    dependencies:
+      webpack: 5.97.1(webpack-cli@6.0.1)
+      webpack-cli: 6.0.1(webpack@5.97.1)
 
   '@xtuc/ieee754@1.2.0': {}
 
@@ -20350,6 +20368,8 @@ snapshots:
 
   commander@10.0.1: {}
 
+  commander@12.1.0: {}
+
   commander@2.17.1: {}
 
   commander@2.19.0: {}
@@ -20693,7 +20713,7 @@ snapshots:
       postcss-value-parser: 4.2.0
       semver: 7.6.3
     optionalDependencies:
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@6.0.1)
 
   css-loader@6.5.1(webpack@5.76.1):
     dependencies:
@@ -25439,7 +25459,7 @@ snapshots:
     dependencies:
       schema-utils: 4.3.0
       tapable: 2.2.1
-      webpack: 5.97.1(webpack-cli@5.1.4)
+      webpack: 5.97.1(webpack-cli@6.0.1)
 
   minimalistic-assert@1.0.1: {}
 
@@ -26767,7 +26787,7 @@ snapshots:
       klona: 2.0.6
       postcss: 8.4.49
       semver: 7.6.3
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   postcss-loader@6.2.1(postcss@8.4.5)(webpack@5.76.1(esbuild@0.14.22)):
     dependencies:
@@ -29314,7 +29334,7 @@ snapshots:
 
   style-loader@3.3.4(webpack@5.97.1):
     dependencies:
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@6.0.1)
 
   stylehacks@4.0.3:
     dependencies:
@@ -29526,7 +29546,7 @@ snapshots:
       schema-utils: 4.3.0
       serialize-javascript: 6.0.2
       terser: 5.37.0
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@6.0.1)
 
   terser@4.8.1:
     dependencies:
@@ -30614,6 +30634,23 @@ snapshots:
     optionalDependencies:
       webpack-dev-server: 4.15.2(webpack-cli@5.1.4)(webpack@5.97.1)
 
+  webpack-cli@6.0.1(webpack@5.97.1):
+    dependencies:
+      '@discoveryjs/json-ext': 0.6.3
+      '@webpack-cli/configtest': 3.0.1(webpack-cli@6.0.1)(webpack@5.97.1)
+      '@webpack-cli/info': 3.0.1(webpack-cli@6.0.1)(webpack@5.97.1)
+      '@webpack-cli/serve': 3.0.1(webpack-cli@6.0.1)(webpack@5.97.1)
+      colorette: 2.0.20
+      commander: 12.1.0
+      cross-spawn: 7.0.6
+      envinfo: 7.14.0
+      fastest-levenshtein: 1.0.16
+      import-local: 3.2.0
+      interpret: 3.1.1
+      rechoir: 0.8.0
+      webpack: 5.97.1(webpack-cli@6.0.1)
+      webpack-merge: 6.0.1
+
   webpack-dev-middleware@3.7.3(webpack@4.44.2):
     dependencies:
       memory-fs: 0.4.1
@@ -30926,6 +30963,12 @@ snapshots:
       clone-deep: 4.0.1
       wildcard: 2.0.1
 
+  webpack-merge@6.0.1:
+    dependencies:
+      clone-deep: 4.0.1
+      flat: 5.0.2
+      wildcard: 2.0.1
+
   webpack-sources@1.4.3:
     dependencies:
       source-list-map: 2.0.1
@@ -31065,6 +31108,38 @@ snapshots:
       webpack-sources: 3.2.3
     optionalDependencies:
       webpack-cli: 5.1.4(webpack-dev-server@4.15.2)(webpack@5.97.1)
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+
+  webpack@5.97.1(webpack-cli@6.0.1):
+    dependencies:
+      '@types/eslint-scope': 3.7.7
+      '@types/estree': 1.0.6
+      '@webassemblyjs/ast': 1.14.1
+      '@webassemblyjs/wasm-edit': 1.14.1
+      '@webassemblyjs/wasm-parser': 1.14.1
+      acorn: 8.14.0
+      browserslist: 4.24.3
+      chrome-trace-event: 1.0.4
+      enhanced-resolve: 5.17.1
+      es-module-lexer: 1.5.4
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.11(webpack@5.97.1)
+      watchpack: 2.4.2
+      webpack-sources: 3.2.3
+    optionalDependencies:
+      webpack-cli: 6.0.1(webpack@5.97.1)
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild

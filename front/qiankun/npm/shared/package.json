@@ -1,11 +1,11 @@
 {
   "name": "@lm/shared",
   "version": "1.0.0",
-  "main": "./",
+  "main": "./lib",
   "directories": {
     "lib": "lib"
   },
-  "files":[
+  "files": [
     "lib"
   ],
   "scripts": {
@@ -19,31 +19,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/eslint-parser": "^7.13.14",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "@typescript-eslint/parser": "^5.30.0",
-    "@vue/eslint-config-prettier": "^7.0.0",
-    "@vue/eslint-config-typescript": "^11.0.0",
-    "eslint": "~8.22.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-config-standard-jsx": "^11.0.0",
-    "eslint-config-standard-react": "^11.0.1",
-    "eslint-define-config": "^1.7.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsonc": "^2.3.0",
-    "eslint-plugin-markdown": "^3.0.0",
-    "eslint-plugin-n": "^15.1.0",
-    "eslint-plugin-prettier": "^4.1.0",
-    "eslint-plugin-prettier-vue": "^4.2.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-unicorn": "^42.0.0",
-    "eslint-plugin-vue": "^9.3.0",
-    "jsonc-eslint-parser": "^2.1.0",
-    "prettier": "^2.7.1",
-    "typescript": "^5.1.6",
-    "yaml-eslint-parser": "^1.0.1"
+    "lodash": "^4.17.21",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "css-loader": "^6.5.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "moment": "^2.29.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
   }
 }

@@ -9,7 +9,7 @@ const name = require('./package.json').name;
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
-const { commonPlugin } = require('../../npm/shared/config/vue');
+const { commonPlugin, webpackBaseConfig } = require('../../npm/shared/src/config/vue');
 const resolve = (dir) => path.join(__dirname, dir);
 console.log('commonPlugin', commonPlugin);
 
@@ -95,13 +95,13 @@ module.exports = {
       swDest: 'service-worker.js' //  此处输出的service-worker.js文件位置, 会相对于 outputDir 目录进行存放
     }
   },
-  configureWebpack: {
-    output: {
-      library: `${name}-[name]`,
-      libraryTarget: 'umd', // 把微应用打包成 umd 库格式
-      jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-    }
-  },
+  // configureWebpack: {
+  //   output: {
+  //     library: `${name}-[name]`,
+  //     libraryTarget: 'umd', // 把微应用打包成 umd 库格式
+  //     jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
+  //   }
+  // },
   configureWebpack: (config) => {
     // 以在浏览器开发工具的性能/时间线面板中启用对组件初始化、编译、渲染和打点
     config.performance = {
@@ -115,10 +115,19 @@ module.exports = {
         return assetFilename.endsWith('.js');
       }
     };
-    // config.output = {
-    //   library: `${name}-[name]`,
-    //   libraryTarget: "umd", // 把微应用打包成 umd 库格式
-    //   jsonpFunction: `webpackJsonp_${name}`, // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
+    config.output = {
+      library: `${name}-[name]`,
+      libraryTarget: 'umd', // 把微应用打包成 umd 库格式
+      jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
+    };
+    // 配置别名
+    webpackBaseConfig(config)
+    // config.resolve.alias = {
+    //   '@': resolve('src'),
+    //   '@lm/shared': resolve('../../npm/shared'),
+    //   assets: resolve('src/assets'),
+    //   components: resolve('src/components'),
+    //   public: resolve('public')
     // };
     // 针对不同环境进行 配置
     if (isProd) {
@@ -138,20 +147,14 @@ module.exports = {
       };
     }
   },
-  chainWebpack: (config) => {
-    config.resolve.alias
-      .set('@', resolve('src'))
-      .set('@lm/shared', resolve('../../npm/shared'))
-      .set('assets', resolve('src/assets'))
-      .set('components', resolve('src/components'))
-      .set('public', resolve('public'));
-
-    if (process.env.NODE_ENV === 'production') {
-      // 为生产环境修改配置...
-    } else {
-      // console.log(config);
-    }
-  },
+  // chainWebpack: (config) => {
+  //   config.resolve.alias
+  //     .set('@', resolve('src'))
+  //     .set('@lm/shared', resolve('../../npm/shared'))
+  //     .set('assets', resolve('src/assets'))
+  //     .set('components', resolve('src/components'))
+  //     .set('public', resolve('public'));
+  // },
   css: {
     extract: !!isProd,
     sourceMap: false,
