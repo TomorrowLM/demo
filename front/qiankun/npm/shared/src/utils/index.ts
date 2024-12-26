@@ -1,8 +1,10 @@
-const lodash = require("lodash");
+import lodash from "lodash";
 // console.log(lodash)
-module.exports = {
+const name:string = 'lodash'
+export default {
   lodash: lodash,
-};
+  name
+}
 
 
 // function add() {
