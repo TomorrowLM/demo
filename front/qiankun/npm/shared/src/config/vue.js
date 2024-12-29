@@ -13,7 +13,7 @@ const commonPlugin = [
 const webpackBaseConfig = (config) => {
   config.resolve.alias = {
     '@': resolve('src'),
-    '@lm/shared': resolve('../../npm/shared'),
+    // '@lm/shared': resolve('../../npm/shared'),
     assets: resolve('src/assets'),
     components: resolve('src/components'),
     public: resolve('public')

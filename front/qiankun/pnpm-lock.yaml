@@ -127,9 +127,15 @@ importers:
         specifier: ^5.1.6
         version: 5.4.5
     devDependencies:
+      axios:
+        specifier: ^1.7.9
+        version: 1.7.9
       css-loader:
         specifier: ^6.5.0
         version: 6.11.0(webpack@5.97.1)
+      element-ui:
+        specifier: 2.15.6
+        version: 2.15.6(vue@3.5.13(typescript@5.4.5))
       mini-css-extract-plugin:
         specifier: ^2.9.2
         version: 2.9.2(webpack@5.97.1)
@@ -139,6 +145,9 @@ importers:
       style-loader:
         specifier: ^3.3.1
         version: 3.3.4(webpack@5.97.1)
+      vant:
+        specifier: 2.12.35
+        version: 2.12.35(vue@3.5.13(typescript@5.4.5))
       webpack:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@6.0.1)
@@ -3406,6 +3415,9 @@ packages:
   '@ungap/structured-clone@1.2.1':
     resolution: {integrity: sha512-fEzPV3hSkSMltkw152tJKNARhOupqbH96MZWyRjNaYZOMIzbrTeQDG+MTc6Mr2pgzFQzFxAfmhGDNP5QK++2ZA==}
 
+  '@vant/icons@1.8.0':
+    resolution: {integrity: sha512-sKfEUo2/CkQFuERxvkuF6mGQZDKu3IQdj5rV9Fm0weJXtchDSSQ+zt8qPCNUEhh9Y8shy5PzxbvAfOOkCwlCXg==}
+
   '@vant/icons@3.0.2':
     resolution: {integrity: sha512-4OlRVMd0uiDtD9hgSISZW8hB95vU0fFtc41tQchRIyiXkR0tS+DydZOLb8/bQkithrNWhW7Uud38MbKjlJ9lJw==}
 
@@ -4467,6 +4479,9 @@ packages:
 
   axios@0.27.2:
     resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+
+  axios@1.7.9:
+    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -6195,6 +6210,11 @@ packages:
 
   element-ui@2.15.14:
     resolution: {integrity: sha512-2v9fHL0ZGINotOlRIAJD5YuVB8V7WKxrE9Qy7dXhRipa035+kF7WuU/z+tEmLVPBcJ0zt8mOu1DKpWcVzBK8IA==}
+    peerDependencies:
+      vue: ^2.5.17
+
+  element-ui@2.15.6:
+    resolution: {integrity: sha512-rcYXEKd/j2G0AgficAOk1Zd1AsnHRkhmrK4yLHmNOiimU2JfsywgfKUjMoFuT6pQx0luhovj8lFjpE4Fnt58Iw==}
     peerDependencies:
       vue: ^2.5.17
 
@@ -10676,6 +10696,9 @@ packages:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
 
+  proxy-from-env@1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+
   prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
 
@@ -12908,6 +12931,11 @@ packages:
 
   value-equal@1.0.1:
     resolution: {integrity: sha512-NOJ6JZCAWr0zlxZt+xqCHNTEKOsrks2HQd4MqhP1qy4z1SkbEP467eNx6TgDKXMvUOb+OENfJCZwM+16n7fRfw==}
+
+  vant@2.12.35:
+    resolution: {integrity: sha512-qJZ3CtR4QjfWP2m+aW8hTF/uUED4QwKeYiCb08u/qSPNhiEbaon9OcG5aG/iydR1gmqZHD/+yzFO+6xh0XqRUQ==}
+    peerDependencies:
+      vue: '>= 2.6.0'
 
   vant@2.13.2:
     resolution: {integrity: sha512-anZbbLqXCq+rUJk10D67mn+V/1/i9tfOTdoR+64B0e+0BzV3KFgpHBF76noLa+yX9i/L+8DeL560WMk0GEN38g==}
@@ -17810,6 +17838,8 @@ snapshots:
 
   '@ungap/structured-clone@1.2.1': {}
 
+  '@vant/icons@1.8.0': {}
+
   '@vant/icons@3.0.2': {}
 
   '@vant/popperjs@1.3.0': {}
@@ -19475,6 +19505,14 @@ snapshots:
     dependencies:
       follow-redirects: 1.15.9(debug@4.4.0)
       form-data: 4.0.1
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.9:
+    dependencies:
+      follow-redirects: 1.15.9(debug@4.4.0)
+      form-data: 4.0.1
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
 
@@ -21462,6 +21500,16 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       throttle-debounce: 1.1.0
       vue: 2.7.16
+
+  element-ui@2.15.6(vue@3.5.13(typescript@5.4.5)):
+    dependencies:
+      async-validator: 1.8.5
+      babel-helper-vue-jsx-merge-props: 2.0.3
+      deepmerge: 1.5.2
+      normalize-wheel: 1.0.1
+      resize-observer-polyfill: 1.5.1
+      throttle-debounce: 1.1.0
+      vue: 3.5.13(typescript@5.4.5)
 
   elliptic@6.6.1:
     dependencies:
@@ -27410,6 +27458,8 @@ snapshots:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
 
+  proxy-from-env@1.1.0: {}
+
   prr@1.0.1: {}
 
   pseudomap@1.0.2: {}
@@ -30072,6 +30122,15 @@ snapshots:
       builtins: 1.0.3
 
   value-equal@1.0.1: {}
+
+  vant@2.12.35(vue@3.5.13(typescript@5.4.5)):
+    dependencies:
+      '@babel/runtime': 7.26.0
+      '@vant/icons': 1.8.0
+      '@vant/popperjs': 1.3.0
+      '@vue/babel-helper-vue-jsx-merge-props': 1.4.0
+      vue: 3.5.13(typescript@5.4.5)
+      vue-lazyload: 1.2.3
 
   vant@2.13.2(vue@2.7.16):
     dependencies:

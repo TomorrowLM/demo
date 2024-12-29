@@ -73,7 +73,9 @@ export default {
     submitForm () {
       console.log(this.$route, 123)
       login(this.ruleForm).then((res) => {
-        Vue.ls.set('token', res.token)
+        console.log(res, 'res')
+        // Vue.ls.set('token', res.token)
+        window.localStorage.setItem('token', res.token)
         if (res.code == 200) {
           this.$router.push('/learn')
         } else {

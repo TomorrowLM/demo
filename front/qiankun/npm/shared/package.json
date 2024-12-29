@@ -1,7 +1,7 @@
 {
   "name": "@lm/shared",
   "version": "1.0.0",
-  "main": "./lib",
+  "main": "./src",
   "directories": {
     "lib": "lib"
   },
@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "rm -rf ./lib && tsc"
   },
   "author": "liming",
   "license": "MIT",
@@ -23,10 +23,13 @@
     "typescript": "^5.1.6"
   },
   "devDependencies": {
+    "axios": "^1.7.9",
     "css-loader": "^6.5.0",
+    "element-ui": "2.15.6",
     "mini-css-extract-plugin": "^2.9.2",
     "moment": "^2.29.1",
     "style-loader": "^3.3.1",
+    "vant": "2.12.35",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
   }

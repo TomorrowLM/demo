@@ -3,7 +3,7 @@
     "start:base": "cd packages/base && npm run start",
     "start:web1": "cd packages/vue-demo-mobile && npm run start",
     "start:web1:nodemon": "nodemon",
-    "start:web2": "cd packages/vue-demo-pc && npm run start",
+    "start:web2:local": "cd packages/vue-demo-pc && npm run serve",
     "start:web3": "cd packages/vue3-demo && npm run start",
     "start:angular": "cd packages/angular-demo && npm run start",
     "start:backend": "cd back-end && npm run devstart",

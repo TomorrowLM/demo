@@ -1,19 +1,13 @@
-import Vue from 'vue'
-import axios from 'axios'
-import { Toast, Dialog } from 'vant'
+// import Vue from 'vue'
+import axios from 'axios';
+import { Toast, Dialog } from 'vant';
+import { Message } from 'element-ui';
 // import { VueAxios } from '../../../packages/vue-demo-mobile/src/utils/axios'
 
 //单例模式，即同一时间只会存在一个 Toast
-Toast.allowMultiple();
 axios.defaults.headers.post['Content-Type'] = 'application/json';
-// 创建 axios 实例
-const service = axios.create({
-  baseURL: '/api', // api base_url
-  timeout: 6000,// 请求超时时间
-  headers: {
-    'Content-Type': 'application/json',
-  }
-})
+Toast.allowMultiple();
+let service;
 
 //code信息
 const codeMessage = {
@@ -42,67 +36,67 @@ const failToast = (msg) => {
     message: msg
   })
 }
-const err = (error) => {
+const err = (error: any) => {
   console.log(error);
   if (error.response) {
-    const data = error.response.data
+    const data = error.response.data;
     if (error.response.status === 403) {
-      failToast('Forbidden')
+      Message.error('Forbidden');
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      failToast('Unauthorized')
+      Message.error('token失效');
+      window.localStorage.removeItem('token');
     }
   } else {
     // 请求超时状态
     if (error.message.includes('timeout')) {
-      console.log('超时了')
-      failToast('请求超时，请检查网络是否连接正常')
+      Message.error('请求超时，请检查网络是否连接正常');
     } else {
       // 可以展示断网组件
-      console.log('断网了')
-      failToast('请求失败，请检查网络是否已连接')
+      Message.error('请求失败，请检查网络是否已连接');
     }
   }
-  showLoading && showLoading.clear()
-  showLoading = null
-  console.log(location.pathname !== "/login", location.pathname);
-  return Promise.reject(error)
-}
+  return Promise.reject(error);
+};
 /**
  * 处理参数
  * @param {*} config
  */
-const handleParams = (config) => {
-  console.log(config);
-  const token = Vue.ls.get('token')
-  const { method } = config
-  if (token) {
-    config.headers.authorization =
-      "Bearer " + token;
+const handleRequest = (config: any) => {
+  const token = window.localStorage.getItem('token');
+  config.headers.authorization = `Bearer ${token}`;
+  return config;
+};
+/**
+ * 处理参数
+ * @param {*} config
+ */
+const handleResponse = async (response: any) => {
+  if (response.data.code !== 200) {
+    return Promise.reject(response.data);
   }
-  return config
-}
-// request interceptor
-service.interceptors.request.use(config => {
-  return handleParams(config)
-}, err)
-// response interceptor
-service.interceptors.response.use((response) => {
-  console.log(response);
-  return response.data
-}, err)
+  return Promise.resolve(response.data);
+};
 
-// Vue.prototype.service = service
-// export { service as axios }
-
-const installer = {
-  vm: {},
-  install(Vue) {
-    // Vue.use(VueAxios, service)
-  }
+const serveceHandle = (baseURL) => {
+  // 创建 axios 实例
+  service = axios.create({
+    baseURL: baseURL, // api base_url
+    timeout: 6000,// 请求超时时间
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+    // request interceptor
+  service.interceptors.request.use(config => {
+    console.log(config, 111);
+    
+    return handleRequest(config)
+  }, err)
+  // response interceptor
+  service.interceptors.response.use((response) => {
+    return handleResponse(response);
+  }, err)
+  return service
 }
-
-export {
-  // installer as VueAxios,
-  service as axios
-}
+export default serveceHandle

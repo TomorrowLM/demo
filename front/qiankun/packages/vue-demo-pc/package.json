@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "serve:local": "vue-cli-service serve --mode local",
+    "serve": "vue-cli-service serve --mode local",
     "start": "vue-cli-service serve --mode dev",
     "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"

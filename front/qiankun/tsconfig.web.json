@@ -10,7 +10,7 @@
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "types": ["webpack-env", "node", "jsdom"],
     "paths": {
-      "@/*": ["src/*"]
+      // "@/*": ["src/*"]
     }
   },
   "include": ["packages", "typings", "packages/**/typings"],

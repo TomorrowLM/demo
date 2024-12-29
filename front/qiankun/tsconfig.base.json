@@ -36,7 +36,7 @@
     ],
     // 指定特殊模块的路径
     "paths": {
-      "@lm/shared": [
+      "@lm/npm/shared": [
         "npm/shared/*"
       ],
     },

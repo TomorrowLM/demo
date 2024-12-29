@@ -44,6 +44,7 @@ export default {
         res => {
           console.log(res);
           Vue.ls.set('token', res.token);
+          window.localStorage.setItem('token', res.token);
           // resetRouter();
           this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
           this.$router.push('/');
