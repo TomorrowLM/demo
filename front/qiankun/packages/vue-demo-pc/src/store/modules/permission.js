@@ -1,5 +1,5 @@
 import routes from '@/router'
-import { userInfo } from '@/api/index';
+import { userInfoApi } from '@/api/index';
 import store from '..';
 
 
@@ -132,7 +132,7 @@ const permission = {
     async generateRoutes({ commit, state }, roles) {
       let permissionRoutes = []
       let role = ''
-      await userInfo()
+      await userInfoApi()
         .then(res => {
           console.log(res.data);
           commit('change_role', {

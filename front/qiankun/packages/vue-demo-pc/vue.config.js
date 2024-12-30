@@ -4,8 +4,7 @@ const { defineConfig } = require('@vue/cli-service');
 
 const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const webpack = require('webpack');
-// const pxtorem = require('postcss-pxtorem')
-const { commonPlugin, webpackBaseConfig } = require('@lm/shared/config/vue');
+const { webpackBaseConfig, commonPlugin, aliasConfigFn } = require('@lm/shared/src/config/vue');
 
 const resolve = dir => path.join(__dirname, dir);
 const isProd = process.env.NODE_ENV === 'production';
@@ -43,8 +42,14 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: config => {
-    webpackBaseConfig(config)
     config.plugins.push(...commonPlugin);
+    console.log(222, aliasConfigFn(resolve))
+    config.resolve.alias = {
+      ...(aliasConfigFn(resolve) || {}),
+      // '@': path.resolve(__dirname, 'src'),
+      // 'components': path.resolve(__dirname, 'src/components'),
+      // 你可以在这里添加更多的 alias
+    };
     config.externals = {
       BMap: 'window.BMap', // 百度地图
       AMap: 'AMap' // 高德地图}
@@ -59,12 +64,12 @@ module.exports = defineConfig({
   },
 
   chainWebpack: config => {
-    config.resolve.alias
-      .set('@', resolve('src'))
-      .set('assets', resolve('src/assets'))
-      .set('components', resolve('src/components'))
-      .set('public', resolve('public'));
-
+    // config.resolve.alias
+    //   .set('@', resolve('src'))
+    //   .set('assets', resolve('src/assets'))
+    //   .set('components', resolve('src/components'))
+    //   .set('public', resolve('public'));
+    // webpackBaseConfig(config)
     // TODO
     config.output.library = `${name}-[name]`;
     config.output.libraryTarget = 'umd';// 把微应用打包成 umd 库格式
@@ -85,48 +90,22 @@ module.exports = defineConfig({
     }, // 是否使用css分离插件 ExtractTextPlugin
     sourceMap: false,
     loaderOptions: {
-      // postcss: {
-      //   plugins: [
-      //     autoprefixer({
-      //       overrideBrowserslist: [
-      //         "Android 4.1",
-      //         "iOS 7.1",
-      //         "Chrome > 31",
-      //         "ff > 31",
-      //         "ie >= 8",
-      //         "last 10 versions", // 所有主流浏览器最近10版本用
-      //       ],
-      //       grid: true
-      //     }),
-      //     // pxtorem({
-      //     //   // 之所以设为37.5，是为了引用像vant、mint-ui这样的第三方UI框架，
-      //     //   // 因为第三方框架没有兼容rem，用的是px单位，将rootValue的值设置为设计图宽度（这里为750px）75的一半，即可以1:1还原vant、mint-ui的组件，否则会样式会有变化，例如按钮会变小。
-      //     //   rootValue: 37.5,//根元素的值，即1rem的值.rem=设计稿元素尺寸/rootValue
-      //     //   propList: ['*'],
-      //     //   selectorBlackList: ['van'] // 过滤掉.van-开头的class，不进行rem转换
-      //     // })
-      //   ]
-      // },
       sass: {
-        additionalData: '@import "@/styles/theme.scss";', // 注入全局样式
-        plugins: [
-          autoprefixer({
-            overrideBrowserslist: [
-              'Android 4.1',
-              'iOS 7.1',
-              'Chrome > 31',
-              'ff > 31',
-              'ie >= 8',
-              'last 10 versions' // 所有主流浏览器最近10版本用
-            ],
-            grid: true
-          })
-
-        ]
+        additionalData: '@use "@/styles/theme.scss";', // 注入全局样式
+        // plugins: [
+        //   autoprefixer({
+        //     overrideBrowserslist: [
+        //       'Android 4.1',
+        //       'iOS 7.1',
+        //       'Chrome > 31',
+        //       'ff > 31',
+        //       'ie >= 8',
+        //       'last 10 versions' // 所有主流浏览器最近10版本用
+        //     ],
+        //     grid: true
+        //   })
+        // ]
       },
-      scss: {
-        additionalData: '@import "@/styles/theme.scss";' // 注入全局样式
-      }
     }
   }
 });

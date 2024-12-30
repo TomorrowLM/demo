@@ -1,37 +1,11 @@
-/**使用文件路径 */
-// import Vue from 'vue';
-// import VueRouter, { RouteConfig } from 'vue-router';
-// import store from '@/store';
-
-// Vue.use(VueRouter);
-
-// const isProd = process.env.NODE_ENV === 'production';
-// const routerContext = require.context('./', true, /index\.js$/);
-// //静态路由
-// export let routes: any = [];
-
-// routerContext.keys().forEach((route) => {
-//   // route就是路径
-//   // 如果是根目录的index不做处理
-//   if (route.startsWith('./index')) {
-//     return;
-//   }
-//   const routerModule = routerContext(route);
-//   routes = [...routes, ...(routerModule.default || routerModule)];
-// });
-
-// // 创建 router 实例，然后传 `routes` 配置
-// const router = new VueRouter({
-//   mode: 'history',
-//   base: isProd ? '/vue-demo/' : process.env.BASE_URL,
-//   routes,
-// });
-
+/** 使用文件路径 */
 import Vue from 'vue';
+
 import VueRouter, { RouteConfig } from 'vue-router';
+
 import store from '@/store';
 Vue.use(VueRouter);
-//基础路由
+// 基础路由
 const commonMenu: Array<RouteConfig> = [...store.getters.commonMenu];
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -39,14 +13,14 @@ const createRouter = () =>
   new VueRouter({
     mode: 'history',
     base: window.__POWERED_BY_QIANKUN__
-      ? '/qiankun/vue2-pc/' //配置子应用的路由根路径
+      ? '/qiankun/vue2-pc/' // 配置子应用的路由根路径
       : isProd
-      ? '/vue2-pc/' //单一项目下的访问路径
+      ? '/vue2-pc/' // 单一项目下的访问路径
       : '/',
     routes: commonMenu,
   });
 const router: any = createRouter();
-//重置router的方法，需要在退出的时候重置router，否则下一个人登陆后也能访问上一个人的路由
+// 重置router的方法，需要在退出的时候重置router，否则下一个人登陆后也能访问上一个人的路由
 export function resetRouter() {
   const newRouter = createRouter();
   // @ts-ignore
@@ -65,7 +39,7 @@ VueRouter.prototype.push = function push(location: any, onResolve: any, onReject
   return originalPush.call(this, location).catch((err: any) => console.log(err));
 };
 
-//replace
+// replace
 // @ts-ignore
 VueRouter.prototype.replace = function push(location: any, onResolve: any, onReject: any) {
   if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject);
@@ -79,7 +53,7 @@ VueRouter.prototype.replace = function push(location: any, onResolve: any, onRej
  */
 router.beforeEach(async (to: any, from: any, next: any) => {
   console.log(to, from);
-  //设置当前页的title
+  // 设置当前页的title
   document.title = to.meta.title;
   console.log('router.beforeEach:', store.getters.routes, router.getRoutes(), store.getters.registerRouteFresh);
   if (to.path !== '/login' && !localStorage.getItem('token')) {
@@ -87,23 +61,23 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     return;
   }
 
-  //如果首次或者刷新界面，next(...to, replace: true)会循环遍历路由，
-  //如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
-  //我们的问题在于页面刷新以后异步获取数据，直接执行next()感觉路由添加了但是在next()之后执行的，
-  //登录时，加载路由表
+  // 如果首次或者刷新界面，next(...to, replace: true)会循环遍历路由，
+  // 如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
+  // 我们的问题在于页面刷新以后异步获取数据，直接执行next()感觉路由添加了但是在next()之后执行的，
+  // 登录时，加载路由表
   if (store.getters.registerRouteFresh && to.path !== '/login') {
     store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: false });
     resetRouter();
-    //设置路由
+    // 设置路由
     const asyncRoutes = await store.dispatch('generateRoutes', store.getters.role);
     console.log(asyncRoutes);
     asyncRoutes.forEach((item: RouteConfig) => {
       console.log('item', item);
       router.addRoute(item);
     });
-    //获取路由配置
+    // 获取路由配置
     // console.log(router.getRoutes());
-    //通过next({...to, replace:true})解决刷新后路由失效的问题
+    // 通过next({...to, replace:true})解决刷新后路由失效的问题
     next({ ...to, replace: true });
   } else {
     next();

@@ -5,17 +5,17 @@
       "path": "../../tsconfig.base.json"
     }
   ],
-  "compilerOptions": {
-    "paths": {
-      "@/*": [ 
-        "src/*" 
-      ],
-      // "@lm/npm/shared": [
-      //   "../../npm/shared/src/*"
-      // ],
-      "components/*": [
-        "src/components/*"
-      ]
-    }
-  }
+  // "compilerOptions": {
+  //   "paths": {
+  //     "@/*": [ 
+  //       "src/*" 
+  //     ],
+  //     // "@lm/npm/shared": [
+  //     //   "../../npm/shared/src/*"
+  //     // ],
+  //     "components/*": [
+  //       "src/components/*"
+  //     ]
+  //   }
+  // } 
 }
