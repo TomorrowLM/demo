@@ -1,12 +1,13 @@
 // import Vue from 'vue'
+
 import axios from 'axios';
-import { Toast, Dialog } from 'vant';
-import { Message } from 'element-ui';
+// import { Toast, Dialog } from 'vant';
+// import { Message } from 'element-ui';
 // import { VueAxios } from '../../../packages/vue-demo-mobile/src/utils/axios'
 
 //单例模式，即同一时间只会存在一个 Toast
 axios.defaults.headers.post['Content-Type'] = 'application/json';
-Toast.allowMultiple();
+// Toast.allowMultiple(true);
 let service;
 
 //code信息
@@ -30,30 +31,30 @@ const codeMessage = {
 };
 
 let showLoading = null
-const failToast = (msg) => {
-  Toast.fail({
-    duration: 2000,
-    message: msg
-  })
+const failToast = (msg:string) => {
+  // Toast.fail({
+  //   duration: 2000,
+  //   message: msg
+  // })
 }
 const err = (error: any) => {
-  console.log(error);
+  console.log('error', error);
   if (error.response) {
     const data = error.response.data;
     if (error.response.status === 403) {
-      Message.error('Forbidden');
+      // Message.error('Forbidden');
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      Message.error('token失效');
+      // Message.error('token失效');
       window.localStorage.removeItem('token');
     }
   } else {
     // 请求超时状态
     if (error.message.includes('timeout')) {
-      Message.error('请求超时，请检查网络是否连接正常');
+      // Message.error('请求超时，请检查网络是否连接正常');
     } else {
       // 可以展示断网组件
-      Message.error('请求失败，请检查网络是否已连接');
+      // Message.error('请求失败，请检查网络是否已连接');
     }
   }
   return Promise.reject(error);
@@ -63,6 +64,8 @@ const err = (error: any) => {
  * @param {*} config
  */
 const handleRequest = (config: any) => {
+  console.log(config, 222);
+  
   const token = window.localStorage.getItem('token');
   config.headers.authorization = `Bearer ${token}`;
   return config;
@@ -78,7 +81,7 @@ const handleResponse = async (response: any) => {
   return Promise.resolve(response.data);
 };
 
-const serveceHandle = (baseURL) => {
+const serveceHandle = (baseURL:string) => {
   // 创建 axios 实例
   service = axios.create({
     baseURL: baseURL, // api base_url

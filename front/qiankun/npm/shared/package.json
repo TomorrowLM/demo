@@ -1,7 +1,7 @@
 {
   "name": "@lm/shared",
   "version": "1.0.0",
-  "main": "./src",
+  "main": "./lib/src",
   "directories": {
     "lib": "lib"
   },

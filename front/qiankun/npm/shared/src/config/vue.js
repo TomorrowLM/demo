@@ -2,7 +2,7 @@
 // const $utils = require('../utils/index');
 const webpack = require("webpack");
 const path = require("path");
-
+const resolve = dir => path.join(__dirname, dir);
 const commonPlugin = [
   // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
   new webpack.ProvidePlugin({

@@ -1,4 +1,4 @@
-const globals = require('@lm/eslint-plugin-lint/vue').globals
+const globals = require('@lm/npm/eslint-plugin-lint/configs/vue').globals
 module.exports = {
   root: true,
   env: {
@@ -6,7 +6,10 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:@lm/eslint-plugin-lint/vue'
-  ],
+    'plugin:@lm/npm/eslint-plugin-lint/configs/vue'
+  ],  
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
   globals
 }

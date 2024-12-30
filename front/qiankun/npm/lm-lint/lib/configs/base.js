@@ -85,7 +85,7 @@ module.exports = {
     rules: {
         // js/ts
         camelcase: 'off',
-        semi: 'off',
+        semi: 'on',
         'no-console': ['off', { allow: ['error'] }],
         'no-debugger': 'warn',
         'no-constant-condition': ['error', { checkLoops: false }],

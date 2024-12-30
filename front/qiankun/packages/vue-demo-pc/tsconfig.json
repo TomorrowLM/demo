@@ -7,9 +7,12 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@/*": [
-        "src/*"
+      "@/*": [ 
+        "src/*" 
       ],
+      // "@lm/npm/shared": [
+      //   "../../npm/shared/src/*"
+      // ],
       "components/*": [
         "src/components/*"
       ]
