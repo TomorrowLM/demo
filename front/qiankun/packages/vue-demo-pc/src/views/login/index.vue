@@ -37,7 +37,7 @@ export default {
       },
     };
   },
-  methods: {
+  methods: {   
     submitForm() {
       console.log(this.$route, 123);
       login(this.ruleForm).then(

@@ -91,7 +91,8 @@ module.exports = defineConfig({
     sourceMap: false,
     loaderOptions: {
       sass: {
-        additionalData: '@use "@/styles/theme.scss";', // 注入全局样式
+        additionalData: '@import "@/styles/index.scss";', // 注入全局样式
+        implementation: require('sass'), // 使用 Dart Sass
         // plugins: [
         //   autoprefixer({
         //     overrideBrowserslist: [

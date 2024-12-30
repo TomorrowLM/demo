@@ -103,7 +103,7 @@ module.exports = {
     sourceType: 'module'
   },
   extends: ['standard', 'plugin:vue/recommended', require.resolve('./base')],
-  plugins: ['unicorn'],
+  plugins: ['unicorn','vue'],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
