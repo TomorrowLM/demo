@@ -39,7 +39,7 @@
       "@lm/npm/shared": [
         "npm/shared/*"
       ],
-      "@lm/npm/eslint-plugin-lint": ["npm/lm-lint/*"],
+      // "@lm/eslint-plugin-lint": ["npm/lm-lint/*"],
     },
     // 编译过程中需要引入的库文件的列表
     "lib": [

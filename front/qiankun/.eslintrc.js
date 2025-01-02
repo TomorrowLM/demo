@@ -1,5 +1,7 @@
 module.exports = {
   root: true,
-  extends: ['plugin:@lm/eslint-plugin-lint/javascript'],
-  rules: {},
+  extends: ['plugin:@lm/eslint-plugin-lint/js'],
+  rules: {
+    semi: [0, "never"]
+  }
 }

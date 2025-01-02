@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     'standard/no-callback-literal': 'off',
     'quotes': [0, 'single'],
+    'semi': 'never',
     // quotes: [
     //   'error',
     //   'single',

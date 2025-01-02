@@ -1,30 +1,33 @@
 <template>
-  <transition name="slide-left" mode="out-in">
-    <router-view></router-view>
+  <transition
+    name="slide-left"
+    mode="out-in"
+  >
+    <router-view />
   </transition>
 </template>
 
 <script>
-import { userInfo } from "@/api";
+import { userInfo } from '@/api'
 export default {
-  name: "App",
-  data() {
+  name: 'App',
+  data () {
     return {
-    };
+    }
   },
-  created() {
+  created () {
     // this.axios("user");
     userInfo()
       .then((res) => {
         // console.log(res);
       })
       .catch((res) => {
-        this.$router.push("/login");
-      });
+        this.$router.push('/login')
+      })
   },
-  mounted() {
-  },
-};
+  mounted () {
+  }
+}
 </script>
 <style lang="scss">
 .slide-left-enter {

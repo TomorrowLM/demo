@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@babel/preset-env": "7.24.6",
-    "@lm/eslint-plugin-lint": "workspace:^",
     "lodash": "^4.17.21",
     "webpack": "4.44.2"
   }

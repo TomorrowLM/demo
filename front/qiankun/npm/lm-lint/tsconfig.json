@@ -1,14 +1,19 @@
 {
+  "baseUrl": "./",
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "commonjs",
     "outDir": "./lib",
-    "lib": ["es6"],
+    "lib": ["dom", "es2015"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    // "declaration": true,
+    // "declarationDir": "./lib/ts",
+    // "declarationMap": true  // 生成类型声明映射文件（可选）
   },
-  "include": ["src"],
-  "exclude": ["lib"]
+  "include": ["**/*"],
+  "exclude": ["lib", "./prettierrc.js"]
 }

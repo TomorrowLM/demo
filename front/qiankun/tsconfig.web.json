@@ -9,9 +9,6 @@
     "sourceMap": true,
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "types": ["webpack-env", "node", "jsdom"],
-    "paths": {
-      // "@/*": ["src/*"]
-    }
   },
   "include": ["packages", "typings", "packages/**/typings"],
   "exclude": ["node_modules", "**/dist", "**/__tests__/**/*", "**/*.md"]

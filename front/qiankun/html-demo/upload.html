@@ -16,8 +16,8 @@
     var file = fileDom.files[0]
     var formData = new FormData();
     formData.append('file', file);
-    console.log(formData.get('file'));
-    var xhr = new XMLHttpRequest();
+    console.log(formData.get("file"))
+    var xhr = new XMLHttpRequest()
     xhr.open('POST', '/upload', true);
     xhr.onload = function() {
       if (xhr.status === 200) {

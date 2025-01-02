@@ -43,12 +43,8 @@ module.exports = defineConfig({
   },
   configureWebpack: config => {
     config.plugins.push(...commonPlugin);
-    console.log(222, aliasConfigFn(resolve))
     config.resolve.alias = {
       ...(aliasConfigFn(resolve) || {}),
-      // '@': path.resolve(__dirname, 'src'),
-      // 'components': path.resolve(__dirname, 'src/components'),
-      // 你可以在这里添加更多的 alias
     };
     config.externals = {
       BMap: 'window.BMap', // 百度地图
@@ -64,12 +60,6 @@ module.exports = defineConfig({
   },
 
   chainWebpack: config => {
-    // config.resolve.alias
-    //   .set('@', resolve('src'))
-    //   .set('assets', resolve('src/assets'))
-    //   .set('components', resolve('src/components'))
-    //   .set('public', resolve('public'));
-    // webpackBaseConfig(config)
     // TODO
     config.output.library = `${name}-[name]`;
     config.output.libraryTarget = 'umd';// 把微应用打包成 umd 库格式
