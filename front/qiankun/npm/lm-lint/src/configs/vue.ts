@@ -1,4 +1,5 @@
 export const rules = {
+  semi: [0, "never"],
   'standard/no-callback-literal': 'off',
 
   // TypeScript's `noFallthroughCasesInSwitch` option is more robust (#6906)

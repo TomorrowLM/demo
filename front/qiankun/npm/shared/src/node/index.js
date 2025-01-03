@@ -1,0 +1,1 @@
+const resolve = (dir) => path.join(__dirname, dir);
