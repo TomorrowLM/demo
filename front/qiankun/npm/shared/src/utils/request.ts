@@ -1,13 +1,8 @@
 // import Vue from 'vue'
 import axios from 'axios';
-// import { Toast, Dialog } from 'vant';
-// import { Message } from 'element-ui';
-// import { VueAxios } from '../../../packages/vue-demo-mobile/src/utils/axios'
 
-//单例模式，即同一时间只会存在一个 Toast
-axios.defaults.headers.post['Content-Type'] = 'application/json';
-// Toast.allowMultiple(true);
-let service;
+// const axios = require('axios');
+let service = null;
 
 //code信息
 const codeMessage = {
@@ -29,13 +24,6 @@ const codeMessage = {
   504: "网关超时。",
 };
 
-let showLoading = null
-const failToast = (msg:string) => {
-  // Toast.fail({
-  //   duration: 2000,
-  //   message: msg
-  // })
-}
 const err = (error: any) => {
   console.log('error', error);
   if (error.response) {
@@ -89,7 +77,9 @@ const serveceHandle = (baseURL:string) => {
       'Content-Type': 'application/json',
     }
   })
-    // request interceptor
+  console.log(service, 'service');
+  service.defaults.headers.post['Content-Type'] = 'application/json';
+  // request interceptor
   service.interceptors.request.use(config => {
     console.log(config, 111);
     
@@ -101,4 +91,5 @@ const serveceHandle = (baseURL:string) => {
   }, err)
   return service
 }
-export default serveceHandle
+
+module.exports = serveceHandle
