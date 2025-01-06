@@ -1,3 +1,2 @@
-import $lm from './utils/index';
-
-export default $lm;
+const $lm = require('./utils/index');
+module.exports = $lm;
