@@ -1,8 +1,5 @@
 <template>
-  <transition
-    name="slide-left"
-    mode="out-in"
-  >
+  <transition name="slide-left" mode="out-in">
     <router-view />
   </transition>
 </template>
@@ -11,12 +8,11 @@
 import { userInfo } from '@/api'
 export default {
   name: 'App',
-  data () {
+  data() {
     return {
     }
   },
-  created () {
-    // this.axios("user");
+  async created() {
     userInfo()
       .then((res) => {
         // console.log(res);
@@ -25,7 +21,7 @@ export default {
         this.$router.push('/login')
       })
   },
-  mounted () {
+  mounted() {
   }
 }
 </script>
@@ -35,14 +31,17 @@ export default {
   -webkit-transform: translate(30px, 0);
   transform: translate(30px, 0);
 }
+
 .slide-left-enter-active {
   transition: all 0.5s ease;
 }
+
 .slide-left-leave-to {
   opacity: 0;
   -webkit-transform: translate(-30px, 0);
   transform: translate(-30px, 0);
 }
+
 .slide-left-leave-active {
   transition: all 0.5s ease;
 }

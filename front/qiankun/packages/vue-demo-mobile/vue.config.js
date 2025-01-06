@@ -1,5 +1,7 @@
 const path = require('path');
 
+const { commonPlugin, aliasConfigFn } = require('@lm/shared/lib/src/config/vue')
+const utils = require('@lm/shared/lib/src/utils');
 const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const pxtorem = require('postcss-pxtorem');
 const webpack = require('webpack');
@@ -9,27 +11,8 @@ const name = require('./package.json').name;
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
-const { commonPlugin, webpackBaseConfig } = require('../../npm/shared/src/config/vue');
 const resolve = (dir) => path.join(__dirname, dir);
-console.log('commonPlugin', commonPlugin);
 
-const assetsCDN = {
-  // webpack build externals
-  // externals: {
-  //   vue: 'Vue',
-  //   'vue-router': 'VueRouter',
-  //   vuex: 'Vuex',
-  //   axios: 'axios'
-  // },
-  css: [],
-  // https://unpkg.com/browse/vue@2.6.10/
-  js: [
-    '//cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
-    '//cdn.jsdelivr.net/npm/vue-router@3.2.0/dist/vue-router.min.js',
-    '//cdn.jsdelivr.net/npm/vuex@3.4.0/dist/vuex.min.js',
-    '//cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js'
-  ]
-};
 console.log(process.env.NODE_ENV, process.env.VUE_APP_API_BASE_URL);
 module.exports = {
   publicPath: isProd ? '/qiankun/child/vue2-mobile/' : '/',
@@ -48,20 +31,14 @@ module.exports = {
     headers: {
       'Access-Control-Allow-Origin': '*'
     },
-    // 这个api是webpack原生的api，主要是说明监控变化是否开启轮询。
-    // 通过开启轮询，来验证前后两次代码是否有变化。
-    // 但是，需要说明的是，这个轮询肯定是会占据消耗资源的。慎重使用吧。
-    // watchOptions: {
-    //   poll: 1000, // 每隔1s轮询一次
-    // },
     proxy: {
-      '/api': {
+      '/vue-demo': {
         // target: process.env.VUE_APP_API_BASE_URL,
         target: 'http://localhost:3600',
         changeOrigin: true,
         secure: false,
         xfwd: false,
-        pathRewrite: { '/api': '' } // 重点：重写资源访问路径，避免转发请求 404问题
+        pathRewrite: { '/vue-demo': '' } // 重点：重写资源访问路径，避免转发请求 404问题
       }
     }
   },
@@ -95,66 +72,16 @@ module.exports = {
       swDest: 'service-worker.js' //  此处输出的service-worker.js文件位置, 会相对于 outputDir 目录进行存放
     }
   },
-  // configureWebpack: {
-  //   output: {
-  //     library: `${name}-[name]`,
-  //     libraryTarget: 'umd', // 把微应用打包成 umd 库格式
-  //     jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-  //   }
-  // },
   configureWebpack: (config) => {
-    // 以在浏览器开发工具的性能/时间线面板中启用对组件初始化、编译、渲染和打点
-    config.performance = {
-      hints: 'warning',
-      // 入口起点的最大体积 整数类型（以字节为单位）
-      maxEntrypointSize: 50000000,
-      // 生成文件的最大体积 整数类型（以字节为单位 300k）
-      maxAssetSize: 30000000,
-      // 只给出 js 文件的性能提示
-      assetFilter (assetFilename) {
-        return assetFilename.endsWith('.js');
-      }
-    };
-    config.output = {
-      library: `${name}-[name]`,
-      libraryTarget: 'umd', // 把微应用打包成 umd 库格式
-      jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-    };
     // 配置别名
-    webpackBaseConfig(config)
-    // config.resolve.alias = {
-    //   '@': resolve('src'),
-    //   '@lm/shared': resolve('../../npm/shared'),
-    //   assets: resolve('src/assets'),
-    //   components: resolve('src/components'),
-    //   public: resolve('public')
-    // };
-    // 针对不同环境进行 配置
-    if (isProd) {
-      // 配置插件
-      return {
-        // 配置插件
-        plugins: [
-          // 调用外部配置
-          ...commonPlugin
-        ],
-        externals: assetsCDN.externals
-      };
-    } else {
-      return {
-        plugins: commonPlugin,
-        externals: {}
-      };
+    config.resolve.alias = {
+      ...(aliasConfigFn(resolve) || {})
     }
+    console.log(config.resolve.alias,222)
+    config.plugins = [...config.plugins, ...commonPlugin, new webpack.ProvidePlugin({
+      $: '@lm/shared/lib/src/utils'
+    })]
   },
-  // chainWebpack: (config) => {
-  //   config.resolve.alias
-  //     .set('@', resolve('src'))
-  //     .set('@lm/shared', resolve('../../npm/shared'))
-  //     .set('assets', resolve('src/assets'))
-  //     .set('components', resolve('src/components'))
-  //     .set('public', resolve('public'));
-  // },
   css: {
     extract: !!isProd,
     sourceMap: false,

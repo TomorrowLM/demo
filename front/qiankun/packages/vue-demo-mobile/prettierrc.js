@@ -1,4 +1,4 @@
-import prettierConfig  from 'shared/lint/prettierrc';
-module.exports = {
-  ...prettierConfig
-}
+// import prettierConfig from '@lm/shared/lint/prettierrc';
+// module.exports = {
+//   ...prettierConfig
+// }

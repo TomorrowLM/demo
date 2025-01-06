@@ -1,6 +1,7 @@
-@use '@lm/shared/styles/index.scss';
-@use '@lm/shared/styles/class/flex.scss';
-@use './element.scss';
+@import '@shared/styles/index.scss';
+// @import '@lm/npm/shared/styles/class/flex.scss';
+@import './element.scss';
 
 
 
+.flex, .flex-center{}

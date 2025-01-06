@@ -1,27 +1,12 @@
 <template>
-  <div class="header-container flex-center flex flex-between">
-    <i
-      class="el-icon-s-unfold"
-      @click="show = true"
-    />
+  <div class="header-container d-flex justify-content-between ">
+    <i class="el-icon-s-unfold" @click="show = true" />
     <div>{{ currentRoute.name }}</div>
     <!-- <div>{{ currentRoute.name.replace(/-\w+/,'') }}</div> -->
     <div />
-    <el-drawer
-      title="菜单"
-      :visible.sync="show"
-      direction="ltr"
-      size="1.4rem"
-      custom-class="menu"
-    >
+    <el-drawer title="菜单" :visible.sync="show" direction="ltr" size="1.4rem" custom-class="menu">
       <van-sidebar v-model="activeKey">
-        <van-sidebar-item
-          v-for="item in menuRoutes"
-          :key="item.name"
-          :title="item.name"
-          :to="{ name: item.children[0].name }"
-          @click="show = false"
-        />
+        <van-sidebar-item v-for="item in menuRoutes" :key="item.name" :title="item.name" :to="{ name: item.children ? item.children[0].name : item.name }" @click="show = false" />
       </van-sidebar>
     </el-drawer>
   </div>
@@ -32,7 +17,7 @@ import { menuRoutes } from '@/router'
 export default {
   name: 'HeaderCom',
   props: {},
-  data () {
+  data() {
     return {
       activeKey: 0,
       show: false,
@@ -40,18 +25,33 @@ export default {
       currentRoute: []
     }
   },
-  mounted () {
+  watch: {
+    $route() {
+      console.log(this.$route, menuRoutes, 2222) // 监听路由变化
+      this.$route.matched.forEach(item => {
+        if (this.$route.name.includes(item.name)) {
+          if (item.children) {
+            this.currentRoute = item.children
+          } else {
+            this.currentRoute = item
+          }
+        }
+      })
+    }
+  },
+  mounted() {
     this.menuRoutes = menuRoutes
-    console.log(this.$route, menuRoutes, 2222)
-    console.log($.lodash.cloneDeep, 999, $.lodash.cloneDeep(menuRoutes))
     this.$route.matched.forEach((item) => {
       if (item.name === this.$route.name) {
-        this.currentRoute = item
-        console.log(this.currentRoute)
+        if (item.children) {
+          this.currentRoute = item.children
+        } else {
+          this.currentRoute = item
+        }
       }
     })
   },
-  beforeCreate () {
+  beforeCreate() {
     console.log('beforeCreate', 123)
   },
   methods: {}
@@ -66,6 +66,7 @@ export default {
 }
 
 ::v-deep(.menu) {
+
   //height: 3rem;
   .el-drawer__header {
     padding: 0.08rem 0.12rem;

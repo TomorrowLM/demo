@@ -1,4 +1,3 @@
-// const globals = require('@lm/eslint-plugin-lint/vue').globals
 module.exports = {
   root: true,
   env: {
@@ -7,6 +6,8 @@ module.exports = {
   },
   extends: [
     'plugin:@lm/eslint-plugin-lint/vue'
-  ]
-  // globals
+  ],
+  rules: {
+    semi: [0, "never"]
+  }
 }

@@ -77,7 +77,7 @@ export default {
         // Vue.ls.set('token', res.token)
         window.localStorage.setItem('token', res.token)
         if (res.code == 200) {
-          this.$router.push('/learn')
+          this.$router.push('/home')
         } else {
           Notify({ type: 'danger', message: res.message })
         }

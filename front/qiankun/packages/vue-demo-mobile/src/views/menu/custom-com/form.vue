@@ -673,7 +673,7 @@ export default {
       } catch (e) {
         throw (e)
       }
-      const data = $.lodash.cloneDeep(this.formData)
+      // const data = $.lodash.cloneDeep(this.formData)
       Object.keys(data).forEach(val => {
         console.log(val)
         if (data[val] && typeof data[val] === 'object' && !Array.isArray(data[val])) {

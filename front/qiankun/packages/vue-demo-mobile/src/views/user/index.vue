@@ -1,5 +1,8 @@
 <template>
-  <div :style="{ height: '100%' }">
+  <div
+    :style="{ height: '80%' }"
+    class="d-flex flex-direction-column flex-center"
+  >
     <div>hello</div>
     <el-button
       type="success"
