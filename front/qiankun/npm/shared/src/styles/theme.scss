@@ -85,11 +85,11 @@ $colors-dark: (text:blue);
 //   --text: blue;
 // }
 
-// $header-bg: var(--header-bg);
-// $box-bg: var(--box-bg);
-// $text: var(--text);
-// $primary-font-size: var(--primary-font-size);
-// $shadow: var(--shadow);
+$header-bg: var(--header-bg);
+$box-bg: var(--box-bg);
+$text: var(--text);
+$primary-font-size: var(--primary-font-size);
+$shadow: var(--shadow);
 
 // @debug #{var(--header-bg)}"woooooooooooooo:#{var(--text)}var(--text)";
 
