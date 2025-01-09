@@ -14,7 +14,6 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills' //允许你在浏览�
 import qiankun from 'vite-plugin-qiankun'
 import { visualizer } from 'rollup-plugin-visualizer'
 import importToCDN, { cdn } from 'vite-plugin-cdn-import'
-import $ from 'jquery'
 import inject from '@rollup/plugin-inject'
 
 // import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';// 引入rollup-plugin-visualizer模块
@@ -46,7 +45,7 @@ export default defineConfig(({ mode }) => {
     '  proxyTarget = ',
     proxyTarget
   )
-  const qiankunPath = path.resolve(__dirname, '../').replace(/\\/g, '//');
+  const qiankunPath = path.resolve(__dirname, '../../').replace(/\\/g, '//');
 
   // path.resolve(__dirname, '../').replace(/\\/g, '/')
   console.log(1234, qiankunPath)
@@ -55,7 +54,7 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "${qiankunPath}/shared/styles/index.scss" as *;`
+          additionalData: `@use "${qiankunPath}/npm/shared/src/styles/index.scss" as *;`
         }
       }
     },
@@ -207,7 +206,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': srcPath,
-        '@shared': qiankunPath + '\\shared'
+        '@shared': qiankunPath + '\\npm\\shared\\src'
       }
     },
     transpileDependencies: true,

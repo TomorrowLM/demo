@@ -1,5 +1,6 @@
 <template>
   <div class="content d-center">
+    <div class="box d-center m-12" @click="jump(0)">vue-grammar</div>
     <div class="box d-center m-12" @click="jump(1)">3D</div>
     <div class="box d-center m-12" @click="jump(2)">editor</div>
   </div>
@@ -10,7 +11,9 @@ import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const jump = (e) => {
-  if (e === 1) {
+  if (e === 0) {
+    router.push('/vue-grammar')
+  } else if (e === 1) {
     router.push('/3D')
   } else if (e === 2) {
     router.push('/editor')

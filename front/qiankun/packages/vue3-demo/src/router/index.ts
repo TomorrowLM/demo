@@ -16,6 +16,11 @@ export const routes = [
     component: () => import('../views/home/index.vue')
   },
   {
+    path: '/vue-grammar',
+    name: 'vue-grammar',
+    component: () => import('../views/vue-grammar/index.vue')
+  },
+  {
     path: '/3D',
     name: '3D',
     component: () => import('../views/3D/index.vue'),

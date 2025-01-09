@@ -59,8 +59,8 @@
   </div>
 </template>
 <script setup>
-import  '@shared/utils/canvas/html2canvas.min.js'
-import  Canvas2Image from '@shared/utils/canvas/canvas2image.js'
+import  '@shared/dependencies/canvas/html2canvas.min.js'
+import  Canvas2Image from '@shared/dependencies/canvas/canvas2image.js'
 console.log(Canvas2Image,123)
 // import * as html2canvas from '@shared/utils/canvas/canvas2image.js'
 let canvas,
