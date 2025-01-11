@@ -4,3 +4,8 @@ nodemon:https://segmentfault.com/q/1010000043761327
 ## 
 
 pnpm required: { node: '>=18.12' }
+
+
+##
+
+npm包编辑之后需要打包才能生效

@@ -1,15 +1,11 @@
-// import $utils from '../utils/index';
-// const $utils = require('../utils/index');
 const path = require("path");
-
 const webpack = require("webpack");
-
 const resolveFn = (dir) => path.join(__dirname, dir);
-const $ = require(resolveFn("../utils"));
+const qiankunPath = path.resolve(__dirname, '../../').replace(/\\/g, '//');
+let isProd = false;
 const commonPlugin = [
   // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
 ];
-
 const assetsCDN = {
   // webpack build externals
   // externals: {
@@ -57,7 +53,58 @@ const pwa = {
     swDest: 'service-worker.js' //  此处输出的service-worker.js文件位置, 会相对于 outputDir 目录进行存放
   }
 }
-
+const devServerConfig = (BASE_URL, API_HOST, port) => {
+  return {
+    devServer: {
+      // contentBase: './src',//项目基本访问目录
+      // host: 'localhost', // 服务器ip地址
+      port,
+      open: true, // 配置自动启动浏览器
+      hot: true, // 模块热替换
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      proxy: {
+        [BASE_URL]: {
+          target: API_HOST,
+          changeOrigin: true,
+          secure: false,
+          xfwd: false,
+          pathRewrite: { [BASE_URL]: '/' } // 重点：重写资源访问路径，避免转发请求 404问题
+        }
+      }
+    }
+  }
+}
+const cssConfig = () => {
+  return {
+    css: {
+      extract: {
+        ignoreOrder: true // 解决组件的引入必须先后顺序一致
+      }, // 是否使用css分离插件 ExtractTextPlugin
+      sourceMap: false,
+      loaderOptions: {
+        sass: {
+          additionalData: '@import "@/styles/index.scss";', // 注入全局样式
+          implementation: require('sass'), // 使用 Dart Sass
+          // plugins: [
+          //   autoprefixer({
+          //     overrideBrowserslist: [
+          //       'Android 4.1',
+          //       'iOS 7.1',
+          //       'Chrome > 31',
+          //       'ff > 31',
+          //       'ie >= 8',
+          //       'last 10 versions' // 所有主流浏览器最近10版本用
+          //     ],
+          //     grid: true
+          //   })
+          // ]
+        }
+      }
+    }
+  }
+}
 const aliasConfigFn = (resolve) => {
   return {
     '@': resolve('./src'),
@@ -73,12 +120,41 @@ const aliasConfigFn = (resolve) => {
     //   public: resolve('public')
   }
 }
-
-const webpackBaseConfig = (config) => {
+const webpackBaseConfig = (processVars, config, resolve) => {
+  config.plugins.push(...commonPlugin)
+  // 配置别名
+  config.resolve.alias = {
+    ...(aliasConfigFn(resolve) || {})
+  }
+  config.plugins = [...config.plugins, ...commonPlugin, new webpack.ProvidePlugin({
+    $: '@lm/shared/lib/src/utils'
+  })]
+  if (!isProd) {
+    config.output.filename = 'js/[name].[contenthash].js'
+    config.output.chunkFilename = 'js/[name].[contenthash].js'
+  }
 };
+const baseConfig = (processVars) => {
+  const { NODE_ENV, VUE_APP_Port, VUE_APP_Build_Path, VUE_APP_BASE_URL, VUE_APP_API_HOST } = processVars;
+  isProd = process.env.NODE_ENV === 'production'
+  console.log(NODE_ENV, VUE_APP_Build_Path, VUE_APP_BASE_URL, VUE_APP_API_HOST)
+  return {
+    publicPath: NODE_ENV === 'production' ? VUE_APP_Build_Path : '/',
+    // 打包文件输出路径，即打包到哪里
+    outputDir: 'dist',
+    // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
+    lintOnSave: true, // boolean | 'warning' | 'default' | 'error'
+    transpileDependencies: true,
+    productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
+    ...devServerConfig(VUE_APP_BASE_URL, VUE_APP_API_HOST, VUE_APP_Port),
+    ...cssConfig(),
+    ...webpackBaseConfig
+  }
+}
 
 module.exports = {
   commonPlugin,
   aliasConfigFn,
-  webpackBaseConfig
+  webpackBaseConfig,
+  baseConfig
 };

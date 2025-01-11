@@ -32,13 +32,12 @@ module.exports = {
       'Access-Control-Allow-Origin': '*'
     },
     proxy: {
-      '/vue-demo': {
-        // target: process.env.VUE_APP_API_BASE_URL,
-        target: 'http://localhost:3600',
+      [process.env.VUE_APP_BASE_URL]: {
+        target: process.env.VUE_APP_API_HOST,
         changeOrigin: true,
         secure: false,
         xfwd: false,
-        pathRewrite: { '/vue-demo': '' } // 重点：重写资源访问路径，避免转发请求 404问题
+        pathRewrite: { [process.env.VUE_APP_BASE_URL]: '' } // 重点：重写资源访问路径，避免转发请求 404问题
       }
     }
   },
@@ -77,7 +76,7 @@ module.exports = {
     config.resolve.alias = {
       ...(aliasConfigFn(resolve) || {})
     }
-    console.log(config.resolve.alias,222)
+    console.log(config.resolve.alias, 222)
     config.plugins = [...config.plugins, ...commonPlugin, new webpack.ProvidePlugin({
       $: '@lm/shared/lib/src/utils'
     })]

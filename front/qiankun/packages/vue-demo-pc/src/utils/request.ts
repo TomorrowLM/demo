@@ -1,13 +1,6 @@
-import $lm from '@lm/shared'; 
-import { Message } from 'element-ui'; 
-    
-console.log($lm, 11118);  
-const baseURL = process.env.VUE_APP_BASE_URL; 
-console.log(baseURL, 111);   
-const requestInstance = $lm.service(baseURL); 
-
-export default requestInstance; 
-
+const request = $.service(process.env.VUE_APP_BASE_URL)
+// console.log($,34)
+export default request
 // Vue.prototype.service = service 
 // export { service as axios } 
  
