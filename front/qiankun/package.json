@@ -2,7 +2,7 @@
   "scripts": {
     "start:base": "cd packages/base && npm run start",
     "start:web11": "cd packages/vue-demo-mobile && npm run start",
-    "start:web1:nodemon": "nodemon",
+    "start:web12:nodemon": "nodemon",
     "start:web3": "cd packages/vue3-demo && npm run start",
     "start:angular": "cd packages/angular-demo && npm run start",
     "start:backend": "cd back-end && npm run devstart",
