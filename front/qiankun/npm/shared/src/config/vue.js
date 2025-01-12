@@ -1,10 +1,19 @@
 const path = require("path");
+
+const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
+const pxtorem = require('postcss-pxtorem');
 const webpack = require("webpack");
 const resolveFn = (dir) => path.join(__dirname, dir);
 const qiankunPath = path.resolve(__dirname, '../../').replace(/\\/g, '//');
 let isProd = false;
 const commonPlugin = [
   // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
+  new webpack.ProvidePlugin({
+    $lm: '@lm/shared/lib/src/utils',
+  }),
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+  })
 ];
 const assetsCDN = {
   // webpack build externals
@@ -76,7 +85,7 @@ const devServerConfig = (BASE_URL, API_HOST, port) => {
     }
   }
 }
-const cssConfig = () => {
+const cssConfig = (isMobile = false) => {
   return {
     css: {
       extract: {
@@ -85,30 +94,66 @@ const cssConfig = () => {
       sourceMap: false,
       loaderOptions: {
         sass: {
-          additionalData: '@import "@/styles/index.scss";', // 注入全局样式
-          implementation: require('sass'), // 使用 Dart Sass
-          // plugins: [
-          //   autoprefixer({
-          //     overrideBrowserslist: [
-          //       'Android 4.1',
-          //       'iOS 7.1',
-          //       'Chrome > 31',
-          //       'ff > 31',
-          //       'ie >= 8',
-          //       'last 10 versions' // 所有主流浏览器最近10版本用
-          //     ],
-          //     grid: true
-          //   })
-          // ]
+          additionalData: '@import "@/styles/index.scss";' // 注入全局样式
+          // implementation: require('sass'), // 使用 Dart Sass
         }
+        // postcss: {
+        //   plugins: [
+        //     autoprefixer({
+        //       overrideBrowserslist: [
+        //         'Android 4.1',
+        //         'iOS 7.1',
+        //         'Chrome > 31',
+        //         'ff > 31',
+        //         'ie >= 8',
+        //         'last 10 versions' // 所有主流浏览器最近10版本用
+        //       ],
+        //       grid: true
+        //     }),
+        //     isMobile && pxtorem({
+        //       rootValue: 100, // 以375的设计稿尺寸，通过设置根元素fontsize=100px=1rem作为标准。将rootValue设置为100，这样16px就会转化成0.16rem。方便计算
+        //       propList: ['*'], // 表示转换所有属性中的px单位
+        //       selectorBlackList: ['van-'] // 过滤掉.van-开头的class，不进行rem转换. Vant 组件内部已经处理好了尺寸。
+        //     })
+        //   ]
+        // }
       }
     }
+    // css: {
+    //   extract: !!isProd,
+    //   sourceMap: false,
+    //   loaderOptions: {
+    //     sass: {
+    //       plugins: [
+    //         autoprefixer({
+    //           overrideBrowserslist: [
+    //             'Android 4.1',
+    //             'iOS 7.1',
+    //             'Chrome > 31',
+    //             'ff > 31',
+    //             'ie >= 8',
+    //             'last 10 versions' // 所有主流浏览器最近10版本用
+    //           ],
+    //           grid: true
+    //         }),
+    //         pxtorem({
+    //           rootValue: 100, // 以375的设计稿尺寸，通过设置根元素fontsize=100px=1rem作为标准。将rootValue设置为100，这样16px就会转化成0.16rem。方便计算
+    //           propList: ['*'], // 表示转换所有属性中的px单位
+    //           selectorBlackList: ['van-'] // 过滤掉.van-开头的class，不进行rem转换. Vant 组件内部已经处理好了尺寸。
+    //         })
+    //       ]
+    //     },
+    //     sass: {
+    //       additionalData: '@use "@/styles/global.scss";'
+    //     }
+    //   }
+    // }
   }
 }
 const aliasConfigFn = (resolve) => {
   return {
     '@': resolve('./src'),
-    '@shared': resolveFn('../'),
+    '@shared': resolveFn('..'),
     '@components': resolve('./src/components')
     // 'assets': path.resolve(__dirname, './src/assets'),
     // 'common': path.resolve(__dirname, './src/common'),
@@ -121,17 +166,21 @@ const aliasConfigFn = (resolve) => {
   }
 }
 const webpackBaseConfig = (processVars, config, resolve) => {
-  config.plugins.push(...commonPlugin)
+
   // 配置别名
   config.resolve.alias = {
     ...(aliasConfigFn(resolve) || {})
   }
-  config.plugins = [...config.plugins, ...commonPlugin, new webpack.ProvidePlugin({
-    $: '@lm/shared/lib/src/utils'
-  })]
-  if (!isProd) {
-    config.output.filename = 'js/[name].[contenthash].js'
-    config.output.chunkFilename = 'js/[name].[contenthash].js'
+  // config.plugins.push(...commonPlugin)
+  config.plugins = [...config.plugins || [], ...commonPlugin]
+  if (isProd) {
+    // 在生产模式下使用 chunkhash 或 contenthash
+    config.output.filename = 'js/[name].[contenthash].js';
+    config.output.chunkFilename = 'js/[name].[contenthash].js';
+  } else {
+    // 在开发模式下使用 hash
+    config.output.filename = 'js/[name].[hash].js';
+    config.output.chunkFilename = 'js/[name].[hash].js';
   }
 };
 const baseConfig = (processVars) => {
@@ -143,8 +192,8 @@ const baseConfig = (processVars) => {
     // 打包文件输出路径，即打包到哪里
     outputDir: 'dist',
     // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
-    lintOnSave: true, // boolean | 'warning' | 'default' | 'error'
-    transpileDependencies: true,
+    // lintOnSave: true, // boolean | 'warning' | 'default' | 'error'
+    // transpileDependencies: [],
     productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
     ...devServerConfig(VUE_APP_BASE_URL, VUE_APP_API_HOST, VUE_APP_Port),
     ...cssConfig(),
@@ -156,5 +205,6 @@ module.exports = {
   commonPlugin,
   aliasConfigFn,
   webpackBaseConfig,
-  baseConfig
+  baseConfig,
+  cssConfig
 };

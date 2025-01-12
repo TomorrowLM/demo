@@ -143,6 +143,6 @@ module.exports = {
   rules: {},
   globals: {
     h: true,
-    $: 'readonly' 
+    $lm: 'readonly' 
   }
 }

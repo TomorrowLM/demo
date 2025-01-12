@@ -1,10 +1,13 @@
 const path = require('path')
+
 const { defineConfig } = require('@vue/cli-service')
-const { commonPlugin, webpackBaseConfig, baseConfig } = require('@lm/shared/src/config/vue')
+
+const { webpackBaseConfig, baseConfig } = require('@lm/shared/src/config/vue')
 const autoprefixer = require('autoprefixer') // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const webpack = require('webpack')
+
 const resolve = dir => path.join(__dirname, dir)
-const name = require('./package.json').name
+const packageName = require('./package.json').name
 const config = baseConfig(process.env)
 
 module.exports = defineConfig({
@@ -15,18 +18,12 @@ module.exports = defineConfig({
       BMap: 'window.BMap', // 百度地图
       AMap: 'AMap' // 高德地图
     }
-    // 配置别名
-    // config.resolve.alias = {
-    //   ...(aliasConfigFn(resolve) || {})
-    // }
-    // config.plugins = [...config.plugins, ...commonPlugin, new webpack.ProvidePlugin({
-    //   $: '@lm/shared/lib/src/utils'
-    // })]
-
-    // if (process.env.NODE_ENV === 'production') {
-    //   config.output.filename = 'js/[name].[contenthash].js'
-    //   config.output.chunkFilename = 'js/[name].[contenthash].js'
-    // }
+    // config.plugins = [
+    //   ...config.plugins || [],
+    //   new webpack.ProvidePlugin({
+    //     $lm: '@lm/shared/lib/src/utils',
+    //   }),]
+    console.log(config.resolve.alias,config.plugins, 11)
   },
   chainWebpack: config => {
     if (process.env.NODE_ENV === 'development') {

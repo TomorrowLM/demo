@@ -4,18 +4,16 @@
     {
       "path": "../../tsconfig.base.json"
     }
-  ],
-  // "compilerOptions": {
-  //   "paths": {
-  //     "@/*": [ 
-  //       "src/*" 
-  //     ],
-  //     // "@lm/npm/shared": [
-  //     //   "../../npm/shared/src/*"
-  //     // ],
-  //     "components/*": [
-  //       "src/components/*"
-  //     ]
-  //   }
-  // } 
+  ], 
+    // // ts 管理的文件
+    // "include": [
+    //   "src/**/*.js",
+    //   "src/**/*.ts",
+    //   "src/**/*.tsx",
+    //   "src/**/*.vue",
+    //   "tests/**/*.ts",
+    //   "tests/**/*.tsx",
+    //   "src/shims-vue.d.ts",
+    // ],
+  // "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/globals.d.ts"],
 }

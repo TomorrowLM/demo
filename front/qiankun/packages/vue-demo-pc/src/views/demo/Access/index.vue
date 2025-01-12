@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
-import permission from '@/directive/permission/index.js'; // 权限判断指令
+import permission from '@/directive/permission'; // 权限判断指令
 // import checkPermission from '@/utils/permission' // 权限判断函数
 @Component({
   directives: {
