@@ -15,28 +15,28 @@ router.get('/', (req, res, next) => {
             {
               path: 'demo',
               name: 'demo',
-              menuName: 'demo',
+
               meta: {
                 sidebar: true,
-                title: 'demo'
+                menuName: 'demo'
               },
               component: 'demo/index.vue',
               children: [
                 {
                   path: 'access',
                   name: 'access',
-                  menuName: '权限',
+
                   component: 'demo/Access/index.vue',
                   meta: {
                     sidebar: true,
-                    title: 'demo',
+                    menuName: '权限',
                     button: {
                       'btn:createUser': 2, // 显示
                       'btn:editUser': 2, // 显示
                       'module:module1': 2// 显示
                     },
                     roles: ['admin', 'liming']
-                  },
+                  }
                 }
               ]
             }
@@ -52,21 +52,21 @@ router.get('/', (req, res, next) => {
           {
             path: 'demo',
             name: 'demo',
-            menuName: 'demo',
+
             meta: {
               sidebar: true,
-              title: 'demo'
+              menuName: 'demo'
             },
             component: 'demo/index.vue',
             children: [
               {
                 path: 'access',
                 name: 'access',
-                menuName: '权限',
+
                 component: 'demo/Access/index.vue',
                 meta: {
                   sidebar: true,
-                  title: 'demo',
+                  menuName: '权限',
                   button: {
                     'btn:createUser': 1, // 禁用
                     'btn:editUser': 0, // 隐藏

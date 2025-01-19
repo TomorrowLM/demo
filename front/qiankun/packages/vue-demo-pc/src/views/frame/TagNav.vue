@@ -2,14 +2,16 @@
   <div>
     <el-tag
       v-for="(tag, index) in tabNav"
-      :class="[currentRouteInfo.name === tag.name ? 'active_tag' : 'tag']"
+      :class="[currentRouteInfo.meta.menuName === tag.meta.menuName ? 'active_tag' : 'tag']"
       :key="tag.path"
       type=""
       :disable-transitions="false"
       @close="handleClose(tag)"
     >
       <router-link :to="tag.path">
-        <span :style="{ color: currentRouteInfo.name !== tag.name ? '#222' : '#697dff' }">{{ tag.name }}</span>
+        <span :style="{ color: currentRouteInfo.meta.menuName !== tag.meta.menuName ? '#222' : '#697dff' }">{{
+          tag.meta.menuName
+        }}</span>
       </router-link>
       <!-- v-if="currentRouteInfo.name === tag.name" -->
       <i key="tag.name" class="el-icon-close" @click="deleteTag(index)"></i>
@@ -45,5 +47,4 @@ export default class Layout extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

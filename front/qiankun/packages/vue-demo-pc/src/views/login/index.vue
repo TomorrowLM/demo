@@ -45,9 +45,9 @@ export default {
           console.log(res);
           Vue.ls.set('token', res.token);
           window.localStorage.setItem('token', res.token);
-          // resetRouter();
           this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
-          this.$router.push('/');
+          const currentRouteInfo = this.$store.getters.currentRouteInfo
+          this.$router.push(currentRouteInfo.path || '/');
         },
         err => {
           console.log(err);
@@ -65,5 +65,6 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 </style>

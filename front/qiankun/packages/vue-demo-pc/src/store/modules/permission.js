@@ -13,7 +13,7 @@ export const loadView = (view) => {
  * @param {*} path 扁平化动态路由父级路径
  * @returns
  */
-export function filterAsyncRoutes (whiteRoutes, asyncRoutes, flatAsyncRoutes, routes, path) {
+export function filterAsyncRoutes(whiteRoutes, asyncRoutes, flatAsyncRoutes, routes, path) {
   asyncRoutes.forEach((element, index) => {
     let pos = -1 // 静态和动态路由匹配索引
     const whiteRoutesItem = whiteRoutes.find((item, index) => {
@@ -44,41 +44,37 @@ export const whiteRoutes = [
       {
         path: 'dashboard',
         name: 'dashboard',
-        menuName: '主页',
         meta: {
           sidebar: true,
-          title: 'dashboard'
+          menuName: '主页'
         },
         component: () => import('@/views/dashboard/index.vue')
       },
       {
         path: 'demo',
         name: 'demo',
-        menuName: 'demo',
         meta: {
           sidebar: true,
-          title: 'demo'
+          menuName: 'demo'
         },
         component: () => import('@/views/demo/index.vue'),
         children: [
           // {
           //   path: 'access',
           //   name: '权限',
-          //   menuName: '权限',
           //   component: () => import('@/views/demo/Access/index.vue'),
           //   meta: {
           //     sidebar: true,
-          //     title: 'access',
+          //   menuName: '权限',
           //   },
           // },
           {
             path: 'skin',
             name: 'skin',
-            menuName: '皮肤',
             component: () => import('@/views/demo/Skin/index.vue'),
             meta: {
-              sidebar: true,
-              title: '皮肤'
+              menuName: '皮肤',
+              sidebar: true
             }
           }
         ]
@@ -86,20 +82,18 @@ export const whiteRoutes = [
       {
         path: 'task',
         name: '案例',
-        menuName: '案例',
         meta: {
           sidebar: true,
-          title: '案例'
+          menuName: '案例'
         },
         component: () => import('@/views/task/index.vue'),
         children: [
           {
             path: 'PickupTask',
             name: '物流智能管控应用',
-            menuName: '物流智能管控应用',
             meta: {
               sidebar: true,
-              title: 'PickupTask'
+              menuName: '物流智能管控应用'
             },
             component: () => import('@/views/task/Sd/index.vue')
           }
@@ -141,7 +135,7 @@ const permission = {
     }
   },
   actions: {
-    async generateRoutes ({ commit, state }) {
+    async generateRoutes({ commit, state }) {
       return new Promise((resolve) => {
         (async () => {
           const { data: { role, name, routes: asyncRoutes } } = await userInfoApi()

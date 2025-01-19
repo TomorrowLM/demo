@@ -1,11 +1,12 @@
 <template>
   <div>
-    <a-button @click="changeRole">切换角色</a-button>
+    <!-- <a-button @click="changeRole">切换角色</a-button> -->
     <span>当前角色：{{ role }}</span>
-    <!-- 注意一定要加disabled属性，才能设置它的disabled值 -->
-
-    <a-button :disabled="false" v-permission="{ type: 'btn:createUser', route: $route }"> 新建用户 </a-button>
-    <a-button :disabled="false" v-permission="{ type: 'btn:editUser', route: $route }"> 编辑用户 </a-button>
+    <div>
+      <!-- 注意一定要加disabled属性，才能设置它的disabled值 -->
+      <a-button :disabled="false" v-permission="{ type: 'btn:createUser', route: $route }"> 新建用户 </a-button>
+      <a-button :disabled="false" v-permission="{ type: 'btn:editUser', route: $route }"> 编辑用户 </a-button>
+    </div>
   </div>
 </template>
 

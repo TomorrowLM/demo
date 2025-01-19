@@ -5,18 +5,22 @@
 // import { userInfo } from '@/api';
 interface TagNavProps {
   name: string;
+  meta: {
+    menuName: string;
+  };
   path: string;
 }
 
 const router = {
   state: {
-    tagNav: [{ name: '主页', path: '/' }],
+    tagNav: [{ meta: { menuName: '主页' }, path: '/' }],
     currentRouteInfo: {},
   },
-  //更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
+  // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
     setTagNav(state: any, nav: any) {
-      if (!state.tagNav.some((val: TagNavProps) => val?.name.includes(nav.name))) {
+      console.log('nav', nav);
+      if (!state.tagNav.some((val: TagNavProps) => val?.meta.menuName.includes(nav.meta.menuName))) {
         state.tagNav.push(nav);
       }
     },
@@ -35,7 +39,7 @@ const router = {
       state.currentRouteInfo = JSON.parse(window.sessionStorage.getItem('currentRouteInfo') as any);
     },
   },
-  //Action 提交的是 mutation，而不是直接变更状态。Action 可以包含任意异步操作。
+  // Action 提交的是 mutation，而不是直接变更状态。Action 可以包含任意异步操作。
   actions: {},
 };
 

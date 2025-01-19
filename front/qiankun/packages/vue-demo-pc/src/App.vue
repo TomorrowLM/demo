@@ -91,6 +91,9 @@ export default class Layout extends Vue {
 :root {
   // --theme-text: blue;
 }
+#vue2-pc{
+  height: 100%;
+}
 #app {
   width: 100%;
   height: 100%;

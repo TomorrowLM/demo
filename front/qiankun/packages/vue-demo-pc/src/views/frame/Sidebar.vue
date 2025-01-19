@@ -13,16 +13,14 @@
         v-if="item.meta.sidebar && (!item.children || item.children.length === 0)"
         :key="item.path"
         :index="`/${item.path}`"
-
       >
         <i class="el-icon-menu"></i>
-        {{ item.path }}
-        <span slot="title">{{ item.menuName }}</span>
+        <span slot="title">{{ item.meta.menuName }}</span>
       </el-menu-item>
       <el-submenu v-if="item.children && item.children.length !== 0" :key="item.path" :index="item.path">
         <template slot="title">
           <i class="el-icon-menu"></i>
-          <span>{{ item.menuName }}</span>
+          <span>{{ item.meta.menuName }}</span>
         </template>
         <el-menu-item-group v-if="item.children">
           <el-menu-item
@@ -30,10 +28,7 @@
             :key="`${item.path}/${child.path}`"
             :index="`/${item.path}/${child.path}`"
           >
-            <!-- {{item.path}}
-          {{child.path}} -->
-            {{ `${item.path}/${child.path}` }}
-            {{ child.menuName }}
+            {{ child.meta.menuName }}
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
@@ -47,9 +42,10 @@ import { Component, Vue, PropSync, Watch } from 'vue-property-decorator';
 @Component({
   watch: {
     $route(to: any, from: any) {
-      window.sessionStorage.setItem('currentRouteInfo', JSON.stringify({ path: to.path, name: to.name }));
+      console.log(to,'to')
+      window.sessionStorage.setItem('currentRouteInfo', JSON.stringify({ path: to.path, meta: to.meta }));
       this.$store.commit('setRouteInfo');
-      // this.$store.commit('setTagNav', { path: to.path, name: to.name });
+      this.$store.commit('setTagNav', { path: to.path, meta: to.meta });
     },
   },
   computed: {
