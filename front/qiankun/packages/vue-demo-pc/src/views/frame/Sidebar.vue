@@ -12,9 +12,11 @@
       <el-menu-item
         v-if="item.meta.sidebar && (!item.children || item.children.length === 0)"
         :key="item.path"
-        :index="item.path"
+        :index="`/${item.path}`"
+
       >
         <i class="el-icon-menu"></i>
+        {{ item.path }}
         <span slot="title">{{ item.menuName }}</span>
       </el-menu-item>
       <el-submenu v-if="item.children && item.children.length !== 0" :key="item.path" :index="item.path">
@@ -26,8 +28,11 @@
           <el-menu-item
             v-for="child in item.children"
             :key="`${item.path}/${child.path}`"
-            :index="`${item.path}/${child.path}`"
+            :index="`/${item.path}/${child.path}`"
           >
+            <!-- {{item.path}}
+          {{child.path}} -->
+            {{ `${item.path}/${child.path}` }}
             {{ child.menuName }}
           </el-menu-item>
         </el-menu-item-group>
@@ -44,12 +49,12 @@ import { Component, Vue, PropSync, Watch } from 'vue-property-decorator';
     $route(to: any, from: any) {
       window.sessionStorage.setItem('currentRouteInfo', JSON.stringify({ path: to.path, name: to.name }));
       this.$store.commit('setRouteInfo');
-      this.$store.commit('setTagNav', { path: to.path, name: to.name });
+      // this.$store.commit('setTagNav', { path: to.path, name: to.name });
     },
   },
   computed: {
     routeList() {
-      return this.$store.getters.routes;
+      return this.$store.getters.commonMenu;
     },
   },
 })
@@ -69,6 +74,12 @@ export default class Sidebar extends Vue {
 
   selectSiderBar() {
     console.log();
+  }
+
+  go(){
+    // this.$router.push({
+    //   name: 'dashboard',
+    // });
   }
 }
 </script>

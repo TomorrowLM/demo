@@ -1,14 +1,15 @@
 /** 使用文件路径 */
 import Vue from 'vue';
 
+import $lm from '@lm/shared/lib/src/utils';
 import VueRouter, { RouteConfig } from 'vue-router';
 
 import store from '@/store';
-Vue.use(VueRouter);
-// 基础路由
-const commonMenu: Array<RouteConfig> = [...store.getters.commonMenu];
+Vue.use(VueRouter); // 安装路由功能
 const isProd = process.env.NODE_ENV === 'production';
-
+// 基础路由
+const whiteRoutes: Array<RouteConfig> = store.getters.whiteRoutes;
+console.log(whiteRoutes, 'router:whiteRoutes');
 const createRouter = () =>
   new VueRouter({
     mode: 'history',
@@ -17,13 +18,21 @@ const createRouter = () =>
       : isProd
       ? '/vue2-pc/' // 单一项目下的访问路径
       : '/',
-    routes: commonMenu,
+    routes: whiteRoutes,
+    // // 使用浏览器的回退或者前进时，重新返回时保留页面滚动位置，跳转页面的话，不触发。
+    // scrollBehavior(to, from, savePosition) {
+    //   if (savePosition) {
+    //     return savePosition;
+    //   } else {
+    //     return { top: 0 };
+    //   }
+    // },
   });
 const router: any = createRouter();
-// 重置router的方法，需要在退出的时候重置router，否则下一个人登陆后也能访问上一个人的路由
+
+// 重置router，否则下一个人登陆后访问的是上一个人的路由信息
 export function resetRouter() {
   const newRouter = createRouter();
-  // @ts-ignore
   router.matcher = newRouter.matcher; // reset router
 }
 
@@ -52,37 +61,30 @@ VueRouter.prototype.replace = function push(location: any, onResolve: any, onRej
  * from : 即将离开的目标路由对象
  */
 router.beforeEach(async (to: any, from: any, next: any) => {
-  console.log(to, from);
-  // 设置当前页的title
-  document.title = to.meta.title;
-  console.log('router.beforeEach:', store.getters.routes, router.getRoutes(), store.getters.registerRouteFresh);
+  console.log('router.beforeEach:', to, from, router.getRoutes(), store.getters.registerRouteFresh);
+  // 设置当前页的title;
+  document.title = to.meta.title || 'vue2-pc';
   if (to.path !== '/login' && !localStorage.getItem('token')) {
+    // 如果没有登录，跳转到登录页
     next('/login');
-    return;
-  }
-
-  // 如果首次或者刷新界面，next(...to, replace: true)会循环遍历路由，
-  // 如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
-  // 我们的问题在于页面刷新以后异步获取数据，直接执行next()感觉路由添加了但是在next()之后执行的，
-  // 登录时，加载路由表
-  if (store.getters.registerRouteFresh && to.path !== '/login') {
+  } else if (store.getters.registerRouteFresh && to.path !== '/login') {
+    // 如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
     store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: false });
-    resetRouter();
-    // 设置路由
-    const asyncRoutes = await store.dispatch('generateRoutes', store.getters.role);
-    console.log(asyncRoutes);
-    asyncRoutes.forEach((item: RouteConfig) => {
-      console.log('item', item);
+    // 获取路由
+    const routes = await store.dispatch('generateRoutes');
+    console.log('routes', routes);
+    resetRouter(); // 重置路由信息
+    routes.forEach((item: RouteConfig) => {
       router.addRoute(item);
     });
     // 获取路由配置
-    // console.log(router.getRoutes());
-    // 通过next({...to, replace:true})解决刷新后路由失效的问题
-    next({ ...to, replace: true });
+    console.log('getRoutes', router.getRoutes());
+    // 解决刷新后路由失效的问题：因为开始时候路由表没有动态路由，需要指向确切的地址
+    next(to.path);
+    // next({ ...to, replace: true }); // 解决刷新后路由失效的问题
   } else {
     next();
   }
-  next();
 });
 
 export default router;

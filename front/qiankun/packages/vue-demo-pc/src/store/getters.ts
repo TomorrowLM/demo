@@ -10,6 +10,8 @@ const user = {
 };
 
 const permission = {
+  whiteRoutes: (state: any) => state.permission.whiteRoutes,
+  flatAsyncRoutes: (state: any) => state.permission.flatAsyncRoutes,
   asyncRoutes: (state: any) => state.permission.asyncRoutes,
   commonMenu: (state: any) => state.permission.commonMenu,
   routes: (state: any) => state.permission.routes,

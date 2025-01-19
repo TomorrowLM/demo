@@ -19,7 +19,7 @@ function checkPermission(el, binding) {
     el.style.display = 'block';
     el.disabled = false;
   }
-  throw new Error(`need roles! Like v-permission="['admin','editor']"`)
+  // throw new Error(`need roles! Like v-permission="['admin','editor']"`)
 }
 
 export default {

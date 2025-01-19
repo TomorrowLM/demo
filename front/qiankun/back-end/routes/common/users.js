@@ -1,137 +1,95 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
   console.log('users');
   console.log(req.cookies);
-  const data = req.cookies.USER === 'admin' ?
-    {
-      name: 'admin',
-      role: 'admin',
-      routes: []
-    } : req.cookies.USER === 'liming' ? {
+  const data = req.cookies.USER === 'admin'
+    ? {
+        name: 'admin',
+        role: 'admin',
+        routes: [{
+          path: '/',
+          children: [
+            {
+              path: 'demo',
+              name: 'demo',
+              menuName: 'demo',
+              meta: {
+                sidebar: true,
+                title: 'demo'
+              },
+              component: 'demo/index.vue',
+              children: [
+                {
+                  path: 'access',
+                  name: 'access',
+                  menuName: '权限',
+                  component: 'demo/Access/index.vue',
+                  meta: {
+                    sidebar: true,
+                    title: 'demo',
+                    button: {
+                      'btn:createUser': 2, // 显示
+                      'btn:editUser': 2, // 显示
+                      'module:module1': 2// 显示
+                    },
+                    roles: ['admin', 'liming']
+                  },
+                }
+              ]
+            }
+          ]
+        }]
+      }
+    : req.cookies.USER === 'liming' ? {
       name: 'liming',
       role: 'second',
-      routes: []
-    } : {
-      name: 'third',
-      role: 'third',
-      routes: []
+      routes: [{
+        path: '/',
+        children: [
+          {
+            path: 'demo',
+            name: 'demo',
+            menuName: 'demo',
+            meta: {
+              sidebar: true,
+              title: 'demo'
+            },
+            component: 'demo/index.vue',
+            children: [
+              {
+                path: 'access',
+                name: 'access',
+                menuName: '权限',
+                component: 'demo/Access/index.vue',
+                meta: {
+                  sidebar: true,
+                  title: 'demo',
+                  button: {
+                    'btn:createUser': 1, // 禁用
+                    'btn:editUser': 0, // 隐藏
+                    'module:module1': 2// 显示
+                  },
+                  roles: ['admin', 'liming']
+                }
+              }
+            ]
+          }
+        ]
+      }]
     }
+      : {
+          name: 'third',
+          role: 'third',
+          routes: []
+        }
   res.send({
     code: 200,
     message: 'success',
     data: {
-      ...data,
-      routes: req.cookies.USER === 'admin' ? [
-        {
-          path: '/',
-          name: '主页',
-        },
-        {
-          path: '/demo',
-          name: 'demo',
-          children: [
-            {
-              path: 'access',
-              name: '权限',
-              meta: {
-                button: {
-                  'btn:createUser': 2, //隐藏
-                  'btn:editUser': 2, //禁用
-                  'module:module1': 2
-                }, roles: ['admin', 'second'],
-              },
-            },
-            {
-              path: 'skin',
-              name: '皮肤',
-            },
-          ],
-        },
-        {
-          path: '/task',
-          name: '案例',
-          children: [
-            {
-              path: 'PickupTask',
-              name: '物流智能管控应用',
-            },
-          ],
-        }
-      ] :
-        req.cookies.USER === 'liming' ? [
-          {
-            path: '/',
-            name: '主页',
-          },
-          {
-            path: '/demo',
-            name: 'demo',
-            children: [
-              {
-                path: 'access',
-                name: '权限',
-                meta: {
-                  button: {
-                    'btn:createUser': 0, //隐藏
-                    'btn:editUser': 1, //禁用
-                    'module:module1': 0
-                  },
-                  roles: ['admin', 'second'],
-                },
-              },
-              {
-                path: 'skin',
-                name: '皮肤',
-              },
-            ],
-          },
-          {
-            path: '/task',
-            name: '案例',
-            children: [
-              {
-                path: 'PickupTask',
-                name: '物流智能管控应用',
-              },
-            ],
-          }
-        ] :
-          [
-            {
-              path: '/',
-              name: '主页',
-            },
-            {
-              path: '/demo',
-              name: 'demo',
-              children: [
-                {
-                  path: 'access',
-                  name: '权限',
-                  meta: {
-                    roles: ['admin', 'second'],
-                  },
-                },
-                {
-                  path: 'skin',
-                  name: '皮肤',
-                },
-              ],
-            },
-            {
-              path: '/task',
-              name: '案例',
-              children: [
-                {
-                  path: 'PickupTask',
-                  name: '物流智能管控应用',
-                },
-              ],
-            }
-          ]
+      ...data
     }
   });
 });

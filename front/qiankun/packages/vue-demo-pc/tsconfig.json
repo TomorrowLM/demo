@@ -4,16 +4,19 @@
     {
       "path": "../../tsconfig.base.json"
     }
-  ], 
-    // // ts 管理的文件
-    // "include": [
-    //   "src/**/*.js",
-    //   "src/**/*.ts",
-    //   "src/**/*.tsx",
-    //   "src/**/*.vue",
-    //   "tests/**/*.ts",
-    //   "tests/**/*.tsx",
-    //   "src/shims-vue.d.ts",
-    // ],
-  // "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/globals.d.ts"],
+  ],
+  // "include": [
+  //   "src/**/*.js",
+  //   "src/**/*.ts",
+  //   "src/**/*.tsx",
+  //   "src/**/*.vue",
+  //   "tests/**/*.ts",
+  //   "tests/**/*.tsx",
+  //   "src/shims-vue.d.ts",
+  //   "src/globals.d.ts"
+  // ],
+  // "exclude": [
+  //   "node_modules",
+  //   "dist"
+  // ]
 }

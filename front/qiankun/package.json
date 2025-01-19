@@ -1,11 +1,11 @@
 {
   "scripts": {
-    "start:backend": "cd back-end && npm run devstart",
     "start:base": "cd packages/base && npm run start",
     "start:web1": "cd packages/vue-demo-mobile && npm run start",
     "start:web1:nodemon": "nodemon",
     "start:web3": "cd packages/vue3-demo && npm run start",
     "start:angular": "cd packages/angular-demo && npm run start",
+    "serve:backend": "cd back-end && npm run devstart",
     "serve:web1": "cd packages/vue-demo-mobile && npm run serve",
     "serve:web2": "cd packages/vue-demo-pc && npm run serve",
     "install:npm": "pnpm --filter \"{npm/**}\" build",
@@ -24,6 +24,7 @@
   "dependencies": {
     "@babel/preset-env": "7.24.6",
     "lodash": "^4.17.21",
+    "vue-router": "2.8.0",
     "webpack": "4.44.2"
   }
 }
