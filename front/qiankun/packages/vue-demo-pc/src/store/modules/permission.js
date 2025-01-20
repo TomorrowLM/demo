@@ -1,11 +1,12 @@
 import $lm from '@lm/shared/lib/src/utils'
 
 import { userInfoApi } from '@/api'
+//网上说后端给的动态路由组件地址不能包含@/views/
 export const loadView = (view) => {
   return () => import(`@/views/${view}`)
 }
 /**
- *
+ * 合并静态路和动态路由，并构建最终的路由列表。
  * @param {*} whiteRoutes 静态路由
  * @param {*} asyncRoutes 动态路由
  * @param {*} flatAsyncRoutes 扁平化动态路由
@@ -117,7 +118,7 @@ export const whiteRoutes = [
 export const commonMenu = []
 const permission = {
   state: {
-    commonMenu: [], // 通用菜单
+    commonMenu: [], // 菜单栏
     whiteRoutes, // 静态路由
     asyncRoutes: [], // 动态路由
     flatAsyncRoutes: [], // 扁平化动态路由
@@ -129,7 +130,7 @@ const permission = {
       console.log('SET_ROUTES：', routes)
       state.routes = routes
     },
-    // SET_PERMISSION会在登录时候触发，更新路由表
+    // SET_PERMISSION会在登录成功的时候触发，更新路由表
     SET_PERMISSION: (state, data) => {
       state[data.type] = data.data
     }
@@ -150,7 +151,7 @@ const permission = {
           state.routes = $lm.lodash.cloneDeep(state.whiteRoutes) // 初始化routes为静态路由，同时深拷贝防止影响静态路由
           filterAsyncRoutes(whiteRoutes, asyncRoutes, state.flatAsyncRoutes, state.routes, '')
           state.asyncRoutes = asyncRoutes
-          state.commonMenu = state.routes[0].children
+          state.commonMenu = state.routes[0].children; // 配置菜单栏
           console.log('routes----', state.routes, state.whiteRoutes, asyncRoutes, commonMenu)
           resolve(state.routes)
         })()

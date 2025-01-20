@@ -56,26 +56,14 @@ import { Component, Vue, PropSync, Watch } from 'vue-property-decorator';
 })
 export default class Sidebar extends Vue {
   @PropSync('collapse') isCollapse!: boolean;
-
   private readonly name = 'Sidebar';
-  private menuList: Array<any> = [];
 
   get currentRouteInfo() {
     return this.$store.getters.currentRouteInfo;
   }
 
-  get routes() {
-    return this.$store.getters.routes;
-  }
-
   selectSiderBar() {
     console.log();
-  }
-
-  go(){
-    // this.$router.push({
-    //   name: 'dashboard',
-    // });
   }
 }
 </script>

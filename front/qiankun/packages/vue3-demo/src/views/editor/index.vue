@@ -1,19 +1,17 @@
 <template>
   <div class="w100 h100 flex-center">
-    <div>
-      <div>集成aviscript:自动补全,语法校验</div>
-      <div class="" id="editor" style="width: 600px; height: 400px"></div>
-    </div>
+    <!-- <div>集成aviscript</div> -->
+    <div class="" id="editor" style="width: 600px; height: 400px"></div>
   </div>
 </template>
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
-import MonacoEditor from './index.ts'
+import MonacoEditor from './index'
 import { onMounted } from 'vue'
-let editor
+
 onMounted(async () => {
-  editor = new MonacoEditor({
+  const editor = new MonacoEditor({
     defaultDoc: '',
     languageConfig: {
       name: 'AviatorScript'

@@ -20,7 +20,6 @@ import DiagnosticsAdapter from './language-service/DiagnosticsAdapter';
 import TodoLangWorker from './language-service/todoLangWorker.ts?worker';
 import { reactive } from 'vue';
 
-
 monaco.editor.defineTheme('myTheme', {
   base: 'vs',
   inherit: true,
@@ -54,31 +53,24 @@ monaco.editor.defineTheme('myTheme', {
 });
 
 export default class MonacoEditor implements MonacoEditorProps {
-  protected editorInstance: any;
-  protected editorInsideInstance: any;
-  protected editorOldInstance: any;
-  protected aviWorker: any;
+  protected editorInstance: any; // 编辑器实例
   protected htmlBox: HTMLElement;
-  protected htmlInsideBox: HTMLElement;
   protected config: ConfigProps;
-  protected DiagnosticsAdapter: any;
-  protected suggestInstance: IDisposable;
+  protected DiagnosticsAdapter: any; // 诊断适配器
+  protected suggestInstance: IDisposable; // 补全实例
   public codeInfo: {
     oldCode: '', //保存删除的脚本
     insideOldCode: any[],
     undoList: any[], // 回退列表
     insideCodeSnip?: any, //inside片段
     outsideCodeSnip?: any
-    insideCode?: string //inside脚本
-  };//inside脚本
-  // private pointPosition: [];
+    insideCode?: string //脚本
+  };
   private status: string;
   public connectRef: any;
 
   constructor(config: ConfigProps) {
     this.htmlBox = document.getElementById(config.tag) as HTMLElement;
-    // this.htmlInsideBox = document.getElementById(config.insideTag) as HTMLElement;
-    // this.editorOldInstance = ;
     this.config = config;
     this.codeInfo = { insideCode: '', insideOldCode: [], undoList: [], oldCode: '' }
     this.status = 'init'
@@ -173,74 +165,6 @@ export default class MonacoEditor implements MonacoEditorProps {
       this.DiagnosticsAdapter = new DiagnosticsAdapter(worker);
     });
 
-    // monaco.languages.registerHoverProvider(this.config?.languageConfig?.name || 'AviatorScript', {
-    //   // that: this,
-    //   provideHover: (model, position, token) => {
-    //     // console.log(this, model, position, model.getWordAtPosition(position));
-    //     const word = model.getWordAtPosition(position).word;
-    //     if (!word) return
-    //     //获取字段的位置
-    //     const positionNew = model.getWordAtPosition(position);
-    //     // console.log(positionNew, positionNew.startColumn);
-    //     //TODO,判断是否是[]
-    //     const range = new monaco.Range(position.lineNumber, positionNew.startColumn - 1, position.lineNumber, positionNew.endColumn + 1)
-    //     //获取中括号中的关键字
-    //     const keywords = model.getValueInRange(new monaco.Range(position.lineNumber, positionNew.startColumn, position.lineNumber, positionNew.endColumn));
-    //     // console.log(range, keywords);
-
-    //     const reg1 = new RegExp('\\[' + keywords + '\\]', 'g');
-    //     const reg2 = new RegExp('\\[' + keywords + '\\]' + '\\[(.+?)\\]', 'g');
-    //     // console.log(reg1, reg2);
-    //     // const outsideArr = this.getValue().match(reg1);
-    //     const outsideArr = model.findMatches('\\[' + keywords + '\\]', true, true, true, null, true, 1000);
-    //     // console.log(outsideArr);
-    //     let index1: number = 0;//获取第几个
-    //     outsideArr.forEach((val, index) => {
-    //       if (val.range.startLineNumber === range.startLineNumber && val.range.startColumn === range.startColumn) {
-    //         index1 = index
-    //       }
-    //     })
-    //     const a1 = this.codeInfo?.insideCode || ''
-    //     const insideArr = a1.match(reg2) || [];
-    //     // console.log(outsideArr, a1, insideArr, this.codeInfo?.insideCode);
-    //     let id;
-    //     if (index1 >= 0 && insideArr.length >= 1) {
-    //       const reg3 = new RegExp('\\[(.+?)\\]', 'g');
-    //       // console.log(insideArr[index1]);
-    //       // const a = insideArr[index1] || ''
-    //       const strArr: any = insideArr[index1].match(reg3);
-    //       // console.log(strArr);
-    //       if (strArr?.length >= 1) {
-    //         id = strArr[1].slice(1, strArr[1].length - 1)
-    //         console.log(strArr[1], strArr[1].length, id);
-    //       }
-
-    //     }
-    //     return {
-    //       // range: new monaco.Range(
-    //       //   1,
-    //       //   1,
-    //       //   model.getLineCount(),
-    //       //   model.getLineMaxColumn(model.getLineCount())
-    //       // ),
-    //       contents: [
-    //         {
-    //           supportHtml: true,
-    //           value: `<div style="color red; class="test">${id}</div>`
-    //         }
-    //       ]
-    //       // contents: [
-    //       //   { value: '**if**' },
-    //       //   {
-    //       //     value: [
-    //       //       id
-    //       //     ],
-    //       //   },
-    //       // ],
-    //     };
-    //   },
-    // });
-
     this.editorInstance = monaco.editor.create(this.htmlBox, {
       value: this.config?.defaultDoc ? this.config?.defaultDoc : '',
       automaticLayout: true,
@@ -256,170 +180,7 @@ export default class MonacoEditor implements MonacoEditorProps {
       scrollbar: {
       },
     });
-    // this.editorInsideInstance = monaco.editor.create(this.htmlInsideBox, {
-    //   value: this.codeInfo.insideCode
-    // })
-    // this.editorOldInstance = monaco.editor.createModel(this.codeInfo.oldCode);
-    // // const that = this;
     const model = this.editorInstance.getModel();
-    // const insideModel = this.editorInsideInstance.getModel();
-    // let reg = new RegExp('\\[(.+?)\\]', 'g')
-    //只读列
-    // if (this.config.readOnlyArr && this.config.readOnlyArr.length) {
-    //   // const { doc, lineNumber, start, end } = this.config.readOnlyArr[0];
-    //   // const readonlyRange = new monaco.Range(lineNumber, start, lineNumber, end);
-    //   // const range = new monaco.Range(lineNumber, start, lineNumber, end);
-    //   // this.editorInstance.executeEdits('需要插入的代码/string', [
-    //   //   {
-    //   //     range: range,
-    //   //     text: doc
-    //   //     // text: e1
-    //   //   }
-    //   // ]);
-    //   this.editorInstance.onKeyDown(e => {
-    //     console.log(e);
-    //     this.config.readOnlyArr.forEach(element => {
-    //       if (this.getPosition().lineNumber === element.lineNumber) {
-    //         this.setPosition(2, 1)
-    //         e.stopPropagation()
-    //         e.preventDefault()
-    //       } else {
-    //         // const contains = this.editorInstance.getSelections().findIndex(range => readonlyRange.intersectRanges(range));
-    //         return;
-    //       }
-    //     });
-    //   })
-    // }
-    // this.editorInstance.onKeyDown(e => {
-    //   console.log(e);
-    // })
-    // this.editorInstance.addCommand(monaco.KeyCode.RightArrow, function (e) {
-    //   let code = that.getValue();
-    //   let { column, lineNumber } = that.getPosition()
-    //   console.log(column, e, model.getValueInRange(new monaco.Range(lineNumber, column, lineNumber, column + 1)) === ']');
-    //   if (model.getValueInRange(new monaco.Range(lineNumber, column, lineNumber, column + 1)) === ']') {
-    //     const arr = model.getLineContent(lineNumber).substring(column, model.getLineContent(lineNumber).length).match(reg)
-    //     console.log(arr);
-    //     that.setPosition(lineNumber, column + arr[0].length)
-    //   } else {
-    //     that.setPosition(lineNumber, column)
-    //   }
-    // })
-    // this.editorInstance.addCommand(monaco.KeyCode.LeftArrow, function (e) {
-    //   let code = that.getValue();
-    //   let { column, lineNumber } = that.getPosition()
-    //   console.log(column, e, code.substring(column, column + 1));
-    //   console.log(model.getValueInRange(new monaco.Range(lineNumber, column - 1, lineNumber, column)));
-    //   console.log(model.getLineCount(), model.getLineLength(lineNumber), model.getLineContent(lineNumber));
-    //   if (model.getValueInRange(new monaco.Range(lineNumber, column - 1, lineNumber, column)) === ']') {
-    //     const arr = model.getLineContent(lineNumber).substring(0, column).match(reg)
-    //     console.log(arr);
-    //     that.setPosition(lineNumber, column - arr[arr.length - 1].length - 2)
-    //   } else {
-    //     that.setPosition(lineNumber, column - 2)
-    //   }
-    // })
-    // this.editorInstance.onDidChangeCursorPosition(e => {  // 隐藏id后， 鼠标定位
-    //   if (this.editorInstance.getSelection().endColumn - this.editorInstance.getSelection().startColumn > 0) {//光标选择退出逻辑
-    //     return;
-    //   }
-    //   console.log('onDidChangeCursorPosition', e);
-    //   let code = this.getValue();
-    //   let { column, lineNumber } = e.position;
-    //   if (e.source === 'mouse' || e.source === 'keyboard') {
-    //     //定位地址前面是],而且中括号个数为奇数才能跳
-    //     console.log(model.getValueInRange(new monaco.Range(lineNumber, column - 1, lineNumber, column)), model.getLineContent(lineNumber).substring(0, column).match(reg));
-    //     if (model.getValueInRange(new monaco.Range(lineNumber, column - 1, lineNumber, column)) === ']' && model.getLineContent(lineNumber).substring(0, column).match(reg).length % 2 !== 0) {
-    //       console.log(model.getLineContent(lineNumber), model.getLineContent(lineNumber).substring(column - 1), model.getLineContent(lineNumber).substring(column - 1).match(reg));
-    //       const arr = model.getLineContent(lineNumber).substring(column - 1).match(reg)
-    //       this.setPosition(lineNumber, column + arr[0].length - 1)
-    //     }
-    //     // const a = this.getCodePosition(e.position.lineNumber, e.position.column - 2)
-    //     // console.log(a, this.codeInfo.oldCode.substring(a - 1, a));
-    //     // if (this.codeInfo.oldCode.substring(a - 1, a) === ']') {
-    //     //   const range = new monaco.Range(e.position.lineNumber, e.position.column, e.position.lineNumber, e.position.column);
-    //     //   this.editorInstance.executeEdits('需要插入的代码/string', [
-    //     //     {
-    //     //       range: range,
-    //     //       text: ']'
-    //     //     }
-    //     //   ]);
-    //     // }
-    //   } else if (e.source === 'deleteLeft') {
-    //     const a = this.getCodePosition(e.position.lineNumber, e.position.column)
-    //     console.log(a, this.codeInfo.oldCode, this.codeInfo.oldCode.substring(a, a + 1));
-    //     if (this.codeInfo.oldCode.substring(a, a + 1) === ']') {
-    //       const range = new monaco.Range(e.position.lineNumber, e.position.column, e.position.lineNumber, e.position.column);
-    //       this.editorInstance.executeEdits('需要插入的代码/string', [
-    //         {
-    //           range: range,
-    //           text: ']'
-    //         }
-    //       ]);
-    //     }
-    //   }
-    // });
-    // this.editorInstance.getModel().onDidChangeContent((e) => {
-    //   setTimeout(() => {
-    //     console.log(e);
-    //     const { outsideCodeSnip, insideCodeSnip, oldCode } = this.codeInfo;
-    //     //获取所有匹配的中括号
-    //     let matches = model.findMatches(/\[(.+?)\]{1}/, true,
-    //       true,
-    //       false,
-    //       null,
-    //       true, 1000);
-    //     //获取正则匹配的偶数项
-    //     matches = matches.map((val, index) => { if (index % 2 !== 0) { return val } }).filter(val => val)
-    //     if (this.decorations?.clear) {
-    //       this.decorations.clear();
-    //     }
-    //     this.decorations = this.editorInstance.createDecorationsCollection(matches.map((match): void => {
-    //       if (matches.length > 0) {
-    //         return {
-    //           range: match.range,
-    //           options: {
-    //             isWholeLine: false,
-    //             inlineClassName: 'myInlineDecoration'
-    //           }
-    //         }
-    //       }
-    //     }));
-    //     // console.log(that.codeInfo.insideCodeSnip);
-    //     if (this.codeInfo.outsideCodeSnip && that.codeInfo.insideCodeSnip) {
-    //       this.setPosition(e.changes[0]['range']['endLineNumber'], e.changes[0]['range']['endColumn'] + that.codeInfo.insideCodeSnip.length + that.codeInfo.outsideCodeSnip.length - 1)
-    //       this.codeInfo.outsideCodeSnip = null
-    //       this.codeInfo.insideCodeSnip = null
-    //     }
-    //     this.codeInfo.oldCode = this.getValue();
-    //     console.log(this.getValue());
-    //   }, 1)
-
-    // });
-
-    // // 然后，你可以为编辑器添加一个键盘绑定，用于监听suggest命令
-    // this.editorInstance.addCommand(monaco.KeyCode.Enter, (e) => {
-    //   console.log(444, e);
-    //   // 获取当前位置的补全提示
-    //   const model = this.editorInstance.getModel();
-    //   const position = this.editorInstance.getPosition();
-    //   // monaco.editor.getSuggestController(this.editorInstance).triggerSuggest(position);
-
-    //   // 你可以在这里添加你的逻辑，比如记录补全事件
-    //   console.log('补全事件触发在位置:', position);
-    //   return;
-    // });
-
-
-    // // 你也可以监听补全面板的改变事件，以便在面板出现或隐藏时做出反应
-    // this.editorInstance.onDidShowSuggestWidget(() => {
-    //   console.log('补全面板显示');
-    // });
-    // model.onWillChangeModelContent(e => {
-    //   console.log(e);
-    // })
-
-
     model.onDidChangeContent((e) => {
       setTimeout(() => {
         if (this.status === 'init') { //编辑初始化的时候需要退出逻辑
@@ -428,272 +189,6 @@ export default class MonacoEditor implements MonacoEditorProps {
           return;
         }
         this.connectRef.status = 'init'
-        // console.log(this.editorInstance.getSuggestWidget());
-        // if (this.editorInstance.getSuggestWidget() && this.editorInstance.getSuggestWidget().getSelection()) {
-        //   // 在此处实现选中建议列表选项后的操作
-        // }
-        // if (e.isUndoing) {
-        //   // console.log(this.codeInfo.insideOldCode.unshift());
-        //   this.codeInfo.insideOldCode.pop()
-        //   const text = this.codeInfo.insideOldCode.pop();
-        //   console.log(text, 1);
-        //   this.editorInsideInstance.setValue(text);
-        //   return;
-        // }
-        // console.log(e);
-        // const { startColumn, endColumn, endLineNumber, startLineNumber } = e.changes[0].range;
-        // const insertText = e.changes[0].text;
-        // const reg1 = new RegExp('\\[(.+?)\\]', 'g');
-        // const reg2 = new RegExp('\\[(.+?)\\]' + '\\[(.+?)\\]', 'g');
-        // const modelMatch = model.findMatches(reg1, true, true, true, null, true, 1000);
-        // const insideMatch = insideModel.findMatches(reg2, true, true, true, null, true, 1000);
-        // let indexArr = 0//匹配光标前面有几个中括号
-        // let indexArr1 = 0 //匹配光标前面以及删除有多少个中括号
-        // let modelElement = null;//光标前面最后一个
-        // let strLength = 0;//获取光标前面[]后的字段长度
-        // let delbeforeText = '';//删除
-        // let delafterText = '';
-        // let deleteStr = ''//删除字段
-        // let delArr = [];
-        // console.log('modelMatch：', modelMatch);
-        // console.log('insideMatch：', insideMatch);
-        // console.log('inside:', insideModel.getValue());
-        // console.log('insideCodeSnip：', this.codeInfo.insideCodeSnip);
-        // console.log('insertText：', insertText);
-        // if (insertText) {//新增 
-        //   console.log('新增');
-        //   modelMatch.forEach((element, index) => {
-        //     if (endLineNumber >= element.range.endLineNumber && endColumn >= element.range.endColumn) {
-        //       indexArr = index + 1;
-        //       modelElement = element
-        //     }
-        //   });
-        //   if (modelElement) {//TODO
-        //     strLength = endColumn - modelElement?.range?.endColumn;
-        //   }
-        // } else if (insertText === '') {//删除
-        //   console.log('删除');
-        //   // deleteStr = monaco.editor.createModel(this.codeInfo.oldCode).getValueInRange(new monaco.Range(startLineNumber, startColumn, endLineNumber, endColumn));
-        //   deleteStr = this.editorOldInstance.getValueInRange(new monaco.Range(startLineNumber, startColumn, endLineNumber, endColumn));
-        //   // const cursorPos = this.getCodePosition(startLineNumber, startColumn);
-        //   // console.log(cursorPos, cursorPos + endColumn - startColumn, this.codeInfo.oldCode);
-        //   // deleteStr = this.codeInfo.oldCode.substring(cursorPos - 1, cursorPos + endColumn - startColumn); // 换行符也算
-        //   modelMatch.forEach((element, index) => {
-        //     // console.log(startLineNumber, element.range.endLineNumber, startColumn, element.range.endColumn);
-        //     if (startLineNumber >= element.range.endLineNumber && startColumn >= element.range.endColumn) {
-        //       indexArr = index + 1;
-        //       modelElement = element;
-        //     }
-        //   });
-        //   console.log(indexArr, modelElement);
-        //   delArr = deleteStr.match(reg1) || [];
-        //   console.log(delArr);
-        //   if (modelElement) {
-        //     strLength = model.getValueInRange(new monaco.Range(startLineNumber, modelElement.range.endColumn, endLineNumber, startColumn)).length
-        //   }
-        //   if (delArr.length) { //删除里面中括号个数
-        //     indexArr1 = indexArr + delArr?.length
-        //     delbeforeText = deleteStr.substring(0, deleteStr.indexOf(delArr[0]))
-        //     delafterText = deleteStr.substring(deleteStr.lastIndexOf(delArr[delArr?.length - 1]) + delArr[delArr?.length - 1].length)
-        //     console.log(strLength, delbeforeText, delafterText);
-        //   }
-        // }
-        // console.log('modelElement：', modelElement);
-        // console.log('indexArr：', indexArr);
-        // console.log('deleteStr：', deleteStr);
-        // console.log('delafterText:', delafterText);
-        // console.log('delbeforeText:', delbeforeText);
-        // console.log(!insertText.match(reg1) && this.isChinese(insertText), deleteStr.match(reg1));
-        // if (deleteStr && (!deleteStr.match(reg1) && deleteStr.match(/\]/g)?.length === 1)) {//TODO删除：匹配单个中括号
-        //   console.log('删除：匹配单个中括号');
-        //   const { startColumn: startColumn1, endColumn: endColumn1, endLineNumber: endLineNumber1, startLineNumber: startLineNumber1 } = insideMatch[indexArr].range;//匹配删除的
-        //   // const { startColumn: startColumn2, endColumn: endColumn2, endLineNumber: endLineNumber2, startLineNumber: startLineNumber2 } = insideMatch[indexArr1].range;
-        //   delafterText = deleteStr.substring(0, deleteStr.match(/\]/)?.index);
-        //   delbeforeText = this.codeInfo.oldCode.match(reg1)[indexArr].substring(0, this.codeInfo.oldCode.match(reg1)[indexArr].length - delbeforeText.length - 1);
-        //   console.log('delafterText:', delafterText);
-        //   console.log('delbeforeText:', delbeforeText);
-        //   this.editorInsideInstance.executeEdits('', [
-        //     {
-        //       range: new monaco.Range(
-        //         startLineNumber1,
-        //         startColumn1 + delbeforeText.length,
-        //         endLineNumber1,
-        //         endColumn1,
-        //       ),
-        //       text: '',
-        //       forceMoveMarkers: true
-        //     }
-        //   ])
-        //   console.log(delbeforeText);
-        // }
-        // else if ((endColumn !== startColumn && endColumn - startColumn <= insertText.length) || (!insertText.match(reg1) && this.isChinese(insertText))) {//TODO:补全
-        //   console.log('补全');
-        //   const completeTetx = model.getValueInRange(new monaco.Range(startLineNumber, startColumn, endLineNumber, endColumn));//补全字段
-        //   console.log(completeTetx, modelElement, 11232);
-        //   const insideMatch = insideModel.findMatches(reg2, true, true, true, null, true, 1000);
-        //   if (modelElement) {
-        //     console.log(modelElement.range);
-        //     const { startColumn: startColumn1, endColumn: endColumn1, endLineNumber: endLineNumber1, startLineNumber: startLineNumber1 } = modelElement.range;
-        //     const { startColumn: startColumn2, endColumn: endColumn2, endLineNumber: endLineNumber2, startLineNumber: startLineNumber2 } = insideMatch[indexArr - 1].range
-        //     const completeText1 = model.getValueInRange(new monaco.Range(endLineNumber1, endColumn1, startLineNumber, startColumn + completeTetx.length)); // 中括号到补全所有字段
-        //     console.log(completeText1, 1);
-        //     console.log(startLineNumber2,
-        //       endColumn2, completeText1.length, completeTetx.length,
-        //       endLineNumber,
-        //       endColumn2 + endColumn - startColumn);
-        //     console.log(this.isChinese(insertText));
-        //     if (!insertText.match(reg1) && this.isChinese(insertText)) {
-        //       this.editorInsideInstance.executeEdits('', [
-        //         {
-        //           range: new monaco.Range(
-        //             startLineNumber2,
-        //             endColumn2 + completeText1.length - completeTetx.length,
-        //             endLineNumber,
-        //             endColumn2 + completeText1.length + endColumn - startColumn
-        //           ),
-        //           text: insertText,
-        //           forceMoveMarkers: true
-        //         }
-        //       ])
-        //     } else {
-        //       this.editorInsideInstance.executeEdits('', [
-        //         {
-        //           range: new monaco.Range(
-        //             startLineNumber2,
-        //             endColumn2 + completeText1.length - completeTetx.length,
-        //             endLineNumber,
-        //             endColumn2 + completeText1.length
-        //           ),
-        //           text: insertText,
-        //           forceMoveMarkers: true
-        //         }
-        //       ])
-        //     }
-        //   }
-        //   else {
-        //     console.log(insertText.match(reg1), this.isChinese(insertText));
-        //     if (!insertText.match(reg1) && this.isChinese(insertText)) { //中文补全
-        //       console.log(insertText, 99);
-        //       this.editorInsideInstance.executeEdits('', [
-        //         {
-        //           range: new monaco.Range(
-        //             startLineNumber,
-        //             startColumn,
-        //             endLineNumber,
-        //             endColumn
-        //           ),
-        //           text: insertText,
-        //           forceMoveMarkers: true
-        //         }
-        //       ])
-        //     } else {
-        //       this.editorInsideInstance.executeEdits('', [
-        //         {
-        //           range: new monaco.Range(startLineNumber,
-        //             startColumn,
-        //             endLineNumber,
-        //             startColumn + completeTetx.length),
-        //           text: insertText,
-        //           forceMoveMarkers: true
-        //         }
-        //       ])
-        //     }
-        //   }
-        // }
-        // else if (modelElement) { //新增或者删除前面有点位的
-        //   console.log('新增或者删除前面有点位的');
-        //   const { startColumn: startColumn1, endColumn: endColumn1, endLineNumber: endLineNumber1, startLineNumber: startLineNumber1 } = insideMatch[indexArr - 1].range;//匹配删除前面的中括号位置
-        //   if (insertText) {//新增
-        //     this.editorInsideInstance.executeEdits('', [
-        //       {
-        //         range: new monaco.Range(
-        //           endLineNumber1,
-        //           endColumn1 + strLength,
-        //           endLineNumber1,
-        //           endColumn1 + strLength,
-        //         ),
-        //         text: insertText + (this.codeInfo.insideCodeSnip ? this.codeInfo.insideCodeSnip : ''),
-        //         forceMoveMarkers: true
-        //       }
-        //     ])
-        //   } else {//删除
-        //     console.log(strLength, delbeforeText, delafterText);
-        //     if (indexArr1) {
-        //       const { startColumn: startColumn2, endColumn: endColumn2, endLineNumber: endLineNumber2, startLineNumber: startLineNumber2 } = insideMatch[indexArr1 - 1].range;
-        //       console.log(
-        //         startColumn1, endColumn1, endLineNumber2,
-        //         startColumn2, endColumn2
-        //       );
-        //       this.editorInsideInstance.executeEdits('', [
-        //         {
-        //           range: new monaco.Range(
-        //             startLineNumber1,
-        //             endColumn1 + strLength,
-        //             endLineNumber2,
-        //             endColumn2 + delafterText.length,
-        //           ),
-        //           text: '',
-        //           forceMoveMarkers: true
-        //         }
-        //       ])
-        //     } else {//删除不包含[]
-        //       this.editorInsideInstance.executeEdits('', [
-        //         {
-        //           range: new monaco.Range(
-        //             startLineNumber1,
-        //             endColumn1 + strLength,
-        //             endLineNumber1,
-        //             endColumn1 + strLength + deleteStr.length,
-        //           ),
-        //           text: '',
-        //           forceMoveMarkers: true
-        //         }
-        //       ])
-        //     }
-        //   }
-        // } else if (delArr.length) {//删除后展示没有点位，内部code有点位的
-        //   console.log('删除后展示没有点位，内部code有点位的');
-        //   const { startColumn: startColumn1, endColumn: endColumn1, endLineNumber: endLineNumber1, startLineNumber: startLineNumber1 } = insideMatch[0].range;
-        //   const { startColumn: startColumn2, endColumn: endColumn2, endLineNumber: endLineNumber2, startLineNumber: startLineNumber2 } = insideMatch[insideMatch.length - 1].range;
-        //   console.log(startLineNumber1,
-        //     startColumn1 - delbeforeText.length,
-        //     endLineNumber2,
-        //     endColumn2 + delafterText.length - 1);
-        //   this.editorInsideInstance.executeEdits('', [
-        //     {
-        //       range: new monaco.Range(startLineNumber1,
-        //         startColumn1 - delbeforeText.length,
-        //         endLineNumber2,
-        //         endColumn2 + delafterText.length,),
-        //       text: insertText,
-        //       forceMoveMarkers: true
-        //     }
-        //   ])
-        // } else {
-        //   console.log('新增或者删除没有点位的');
-        //   console.log(endLineNumber,
-        //     endColumn,
-        //     endLineNumber,
-        //     endColumn + strLength, insertText, this.getInsideValue());
-        //   console.log(insertText + (this.codeInfo.insideCodeSnip ? this.codeInfo.insideCodeSnip : ''));
-        //   this.editorInsideInstance.executeEdits('', [
-        //     {
-        //       range: new monaco.Range(
-        //         endLineNumber,
-        //         startColumn,
-        //         endLineNumber,
-        //         endColumn + strLength),
-        //       text: insertText + (this.codeInfo.insideCodeSnip ? this.codeInfo.insideCodeSnip : ''),
-        //       forceMoveMarkers: true
-        //     }
-        //   ])
-        // }
-        // console.log(this.getValue());
-        // console.log(this.editorInsideInstance.getValue());
-        // this.codeInfo.insideCodeSnip = '';
-        // this.codeInfo.outsideCodeSnip = '';
-        // this.codeInfo.oldCode = this.getValue();
-        // this.editorOldInstance.setValue(this.codeInfo.oldCode)
       }, 10);
     })
   }
@@ -745,10 +240,6 @@ export default class MonacoEditor implements MonacoEditorProps {
     return this.editorInstance.getValue()
   }
 
-  // getInsideValue() {
-  //   return this.editorInsideInstance.getValue()
-  // }
-
   insertText(e1: any, e2?: any) {
     let readOnlyStatus = false
     this.config.readOnlyArr && this.config.readOnlyArr.forEach(element => {
@@ -785,7 +276,6 @@ export default class MonacoEditor implements MonacoEditorProps {
   }
 
   copy() {
-    // this.editorInstance.getAction('editor.action.clipboardCopyAction')
     this.editorInstance.trigger('editor', 'editor.action.clipboardCutAction');
     this.copyToClipboard(this.editorInstance.getValue())
   }
@@ -796,10 +286,7 @@ export default class MonacoEditor implements MonacoEditorProps {
   }
 
   setPosition(lineNumber: number, column: number) {
-    console.log(lineNumber, column);
-    // console.log(this.getPosition());
     this.editorInstance.setPosition({ lineNumber, column });
-    // console.log(this.getPosition());
   }
 
   setLanguage(val: any) {
@@ -810,33 +297,6 @@ export default class MonacoEditor implements MonacoEditorProps {
 
   setTheme() {
     monaco.editor.setTheme('myTheme');
-    // //长度
-    // monaco.languages.registerCodeLensProvider('javascript', {
-    //   provideCodeLenses: function (model, token) {
-    //     return {
-    //       lenses: [
-    //         {
-    //           range: {
-    //             startLineNumber: 0,
-    //             startColumn: 1,
-    //             endLineNumber: 2,
-    //             endColumn: 1,
-    //           },
-    //           id: 'First Line',
-    //           command: {
-    //             id: commandId,
-    //             title: 'First Line',
-    //           },
-    //         },
-    //       ],
-    //       dispose: () => { },
-    //     };
-    //   },
-    //   resolveCodeLens: function (model, codeLens, token) {
-    //     console.log(codeLens);
-    //     return codeLens;
-    //   },
-    // });
   }
 
   // 标记错误信息
@@ -846,20 +306,6 @@ export default class MonacoEditor implements MonacoEditorProps {
       this.editorInstance.getModel(),
       'AviatorScript',
       data
-      //   [
-      //     {
-      //     startLineNumber,
-      //     startColumn,
-      //     endLineNumber,
-      //     endColumn,
-      //     // Hint = 1,
-      //     // Info = 2,
-      //     // Warning = 4,
-      //     // Error = 8
-      //     severity: monaco.MarkerSeverity['Warning'], // type可以是Error,Warning,Info
-      //     message: message
-      //   }
-      // ]
     )
   }
 
@@ -873,19 +319,22 @@ export default class MonacoEditor implements MonacoEditorProps {
   }
 
   //   格式化代码 getAction
-  // editor.getAction(‘editor.action.formatDocument’).run() //格式化代码
-  //   editor.trigger("myapp", "undo");//触发撤销
-  // editor.trigger("myapp", "redo");//触发重做
+  format() {
+    this.editorInstance.getAction('editor.action.formatDocument').run();
+  }
+
+  //   撤销
+  undo() {
+    this.editorInstance.trigger('myapp', 'undo');
+  }
+  //  重做
+  redo() {
+    this.editorInstance.trigger('myapp', 'redo');
+  }
   // 格式化代码
   formatCode() {
     const formatFn = () => {
       try {
-        // return format(this.getValue(), {
-        //   language: 'mysql',
-        //   tabWidth: 2,
-        //   keywordCase: 'upper',
-        //   linesBetweenQueries: 2,
-        // });
       } catch (e: any) {
         const { message } = e
         console.log(message);

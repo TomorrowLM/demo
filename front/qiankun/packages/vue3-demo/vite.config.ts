@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
   const sprintVersion = env.CONFIG_SPRINT_VERSION || ''
   const srcPath = fileURLToPath(new URL('./src', import.meta.url))
 
- 
+
   const typingsPath = resolve(srcPath, 'typings')
   const appPublicPath = mode === 'elecPro' ? '../' : env.CONFIG_APP_PUBLIC || '/'
   const basePath = mode === 'elecPro' ? './' : env.CONFIG_APP_PUBLIC || '/'
@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
 
   // path.resolve(__dirname, '../').replace(/\\/g, '/')
   console.log(1234, qiankunPath)
-  console.log(srcPath,1234)
+  console.log(srcPath, 1234)
   return {
     css: {
       preprocessorOptions: {

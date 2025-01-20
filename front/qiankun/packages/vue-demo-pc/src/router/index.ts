@@ -1,9 +1,6 @@
-/** 使用文件路径 */
 import Vue from 'vue';
-
-import $lm from '@lm/shared/lib/src/utils';
 import VueRouter, { RouteConfig } from 'vue-router';
-
+import $lm from '@lm/shared/lib/src/utils';
 import store from '@/store';
 Vue.use(VueRouter); // 安装路由功能
 const isProd = process.env.NODE_ENV === 'production';
@@ -19,14 +16,6 @@ const createRouter = () =>
       ? '/vue2-pc/' // 单一项目下的访问路径
       : '/',
     routes: whiteRoutes,
-    // // 使用浏览器的回退或者前进时，重新返回时保留页面滚动位置，跳转页面的话，不触发。
-    // scrollBehavior(to, from, savePosition) {
-    //   if (savePosition) {
-    //     return savePosition;
-    //   } else {
-    //     return { top: 0 };
-    //   }
-    // },
   });
 const router: any = createRouter();
 
@@ -79,9 +68,10 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     });
     // 获取路由配置
     console.log('getRoutes', router.getRoutes());
-    // 解决刷新后路由失效的问题：因为开始时候路由表没有动态路由，需要指向确切的地址
-    next(to.path);
-    // next({ ...to, replace: true }); // 解决刷新后路由失效的问题
+    // 解决登录或者刷新后路由找不到的问题：
+    // 虽然to找不到对应的路由那么他会再执行一次beforeEach，但是登录或者刷新前路由表没有动态路由信息，那么to.name还是找不到对应的路由，最后会跳转到404页面
+    next({ ...to, replace: true }); // 解决刷新后路由失效的问题
+    // next(to.path); // 需要指向确切的地址
   } else {
     next();
   }
