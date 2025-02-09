@@ -27,15 +27,15 @@ const jump = (e) => {
   .box {
     width: 20%;
     height: 20%;
-    background-color: $box-bg;
-    color: $text;
+    // background-color: $box-bg;
+    // color: $text;
     font-size: 24px;
   }
   @media (max-width: 1024px) {
     .box {
       width: 100px;
       height: 100px;
-      background-color: $box-bg;
+      // background-color: $box-bg;
       color: #fff;
     }
   }

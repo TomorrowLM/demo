@@ -664,6 +664,9 @@ importers:
 
   packages/vue3-demo:
     dependencies:
+      '@lm/shared':
+        specifier: workspace:^
+        version: link:../../npm/shared
       '@rollup/plugin-inject':
         specifier: ^5.0.5
         version: 5.0.5(rollup@4.28.1)
@@ -740,6 +743,9 @@ importers:
       monaco-editor:
         specifier: ^0.45.0
         version: 0.45.0
+      monaco-editor-webpack-plugin:
+        specifier: ^7.1.0
+        version: 7.1.0(monaco-editor@0.45.0)(webpack@5.97.1)
       npm-run-all2:
         specifier: ^6.1.2
         version: 6.2.6
@@ -773,6 +779,9 @@ importers:
       vite-plugin-cdn-import:
         specifier: ^1.0.1
         version: 1.0.1(rollup@4.28.1)(vite@5.4.11(@types/node@20.17.10)(less@4.2.1)(sass@1.83.0)(stylus@0.56.0)(terser@5.37.0))
+      vite-plugin-monaco-editor:
+        specifier: ^1.1.0
+        version: 1.1.0(monaco-editor@0.45.0)
       vite-plugin-node-polyfills:
         specifier: ^0.22.0
         version: 0.22.0(rollup@4.28.1)(vite@5.4.11(@types/node@20.17.10)(less@4.2.1)(sass@1.83.0)(stylus@0.56.0)(terser@5.37.0))
@@ -9264,6 +9273,12 @@ packages:
   moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
 
+  monaco-editor-webpack-plugin@7.1.0:
+    resolution: {integrity: sha512-ZjnGINHN963JQkFqjjcBtn1XBtUATDZBMgNQhDQwd78w2ukRhFXAPNgWuacaQiDZsUr4h1rWv5Mv6eriKuOSzA==}
+    peerDependencies:
+      monaco-editor: '>= 0.31.0'
+      webpack: ^4.5.0 || 5.x
+
   monaco-editor@0.45.0:
     resolution: {integrity: sha512-mjv1G1ZzfEE3k9HZN0dQ2olMdwIfaeAAjFiwNprLfYNRSz7ctv9XuCT7gPtBGrMUeV1/iZzYKj17Khu1hxoHOA==}
 
@@ -13062,6 +13077,11 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: '>=2.0.0'
+
+  vite-plugin-monaco-editor@1.1.0:
+    resolution: {integrity: sha512-IvtUqZotrRoVqwT0PBBDIZPNraya3BxN/bfcNfnxZ5rkJiGcNtO5eAOWWSgT7zullIAEqQwxMU83yL9J5k7gww==}
+    peerDependencies:
+      monaco-editor: '>=0.33.0'
 
   vite-plugin-node-polyfills@0.22.0:
     resolution: {integrity: sha512-F+G3LjiGbG8QpbH9bZ//GSBr9i1InSTkaulfUHFa9jkLqVGORFBoqc2A/Yu5Mmh1kNAbiAeKeK+6aaQUf3x0JA==}
@@ -25594,6 +25614,12 @@ snapshots:
 
   moment@2.30.1: {}
 
+  monaco-editor-webpack-plugin@7.1.0(monaco-editor@0.45.0)(webpack@5.97.1):
+    dependencies:
+      loader-utils: 2.0.4
+      monaco-editor: 0.45.0
+      webpack: 5.97.1(webpack-cli@4.10.0)
+
   monaco-editor@0.45.0: {}
 
   move-concurrently@1.0.1:
@@ -26797,7 +26823,7 @@ snapshots:
       klona: 2.0.6
       postcss: 8.4.49
       semver: 7.6.3
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   postcss-loader@6.2.1(postcss@8.4.5)(webpack@5.76.1(esbuild@0.14.22)):
     dependencies:
@@ -30247,6 +30273,10 @@ snapshots:
       fs-extra: 10.1.0
       magic-string: 0.25.9
       vite: 5.4.11(@types/node@20.17.10)(less@4.2.1)(sass@1.83.0)(stylus@0.56.0)(terser@5.37.0)
+
+  vite-plugin-monaco-editor@1.1.0(monaco-editor@0.45.0):
+    dependencies:
+      monaco-editor: 0.45.0
 
   vite-plugin-node-polyfills@0.22.0(rollup@4.28.1)(vite@5.4.11(@types/node@20.17.10)(less@4.2.1)(sass@1.83.0)(stylus@0.56.0)(terser@5.37.0)):
     dependencies:

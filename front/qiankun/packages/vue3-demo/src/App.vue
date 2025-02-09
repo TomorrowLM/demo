@@ -42,7 +42,7 @@ console.log(56)
 }
 header {
   color: $text;
-  // background: $header-bg;
+  background: $header-bg;
   height: 48px;
   padding: 16px;
   box-sizing: border-box;

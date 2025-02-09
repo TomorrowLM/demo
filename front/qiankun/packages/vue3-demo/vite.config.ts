@@ -15,18 +15,15 @@ import qiankun from 'vite-plugin-qiankun'
 import { visualizer } from 'rollup-plugin-visualizer'
 import importToCDN, { cdn } from 'vite-plugin-cdn-import'
 import inject from '@rollup/plugin-inject'
-
+// import MonacoEditorPlugin from 'vite-plugin-monaco-editor' // 使用vite-plugin-monaco-editor
 // import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';// 引入rollup-plugin-visualizer模块
 // import Inspect from 'vite-plugin-inspect'; //可以让开发者在浏览器端就可以看到vue文件编译后的代码、vue文件的相互依赖关系
-
 export default defineConfig(({ mode }) => {
   const buildDate = dayjs().format('YYYY-MM-DD HH:mm:ss')
   const env = loadEnv(mode, process.cwd(), 'CONFIG')
   const proxyTarget = `http://${env.CONFIG_API_PROXY}`
   const sprintVersion = env.CONFIG_SPRINT_VERSION || ''
   const srcPath = fileURLToPath(new URL('./src', import.meta.url))
-
-
   const typingsPath = resolve(srcPath, 'typings')
   const appPublicPath = mode === 'elecPro' ? '../' : env.CONFIG_APP_PUBLIC || '/'
   const basePath = mode === 'elecPro' ? './' : env.CONFIG_APP_PUBLIC || '/'
@@ -54,14 +51,14 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "${qiankunPath}/npm/shared/src/styles/index.scss" as *;`
+          additionalData: `@use "@lm/shared/src/styles/index.scss" as *;`
         }
       }
     },
     optimizeDeps: {
       include: [
-        'monaco-editor/esm/vs/editor/editor.worker' // 预构建
-        // './src/components/monacoEditor/language-service/todoLangWorker.ts',
+        'monaco-editor/esm/vs/editor/editor.worker', // 预构建
+        // './src/views/editor/language-service/todoLangWorker.ts',
       ]
     },
     plugins: [
@@ -195,7 +192,13 @@ export default defineConfig(({ mode }) => {
           //   path: 'dist/zrender.js'
           // },
         ]
-      })
+      }),
+      // MonacoEditorPlugin({
+      //   languageWorkers: ['editorWorkerService']
+      // })
+      // new MonacoWebpackPlugin({ 
+      //   languages: ['typescript', 'javascript', 'css', 'AviatorScript']
+      // })
       // VueI18nPlugin({
       //   /* options */
       //   // locale messages resource pre-compile option

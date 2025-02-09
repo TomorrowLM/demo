@@ -3,7 +3,7 @@ import TodoLangLanguageService from './LanguageService';
 import type { ITodoLangError } from './TodoLangErrorListener';
 import * as monacoWorker from 'monaco-editor/esm/vs/editor/editor.worker.js';
 import IWorkerContext = monaco.worker.IWorkerContext;
-//worker中代理方法需要去initialize先初始化TodoLangWorker
+//在monaco代理的worker中需要去initialize先初始化TodoLangWorker
 self.onmessage = () => {
     monacoWorker.initialize((ctx, CreateData) => {
         // console.log(ctx, CreateData);

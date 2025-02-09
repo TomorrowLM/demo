@@ -1,12 +1,13 @@
 // import { TodoLangGrammarParser, TodoExpressionsContext } from '../ANTLR/TodoLangGrammarParser';
 // import { TodoLangGrammarLexer } from '../ANTLR/TodoLangGrammarLexer';
-import TodoLangErrorListener from './TodoLangErrorListener'
-import { InputStream, CommonTokenStream } from 'antlr4'
-import GrammarParser from '../aviatorscript/grammar/GrammarParser.mjs'
-import { MySQL } from 'dt-sql-parser'
-function parse(code: string): { ast: TodoExpressionsContext; errors: ITodoLangError[] } {
-  const parser = new MySQL()
-  const astJson = parser.validate(code)
+// import { ANTLRInputStream, CommonTokenStream } from 'antlr4ts';
+import TodoLangErrorListener from './TodoLangErrorListener';
+import { InputStream, CommonTokenStream } from 'antlr4';
+import GrammarParser from '../aviatorscript/grammar/GrammarParser.mjs';
+import { MySQL } from 'dt-sql-parser';
+function parse(code: string): { ast: TodoExpressionsContext, errors: ITodoLangError[] } {
+  const parser = new MySQL();
+  let astJson = parser.validate(code);
   // console.log(astJson);
   // let markers = [];
 
@@ -42,10 +43,10 @@ function parse(code: string): { ast: TodoExpressionsContext; errors: ITodoLangEr
 //     // return {ast, errors};
 // }
 export function parseAndGetASTRoot(code: string): TodoExpressionsContext {
-  const { ast } = parse(code)
-  return ast
+  const { ast } = parse(code);
+  return ast;
 }
 export function parseAndGetSyntaxErrors(code: string): any[] {
-  const { errors } = parse(code)
-  return errors
+  const { errors } = parse(code);
+  return errors;
 }

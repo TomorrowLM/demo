@@ -17,7 +17,6 @@ export default class TodoLangLanguageService {
             syntaxErrors = parseAndGetSyntaxErrors(code);
             ast = parseAndGetASTRoot(code);
         }
-        console.log(ast);
         // console.log(syntaxErrors);
         // return syntaxErrors.concat(checkSemanticRules(ast));
         return syntaxErrors;

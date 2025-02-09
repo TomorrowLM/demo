@@ -11,8 +11,7 @@ enum AutoCompleteTypeEnum {
 }
 
 export interface ConfigProps {
-  tag: string
-  insideTag?: string
+  el: string //挂载元素
   defaultDoc?: string
   readOnly?: boolean
   readOnlyArr?: any

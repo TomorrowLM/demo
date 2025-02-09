@@ -10,12 +10,14 @@ import {
   type QiankunProps
 } from 'vite-plugin-qiankun/dist/helper'
 import './style.scss';
-
+import ElementPlus from 'element-plus';
+import 'element-plus/theme-chalk/index.css';
 let instance: any = null
 function render(props: any = {}) {
   const { container } = props
   instance = createApp(App)
   instance.use(createPinia())
+  instance.use(ElementPlus)
   instance.use(router)
   instance.use(router)
   instance.mount(container ? container.querySelector('#vue3-page') : '#vue3-page');

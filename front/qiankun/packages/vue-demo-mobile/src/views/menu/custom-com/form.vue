@@ -181,7 +181,7 @@ export default {
       showPicker: [false, false],
       formData: {},
       treeProps: {
-        children: 'children',
+        children: 'children', 
         label: 'name'
       },
       renderList: [
@@ -204,7 +204,7 @@ export default {
             mes: '请选择派工类型'
           }],
           init (_, index) {
-            _.setList({ api: '/common/typeList', data: {} }, index)
+            _.setList({ api: '/common/typeList', data: {} }, index);
           },
           onConfirm: (value, index) => {
             this.pickerComfirm(value, index)
