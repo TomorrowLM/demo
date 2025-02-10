@@ -50,5 +50,5 @@ export interface ConfigProps {
 }
 
 export interface MonacoEditorProps {
-  registerLanguage: (data: RegisterLanguageModule) => void
+  // registerLanguage: (data: RegisterLanguageModule) => void
 }

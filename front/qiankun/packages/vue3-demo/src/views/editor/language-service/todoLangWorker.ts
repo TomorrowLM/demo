@@ -1,7 +1,7 @@
 import type * as monaco from 'monaco-editor';
-import TodoLangLanguageService from './LanguageService';
-import type { ITodoLangError } from './TodoLangErrorListener';
+import TodoLangLanguageService from './sql/service1';
 import * as monacoWorker from 'monaco-editor/esm/vs/editor/editor.worker.js';
+// import AviService from './aviatorscript/service';
 import IWorkerContext = monaco.worker.IWorkerContext;
 //在monaco代理的worker中需要去initialize先初始化TodoLangWorker
 self.onmessage = () => {
@@ -24,10 +24,10 @@ export class TodoLangWorker {
         // console.log('TodoLangWorker:ctx', this._ctx, this.CreateData);
         const code = this.getTextDocument();
         // console.log(code)
-        return Promise.resolve(this.languageService.validate(code, this.CreateData));
+        // return Promise.resolve(AviService.parse(code));
     }
     format(code: string): Promise<string> {
-        return Promise.resolve(this.languageService.format(code));
+        return Promise.resolve(AviService.format(code));
     }
     private getTextDocument(): string {
         const model = this._ctx.getMirrorModels()[0];// When there are multiple files open, this will be an array

@@ -46,7 +46,7 @@ onMounted(async () => {
       name: 'AviatorScript'
     },
   })
-  await editor.init()
+
   await editor.creatWorker()
   await editor.formatCode()
   editor.initSetValue('const name="liming"')
