@@ -13,7 +13,7 @@ export interface ITodoLangError {
 export default class TodoLangErrorListener implements ANTLRErrorListener<any> {
   private errors: ITodoLangError[] = []
   syntaxError(recognizer: Recognizer<any, any>, offendingSymbol: any, line: number, charPositionInLine: number, message: string, e: RecognitionException | undefined): void {
-
+    console.log('recognizer, offendingSymbol', line, charPositionInLine, message, e)
     this.errors.push(
       {
         startLineNumber: line,

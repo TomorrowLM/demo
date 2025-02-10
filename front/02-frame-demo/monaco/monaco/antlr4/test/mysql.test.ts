@@ -68,12 +68,11 @@ class SelectParser {
 }
 
 test("can parse and tokenize a query", () => {
-  // // 试一下效果
+  // 试一下效果
   const selectParser = new SelectParser();
   // const parseTree = selectParser.parse("SELECT * FROM table1");
   const parseTree = selectParser.parse(`
-  ADD TODO "Create an editor"
-  COMPLETE TODO "Create an editor"
+  select a frmo 1;
   `);
   console.log(parseTree);
 });

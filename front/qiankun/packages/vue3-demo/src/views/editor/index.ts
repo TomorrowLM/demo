@@ -13,7 +13,7 @@ import { language as sqlLanguage } from 'monaco-editor/esm/vs/basic-languages/sq
 import aviSuggestions from './aviatorscript/suggestions.js';
 import aviMonarchs from './aviatorscript/monarch';
 
-import { WorkerManager } from './language-service/worker';
+import { WorkerManager } from './language-service/WorkerManager';
 import DiagnosticsAdapter from './language-service/DiagnosticsAdapter';
 import TodoLangWorker from './language-service/todoLangWorker.ts?worker';
 import { reactive } from 'vue';
@@ -53,7 +53,7 @@ monaco.editor.defineTheme('myTheme', {
 export default class MonacoEditor implements MonacoEditorProps {
   protected editorInstance: any; // 编辑器实例
   protected htmlBox: HTMLElement;
-  protected config: ConfigProps;
+  protected monacoConfig: ConfigProps;
   protected DiagnosticsAdapter: any; // 语法校验诊断
   protected suggestInstance: IDisposable; // 补全实例
   // public codeInfo: {
@@ -68,7 +68,7 @@ export default class MonacoEditor implements MonacoEditorProps {
 
   constructor(config: ConfigProps) {
     this.htmlBox = document.getElementById(config.el) as HTMLElement;
-    this.config = config;
+    this.monacoConfig = config;
     this.languageConfig = {
       sql: {
         name: 'sql',
@@ -105,19 +105,23 @@ export default class MonacoEditor implements MonacoEditorProps {
   }
 
   async init() {
+    console.log('init', this.monacoConfig?.languageConfig?.name)
+    const languageConfig = this.languageConfig[this.monacoConfig?.languageConfig?.name || 'AviatorScript'];
+    if (languageConfig) {
+      await this.registerLanguage(languageConfig)
+    }
     await this.creatWorker();//在初始化之前，先设置MonacoEnvironment环境，不然代码提示会报错
-    await this.registerLanguage(this.languageConfig[this.config.languageConfig.name])
     this.editorInstance = monaco.editor.create(this.htmlBox, {
-      value: this.config?.defaultDoc ? this.config?.defaultDoc : '',
+      value: this.monacoConfig?.defaultDoc ? this.monacoConfig?.defaultDoc : '',
       automaticLayout: true,
-      readOnly: this.config?.readOnly ? this.config.readOnly : false,
-      language: this.config?.languageConfig?.name || 'AviatorScript',
+      readOnly: this.monacoConfig?.readOnly ? this.monacoConfig.readOnly : false,
+      language: this.monacoConfig?.languageConfig?.name || 'AviatorScript',
       lineNumbers: 'on',
       fontSize: 16,
       folding: true, // 是否启用代码折叠
       links: true, // 是否点击链接
-      theme: this.config?.theme || 'vs',
-      ...this.config?.prettier,
+      theme: this.monacoConfig?.theme || 'vs',
+      ...this.monacoConfig?.prettier,
       scrollbar: {
       },
     });
@@ -145,32 +149,8 @@ export default class MonacoEditor implements MonacoEditorProps {
         }
         return new monacoWorker();
       }
-    }; 
-    //是 Monaco Editor 提供的一个方法，用于在特定语言被加载时执行回调函数。这个方法可以用来设置语言相关的功能，例如语法检查、自动补全等。
-    monaco.languages.onLanguage(this.config?.languageConfig?.name, () => {
-      console.log(this.config?.languageConfig?.name)
-      // monacoWorker.initialize((ctx, CreateData) => {
-      //   // console.log(ctx, CreateData);
-      //   return new TodoLangWorker(ctx, CreateData)
-      // });
+    };
 
-      const client = new WorkerManager(this.config?.languageConfig?.name);
-      console.log('client', client)
-      const worker = (...uris: monaco.Uri[]) => {
-        return client.getLanguageServiceWorker(...uris);
-      };
-      console.log('worker', worker)
-      this.DiagnosticsAdapter = new DiagnosticsAdapter(worker);
-    });
-    //worker中代理方法需要去initialize先初始化TodoLangWorker
-    // self.onmessage = (message: any) => {
-    //   // console.log('get:message', self, message);
-    //   // worker.parse(this.editorInstance)
-    //   //使用内置的worker.initialize初始化我们的 worker，并使用TodoLangWorker进行必要的方法代理
-    //   monacoWorker.initialize((ctx: monaco.worker.IWorkerContext, createData: any) => {
-    //     return new WorkerManager(ctx, createData)
-    //   });
-    // };
   }
 
   async monarchToken(languageConfig: ConfigProps['languageConfig']) {
@@ -191,7 +171,17 @@ export default class MonacoEditor implements MonacoEditorProps {
 
 
   async registerLanguage(languageConfig: ConfigProps['languageConfig']): void {
-    await monaco.languages.register({ id: languageConfig.name });
+    await monaco.languages.register({ id: this.monacoConfig.languageConfig.name });
+    //是 Monaco Editor 提供的一个方法，用于在特定语言被加载时执行回调函数。这个方法可以用来设置语言相关的功能，例如语法检查、自动补全等。
+    await monaco.languages.onLanguage(this.monacoConfig?.languageConfig?.name, () => {
+      const client = new WorkerManager(this.monacoConfig?.languageConfig?.name);
+      console.log('onLanguage-client', client)
+      const worker = (...uris: monaco.Uri[]) => {
+        return client.getLanguageServiceWorker(...uris);
+      };
+      console.log('onLanguage-worker', worker)
+      this.DiagnosticsAdapter = new DiagnosticsAdapter(worker);
+    });
     await this.setAutoComplete(languageConfig)
     await languageConfig.monarchTokens && this.monarchToken(languageConfig)
   }
@@ -242,7 +232,7 @@ export default class MonacoEditor implements MonacoEditorProps {
       // monaco.languages.typescript.javascriptDefaults.addExtraLib(libSource, 'index.d.ts');
     }
     //注册语法片段
-    // monaco.languages.registerCompletionItemProvider(this.config.language, {
+    // monaco.languages.registerCompletionItemProvider(this.monacoConfig.language, {
     //   provideCompletionItems: async (model, position) => {
     //     // const wordUntil = model.getWordUntilPosition(position);
     //     // const defaultRange = new monaco.Range(position.lineNumber, wordUntil.startColumn, position.lineNumber, wordUntil.endColumn);
@@ -323,7 +313,7 @@ export default class MonacoEditor implements MonacoEditorProps {
 
   insertText(e1: any, e2?: any) {
     let readOnlyStatus = false
-    this.config.readOnlyArr && this.config.readOnlyArr.forEach(element => {
+    this.monacoConfig.readOnlyArr && this.monacoConfig.readOnlyArr.forEach(element => {
       if (this.getPosition().lineNumber === element.lineNumber) {
         readOnlyStatus = true
       }

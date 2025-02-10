@@ -6,7 +6,7 @@ import IWorkerContext = monaco.worker.IWorkerContext;
 //在monaco代理的worker中需要去initialize先初始化TodoLangWorker
 self.onmessage = () => {
     monacoWorker.initialize((ctx, CreateData) => {
-        // console.log(ctx, CreateData);
+        console.log(ctx, CreateData, 'onmessage');
         return new TodoLangWorker(ctx, CreateData)
     });
 };

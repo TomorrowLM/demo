@@ -12,8 +12,9 @@ export default function parseAndGetASTRoot(code: string): TodoExpressionsContext
 }
 
 test("can parse and tokenize a query", () => {
-  console.log(  parseAndGetASTRoot(`
-  ADD TODO "Create an editor"
-  COMPLETE TODO "Create an editor"
-  `))
+    const ast = parseAndGetASTRoot(`
+        ADD TODO "Create an editor"
+        COMPLETE TODO "Create an editor"
+        `)
+    console.log('ast', ast)
 });
