@@ -55,12 +55,12 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    optimizeDeps: {
-      include: [
-        'monaco-editor/esm/vs/editor/editor.worker', // 预构建
-        // './src/views/editor/language-service/todoLangWorker.ts',
-      ]
-    },
+    // optimizeDeps: {
+    //   include: [
+    //     // 'monaco-editor/esm/vs/editor/editor.worker', // 预构建
+    //     // './src/views/editor/language-service/todoLangWorker.ts',
+    //   ]
+    // },
     plugins: [
       Vue(),
       nodePolyfills(),

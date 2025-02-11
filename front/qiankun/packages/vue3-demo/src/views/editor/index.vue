@@ -37,19 +37,18 @@ import { useRoute, useRouter } from 'vue-router'
 import MonacoEditor from './index'
 import { onMounted } from 'vue'
 import * as monaco from 'monaco-editor'
+import { setupLanguage } from './language-service/setup'
 let editor: any = null
 onMounted(async () => {
-  editor = new MonacoEditor({
+  // await setupLanguage({ id: 'AviatorScript' })
+  editor = await new MonacoEditor({
     el: 'container',
     defaultDoc: '',
     languageConfig: {
       name: 'AviatorScript'
-    },
+    }
   })
-
-  await editor.creatWorker()
-  await editor.formatCode()
-  editor.initSetValue('const name="liming"')
+  await editor.initSetValue('const name="liming"')
 })
 const form: any = ref({
   language: 'aviatorScript',
