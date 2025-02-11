@@ -16,7 +16,6 @@ export default class DiagnosticsAdapter {
         clearTimeout(handle);
         handle = setTimeout(() => {
           this.validate(model.uri);
-          console.log('validate', 2)
         }, 500);
       });
 
@@ -26,13 +25,13 @@ export default class DiagnosticsAdapter {
     // monaco.editor.getModels().forEach(onModelAdd);
   }
   private async validate(resource: monaco.Uri): Promise<void> {
-    console.log('validate', this.worker);
-    // get the worker proxy
-    const worker = await this.worker(resource)
+    console.log('validate', resource);
+    // // get the worker proxy
+    const worker = this.worker(resource)
     // get the current model(editor or file) which is only one
     const model: any = monaco.editor.getModel(resource);
     console.log('validate', 2)
-    // console.log(worker);
+    console.log(worker);
     // call the validate methode proxy from the langaueg service and get errors
     const errorMarkers = await worker.doValidation(resource);
     // console.log(errorMarkers);

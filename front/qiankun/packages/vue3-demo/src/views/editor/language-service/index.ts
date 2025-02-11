@@ -42,14 +42,14 @@ export default class LanguageService {
     if (this.config.name === 'AviatorScript') {
       this.serviceInstance = AviService;
     }
-    this.creatWorker();//在初始化之前，先设置MonacoEnvironment环境，不然代码提示会报错
-    this.registerLanguage()
+   this.creatWorker();//在初始化之前，先设置MonacoEnvironment环境，不然代码提示会报错
+   this.registerLanguage()
   }
   creatWorker() {
     (window as any).MonacoEnvironment = {
       getWorker: function (moduleId: string, label: string) {
         // label 是语言类型，比如：sql, AviatorScript, json等，这里可以根据需要自定义worker的加载方式
-        console.log(moduleId, label === 'AviatorScript', 2, label);
+        console.log('getWorker', moduleId, label === 'AviatorScript', 2, label);
         if (label === 'AviatorScript') {
           return new TodoLangWorker();
         }
@@ -68,18 +68,17 @@ export default class LanguageService {
         return new editorWorker();
       }
     };
-
   }
   async registerLanguage(): Promise<void> {
+    console.log('registerLanguage')
     await monaco.languages.register({ id: this.config.name });
-    //是 Monaco Editor 提供的一个方法，用于在特定语言被加载时执行回调函数。这个方法可以用来设置语言相关的功能，例如语法检查、自动补全等。
+    // //是 Monaco Editor 提供的一个方法，用于在特定语言被加载时执行回调函数。这个方法可以用来设置语言相关的功能，例如语法检查、自动补全等。
     await monaco.languages.onLanguage(this.config.name, () => {
       const client = new WorkerManager(this.config.name);
       console.log('onLanguage-client', client)
       const worker = (...uris: monaco.Uri[]) => {
         return client.getLanguageServiceWorker(...uris);
       };
-      console.log('onLanguage-worker', worker)
       this.DiagnosticsAdapter = new DiagnosticsAdapter(worker);
     });
   }

@@ -1,7 +1,7 @@
 import * as monaco from "monaco-editor";
 // import { languageExtensionPoint, languageID } from "./config";
 // import { richLanguageConfiguration, monarchLanguage } from "./TodoLang";
-import { TodoLangWorker } from "./todoLangWorker";
+import TodoLangWorker from "./todoLangWorker";
 import { WorkerManager } from "./WorkerManager";
 import DiagnosticsAdapter from "./DiagnosticsAdapter";
 // import TodoLangFormattingProvider from "./TodoLangFormattingProvider";
@@ -49,5 +49,3 @@ export function setupLanguage(languageID: any) {
   });
 
 }
-
-export type WorkerAccessor = (...uris: monaco.Uri[]) => Promise<TodoLangWorker>;

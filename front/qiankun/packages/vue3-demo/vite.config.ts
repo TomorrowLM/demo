@@ -15,6 +15,7 @@ import qiankun from 'vite-plugin-qiankun'
 import { visualizer } from 'rollup-plugin-visualizer'
 import importToCDN, { cdn } from 'vite-plugin-cdn-import'
 import inject from '@rollup/plugin-inject'
+import monacoEditorPlugin from "vite-plugin-monaco-editor"
 // import MonacoEditorPlugin from 'vite-plugin-monaco-editor' // 使用vite-plugin-monaco-editor
 // import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';// 引入rollup-plugin-visualizer模块
 // import Inspect from 'vite-plugin-inspect'; //可以让开发者在浏览器端就可以看到vue文件编译后的代码、vue文件的相互依赖关系
@@ -193,6 +194,15 @@ export default defineConfig(({ mode }) => {
           // },
         ]
       }),
+      // (monacoEditorPlugin as any).default({
+      //   languageWorkers: ['json', 'AviatorScript', 'editorWorkerService'],
+      //   customWorkers: [
+      //     {
+      //       label: 'AviatorScript',
+      //       entry: './src/views/editor/language-service/todoLangWorker.worker'
+      //     }
+      //   ]
+      // })
       // MonacoEditorPlugin({
       //   languageWorkers: ['editorWorkerService']
       // })

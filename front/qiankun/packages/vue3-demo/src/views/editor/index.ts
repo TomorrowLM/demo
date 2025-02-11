@@ -49,20 +49,22 @@ export default class MonacoEditor implements MonacoEditorProps {
   async init() {
     console.log('init', this.monacoConfig?.languageConfig?.name)
     this.LanguageServiceInstance = await new LanguageService(this.monacoConfig?.languageConfig);
-    this.editorInstance = monaco.editor.create(this.htmlBox, {
-      value: this.monacoConfig?.defaultDoc ? this.monacoConfig?.defaultDoc : '',
-      automaticLayout: true,
-      readOnly: this.monacoConfig?.readOnly ? this.monacoConfig.readOnly : false,
-      language: this.monacoConfig?.languageConfig?.name || 'AviatorScript',
-      lineNumbers: 'on',
-      fontSize: 16,
-      folding: true, // 是否启用代码折叠
-      links: true, // 是否点击链接
-      theme: this.monacoConfig?.theme || 'vs',
-      ...this.monacoConfig?.prettier,
-      scrollbar: {
-      },
-    });
+    setTimeout(() => {
+      this.editorInstance = monaco.editor.create(this.htmlBox, {
+        value: this.monacoConfig?.defaultDoc ? this.monacoConfig?.defaultDoc : '',
+        automaticLayout: true,
+        readOnly: this.monacoConfig?.readOnly ? this.monacoConfig.readOnly : false,
+        language: this.monacoConfig?.languageConfig?.name || 'AviatorScript',
+        lineNumbers: 'on',
+        fontSize: 16,
+        folding: true, // 是否启用代码折叠
+        links: true, // 是否点击链接
+        theme: this.monacoConfig?.theme || 'vs',
+        ...this.monacoConfig?.prettier,
+        scrollbar: {
+        },
+      });
+    }, 1000)
   }
 
   isChinese(text) {

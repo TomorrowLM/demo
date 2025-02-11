@@ -48,10 +48,10 @@ onMounted(async () => {
       name: 'AviatorScript'
     }
   })
-  await editor.initSetValue('const name="liming"')
+  // await editor.initSetValue('const name="liming"')
 })
 const form: any = ref({
-  language: 'aviatorScript',
+  language: 'AviatorScript',
   theme: 'vs'
 })
 const options = ref({

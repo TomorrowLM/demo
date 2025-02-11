@@ -1,15 +1,14 @@
 import type * as monaco from 'monaco-editor';
 import * as monacoWorker from 'monaco-editor/esm/vs/editor/editor.worker.js';
 import AviService from './aviatorscript/service';
-import * as edworker from 'monaco-editor/esm/vs/editor/editor.worker';
 import IWorkerContext = monaco.worker.IWorkerContext;
 //在monaco代理的worker中需要去initialize先初始化TodoLangWorker
-self.onmessage = () => {
-  edworker.initialize((ctx, CreateData) => {
-    console.log(ctx, CreateData, 'onmessage');
-    return new TodoLangWorker(ctx, CreateData)
-  });
-};
+// self.onmessage = () => {
+//     monacoWorker.initialize((ctx, CreateData) => {
+//         console.log(ctx, CreateData, 'onmessage');
+//         return new TodoLangWorker(ctx, CreateData)
+//     });
+// };
 export default class TodoLangWorker {
   // private _ctx: IWorkerContext;
   // private CreateData: any;
