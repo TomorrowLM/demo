@@ -1,7 +1,7 @@
 import * as monaco from "monaco-editor";
 // import { languageExtensionPoint, languageID } from "./config";
 // import { richLanguageConfiguration, monarchLanguage } from "./TodoLang";
-import TodoLangWorker from "./todoLangWorker";
+import TodoLangWorker from "./todoLangWorker?worker";
 import { WorkerManager } from "./WorkerManager";
 import DiagnosticsAdapter from "./DiagnosticsAdapter";
 // import TodoLangFormattingProvider from "./TodoLangFormattingProvider";

@@ -1,9 +1,9 @@
 import * as monaco from 'monaco-editor';
 import { WorkerManager } from './WorkerManager';
 import DiagnosticsAdapter from './DiagnosticsAdapter';
-import type { MonacoEditorProps, ConfigProps } from '../index.d';
+import type { MonacoEditorProps, ConfigProps } from '../../../components/monaco/monacoEditor2';
 import AviService from './aviatorscript/service';
-import TodoLangWorker from './todoLangWorker.ts?worker';
+import TodoLangWorker from './todoLangWorker?worker';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
@@ -42,8 +42,8 @@ export default class LanguageService {
     if (this.config.name === 'AviatorScript') {
       this.serviceInstance = AviService;
     }
-   this.creatWorker();//在初始化之前，先设置MonacoEnvironment环境，不然代码提示会报错
-   this.registerLanguage()
+    await this.registerLanguage()
+    await this.creatWorker();//在初始化之前，先设置MonacoEnvironment环境，不然代码提示会报错
   }
   creatWorker() {
     (window as any).MonacoEnvironment = {

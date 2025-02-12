@@ -28,21 +28,45 @@
         </el-select>
       </el-form-item>
     </el-form>
-    <div class="" id="container" style="width: 600px; height: 400px"></div>
+    <div class="d-flex" style="display: flex">
+      <!-- <div class="" id="container1" style="width: 600px; height: 400px"></div>
+      <div class="" id="container2" style="width: 600px; height: 400px"></div> -->
+      <div class="" id="container3" style="width: 600px; height: 400px"></div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
-import MonacoEditor from './index'
+import MonacoEditor1 from '@/components/monaco/monacoEditor1/index.jss'
+import MonacoEditor2 from '@/components/monaco/monacoEditor2/index.js'
+import MonacoEditor3 from '@/components/monaco/index.js'
+
 import { onMounted } from 'vue'
 import * as monaco from 'monaco-editor'
-import { setupLanguage } from './language-service/setup'
-let editor: any = null
+// import { setupLanguage } from './language-service/setup.js'
+let editor1: any = null
+let editor2: any = null
+let editor3: any = null
 onMounted(async () => {
   // await setupLanguage({ id: 'AviatorScript' })
-  editor = await new MonacoEditor({
-    el: 'container',
+  // editor1 = await new MonacoEditor1({
+  //   tag: 'container1',
+  //   defaultDoc: '',
+  //   languageConfig: {
+  //     name: 'AviatorScript'
+  //   }
+  // })
+
+  // editor2 = await new MonacoEditor2({
+  //   tag: 'container2',
+  //   defaultDoc: '',
+  //   languageConfig: {
+  //     name: 'AviatorScript'
+  //   }
+  // })
+  editor3 = await new MonacoEditor3({
+    el: 'container3',
     defaultDoc: '',
     languageConfig: {
       name: 'AviatorScript'

@@ -1,7 +1,19 @@
 import * as monaco from 'monaco-editor';
-// import initialize from 'monaco-editor/esm/vs/editor/editor.worker?worker';
-import type { MonacoEditorProps, ConfigProps } from './index.d';
+// import type { IDisposable } from 'monaco-editor';
+// import * as monacoWorker from 'monaco-editor/esm/vs/editor/editor.worker.js';
+// import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+// import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
+// import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
+// import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+// import { language as sqlLanguage } from 'monaco-editor/esm/vs/basic-languages/sql/sql.js';
+
+// import { WorkerManager } from '../monacoEditor2/language-service/worker'
+// import DiagnosticsAdapter from './language-service/DiagnosticsAdapter'
+// import TodoLangWorker from '../todoLangWorker?worker'
+
 import LanguageService from './language-service/index'
+
+
 
 monaco.editor.defineTheme('myTheme', {
   base: 'vs',
@@ -35,10 +47,11 @@ monaco.editor.defineTheme('myTheme', {
   ],
 });
 
-export default class MonacoEditor implements MonacoEditorProps {
+export default class MonacoEditor3 implements MonacoEditorProps {
   protected editorInstance: any; // 编辑器实例
   protected htmlBox: HTMLElement;
   protected monacoConfig: ConfigProps;
+  protected DiagnosticsAdapter: any;
   protected LanguageServiceInstance: any; // 语言服务实例
   constructor(config: ConfigProps) {
     this.htmlBox = document.getElementById(config.el) as HTMLElement;
@@ -49,24 +62,56 @@ export default class MonacoEditor implements MonacoEditorProps {
   async init() {
     console.log('init', this.monacoConfig?.languageConfig?.name)
     this.LanguageServiceInstance = await new LanguageService(this.monacoConfig?.languageConfig);
-    setTimeout(() => {
-      this.editorInstance = monaco.editor.create(this.htmlBox, {
-        value: this.monacoConfig?.defaultDoc ? this.monacoConfig?.defaultDoc : '',
-        automaticLayout: true,
-        readOnly: this.monacoConfig?.readOnly ? this.monacoConfig.readOnly : false,
-        language: this.monacoConfig?.languageConfig?.name || 'AviatorScript',
-        lineNumbers: 'on',
-        fontSize: 16,
-        folding: true, // 是否启用代码折叠
-        links: true, // 是否点击链接
-        theme: this.monacoConfig?.theme || 'vs',
-        ...this.monacoConfig?.prettier,
-        scrollbar: {
-        },
-      });
-    }, 1000)
-  }
+    // if (this.monacoConfig?.languageConfig?.name === 'sql') {
 
+    // } else {
+    //   await this.registerLanguage({
+    //     name: 'AviatorScript',
+    //   })
+    // }
+    // (window as any).MonacoEnvironment = {
+    //   getWorker: function (moduleId, label) {
+    //     console.log(moduleId, label === 'AviatorScript', 2, label);
+    //     if (label === 'AviatorScript') {
+    //       // return './language-service/todoLangWorker.js';
+    //       const worker = new TodoLangWorker()
+    //       return worker;
+    //     } else if (label === 'sql') {
+    //       const worker = new TodoLangWorker()
+    //       return worker;
+    //     }
+    //     return new monacoWorker();
+    //   }
+    // }
+
+    // monaco.languages.onLanguage(this.monacoConfig?.languageConfig?.name, () => {
+    //   const client = new WorkerManager(this.monacoConfig?.languageConfig?.name);
+    //   const worker = (...uris: monaco.Uri[]) => {
+    //     return client.getLanguageServiceWorker(...uris);
+    //   };
+    //   console.log('monaco.languages.onLanguage')
+    //   this.DiagnosticsAdapter = new DiagnosticsAdapter(worker);
+    // });
+    this.editorInstance = monaco.editor.create(this.htmlBox, {
+      value: this.monacoConfig?.defaultDoc ? this.monacoConfig?.defaultDoc : '',
+      automaticLayout: true,
+      readOnly: this.monacoConfig?.readOnly ? this.monacoConfig.readOnly : false,
+      language: this.monacoConfig?.languageConfig?.name || 'AviatorScript',
+      lineNumbers: 'on',
+      fontSize: 16,
+      folding: true, // 是否启用代码折叠
+      links: true, // 是否点击链接
+      theme: this.monacoConfig?.theme || 'vs',
+      ...this.monacoConfig?.prettier,
+      scrollbar: {
+      },
+    });
+  }
+  async registerLanguage(languageConfig: ConfigProps['languageConfig']): void {
+    await monaco.languages.register({ id: languageConfig.name });
+    // await this.setAutoComplete(languageConfig)
+    // await languageConfig.monarchTokens && this.monarchToken(languageConfig)
+  }
   isChinese(text) {
     const pattern = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
     return pattern.test(text);
