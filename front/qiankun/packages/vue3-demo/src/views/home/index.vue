@@ -3,6 +3,7 @@
     <div class="box d-center m-12" @click="jump(0)">vue-grammar</div>
     <div class="box d-center m-12" @click="jump(1)">3D</div>
     <div class="box d-center m-12" @click="jump(2)">editor</div>
+    <div class="box d-center m-12" @click="jump(3)">media</div>
   </div>
 </template>
 <script setup lang="ts">
@@ -17,6 +18,8 @@ const jump = (e) => {
     router.push('/3D')
   } else if (e === 2) {
     router.push('/editor')
+  }else if (e === 3) {
+    router.push('/media')
   }
 }
 </script>

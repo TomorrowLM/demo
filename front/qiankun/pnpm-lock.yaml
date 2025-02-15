@@ -737,6 +737,9 @@ importers:
       eslint-plugin-vue:
         specifier: ^9.17.0
         version: 9.32.0(eslint@8.57.1)
+      hls.js:
+        specifier: ^1.5.20
+        version: 1.5.20
       jsdom:
         specifier: ^24.0.0
         version: 24.1.3
@@ -7670,6 +7673,9 @@ packages:
 
   history@4.10.1:
     resolution: {integrity: sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==}
+
+  hls.js@1.5.20:
+    resolution: {integrity: sha512-uu0VXUK52JhihhnN/MVVo1lvqNNuhoxkonqgO3IpjvQiGpJBdIXMGkofjQb/j9zvV7a1SW8U9g1FslWx/1HOiQ==}
 
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
@@ -23588,6 +23594,8 @@ snapshots:
       tiny-warning: 1.0.3
       value-equal: 1.0.1
 
+  hls.js@1.5.20: {}
+
   hmac-drbg@1.0.1:
     dependencies:
       hash.js: 1.1.7
@@ -29810,7 +29818,7 @@ snapshots:
       schema-utils: 4.3.0
       serialize-javascript: 6.0.2
       terser: 5.37.0
-      webpack: 5.97.1(webpack-cli@5.1.4)
+      webpack: 5.97.1(webpack-cli@4.10.0)
 
   terser@4.8.1:
     dependencies:

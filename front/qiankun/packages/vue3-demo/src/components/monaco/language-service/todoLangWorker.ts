@@ -17,7 +17,7 @@ export default class TodoLangWorker {
   constructor(ctx: any, CreateData: any) {
     this._ctx = ctx;
     this.CreateData = CreateData;
-    // this.languageService = AviService;
+    this.languageService = new AviService();
   }
   doValidation(model: monaco.editor.IModel): Promise<any[]> {
     const code = this.getTextDocument();
@@ -25,7 +25,7 @@ export default class TodoLangWorker {
     return Promise.resolve();
   }
   format(code: string): Promise<string> {
-    return Promise.resolve(this.languageService.format(code));
+    // return Promise.resolve(this.languageService.format(code));
   }
   private getTextDocument(): string {
     const model = this._ctx.getMirrorModels()[0];// When there are multiple files open, this will be an array

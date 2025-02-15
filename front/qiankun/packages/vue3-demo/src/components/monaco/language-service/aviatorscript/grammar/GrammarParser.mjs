@@ -1,4 +1,4 @@
-import antlr4 from 'antlr4';
+import antlr4 from 'antlr4ts';
 
 import DSLLexer from './DSLLexer.js';
 import DSLParser from './DSLParser.js';

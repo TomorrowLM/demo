@@ -97,6 +97,10 @@ export const routes = [
     path: '/editor',
     name: 'editor',
     component: () => import('../views/editor/index.vue')
+  }, {
+    path: '/media',
+    name: 'media',
+    component: () => import('../views/media/index.vue')
   }
 ]
 

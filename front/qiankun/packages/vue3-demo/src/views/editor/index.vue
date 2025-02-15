@@ -38,8 +38,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
-import MonacoEditor1 from '@/components/monaco/monacoEditor1/index.jss'
-import MonacoEditor2 from '@/components/monaco/monacoEditor2/index.js'
+// import MonacoEditor1 from '@/components/monaco/monacoEditor1/index.jss'
+// import MonacoEditor2 from '@/components/monaco/monacoEditor2/index.js'
 import MonacoEditor3 from '@/components/monaco/index.js'
 
 import { onMounted } from 'vue'
