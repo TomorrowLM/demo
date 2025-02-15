@@ -150,6 +150,11 @@ const cssConfig = (isMobile = false) => {
     // }
   }
 }
+    // config.plugins = [
+    //   ...config.plugins || [],
+    //   new webpack.ProvidePlugin({
+    //     $lm: '@lm/shared/lib/src/utils',
+    //   }),]
 const aliasConfigFn = (resolve) => {
   return {
     '@': resolve('./src'),
@@ -197,7 +202,6 @@ const baseConfig = (processVars) => {
     productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
     ...devServerConfig(VUE_APP_BASE_URL, VUE_APP_API_HOST, VUE_APP_Port),
     ...cssConfig(),
-    ...webpackBaseConfig
   }
 }
 

@@ -3,18 +3,20 @@ const path = require('path');
 const { webpackBaseConfig, baseConfig, cssConfig } = require('@lm/shared/src/config/vue')
 const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const pxtorem = require('postcss-pxtorem');
-
 const packageName = require('./package.json').name;
 const resolve = (dir) => path.join(__dirname, dir);
-console.log(process.env.NODE_ENV, process.env.VUE_APP_API_BASE_URL, 1);
+console.log(process.env.NODE_ENV, process.env.VUE_APP_IS_QIANKUN, process.env.VUE_APP_API_HOST, 1);
 const config = baseConfig(process.env)
+const { qiankunConfigFn } = require('@lm/shared/src/config/qiankun')
+const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
 module.exports = {
   ...config,
   configureWebpack: (config) => {
-    // 配置别名
-    webpackBaseConfig(process.env, config, resolve)
+    webpackBaseConfig(process.env, config, resolve);
+    isQiankun && qiankunConfigFn({ projectName: 'web1', config })
   },
-  ...cssConfig(true)
+  ...cssConfig(true),
+
   // css: {
   //   extract: !!isProd,
   //   sourceMap: false,

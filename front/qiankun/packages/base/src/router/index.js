@@ -15,6 +15,9 @@ export const router = createBrowserRouter([
         element: <Web1></Web1>,
         children: [
           {
+            path: "home",
+          },
+          {
             path: "learn",
           },
           {
@@ -22,6 +25,9 @@ export const router = createBrowserRouter([
           },
           {
             path: "login",
+          },
+          {
+            path: "menu",
           },
         ],
       },
@@ -33,8 +39,11 @@ export const router = createBrowserRouter([
             path: "login",
           },
           {
+            path: "dashboard",
+          },
+          {
             path: "user",
-          }, 
+          },
           {
             path: "demo",
             children: [{

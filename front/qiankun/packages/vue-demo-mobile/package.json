@@ -8,6 +8,7 @@
   },
   "scripts": {
     "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local",
+    "serve:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local.qiankun",
     "start": "vue-cli-service serve --mode dev",
     "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
@@ -19,12 +20,12 @@
     "core-js": "^3.8.3",
     "echarts": "^5.3.3",
     "node-gyp": "^8.4.0",
+    "node-sass": "^9.0.0",
     "register-service-worker": "^1.7.1",
     "sass": "^1.77.6",
     "sass-loader": "^10.0.1",
     "tslib": "^2.3.0",
-    "vue": "^2.6.14",
-    "node-sass": "^9.0.0"
+    "vue": "^2.6.14"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -33,6 +34,7 @@
     "autoprefixer": "^9.8.4",
     "axios": "^0.24.0",
     "babel-plugin-component": "^1.1.1",
+    "cross-env": "^7.0.3",
     "element-ui": "^2.15.6",
     "moment": "^2.29.1",
     "postcss-pxtorem": "5.1.1",

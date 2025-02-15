@@ -1,5 +1,4 @@
 import Vue from 'vue';
-
 import Vant from 'vant';
 import 'vant/lib/index.css';
 
@@ -21,7 +20,6 @@ import './public-path';
 // Vue.config.productionTip = false;
 // import '@lm/shared/src/vue/sdk'
 Vue.use(Vant);
-
 console.log(process.env.BASE_URL, window.__POWERED_BY_QIANKUN__);
 let instance = null;
 function render (props = {}) {

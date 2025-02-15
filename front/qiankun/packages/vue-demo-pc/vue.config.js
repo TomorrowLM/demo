@@ -1,15 +1,13 @@
 const path = require('path')
-
 const { defineConfig } = require('@vue/cli-service')
-
 const { webpackBaseConfig, baseConfig } = require('@lm/shared/src/config/vue')
 const autoprefixer = require('autoprefixer') // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const webpack = require('webpack')
-
 const resolve = dir => path.join(__dirname, dir)
 const packageName = require('./package.json').name
 const config = baseConfig(process.env)
-
+const { qiankunConfigFn } = require('@lm/shared/src/config/qiankun')
+const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
 module.exports = defineConfig({
   ...config,
   configureWebpack: config => {
@@ -18,12 +16,7 @@ module.exports = defineConfig({
       BMap: 'window.BMap', // 百度地图
       AMap: 'AMap' // 高德地图
     }
-    // config.plugins = [
-    //   ...config.plugins || [],
-    //   new webpack.ProvidePlugin({
-    //     $lm: '@lm/shared/lib/src/utils',
-    //   }),]
-    console.log(config.resolve.alias,config.plugins, 11)
+    isQiankun && qiankunConfigFn({ projectName: 'web2', config })
   },
   chainWebpack: config => {
     if (process.env.NODE_ENV === 'development') {
