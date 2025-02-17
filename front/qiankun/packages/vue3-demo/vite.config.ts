@@ -9,26 +9,24 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import dayjs from 'dayjs'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
-import path from 'path'
 import { nodePolyfills } from 'vite-plugin-node-polyfills' //允许你在浏览器环境中直接require或import Node.js的内置模块。通过这个插件，您可以轻松地在Web应用中使用诸如process、events、http和stream等常用的Node.js模块
 import qiankun from 'vite-plugin-qiankun'
 import { visualizer } from 'rollup-plugin-visualizer'
-import importToCDN, { cdn } from 'vite-plugin-cdn-import'
+import importToCDN from 'vite-plugin-cdn-import'
 import inject from '@rollup/plugin-inject'
 import monacoEditorPlugin from "vite-plugin-monaco-editor"
-// import MonacoEditorPlugin from 'vite-plugin-monaco-editor' // 使用vite-plugin-monaco-editor
 // import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';// 引入rollup-plugin-visualizer模块
 // import Inspect from 'vite-plugin-inspect'; //可以让开发者在浏览器端就可以看到vue文件编译后的代码、vue文件的相互依赖关系
 export default defineConfig(({ mode }) => {
-  const buildDate = dayjs().format('YYYY-MM-DD HH:mm:ss')
-  const env = loadEnv(mode, process.cwd(), 'CONFIG')
+  // const buildDate = dayjs().format('YYYY-MM-DD HH:mm:ss')
+  const env = loadEnv(mode, process.cwd(), 'VUE_APP')
   const proxyTarget = `http://${env.CONFIG_API_PROXY}`
-  const sprintVersion = env.CONFIG_SPRINT_VERSION || ''
   const srcPath = fileURLToPath(new URL('./src', import.meta.url))
   const typingsPath = resolve(srcPath, 'typings')
-  const appPublicPath = mode === 'elecPro' ? '../' : env.CONFIG_APP_PUBLIC || '/'
+  const isQiankun = mode === 'production.qiankun'
+  const appPublicPath = isQiankun ? env.VUE_APP_Build_Qiankun_Path : 'dist'
   const basePath = mode === 'elecPro' ? './' : env.CONFIG_APP_PUBLIC || '/'
-  const appBuildDir = env.CONFIG_APP_BUILD_DIR || 'dist'
+  const appBuildDir = isQiankun ? env.VUE_APP_OUTPUTDIR : 'dist'
   const isDev = mode === 'development' || mode === 'elecDev'
   const name = require('./package.json').name
   const externals = {
@@ -37,23 +35,71 @@ export default defineConfig(({ mode }) => {
   console.log(
     '========> mode = ',
     mode,
-    process.env.npm_package_version,
     ' appPublicPath = ',
     appPublicPath,
     '  proxyTarget = ',
-    proxyTarget
+    proxyTarget,
+    srcPath,
+    env.VUE_APP_Build_Qiankun_Path
   )
-  const qiankunPath = path.resolve(__dirname, '../../').replace(/\\/g, '//');
-
-  // path.resolve(__dirname, '../').replace(/\\/g, '/')
-  console.log(1234, qiankunPath)
-  console.log(srcPath, 1234)
+  const output = isQiankun ? {
+    // 把子应用打包成 umd 库格式
+    library: `${name}-[name]`,
+    libraryTarget: 'umd', // 把微应用打包成 umd 库格式
+    jsonpFunction: `webpackJsonp_${name}`, // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
+    // formats: ['es'],
+  } : {}
   return {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@use "@lm/shared/src/styles/index.scss" as *;`
+    // publicPath: appPublicPath,
+    base: appPublicPath,
+    // assetsPublicPath: './',
+    // productionSourceMap: true,
+    output,
+    define: {
+      __APP_VERSION__: "'1.0'",
+      // __APP_BUILD_DATE__: `'${buildDate}'`,
+    },
+    transpileDependencies: true,
+    inlineDynamicImports: true,
+    build: {
+      outDir: appBuildDir,
+      // emptyOutDir: true,
+      // chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        chunkFileNames: 'static/js/[name]-[hash].js',
+        output: {
+          globals: {
+            moment: 'moment',
+            uuid: 'uuid',
+            lodash: 'lodash',
+            jquery: '$'
+          },
+          // 分包
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString()
+            }
+          }
         }
+      }
+    },
+    server: {
+      host: true,
+      port: 8003,
+      proxy: {
+        '/api': {
+          target: 'http://192.168.110.59:7000'
+        },
+
+        '/mock': {
+          target: '192.168.110.41:7000'
+        }
+      }
+    },
+    external: ['jquery'],
+    resolve: {
+      alias: {
+        '@': srcPath,
       }
     },
     // optimizeDeps: {
@@ -203,12 +249,6 @@ export default defineConfig(({ mode }) => {
       //     }
       //   ]
       // })
-      // MonacoEditorPlugin({
-      //   languageWorkers: ['editorWorkerService']
-      // })
-      // new MonacoWebpackPlugin({ 
-      //   languages: ['typescript', 'javascript', 'css', 'AviatorScript']
-      // })
       // VueI18nPlugin({
       //   /* options */
       //   // locale messages resource pre-compile option
@@ -216,66 +256,23 @@ export default defineConfig(({ mode }) => {
       // }),
       // Inspect(),
     ],
-    resolve: {
-      alias: {
-        '@': srcPath,
-        '@shared': qiankunPath + '\\npm\\shared\\src'
-      }
+    worker: {
+      // --- do this
+      format: 'es',
+      // --- or this
+      // rollupOptions: {
+      //   output: {
+      //     inlineDynamicImports: true,
+      //   },
+      // },
     },
-    transpileDependencies: true,
-    publicPath: appPublicPath,
-    base: basePath,
-    // assetsPublicPath: './',
-    // productionSourceMap: true,
-    external: ['jquery'],
-    output: {
-      // 把子应用打包成 umd 库格式
-      library: `${name}-[name]`,
-      libraryTarget: 'umd', // 把微应用打包成 umd 库格式
-      jsonpFunction: `webpackJsonp_${name}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-    },
-    define: {
-      __APP_VERSION__: "'1.0'",
-      __APP_BUILD_DATE__: `'${buildDate}'`,
-      qiankunPath: `'${qiankunPath}'`
-      // __APP_VERSION__: `'${process.env.npm_package_version}${sprintVersion ? `.${sprintVersion}` : ''}'`,
-      // __APP_BUILD_COMMIT__: `'${buildCommit}'`,
-      // __APP_BUILD_BRANCH__: `'${buildBranch}'`,
-    },
-    build: {
-      outDir: appBuildDir,
-      // emptyOutDir: true,
-      // chunkSizeWarningLimit: 1000,
-      rollupOptions: {
-        chunkFileNames: 'static/js/[name]-[hash].js',
-        output: {
-          globals: {
-            moment: 'moment',
-            uuid: 'uuid',
-            lodash: 'lodash',
-            jquery: '$'
-          },
-          // 分包
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              return id.toString().split('node_modules/')[1].split('/')[0].toString()
-            }
-          }
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "@lm/shared/src/styles/index.scss" as *;`
         }
       }
     },
-    server: {
-      host: true,
-      port: 8003,
-      proxy: {
-        '/api': {
-          target: 'http://192.168.110.59:7000'
-        },
 
-        '/mock': {
-          target: '192.168.110.41:7000'
-        }
-      }
-    }
   }
 })

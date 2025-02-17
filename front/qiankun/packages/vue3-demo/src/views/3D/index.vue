@@ -20,8 +20,8 @@
 import { onMounted } from 'vue'
 import { routes } from '@/router/index.ts'
 
-console.log(routes)
-const routes3d = routes[1].children
+console.log(routes,123)
+const routes3d = routes[2].children
 </script>
 
 <style scoped>

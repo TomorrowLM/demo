@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "serve": "vite",
     "build": "vite build",
+    "build:qiankun": "vite build --mode production.qiankun",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",

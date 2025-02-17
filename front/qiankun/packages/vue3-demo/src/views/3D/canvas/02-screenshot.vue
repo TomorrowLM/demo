@@ -59,10 +59,9 @@
   </div>
 </template>
 <script setup>
-import  '@shared/dependencies/canvas/html2canvas.min.js'
-import  Canvas2Image from '@shared/dependencies/canvas/canvas2image.js'
-console.log(Canvas2Image,123)
-// import * as html2canvas from '@shared/utils/canvas/canvas2image.js'
+import '@lm/shared/src/dependencies/canvas/html2canvas.min.js'
+import Canvas2Image from '@lm/shared/src/dependencies/canvas/canvas2image.js'
+console.log(Canvas2Image, 123)
 let canvas,
   ctx,
   canvas1,
@@ -82,7 +81,7 @@ let canvas,
   spreadY,
   pixelRatio
 onMounted(() => {
-  console.log(qiankunPath,`${qiankunPath}/shared/utils/canvas/html2canvas.min.js`);
+
   //图像层
   canvas = document.getElementById('canvas')
   ctx = canvas.getContext('2d')
