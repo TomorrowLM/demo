@@ -62,36 +62,36 @@ export const router = createBrowserRouter([
         // ],
       },
       {
-        path: "vue3",
+        path: "vue3/*",
         element: <Web3></Web3>,
-        children: [
-          {
-            path: '3D',
-            children: [
-              {
-                path: "canvas/moon",
-              },
-              {
-                path: "webgl/basic",
-              },
-              {
-                path: "webgl/attribute",
-              },
-              {
-                path: "webgl/uniform",
-              },
-              {
-                path: "three/axis",
-              },
-              {
-                path: "three/cube",
-              },
-            ]
-          },
-          {
-            path: "editor",
-          },
-        ],
+        // children: [
+        //   {
+        //     path: '3D',
+        //     children: [
+        //       {
+        //         path: "canvas/moon",
+        //       },
+        //       {
+        //         path: "webgl/basic",
+        //       },
+        //       {
+        //         path: "webgl/attribute",
+        //       },
+        //       {
+        //         path: "webgl/uniform",
+        //       },
+        //       {
+        //         path: "three/axis",
+        //       },
+        //       {
+        //         path: "three/cube",
+        //       },
+        //     ]
+        //   },
+        //   {
+        //     path: "editor",
+        //   },
+        // ],
       },
     ]
   },

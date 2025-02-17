@@ -1,0 +1,30 @@
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+}
+.float-right {
+  float: right;
+}
+.qiankun {
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+.qiankun-app {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 32px);
+}
+.qiankun-header {
+  height: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.ml-8{
+  margin-left: 8px;
+}
