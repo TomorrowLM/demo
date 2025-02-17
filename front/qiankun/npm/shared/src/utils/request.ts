@@ -69,6 +69,7 @@ const handleResponse = async (response: any) => {
 };
 
 const serveceHandle = (baseURL:string) => {
+  console.log(baseURL, 'baseURL');
   // 创建 axios 实例
   service = axios.create({
     baseURL: baseURL, // api base_url

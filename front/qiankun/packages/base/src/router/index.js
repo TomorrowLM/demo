@@ -11,55 +11,55 @@ export const router = createBrowserRouter([
     element: <Home></Home>,
     children: [
       {
-        path: "vue2-mobile",
+        path: "vue2-mobile/*",
         element: <Web1></Web1>,
-        children: [
-          {
-            path: "home",
-          },
-          {
-            path: "learn",
-          },
-          {
-            path: "user",
-          },
-          {
-            path: "login",
-          },
-          {
-            path: "menu",
-          },
-        ],
+        // children: [
+        //   {
+        //     path: "home",
+        //   },
+        //   {
+        //     path: "learn",
+        //   },
+        //   {
+        //     path: "user",
+        //   },
+        //   {
+        //     path: "login",
+        //   },
+        //   {
+        //     path: "menu",
+        //   },
+        // ],
       },
       {
-        path: "vue2-pc",
+        path: "vue2-pc/*",
         element: <Web2></Web2>,
-        children: [
-          {
-            path: "login",
-          },
-          {
-            path: "dashboard",
-          },
-          {
-            path: "user",
-          },
-          {
-            path: "demo",
-            children: [{
-              path: 'access'
-            }, {
-              path: 'skin'
-            }]
-          }, {
-            path: "task",
-            children: [{
-              path: 'PickupTask'
-            }, {
-              path: 'skin'
-            }]
-          },
-        ],
+        // children: [
+        //   {
+        //     path: "login",
+        //   },
+        //   {
+        //     path: "dashboard",
+        //   },
+        //   {
+        //     path: "user",
+        //   },
+        //   {
+        //     path: "demo",
+        //     children: [{
+        //       path: 'access'
+        //     }, {
+        //       path: 'skin'
+        //     }]
+        //   }, {
+        //     path: "task",
+        //     children: [{
+        //       path: 'PickupTask'
+        //     }, {
+        //       path: 'skin'
+        //     }]
+        //   },
+        // ],
       },
       {
         path: "vue3",

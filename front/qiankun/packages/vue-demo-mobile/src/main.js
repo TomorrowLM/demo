@@ -1,6 +1,8 @@
 import Vue from 'vue';
+
 import Vant from 'vant';
 import 'vant/lib/index.css';
+// const App = resolve => require(['./App'], resolve)
 
 import App from './App.vue';
 import './registerServiceWorker';

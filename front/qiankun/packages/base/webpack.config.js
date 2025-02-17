@@ -8,15 +8,18 @@ const isDev = process.env.NODE_ENV === "development" ? true : false;
 // const globalConstants = require('../config/envConfig/env.dev.js')
 // const { PUBLIC_URL } = globalConstants;
 // console.log(PUBLIC_URL, globalConstants);
+require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.NODE_ENV) })
+console.log(process.env.NODE_ENV, 12)
+const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
 module.exports = () => {
   const config = {
-    mode: process.env.NODE_ENV,
+    mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
     devtool: isDev ? "eval-cheap-module-source-map" : 'source-map',
     entry: {
       app: path.resolve(__dirname, "./src/main.js"),
     },
     output: {
-      path: path.resolve(__dirname, "./dist"),
+      path: path.resolve(__dirname, "../dist/qiankun"),
       filename: "js/[name].[hash].js", //输出文件名
       publicPath: isDev ? '/' : '/qiankun', //资源访问根路径
       // library: `${packageName}-[name]`,

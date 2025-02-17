@@ -7,7 +7,7 @@ const packageName = require('./package.json').name;
 const resolve = (dir) => path.join(__dirname, dir);
 console.log(process.env.NODE_ENV, process.env.VUE_APP_IS_QIANKUN, process.env.VUE_APP_API_HOST, 1);
 const config = baseConfig(process.env)
-const { qiankunConfigFn } = require('@lm/shared/src/config/qiankun')
+const { qiankunConfigFn, configAsset } = require('@lm/shared/src/config/qiankun')
 const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
 module.exports = {
   ...config,
@@ -15,7 +15,10 @@ module.exports = {
     webpackBaseConfig(process.env, config, resolve);
     isQiankun && qiankunConfigFn({ projectName: 'web1', config })
   },
-  ...cssConfig(true),
+  chainWebpack: (config) => {
+    configAsset(config)
+  },
+  ...cssConfig(true)
 
   // css: {
   //   extract: !!isProd,

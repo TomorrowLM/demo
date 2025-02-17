@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const resolve = dir => path.join(__dirname, dir)
 const packageName = require('./package.json').name
 const config = baseConfig(process.env)
-const { qiankunConfigFn } = require('@lm/shared/src/config/qiankun')
+const { qiankunConfigFn, configAsset } = require('@lm/shared/src/config/qiankun')
 const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
 module.exports = defineConfig({
   ...config,
@@ -19,6 +19,7 @@ module.exports = defineConfig({
     isQiankun && qiankunConfigFn({ projectName: 'web2', config })
   },
   chainWebpack: config => {
+    configAsset(config)
     if (process.env.NODE_ENV === 'development') {
       config.optimization.minimize(true) // 开启压缩js代码
       config.optimization.splitChunks({

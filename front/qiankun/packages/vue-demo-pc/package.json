@@ -8,6 +8,7 @@
     "serve:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local.qiankun",
     "start": "vue-cli-service serve --mode dev",
     "build": "vue-cli-service build --mode production",
+    "build:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -43,6 +44,7 @@
     "sass-loader": "^10.0.1",
     "tslib": "^2.3.0",
     "typescript": "~5.7.3",
+    "url-loader": "^4.1.1",
     "vue-router": "^3.5.1",
     "vue-template-compiler": "^2.6.14"
   },

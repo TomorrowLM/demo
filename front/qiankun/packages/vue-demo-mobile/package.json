@@ -9,8 +9,9 @@
   "scripts": {
     "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local",
     "serve:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local.qiankun",
-    "start": "vue-cli-service serve --mode dev",
-    "build": "vue-cli-service build --mode production",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production",
+    "build:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
     "moment": "^2.29.1",
     "postcss-pxtorem": "5.1.1",
     "register-service-worker": "^1.7.2",
+    "url-loader": "^4.1.1",
     "vant": "^2.12.35",
     "vue-ls": "^4.0.0",
     "vue-router": "^3.5.3",

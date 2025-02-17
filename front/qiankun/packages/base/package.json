@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "dotenv": "^16.4.7",
     "qiankun": "^2.10.16",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -16,6 +17,7 @@
   "scripts": {
     "serve": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "build:qiankun": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

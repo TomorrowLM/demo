@@ -10,6 +10,7 @@ const commonPlugin = [
   // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
   new webpack.ProvidePlugin({
     $lm: '@lm/shared/lib/src/utils',
+    // $lm: '@lm/shared/src/utils',
   }),
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
@@ -150,11 +151,11 @@ const cssConfig = (isMobile = false) => {
     // }
   }
 }
-    // config.plugins = [
-    //   ...config.plugins || [],
-    //   new webpack.ProvidePlugin({
-    //     $lm: '@lm/shared/lib/src/utils',
-    //   }),]
+// config.plugins = [
+//   ...config.plugins || [],
+//   new webpack.ProvidePlugin({
+//     $lm: '@lm/shared/lib/src/utils',
+//   }),]
 const aliasConfigFn = (resolve) => {
   return {
     '@': resolve('./src'),
@@ -189,19 +190,20 @@ const webpackBaseConfig = (processVars, config, resolve) => {
   }
 };
 const baseConfig = (processVars) => {
-  const { NODE_ENV, VUE_APP_Port, VUE_APP_Build_Path, VUE_APP_BASE_URL, VUE_APP_API_HOST } = processVars;
+  const { NODE_ENV, VUE_APP_PORT, VUE_APP_PROXY_API, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_OUTPUTDIR, VUE_APP_API_HOST } = processVars;
   isProd = process.env.NODE_ENV === 'production'
-  console.log(NODE_ENV, VUE_APP_Build_Path, VUE_APP_BASE_URL, VUE_APP_API_HOST)
+  const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
+  console.log('baseConfig', VUE_APP_PROXY_API, NODE_ENV, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_API_HOST)
   return {
-    publicPath: NODE_ENV === 'production' ? VUE_APP_Build_Path : '/',
+    publicPath: isProd ? isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path : '/',
     // 打包文件输出路径，即打包到哪里
-    outputDir: 'dist',
+    outputDir: VUE_APP_OUTPUTDIR || 'dist',
     // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面
     // lintOnSave: true, // boolean | 'warning' | 'default' | 'error'
     // transpileDependencies: [],
     productionSourceMap: !isProd, // 生产环境是否生成 sourceMap 文件
-    ...devServerConfig(VUE_APP_BASE_URL, VUE_APP_API_HOST, VUE_APP_Port),
-    ...cssConfig(),
+    ...devServerConfig(VUE_APP_PROXY_API, VUE_APP_API_HOST, VUE_APP_PORT),
+    ...cssConfig()
   }
 }
 
