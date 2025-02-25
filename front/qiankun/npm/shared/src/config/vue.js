@@ -189,6 +189,10 @@ const webpackBaseConfig = (processVars, config, resolve) => {
     config.output.chunkFilename = 'js/[name].[hash].js';
   }
 };
+
+const publicPath = (isProd, isQiankun) => {
+  return isProd ? (isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path) : '/'
+}
 const baseConfig = (processVars) => {
   const { NODE_ENV, VUE_APP_PORT, VUE_APP_PROXY_API, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_OUTPUTDIR, VUE_APP_API_HOST } = processVars;
   isProd = process.env.NODE_ENV === 'production'

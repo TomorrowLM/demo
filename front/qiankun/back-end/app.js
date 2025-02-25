@@ -38,7 +38,7 @@ app.all("*", (req, res, next) => {
   res.header("X-Powered-By", " 3.2.1");
   // 内容类型：如果是post请求必须指定这个属性
   res.header("Content-Type", "application/json;charset=utf-8");
-  if (req.method == "OPTIONS") {
+  if (req.method === "OPTIONS") {
     console.log("is option")
     res.send(200);
   } else {

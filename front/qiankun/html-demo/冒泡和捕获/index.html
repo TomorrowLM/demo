@@ -53,7 +53,10 @@
     }
     //顺序：先捕获再冒泡
     document.getElementById('outer').addEventListener('click', (e) => logEvent(e, 1, 'outer'), true);
-    document.getElementById('inner').addEventListener('click', (e) => logEvent(e, 2, 'inner'), true);
+    document.getElementById('inner').addEventListener('click', (e) => {
+      e.preventDefault();
+      logEvent(e, 2, 'inner')
+    }, true);
     document.getElementById('outer').addEventListener('click', (e) => logEvent(e, 3, 'outer'), false);
     document.getElementById('inner').addEventListener('click', (e) => logEvent(e, 4, 'inner'), false);
   </script>
