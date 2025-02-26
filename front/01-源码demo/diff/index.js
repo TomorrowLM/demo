@@ -214,12 +214,13 @@ const diff = (el, oldChildren, newChildren) => {
 
 //打补丁，针对同级的节点处理
 const patchVNode = (oldVNode, newVNode) => {
+  console.log('patchVNode', oldVNode, newVNode);
   if (oldVNode === newVNode) {
     return
   }
-  // 元素标签相同，进行patch
+  // 元素标签相同
   if (oldVNode.tag === newVNode.tag) {
-    // 元素类型相同，那么旧元素肯定是进行复用的
+    // 元素类型相同，那么新元素可以复用旧元素的dom节点
     newVNode.el = oldVNode.el;
     let el = newVNode.el;
     console.log(oldVNode, newVNode);
@@ -245,7 +246,7 @@ const patchVNode = (oldVNode, newVNode) => {
       // 新旧节点都存在子节点，那么就要进行diff
       if (oldVNode.children && newVNode.children) {
         diff(el, oldVNode.children, newVNode.children)
-      } else if (newVNode.children) { // 新节点存在子节点
+      } else if (newVNode.children) { // 新节点存在子节点，旧节点不存在
         // 旧节点存在文本节点则移除
         if (oldVNode.text) {
           el.textContent = ''
@@ -263,7 +264,7 @@ const patchVNode = (oldVNode, newVNode) => {
         el.textContent = ''
       }
     }
-  } else { // 元素标签不同，使用newNode替换oldNode
+  } else { // 标签不同，根据新的VNode创建新的dom节点，然后插入新节点，移除旧节点
     let newEl = createEl(newVNode)
     updateClass(newEl, newVNode)
     updateStyle(newEl, null, newVNode)
@@ -278,6 +279,7 @@ const patchVNode = (oldVNode, newVNode) => {
 
 //入口方法
 const patch = (oldVNode, newVNode) => {
+  console.log('patch', oldVNode, oldVNode.tag, oldVNode.tagName, 'oldVNode');
   // 初始化的时候，dom元素转换成vnode
   if (!oldVNode.tag) {
     let el = oldVNode
@@ -289,74 +291,3 @@ const patch = (oldVNode, newVNode) => {
   return newVNode
 }
 
-let preVNode = patch(
-  document.getElementById("app"),
-  h(
-    "div",
-    {
-      class: {
-        btn: true,
-      },
-      style: {
-        fontSize: "30px",
-      },
-      attr: {
-        id: "oldId",
-      },
-      event: {
-        mouseover: () => {
-          setTimeout(() => {
-            let newVNode = h(
-              "div",
-              {
-                class: {//类名改变
-                  btn: true,
-                  warning: false,
-                  bg: true,
-                },
-                style: {//样式改变
-                  fontWeight: "bold",
-                  fontStyle: "italic",
-                },
-                attr: {
-                  id: "newId",//id改变
-                },
-                event: {
-                  click: () => {
-                    alert("点了我");
-                  },
-                },
-              },
-              [//reorder 移动／增加／删除 子节点
-                {
-                  tag: 'h1',
-                  children: '已经移入'//text 文本变了 此时不会触发节点卸载和装载，而是节点更新
-                },
-                {
-                  tag: 'h3',//replace 节点类型变了 直接将旧节点卸载并装载新节点
-                  children: 'item3'
-                },
-              ]
-            );
-            console.log('preVNode:', preVNode, 'newVNode:', newVNode);
-            patch(preVNode, newVNode);
-          }, 1000);
-        },
-      },
-    },
-    [
-      {
-        tag: 'h1',
-        children: '移入我'
-      },
-      {
-        tag: 'h2',
-        children: 'item1'
-      },
-      {
-        tag: 'h2',
-        children: 'item2'
-      }
-    ]
-  )
-);

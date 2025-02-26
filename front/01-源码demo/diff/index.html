@@ -38,41 +38,112 @@
             fontSize: "30px",
           },
           attr: {
-            id: "a",
+            id: "oldId",
           },
           event: {
             mouseover: () => {
-              alert("移入我");
+              setTimeout(() => {
+                let newVNode = h(
+                  "div",
+                  {
+                    class: {//类名改变
+                      btn: true,
+                      warning: false,
+                      bg: true,
+                    },
+                    style: {//样式改变
+                      fontWeight: "bold",
+                      fontStyle: "italic",
+                    },
+                    attr: {
+                      id: "newId",//id改变
+                    },
+                    event: {
+                      click: () => {
+                        alert("点了我");
+                      },
+                    },
+                  },
+                  [//reorder 移动／增加／删除 子节点
+                    {
+                      tag: 'h1',
+                      children: '已经移入'//text 文本变了 此时不会触发节点卸载和装载，而是节点更新
+                    },
+                    {
+                      tag: 'h3',//replace 节点类型变了 直接将旧节点卸载并装载新节点
+                      children: 'item3'
+                    },
+                  ]
+                );
+                console.log('preVNode:', preVNode, 'newVNode:', newVNode);
+                patch(preVNode, newVNode);
+              }, 1000);
             },
           },
         },
-        "旧"
+        [
+          {
+            tag: 'h1',
+            children: '移入我'
+          },
+          {
+            tag: 'h2',
+            children: 'item1'
+          },
+          {
+            tag: 'h2',
+            children: 'item2'
+          }
+        ]
       )
     );
-    setTimeout(() => {
-      let newVNode = h(
-        "div",
-        {
-          class: {
-            btn: true,
-            warning: false,
-            bg: true,
-          },
-          style: {
-            fontWeight: "bold",
-            fontStyle: "italic",
-          },
-          event: {
-            click: () => {
-              alert("点了我");
-            },
-          },
-        },
-        "新"
-      );
-      console.log(preVNode, newVNode);
-      patch(preVNode, newVNode);
-    }, 1000);
+    // let preVNode = patch(
+    //   document.getElementById("app"),
+    //   h(
+    //     "div",
+    //     {
+    //       class: {
+    //         btn: true,
+    //       },
+    //       style: {
+    //         fontSize: "30px",
+    //       },
+    //       attr: {
+    //         id: "a",
+    //       },
+    //       event: {
+    //         mouseover: () => {
+    //           alert("移入我");
+    //         },
+    //       },
+    //     },
+    //     "旧"
+    //   )
+    // );
+    // setTimeout(() => {
+    //   let newVNode = h(
+    //     "div",
+    //     {
+    //       class: {
+    //         btn: true,
+    //         warning: false,
+    //         bg: true,
+    //       },
+    //       style: {
+    //         fontWeight: "bold",
+    //         fontStyle: "italic",
+    //       },
+    //       event: {
+    //         click: () => {
+    //           alert("点了我");
+    //         },
+    //       },
+    //     },
+    //     "新"
+    //   );
+    //   console.log(preVNode, newVNode);
+    //   patch(preVNode, newVNode);
+    // }, 1000);
   </script>
 </body>
 

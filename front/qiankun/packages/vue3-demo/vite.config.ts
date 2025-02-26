@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
   const srcPath = fileURLToPath(new URL('./src', import.meta.url))
   const typingsPath = resolve(srcPath, 'typings')
   const isQiankun = mode === 'production.qiankun'
-  const appPublicPath = isQiankun ? env.VUE_APP_Build_Qiankun_Path : 'dist'
+  const appPublicPath = isQiankun ? env.VUE_APP_Build_Qiankun_Path : ''
   const basePath = mode === 'elecPro' ? './' : env.CONFIG_APP_PUBLIC || '/'
   const appBuildDir = isQiankun ? env.VUE_APP_OUTPUTDIR : 'dist'
   const isDev = mode === 'development' || mode === 'elecDev'
