@@ -19,7 +19,7 @@ const h = (tag, data = {}, children) => {
     text, // 文本节点的文本
     el, // 真实dom
     key,
-    data
+    data //样式，class类，事件等
   }
 }
 

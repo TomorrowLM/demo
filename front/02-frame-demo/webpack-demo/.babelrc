@@ -1,4 +1,15 @@
-// {
-//   "presets": [["@babel/preset-env"]],
-//   "plugins": ["@babel/plugin-transform-runtime"]
-// }
+{
+  // plugins: ["react-refresh/babel"], //使能JS的HMR
+  "presets": [
+    "@babel/preset-env",
+    [
+      "@babel/preset-react",
+      // {
+      //   "runtime": "automatic"
+      // }
+    ]
+  ],
+  "plugins": [
+    // "@babel/plugin-transform-runtime"
+  ]
+}

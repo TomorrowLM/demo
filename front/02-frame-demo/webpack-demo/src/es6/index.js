@@ -6,7 +6,3 @@ export const add = () => {
   })
 }
 add()
-
-// exports.module={
-//   add
-// }
