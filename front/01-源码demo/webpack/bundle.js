@@ -40,7 +40,7 @@ const getModuleInfo = (file) => {
   // console.log("getModuleInfo:deps", deps); //{ './add.js': './src\\add.js', './minus.js': './src\\minus.js' }
 
   /**
-   * 第四步:把获得的ES6的AST转化成ES5，import -> require.依赖包 @babel/core @babel/preset-env
+   * 第四步:把获得的ES6的AST转化成commonjs，import -> require.依赖包 @babel/core @babel/preset-env
    */
   const { code } = babel.transformFromAst(ast, null, {
     presets: ["@babel/preset-env"],
@@ -64,12 +64,12 @@ const getModuleInfo = (file) => {
 */
 const parseModules = (file) => {
   const entry = getModuleInfo(file);
-  // console.log('entry', entry);
-  const temp = [entry];
+  const temp = [entry]; //扁平化数组，存放所有模块信息
+  // console.log('temp', temp);
   const depsGraph = {}; //新增代码
   for (let i = 0; i < temp.length; i++) {
     const deps = temp[i].deps;
-    console.log("parseModules:deps", deps);
+    // console.log("parseModules:deps", deps);
     if (deps) {
       for (const key in deps) {
         if (deps.hasOwnProperty(key)) {
@@ -87,33 +87,32 @@ const parseModules = (file) => {
   });
   return depsGraph;
 };
-// const depsGraph = parseModules("./src/index.js");
+const depsGraph = parseModules("./src/index.js");
 // console.log("depsGraph", depsGraph);
 
 //浏览器不会识别执行require和exports
 const bundle = (file) => {
   const depsGraph = JSON.stringify(parseModules(file)); //返回一个整合完整的字符串代码
   /**
-   * 把保存下来的depsGraph，传入一个立即执行函数。
-    将主模块路径传入require函数执行
-    执行reuire函数的时候，又立即执行一个立即执行函数，这里是把code的值传进去了
-    执行eval（code）。也就是执行主模块的code这段代码
-   */
+  * 把保存下来的depsGraph，传入一个立即执行函数。
+   将主模块路径传入require函数执行
+   执行reuire函数的时候，立即执行一个立即执行函数
+   执行eval（code）,也就是执行主模块的code这段代码，这段代码会读取require, exports传参
+  */
   return `(function (graph) {
-    console.log(222222\n);
     function require(file) {
-      //转化成绝对路径
+      //相对路径转化成绝对路径
       function absRequire(relPath) {
         return require(graph[file].deps[relPath])
       }
       //执行add.js的code时候，会遇到exports这个还没定义的问题.因此我们可以自己定义一个exports对象。
       var exports = {};
       (function (require, exports, code) {
-        console.log(11111111, exports);
         //code代码执行过程中会执行到require函数。
         //这时会调用这个require，也就是我们传入的absRequire
         eval(code);
       })(absRequire, exports, graph[file].code)
+      console.log('exports', exports);
       return exports;
     }
     require('${file}')

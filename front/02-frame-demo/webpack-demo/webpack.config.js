@@ -66,11 +66,27 @@ module.exports = {
   optimization: {
     // runtimeChunk: 'single', // 用于将运行时代码（runtime code）提取到一个单独的文件中。多个入口文件共享相同的运行时代码
     splitChunks: { // 代码分割,提取模块。但是有多个入口文件的话。文件中引入相同的模块是不会共享，需要配置runtimeChunk
-      chunks: 'all'
+      chunks: 'all',
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          name: 'vendors', // 打包出来的文件名
+        },
+        lodash: { // 针对lodash的特定规则
+          test: /[\\/]node_modules[\\/]lodash[\\/]/,
+          name: 'lodash', // 自定义文件名
+          chunks: 'all',
+        },
+      },
     },
     // usedExports: false, //默认在生产环境下，webpack 会自动置为true
   },
   plugins,
+  // cache: {
+  //   type: 'filesystem',
+  //   // cacheDirectory: path.resolve(__dirname, '.temp_cache'),
+  // },
   module: {
     rules: [
       {

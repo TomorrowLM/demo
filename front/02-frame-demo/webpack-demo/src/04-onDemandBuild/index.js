@@ -7,4 +7,3 @@ import trim from 'lodash/trim'
 
 console.log(trim(' 123123 '))
 console.log('utils', add(1, 2))
-
