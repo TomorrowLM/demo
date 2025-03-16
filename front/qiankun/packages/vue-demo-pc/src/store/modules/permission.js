@@ -70,11 +70,28 @@ export const whiteRoutes = [
           //   },
           // },
           {
+            path: 'grammar',
+            name: 'grammar',
+            component: () => import('@/views/demo/grammar/index.vue'),
+            meta: {
+              menuName: '语法',
+              sidebar: true
+            }
+          },
+          {
             path: 'skin',
             name: 'skin',
             component: () => import('@/views/demo/Skin/index.vue'),
             meta: {
               menuName: '皮肤',
+              sidebar: true
+            }
+          }, {
+            path: 'repeatReq',
+            name: 'repeatReq',
+            component: () => import('@/views/demo/repeatReq/index.vue'),
+            meta: {
+              menuName: '重复请求',
               sidebar: true
             }
           }

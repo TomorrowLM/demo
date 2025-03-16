@@ -1,7 +1,8 @@
 // import './01-commonjs/index'
 // import "./02-dynamicImport/index"
 // import './03-onDemandBuild/index'
-import './03-split-lib-code'
+// import './03-split-lib-code'
+import './00-esAndcom'
 
 // import "./math/index"
 // import "./lodash/index"

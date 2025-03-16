@@ -152,6 +152,9 @@ importers:
       element-ui:
         specifier: 2.15.6
         version: 2.15.6(vue@3.5.13(typescript@5.4.5))
+      js-md5:
+        specifier: ^0.8.3
+        version: 0.8.3
       mini-css-extract-plugin:
         specifier: ^2.9.2
         version: 2.9.2(webpack@4.0.0)
@@ -161,6 +164,9 @@ importers:
       postcss-pxtorem:
         specifier: 5.1.1
         version: 5.1.1
+      qs:
+        specifier: ^6.14.0
+        version: 6.14.0
       style-loader:
         specifier: ^3.3.1
         version: 3.3.4(webpack@4.0.0)
@@ -8650,6 +8656,9 @@ packages:
     resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
     engines: {node: '>=14'}
 
+  js-md5@0.8.3:
+    resolution: {integrity: sha512-qR0HB5uP6wCuRMrWPTrkMaev7MJZwJuuw4fnwAzRgP4J4/F8RwtodOKpGp4XpqsLBFzzgqIO42efFAyz2Et6KQ==}
+
   js-message@1.0.7:
     resolution: {integrity: sha512-efJLHhLjIyKRewNS9EGZ4UpI8NguuL6fKkhRxVuMmrGV2xN/0APGdQYwLFky5w9naebSZ0OwAGp0G6/2Cg90rA==}
     engines: {node: '>=0.6.0'}
@@ -10922,6 +10931,10 @@ packages:
 
   qs@6.13.1:
     resolution: {integrity: sha512-EJPeIn0CYrGu+hli1xilKAPXODtJ12T0sP63Ijx2/khC2JtuaN3JyNIpvmnkmaEtha9ocbG4A4cMcr+TvqvwQg==}
+    engines: {node: '>=0.6'}
+
+  qs@6.14.0:
+    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
     engines: {node: '>=0.6'}
 
   qs@6.5.3:
@@ -24873,6 +24886,8 @@ snapshots:
 
   js-cookie@3.0.5: {}
 
+  js-md5@0.8.3: {}
+
   js-message@1.0.7: {}
 
   js-tokens@4.0.0: {}
@@ -27074,7 +27089,7 @@ snapshots:
       klona: 2.0.6
       postcss: 8.4.49
       semver: 7.6.3
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   postcss-loader@6.2.1(postcss@8.4.5)(webpack@5.76.1(esbuild@0.14.22)):
     dependencies:
@@ -27752,6 +27767,10 @@ snapshots:
       side-channel: 1.1.0
 
   qs@6.13.1:
+    dependencies:
+      side-channel: 1.1.0
+
+  qs@6.14.0:
     dependencies:
       side-channel: 1.1.0
 
@@ -29836,7 +29855,7 @@ snapshots:
       schema-utils: 4.3.0
       serialize-javascript: 6.0.2
       terser: 5.37.0
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   terser@4.8.1:
     dependencies:
@@ -30412,7 +30431,7 @@ snapshots:
   url@0.11.4:
     dependencies:
       punycode: 1.4.1
-      qs: 6.13.1
+      qs: 6.14.0
 
   use@3.1.1: {}
 

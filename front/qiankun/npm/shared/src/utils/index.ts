@@ -8,7 +8,9 @@
 // }
 const lodash = require('lodash');
 const service = require('./request');
+const useRequest = require('./useRequest');
 module.exports = {
   lodash: lodash,
-  service
+  service,
+  useRequest
 }

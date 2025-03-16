@@ -37,7 +37,7 @@ export default {
       },
     };
   },
-  methods: {   
+  methods: {
     submitForm() {
       console.log(this.$route, 123);
       login(this.ruleForm).then(
@@ -46,7 +46,7 @@ export default {
           Vue.ls.set('token', res.token);
           window.localStorage.setItem('token', res.token);
           this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
-          const currentRouteInfo = this.$store.getters.currentRouteInfo
+          const currentRouteInfo = this.$store.getters.currentRouteInfo;
           this.$router.push(currentRouteInfo.path || '/');
         },
         err => {

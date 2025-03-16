@@ -30,21 +30,26 @@ const err = (error: any) => {
     const data = error.response.data;
     if (error.response.status === 403) {
       // Message.error('Forbidden');
+      error.msg = "Forbidden"
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       // Message.error('token失效');
+      error.msg = "token失效"
+      // window.location.pathname = "login"
       window.localStorage.removeItem('token');
     }
   } else {
     // 请求超时状态
     if (error.message.includes('timeout')) {
       // Message.error('请求超时，请检查网络是否连接正常');
-    } else {
+      error.msg = "请求超时，请检查网络是否连接正常"
+    } else if (!window.navigator.onLine) {
       // 可以展示断网组件
       // Message.error('请求失败，请检查网络是否已连接');
+      error.msg = "请求失败，请检查网络是否已连接"
     }
   }
-  return Promise.reject(error);
+  return error;
 };
 /**
  * 处理参数
@@ -52,7 +57,7 @@ const err = (error: any) => {
  */
 const handleRequest = (config: any) => {
   console.log(config, 222);
-  
+
   const token = window.localStorage.getItem('token');
   config.headers.authorization = `Bearer ${token}`;
   return config;
@@ -68,7 +73,7 @@ const handleResponse = async (response: any) => {
   return Promise.resolve(response.data);
 };
 
-const serveceHandle = (baseURL:string) => {
+const serveceHandle = (baseURL: string) => {
   console.log(baseURL, 'baseURL');
   // 创建 axios 实例
   service = axios.create({
@@ -82,15 +87,16 @@ const serveceHandle = (baseURL:string) => {
   service.defaults.headers.post['Content-Type'] = 'application/json';
   // request interceptor
   service.interceptors.request.use(config => {
-    console.log(config, 111);
-    
+    console.log('interceptors.request', config);
     return handleRequest(config)
   }, err)
   // response interceptor
   service.interceptors.response.use((response) => {
+    console.log('interceptors.response', response);
     return handleResponse(response);
   }, err)
   return service
 }
 
 module.exports = serveceHandle
+// export default serveceHandle
