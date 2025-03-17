@@ -10,12 +10,12 @@ import { BrowserRouter } from 'react-router-dom'
 const router = new BrowserRouter()
 
 const API_BASE_URLS = {
-  development: "http://121.40.61.99:3600/",
-  production: "http://121.40.61.99:3600/"
+  development: "http://0.0.0.0:3600",
+  production: "http://121.40.61.99:3600"
 };
-
+console.log(EnvConfig)
 const request = axios.create({
-  baseURL: API_BASE_URLS[process.env.NODE_ENV],
+  baseURL: EnvConfig.apiPath,
 });
 
 const codeMessage = {

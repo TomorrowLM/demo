@@ -1,10 +1,12 @@
 const env = process.env.NODE_ENV;
 const config = {
   development: {
-    api: 'www.baidu.com'
+    apiPath: '/api',
+    api: 'http://0.0.0.0:3600'
   },
   production: {
-    api: 'www.jd.com'
+    apiPath: '/api',
+    api: 'http://121.40.61.99:3600'
   }
 };
 module.exports = config[env];

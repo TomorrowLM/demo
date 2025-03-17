@@ -17,3 +17,5 @@
   "webpack-cli": "^4.8.0",
 
   "webpack-dev-server": "^4.7.2",
+
+  node<18

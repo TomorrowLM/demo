@@ -4,8 +4,8 @@ import styles from "./index.less";
 import { Card, Col, Row } from "antd";
 import { useEffect } from "react";
 import Zhexiang from "./AntV-G2/zhexiang";
-import Zhuzhuang from "./AntV-G2/Zhuzhuang";
-import Donghua from "./AntV-L7/Donghua";
+import Zhuzhuang from "./AntV-G2/zhuzhuang";
+import Donghua from "./AntV-L7/donghua";
 import AntVL7 from "./AntV-L7";
 
 export default function Dashboard() {

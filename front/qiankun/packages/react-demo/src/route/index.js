@@ -45,31 +45,7 @@ export const routes = [
           }
         ]
       },
-      {
-        name: 'ref',
-        icon: <LaptopOutlined />,
-        isMenu: 1,
-        children: [
-          {
-            name: "onRef",
-            path: "/dom/onRef",
-            component: 'Dom/OnRef',
-            icon: <DesktopOutlined />
-          },
-          {
-            name: "findDomDode",
-            path: "/dom/findDomDode",
-            component: 'Dom/FindDomDode',
-            icon: <DesktopOutlined />
-          },
-          {
-            name: "ref",
-            path: "/dom/ref",
-            component: 'Dom/Ref',
-            icon: <DesktopOutlined />
-          },
-        ]
-      },
+   
       {
         name: '交流',
         icon: <LaptopOutlined />,

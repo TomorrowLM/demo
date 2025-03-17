@@ -6,9 +6,7 @@ import { connect } from "react-redux";
 import { userInfo } from "../store/actions/userInfo";
 import usePermissionModel from "../hox/access";
 import { routes } from "@/route/index.js";
-import Login from "@/view/User/Login";
-
-import styles from '@/view/index.module.less';
+import styles from "@/view/index.module.less";
 
 const AuthRoute = (props) => {
   const { getuserInfo } = props;
@@ -18,7 +16,8 @@ const AuthRoute = (props) => {
   const { set } = usePermissionModel();
   //保存用户信息
   const getUserInfo = () => {
-    request.get("/users").then((res) => {
+    request.get("/common/users").then((res) => {
+      console.log(res);
       if (res.status === 401) {
         history.push("/user/login");
         setIsCheckingTokenStatus(false);
@@ -33,7 +32,7 @@ const AuthRoute = (props) => {
   };
   //保存路由权限
   const getAccess = () => {
-    request.get("/access").then((res) => {
+    request.get("/common/access").then((res) => {
       localStorage.setItem(
         "access",
         JSON.stringify({
@@ -47,22 +46,53 @@ const AuthRoute = (props) => {
   //生成路由dom
   const mapRouteMethod = (data) => {
     return data.map(({ path, exact, component, children }, index) => {
-      const Component = typeof component !== 'string' ? component : lazy(() => import(`@/view/${component}`));
+      const Component =
+        typeof component !== "string"
+          ? component
+          : lazy(() => import(`@/view/${component}`));
       if (!path && children) {
-        return mapRouteMethod(children)
+        return mapRouteMethod(children);
       }
       if (path && children) {
-        return <Suspense key={path} fallback={<div className={styles.loading_container}><Spin></Spin></div>}>
-          <Route key={path} exact={exact ? exact : false} path={path} render={(props) => {
-            return <Component>{mapRouteMethod(children)} </Component>
-          }}></Route>
-        </Suspense>
+        return (
+          <Suspense
+            key={path}
+            fallback={
+              <div className={styles.loading_container}>
+                <Spin></Spin>
+              </div>
+            }
+          >
+            <Route
+              key={path}
+              exact={exact ? exact : false}
+              path={path}
+              render={(props) => {
+                return <Component>{mapRouteMethod(children)} </Component>;
+              }}
+            ></Route>
+          </Suspense>
+        );
       }
-      return <Suspense key={path} fallback={<div className={styles.loading_container}><Spin></Spin></div>}>
-        <Route key={path} path={path} exact={exact ? exact : false} component={Component} />
-      </Suspense>
-    })
-  }
+      return (
+        <Suspense
+          key={path}
+          fallback={
+            <div className={styles.loading_container}>
+              <Spin></Spin>
+            </div>
+          }
+        >
+          <Route
+            key={path}
+            path={path}
+            exact={exact ? exact : false}
+            component={Component}
+          />
+        </Suspense>
+      );
+    });
+  };
 
   useEffect(() => {
     getUserInfo();
@@ -79,7 +109,6 @@ const AuthRoute = (props) => {
         {mapRouteMethod(routes)}
         <Redirect from="/*" to="/dashboard"></Redirect>
       </Spin>
-
     </div>
   );
 };

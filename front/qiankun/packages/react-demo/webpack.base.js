@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 // 分离 css 到独立的文件中
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
+// 为缺失的 Node.js 核心模块提供 polyfill
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 //编译进度
 const WebpackBar = require("webpackbar");
 //分析编译时间
@@ -37,6 +39,18 @@ module.exports = {
     // ? '/react-demo/'
     // : '/',
     assetModuleFilename: 'img/[name].[hash:10][ext]'
+  },
+  devServer: {
+    proxy: {
+      [envConfig.apiPath]: {
+        target: envConfig.api,
+        ws: true,
+        changeOrigin: true,
+        pathRewrite:{
+          [`^${envConfig.apiPath}`]: ''
+        }
+      }
+    }
   },
   //配置插件
   plugins: [
@@ -78,12 +92,12 @@ module.exports = {
     //定义全局变量
     new webpack.DefinePlugin({
       //定义全局变量
-      API: JSON.stringify(envConfig),
-    }),
+      EnvConfig: JSON.stringify(envConfig),
+    }), 
+    new NodePolyfillPlugin()
   ],
   resolve: {
     modules: [path.resolve("node_modules")], //只在当前目录下查找
-    // extensions: [".js", ".jsx"],
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     alias: {
       '@': path.resolve(__dirname, 'src/'),

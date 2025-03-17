@@ -4,13 +4,14 @@ import { useHistory } from "react-router-dom";
 import request from "@/utils/request";
 import { Row, Col } from "antd";
 
-import styles from '../index.module.less'
+import styles from "../index.module.less";
 
 const Login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
     let { username, password } = values;
-    request.post("/login", { username, password }).then((res) => {
+    console.log("Success:", values);
+    request.post("/white/login", { username, password }).then((res) => {
       const { token } = res.data;
       window.localStorage.setItem("token", token);
       history.push("/dashboard");
@@ -20,8 +21,11 @@ const Login = (props) => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div className={styles.login} style={{backgroundImage:`url(require(img/bg.jpg))`}}>
-      <Row style={{marginTop:'20vh', overflow:"hidden"}}>
+    <div
+      className={styles.login}
+      style={{ backgroundImage: `url(require(img/bg.jpg))` }}
+    >
+      <Row style={{ marginTop: "20vh", overflow: "hidden" }}>
         <Col xs={2} sm={4} md={4} lg={4} xl={4}></Col>
         <Col xs={20} sm={16} md={12} lg={12} xl={12}>
           <Form
@@ -49,7 +53,7 @@ const Login = (props) => {
                 },
               ]}
             >
-              <Input placeholder="账号：liming"/>
+              <Input placeholder="账号：liming" />
             </Form.Item>
 
             <Form.Item
@@ -62,7 +66,7 @@ const Login = (props) => {
                 },
               ]}
             >
-              <Input.Password placeholder="密码：1"/>
+              <Input.Password placeholder="密码：1" />
             </Form.Item>
 
             <Form.Item
