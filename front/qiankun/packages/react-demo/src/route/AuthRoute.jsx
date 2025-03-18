@@ -12,12 +12,10 @@ const AuthRoute = (props) => {
   const { getuserInfo } = props;
   const history = useHistory();
   const [isCheckingTokenStatus, setIsCheckingTokenStatus] = useState(true);
-
   const { set } = usePermissionModel();
   //保存用户信息
   const getUserInfo = () => {
     request.get("/common/users").then((res) => {
-      console.log(res);
       if (res.status === 401) {
         history.push("/user/login");
         setIsCheckingTokenStatus(false);
@@ -46,6 +44,9 @@ const AuthRoute = (props) => {
   //生成路由dom
   const mapRouteMethod = (data) => {
     return data.map(({ path, exact, component, children }, index) => {
+      if (!path && children) {
+        return mapRouteMethod(children);
+      }
       const Component =
         typeof component !== "string"
           ? component
@@ -106,13 +107,12 @@ const AuthRoute = (props) => {
         tip="loading"
         spinning={isCheckingTokenStatus}
       >
-        {mapRouteMethod(routes)}
-        <Redirect from="/*" to="/dashboard"></Redirect>
+        {mapRouteMethod([routes[1]])}
+        {/* <Redirect from="/*" to="/"></Redirect> */}
       </Spin>
     </div>
   );
 };
-
 function mapStateToProps(state) {
   return {
     info: state.userInfo,

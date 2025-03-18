@@ -1,6 +1,6 @@
 import React, { useState, lazy, Suspense } from "react";
-import { routes } from "@/route/index";
-import { Link } from "react-router-dom";
+import { menuRoutes } from "@/route/index";
+import { Link, Outlet } from "react-router-dom";
 import { Layout, Menu, Breadcrumb, Spin } from "antd";
 import { LaptopOutlined } from "@ant-design/icons";
 import HomeNav from "@/components/HomePage/Nav";
@@ -18,40 +18,28 @@ export default function App(props) {
     }
     setCollapsed(!collapsed);
   };
-  // 生成menu dom
-  const subTitle = [];
-  let subIndex = 1;
-  let router = routes[1]["children"].map((value, index) => {
-    subTitle.push(value.name);
-    if (value.isMenu === 1 && !value.children) {
-      return [value];
-    } else if (value.isMenu === 1 && value.children) {
-      return value.children;
-    }
-  });
-  router = router.filter((value) => value);
-  const routerDom = router.map((routerVal, index) => {
-    subIndex = subIndex + 1;
-    return routerVal.length === 1 ?
-      <Menu.Item key={`${routerVal[0].path}`} icon={routerVal[0].icon}>
-        <Link to={routerVal[0].path}>{routerVal[0].name}</Link>
-      </Menu.Item> : (
+  const routerDomCreate = (router) => {
+    return router.map((routerVal, index) => {
+      // subIndex = subIndex + 1;
+      console.log(routerVal, 11);
+      return !routerVal?.children?.length ? (
+        <Menu.Item key={`${routerVal.path}`} icon={routerVal.icon}>
+          <Link to={routerVal.path}>{routerVal.name}</Link>
+        </Menu.Item>
+      ) : (
         <SubMenu
-          key={'sub' + `${routerVal[0].path}`}
+          key={"sub" + `${routerVal.name}`}
           icon={<LaptopOutlined />}
-          title={subTitle[subIndex - 2]}
+          title={routerVal.name}
         >
-          {routerVal.map((menuVal) => {
-            return (
-              <Menu.Item key={`${menuVal.path}`} icon={menuVal.icon}>
-                <Link to={menuVal.path}>{menuVal.name}</Link>
-              </Menu.Item>
-            );
-          })}
+          {routerDomCreate(routerVal.children)}
         </SubMenu>
       );
-  });
+    });
+  };
+  const routerDom = routerDomCreate(menuRoutes);
   const branch = window.location.hash.replace(/#\//, "").split("/");
+  console.log(props, "props.children");
   return (
     <div style={{ width: "100%,", height: "100vh", overflow: "hidden" }}>
       <Layout>
@@ -88,9 +76,8 @@ export default function App(props) {
                 overflowY: "auto",
               }}
             >
-              <div style={{ width: "100%" }}>
-                {props.children}
-              </div>
+              <div style={{ width: "100%" }}>{props.children}</div>
+              {/* <Outlet></Outlet> */}
             </Content>
           </Layout>
         </Layout>
