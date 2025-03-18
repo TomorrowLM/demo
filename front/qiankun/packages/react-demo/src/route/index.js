@@ -16,11 +16,19 @@ export const routes = [
     path: "/",
     component: Index,
     children: [
+      // {
+      //   path: "/dashboard",
+      //   name: "面板",
+      //   // exact: true,
+      //   component: Dashboard,
+      //   icon: <DesktopOutlined />,
+      //   isMenu: 1,
+      // },
       {
-        path: "/dashboard",
-        name: "面板",
-        // exact: true,
-        component: Dashboard,
+        path: "/grammer",
+        name: "react学习",
+        path: "/Grammer",
+        component: 'Grammer',
         icon: <DesktopOutlined />,
         isMenu: 1,
       },
@@ -45,7 +53,7 @@ export const routes = [
           }
         ]
       },
-   
+
       {
         name: '交流',
         icon: <LaptopOutlined />,

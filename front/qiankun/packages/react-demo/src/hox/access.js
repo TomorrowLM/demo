@@ -1,16 +1,21 @@
 import { useSetState } from "ahooks";
 import { createModel } from "hox";
-
+import { useHistory } from 'react-router-dom';
 const usePermissionModel = () => {
-  const access = localStorage.getItem('access');
+  let access = null;
+  const history = useHistory(); 
+  console.log(history)
+  try {
+    access = localStorage.getItem('access') || ''
+  } catch {
+    console.log(history)
+    window.location.href = '/#/user/login'
+  }
   // console.log(typeof access, access);
   const { menus, buttons } = access ? JSON.parse(access) : { menus: [], buttons: {} }
   const initParams = { menus, buttons, visible: false };
-
   const [accessInfo, setState] = useSetState(initParams);
-
-  const set = (params) => {setState(params)};
-
+  const set = (params) => { setState(params) };
   const reset = () => setState({ ...initParams });
   return {
     ...accessInfo,

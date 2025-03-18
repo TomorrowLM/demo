@@ -2,7 +2,7 @@ import React from "react";
 import ReactDom from "react-dom";
 import { Provider } from "react-redux";
 import store from "@/store";
-import VConsole from 'vconsole';
+// import VConsole from 'vconsole';
 import { IsPC } from "@/utils";
 import App from './app'
 import "@/global.less";
