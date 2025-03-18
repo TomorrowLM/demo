@@ -1,13 +1,13 @@
 import React from "react";
+import { Button, Input } from "antd";
 export default function CallbackRefsFunction(props) {
-    const clickButton = ()=>{
-        this.textInput.focus();
-    }
-    return (
+  const clickButton = () => {
+    this.textInput.focus();
+  };
+  return (
     <div>
-      <input type="text" ref={el => this.textInput = el} />
-      <input type="button" onClick={clickButton} />
+      <Input type="text" ref={(el) => (this.textInput = el)} />
+      <Input type="button" onClick={clickButton} />
     </div>
   );
 }
-

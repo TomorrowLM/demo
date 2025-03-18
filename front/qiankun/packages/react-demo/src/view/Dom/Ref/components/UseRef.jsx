@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import Input from "./Input";
+import { Button, Input } from "antd";
+import InputCom from "./Input";
 export default function UseRef(props) {
   let inputRef1 = useRef(null);
   const handleClick1 = () => {
@@ -13,14 +14,14 @@ export default function UseRef(props) {
     <div>
       <div>
         <h1>当 ref 属性用于 HTML 元素时</h1>
-        <input type="text" ref={inputRef1} />
-        <button onClick={handleClick1}>Click</button>
+        <Input type="text" ref={inputRef1} />
+        <Button onClick={handleClick1}>Click</Button>
       </div>
       <div>
         <h1>函数式组件内部中使用useRef属性,并使用forwardRef转发ref</h1>
         {/* 将inputRef2通过forwardRef转发到Input组件中的input */}
-        <Input ref={inputRef2}></Input>
-        <button onClick={handleClick2}>Click</button>
+        <InputCom ref={inputRef2}></InputCom>
+        <Button onClick={handleClick2}>Click</Button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useState, useRef } from "react";
-
+import { Button, Input } from "antd";
 const UseRefAlert = () => {
   const [count1, setCount1] = useState(0);
   const [count2, setCount2] = useState(0);
@@ -21,26 +21,28 @@ const UseRefAlert = () => {
     <div>
       <div>
         {/* alert 不是界面上 count 的实时状态 */}
+        点击按钮后，1 秒后弹出 alert，在1s内多次点击，alert
+        弹出的是点击alert时的 count 值。
         <p>you clicked {count1}</p>
-        <button
+        <Button
           onClick={() => {
             setCount1(count1 + 1);
           }}
         >
           click me
-        </button>
-        <button onClick={handleAlert1}>alert</button>
+        </Button>
+        <Button onClick={handleAlert1}>alert</Button>
       </div>
       <div>
         <p>you clicked {count2}</p>
-        <button
+        <Button
           onClick={() => {
             setCount2(count2 + 1);
           }}
         >
           click me
-        </button>
-        <button onClick={handleAlert2}>alert</button>
+        </Button>
+        <Button onClick={handleAlert2}>alert</Button>
       </div>
     </div>
   );

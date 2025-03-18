@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Input } from "antd";
 class Child extends React.Component {
   constructor(props){
     super(props);
@@ -8,7 +9,7 @@ class Child extends React.Component {
     console.log(this.props)
     return (
       <div>
-        <input ref={this.textInput} />
+        <Input ref={this.textInput} />
       </div>
     );
   }

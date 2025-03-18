@@ -31,6 +31,12 @@ export const menuRoutes = [
         isMenu: 2,
         children: [
           {
+            name: "ref",
+            path: "/dom/ref",
+            component: 'Dom/Ref',
+            icon: <DesktopOutlined />
+          },
+          {
             name: "onRef",
             path: "/dom/onRef",
             component: 'Dom/OnRef',
@@ -40,12 +46,6 @@ export const menuRoutes = [
             name: "findDomDode",
             path: "/dom/findDomDode",
             component: 'Dom/FindDomDode',
-            icon: <DesktopOutlined />
-          },
-          {
-            name: "ref",
-            path: "/dom/ref",
-            component: 'Dom/Ref',
             icon: <DesktopOutlined />
           },
         ]
