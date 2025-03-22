@@ -14,7 +14,6 @@ import * as monaco from 'monaco-editor';
 import LanguageService from './language-service/index'
 
 
-
 monaco.editor.defineTheme('myTheme', {
   base: 'vs',
   inherit: true,

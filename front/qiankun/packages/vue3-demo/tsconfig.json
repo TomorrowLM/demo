@@ -10,5 +10,11 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "jsx": "preserve", // 或 "vue"
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "importHelpers": true
+  }
 }

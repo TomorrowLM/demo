@@ -72,7 +72,7 @@ export default class LanguageService {
   async registerLanguage(): Promise<void> {
     console.log('registerLanguage')
     await monaco.languages.register({ id: this.config.name });
-    // //是 Monaco Editor 提供的一个方法，用于在特定语言被加载时执行回调函数。这个方法可以用来设置语言相关的功能，例如语法检查、自动补全等。
+    // 是 Monaco Editor 提供的一个方法，用于在特定语言被加载时执行回调函数。这个方法可以用来设置语言相关的功能，例如语法检查、自动补全等。
     await monaco.languages.onLanguage(this.config.name, () => {
       const client = new WorkerManager(this.config.name);
       console.log('onLanguage-client', client)

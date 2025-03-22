@@ -15,8 +15,11 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import importToCDN from 'vite-plugin-cdn-import'
 import inject from '@rollup/plugin-inject'
 import monacoEditorPlugin from "vite-plugin-monaco-editor"
+import vueJsx from "@vitejs/plugin-vue-jsx";
+
 // import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';// 引入rollup-plugin-visualizer模块
 // import Inspect from 'vite-plugin-inspect'; //可以让开发者在浏览器端就可以看到vue文件编译后的代码、vue文件的相互依赖关系
+
 export default defineConfig(({ mode }) => {
   // const buildDate = dayjs().format('YYYY-MM-DD HH:mm:ss')
   const env = loadEnv(mode, process.cwd(), 'VUE_APP')
@@ -110,6 +113,7 @@ export default defineConfig(({ mode }) => {
     // },
     plugins: [
       Vue(),
+      vueJsx(),
       nodePolyfills(),
       AutoImport({
         // Auto import functions from Vue, e.g. ref, reactive, toRef...

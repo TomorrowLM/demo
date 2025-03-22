@@ -1,8 +1,8 @@
 <template>
   <div>
-    <button v-if="type === 1" @click="add1">对值类型加1</button>
-    <button v-if="type === 2" @click="add2">对引用类型加1</button>
-    <button v-if="type === 3" @click="add3">emit</button>
+    <button v-if="type === 1" @click="add1">直接对prop值类型加1</button>
+    <button v-if="type === 2" @click="add2">emit触发值类型加1</button>
+    <button v-if="type === 3" @click="add3">直接对prop引用类型加1</button>
   </div>
 </template>
 
@@ -20,17 +20,18 @@ const props = defineProps({
 })
 const { parentNum, parentObj, type } = toRefs(props)
 const emit = defineEmits(['update:parentNum'])
-const parentObj1 = computed(() => {
+const parentObjProp = computed(() => {
   return parentObj.value
 })
 const add1 = () => {
   parentNum.value++
 }
 const add2 = () => {
-  parentObj1.value.num++
-  parentObj.value.num++
+  emit('update:parentNum', parentNum.value + 1)
 }
 const add3 = () => {
-  emit('update:parentNum', parentNum.value + 1)
+  props.parentObj.num++
+  // parentObj.value.num++
+  // parentObjProp.value.num++
 }
 </script>

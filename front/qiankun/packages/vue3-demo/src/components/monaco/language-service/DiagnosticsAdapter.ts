@@ -27,7 +27,7 @@ export default class DiagnosticsAdapter {
   private async validate(resource: monaco.Uri): Promise<void> {
     console.log('validate', resource);
     // // get the worker proxy
-    const worker =await this.worker(resource)
+    const worker = await this.worker(resource)
     // get the current model(editor or file) which is only one
     const model: any = monaco.editor.getModel(resource);
     console.log(worker);
