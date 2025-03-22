@@ -83,8 +83,9 @@
         configurable: true,
         // 获取值
         get() {
-          // 在这里添加观察者对象 Dep.target 表示观察者
-          console.log(Dep.target,11)
+          // 在这里添加观察者对象 
+          // Dep.target 表示观察者
+          console.log(Dep.target, 'target')
           Dep.target && dep.addSub(Dep.target)
           return value
         },
@@ -118,6 +119,7 @@
     compile(el) {
       // 获取子节点 如果使用 forEach遍历就把伪数组转为真的数组
       let childNodes = [...el.childNodes]
+      console.log(childNodes)
       childNodes.forEach((node) => {
         // 根据不同的节点类型进行编译
         // 文本类型的节点
@@ -150,6 +152,7 @@
         node.textContent = val.replace(reg, this.vm[key])
         // 创建观察者
         new Watcher(this.vm, key, (newValue) => {
+          console.log('cb:node', node)
           node.textContent = newValue
         })
       }

@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
     code: 200,
     message: 'success',
     data: {
-      
+      "": ""
     }
   });
 });
