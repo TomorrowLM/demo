@@ -1,5 +1,5 @@
 import React from "react";
-import Input from "./Input";
+import InputCom from "./Input";
 import { Button } from "antd";
 export default function FunctionChild() {
   // textInput 必须被声明在这里——ref才能适用于它
@@ -10,7 +10,7 @@ export default function FunctionChild() {
   };
   return (
     <div>
-      <Input type="text" ref={textInput} />
+      <InputCom type="text" ref={textInput} />
       <Button onClick={handleClick}>获取ref</Button>
     </div>
   );

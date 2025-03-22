@@ -49,6 +49,43 @@ export const menuRoutes = [
             icon: <DesktopOutlined />
           },
         ]
+      }, {
+        name: '组件',
+        icon: <LaptopOutlined />,
+        isMenu: 2,
+        children: [
+          {
+            name: "渲染机制",
+            path: "/render",
+            component: 'Component/Render',
+            icon: <DesktopOutlined />
+          },
+          {
+            name: "通信",
+            path: "/communicate",
+            component: 'Component/Communicate',
+            icon: <DesktopOutlined />
+          },
+        ]
+      }, {
+        name: 'hooks',
+        icon: <LaptopOutlined />,
+        path: "/hooks/functionHooks",
+        component: 'Grammer/Hooks/AHooks',
+        // children: [
+        //   {
+        //     name: "函数组件",
+        //     path: "/hooks/functionHooks",
+        //     component: 'Grammer/Hooks/FunctionHooks',
+        //     icon: <DesktopOutlined />,
+        //   },
+        //   {
+        //     name: "ahooks",
+        //     path: "/hooks/ahooks",
+        //     component: 'Grammer/Hooks/AHooks',
+        //     icon: <DesktopOutlined />
+        //   }
+        // ]
       },
     ]
   },
@@ -70,45 +107,6 @@ export const menuRoutes = [
         path: "/store/hox",
         component: "Store/Hox",
         icon: <DesktopOutlined />,
-      }
-    ]
-  },
-
-  {
-    name: '交流',
-    icon: <LaptopOutlined />,
-    isMenu: 1,
-    children: [
-      {
-        name: "communicate",
-        path: "/communicate",
-        component: 'Communicate/Communicate',
-        icon: <DesktopOutlined />
-      }
-    ]
-  },
-  {
-    name: 'hooks',
-    icon: <LaptopOutlined />,
-    isMenu: 1,
-    children: [
-      {
-        name: "类组件",
-        path: "/hooks/classhooks",
-        component: 'Hooks/ClassHooks',
-        icon: <DesktopOutlined />
-      },
-      {
-        name: "函数组件",
-        path: "/hooks/functionHooks",
-        component: 'Hooks/FunctionHooks',
-        icon: <DesktopOutlined />,
-      },
-      {
-        name: "ahooks",
-        path: "/hooks/ahooks",
-        component: 'Hooks/AHooks',
-        icon: <DesktopOutlined />
       }
     ]
   },
@@ -156,13 +154,6 @@ export const menuRoutes = [
           }
         ]
       },
-      {
-        name: "路由渲染方式",
-        exact: true,
-        path: "/routertype",
-        component: 'Router/RouterType',
-        icon: <DesktopOutlined />,
-      }
     ]
   },
   {

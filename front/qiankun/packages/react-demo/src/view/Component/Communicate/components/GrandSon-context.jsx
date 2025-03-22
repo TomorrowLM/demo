@@ -10,7 +10,7 @@ class GrandSon extends React.Component {
         {(info) => (
           // 通过 Consumer 中可以直接获取组父组件的值
           <div>
-            <p>爷爷组件传递的值:{info}</p>
+            <p>我是孙子组件这是爷爷组件传递的值:{info}</p>
           </div>
         )}
       </Consumer>

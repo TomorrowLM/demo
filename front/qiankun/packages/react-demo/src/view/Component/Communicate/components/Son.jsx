@@ -11,6 +11,7 @@ class Son extends React.Component {
   render() {
     return (
       <div>
+        <h1>我是子组件</h1>
         <input type='text' onChange={this.handleChange} />
       </div>
     )

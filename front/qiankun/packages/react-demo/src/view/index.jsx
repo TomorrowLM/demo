@@ -21,7 +21,7 @@ export default function App(props) {
   const routerDomCreate = (router) => {
     return router.map((routerVal, index) => {
       // subIndex = subIndex + 1;
-      console.log(routerVal, 11);
+      // console.log(routerVal, 11);
       return !routerVal?.children?.length ? (
         <Menu.Item key={`${routerVal.path}`} icon={routerVal.icon}>
           <Link to={routerVal.path}>{routerVal.name}</Link>
