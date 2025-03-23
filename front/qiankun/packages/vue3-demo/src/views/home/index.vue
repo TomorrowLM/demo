@@ -1,9 +1,9 @@
 <template>
   <div class="content d-center">
-    <div class="box d-center m-12" @click="jump(0)">vue-grammar</div>
-    <div class="box d-center m-12" @click="jump(1)">3D</div>
-    <div class="box d-center m-12" @click="jump(2)">editor</div>
-    <div class="box d-center m-12" @click="jump(3)">media</div>
+    <div class="box d-center m-12" @click="jump(0)" date-hover="vue-grammar">vue-grammar</div>
+    <div class="box d-center m-12" @click="jump(1)" date-hover="3D">3D</div>
+    <div class="box d-center m-12" @click="jump(2)" date-hover="editor">editor</div>
+    <div class="box d-center m-12" @click="jump(3)" date-hover="media">media</div>
   </div>
 </template>
 <script setup lang="ts">
@@ -18,7 +18,7 @@ const jump = (e) => {
     router.push('/3D')
   } else if (e === 2) {
     router.push('/editor')
-  }else if (e === 3) {
+  } else if (e === 3) {
     router.push('/media')
   }
 }
@@ -27,19 +27,49 @@ const jump = (e) => {
 <style lang="scss" scoped>
 .content {
   height: calc(100% - 48px);
+  width: 100%;
   .box {
-    width: 20%;
-    height: 20%;
-    // background-color: $box-bg;
-    // color: $text;
+    width: 10%;
+    height: 10%;
+    background-color: $box-bg;
+    color: $text;
     font-size: 24px;
+    @extend .point;
+    // background-color: #2195de;
+    padding: 0 25px;
+    position: relative;
+    transform-origin: top;
+    transition: all 1s;
+    /*span是span::after的父元素，span::after默认是2D来展示*/
+    transform-style: preserve-3d;
+    box-shadow: 1px 1px 10px rgba(219, 211, 138, 0.5);
+    &::after {
+      content: attr(date-hover); /*attribute 自定义属性*/
+      position: absolute;
+      top: 100%;
+      left: 0;
+      // background-color: #0965a0;
+      box-shadow: 1px 1px 10px rgba(219, 211, 138, 0.5);
+      width: 100%;
+      height: 100%;
+      transform: rotateX(-90deg);
+      transform-origin: top;
+      @extend .d-center;
+    }
+    &:hover {
+      transform: rotateX(90deg) translateY(-50px);
+    }
   }
-  @media (max-width: 1024px) {
+  @media (max-width: 765px) {
+    display: flex;
+    // justify-content: center;
+    // align-items: center;
+    flex-direction: column;
     .box {
-      width: 100px;
+      width: 100%;
       height: 100px;
-      // background-color: $box-bg;
-      color: #fff;
+      background-color: $box-bg;
+      color: $text;
     }
   }
 }

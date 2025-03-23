@@ -46,7 +46,10 @@ header {
   height: 48px;
   padding: 16px;
   box-sizing: border-box;
-  border-bottom: 1px solid $header-bg;
+  border-bottom: 1px solid $text;
   box-shadow: 1px 1px 5px $shadow;
 }
+// .point {
+//   border-bottom: 1px solid $text;
+// }
 </style>

@@ -129,7 +129,6 @@ export default defineConfig(({ mode }) => {
             ]
           }
         ],
-        dirs: [resolve(srcPath, './composition-api')],
         resolvers: [
           // Auto import functions from Element Plus, e.g. ElMessage, ElMessageBox... (with style)
           // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
@@ -142,6 +141,12 @@ export default defineConfig(({ mode }) => {
             prefix: 'Icon'
           })
         ],
+        dirs: [resolve(srcPath, './composition-api'), resolve(srcPath, './hooks')],
+        // dirs: [path.resolve(process.cwd(), './src/composition-api')],
+        // dts: path.resolve(
+        //   process.cwd(),
+        //   './src/composition-api/auto-imports.d.ts'
+        // ),
         dts: resolve(typingsPath, 'auto-imports.d.ts'),
         // Generate corresponding .eslintrc-auto-import.json file.
         // eslint globals Docs - https://eslint.org/docs/user-guide/configuring/language-options#specifying-globals

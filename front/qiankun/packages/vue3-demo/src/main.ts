@@ -12,6 +12,8 @@ import {
 import './style.scss';
 import ElementPlus from 'element-plus';
 import 'element-plus/theme-chalk/index.css';
+import './utils/element-default-config';
+
 let instance: any = null
 function render(props: any = {}) {
   const { container } = props

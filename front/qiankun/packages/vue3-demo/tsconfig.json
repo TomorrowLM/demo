@@ -15,6 +15,7 @@
     "jsx": "preserve", // 或 "vue"
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
+    "verbatimModuleSyntax": false,
     "importHelpers": true
   }
 }

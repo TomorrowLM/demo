@@ -14,13 +14,17 @@
       <child :type="3" :parentObj="parentObj"></child>
     </div>
     <div>
-      <h1>组件</h1>
+      <h1>jsx组件</h1>
       <com attr="1">
         <template #default="data">
           <div>default slot</div>
           <div>这是子组件传的值： {{ data }}</div>
         </template>
       </com>
+    </div>
+    <div>
+      <h1>useTableHook</h1>
+      <useTableHook></useTableHook>
     </div>
   </div>
 </template>
@@ -29,6 +33,7 @@
 import { ref, reactive } from 'vue'
 import child from './components/child.vue'
 import com from './components/com.vue'
+import useTableHook from './components/useTableHook.vue'
 
 /**解构 */
 const state = ref({ a: 1 })
