@@ -9,30 +9,31 @@
       </template>
     </custom-form>
     <Pro-table
+      v-model:searchParam="searchModel"
       ref="tableRef"
       :border="true"
       :toolButton="[]"
       :columns="tableSourceColumns"
       :requestApi="gainPersonnePage"
-      v-model:initParam="searchModel"
       :dataCallback="dataCallback"
+      :paramsHandler="paramsHandler"
     ></Pro-table>
   </div>
 </template>
 
 <script setup lang="ts" name="useTableHook">
 import { ref, reactive } from 'vue'
-// import ProTable from '@/components/ProTable/index.vue'
-// import ProTable from '@/components/ProTable/index.vue'
-const { setResetField, isArray } = useFun()
+
 const state = reactive({
   tableSourceColumns: [
     // { type: 'selection', align: 'left', width: 70 },
+    // { type: 'selection' },
+    { type: 'sort', label: '拖拽' },
     { prop: 'employeeName', label: '姓名' },
     { prop: 'sex', label: '性别' },
     { prop: 'idCard', label: '证件编号', width: 250 },
-    { prop: 'nextExaminationDate', label: '提醒时间' },
-    { prop: 'operation', label: '操作', fixed: 'right' }
+    { prop: 'nextExaminationDate', label: '提醒时间' }
+    // { prop: 'operation', label: '操作', fixed: 'right' }
   ],
   formConfig: {
     styleConfig: {
@@ -44,20 +45,20 @@ const state = reactive({
       {
         elements: [
           {
+            prop: 'employeeName',
+            label: '姓名',
+            type: 'input',
+            labelWidth: '85px'
+          },
+          {
             prop: 'idCard',
             label: '证件编号',
             type: 'input',
             labelWidth: '85px'
           },
           {
-            prop: 'physicalExaminationAgency',
-            label: '体检机构',
-            type: 'input',
-            labelWidth: '85px'
-          },
-          {
-            prop: 'lastExaminationDate',
-            label: '上次体检时间',
+            prop: 'nextExaminationDate',
+            label: '提醒时间',
             type: 'daterange',
             width: '330px',
             'value-format': 'YYYY-MM-DD'
@@ -72,17 +73,28 @@ const state = reactive({
 })
 const { tableSourceColumns, formConfig } = toRefs(state)
 
-const gainPersonnePage = async () => {
+const gainPersonnePage = async (data) => {
+  if (data.employeeName.includes('zs') || !data.employeeName) {
+    return {
+      data: {
+        pageNum: 1,
+        pageSize: 10,
+        total: 1,
+        list: [
+          { employeeName: 'zs1', sex: '男' },
+          { employeeName: 'zs2', sex: '男' }
+        ]
+      }
+    }
+  }
   return {
     data: {
       pageNum: 1,
       pageSize: 10,
-      total: 1,
-      list: [{ employeeName: 'zs', sex: '男' }]
+      total: 0
     }
   }
 }
-
 const searchModel = ref({
   employeeName: '',
   sex: '',
@@ -93,8 +105,19 @@ const searchModel = ref({
 const dataCallback = (res) => {
   return res
 }
-
 const tableRef = ref()
+const paramsHandler = (data) => {
+  if (data.nextExaminationDate.length) {
+    data.nextExaminationDateStart = data.nextExaminationDate ? data.nextExaminationDate[0] : ''
+    data.nextExaminationDateEnd = data.nextExaminationDate ? data.nextExaminationDate[1] : ''
+    delete data.nextExaminationDate
+  } else {
+    data.nextExaminationDate = null
+  }
+  return data
+}
+
+const { setResetField, isArray } = useFun()
 // const search = (isReset?: boolean) => {
 //   console.log(tableRef.value)
 //   if (isReset) {

@@ -1,19 +1,10 @@
 <!-- 📚📚📚 Pro-Table 文档: https://juejin.cn/post/7166068828202336263 -->
 
 <template>
-  <!-- 查询表单 -->
-  <!-- <SearchForm
-		v-show="isShowSearch"
-		:search="_search"
-		:reset="_reset"
-		:columns="searchColumns"
-		:search-param="searchParam"
-		:search-col="searchCol"
-	/> -->
   <!-- 表格主体 -->
   <div class="card table-main">
     <!-- 表格头部 操作按钮 -->
-    <div class="table-header">
+    <!-- <div class="table-header">
       <div class="header-button-lf">
         <slot
           name="tableHeader"
@@ -44,7 +35,7 @@
           />
         </slot>
       </div>
-    </div>
+    </div> -->
     <!-- 表格主体 -->
     <el-table
       ref="tableRef"
@@ -78,12 +69,11 @@
             </el-radio>
             <!-- sort -->
             <el-tag v-if="item.type == 'sort'" class="move">
-              <el-icon> </el-icon>
+              <el-icon> 拖拽</el-icon>
             </el-tag>
           </template>
         </el-table-column>
         <!-- other -->
-
         <TableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
           <template v-for="slot in Object.keys($slots)" #[slot]="scope">
             <slot :name="slot" v-bind="scope" />
@@ -142,9 +132,10 @@ export interface ProTableProps {
   requestAuto?: boolean // 是否自动执行请求 api ==> 非必传（默认为true）
   requestError?: (params: any) => void // 表格 api 请求错误监听 ==> 非必传
   dataCallback?: (data: any) => any // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
+  paramsHandler?: (data: any) => any // 返回数据的处理的参数处理函数，可以对参数进行处理 ==> 非必传
   title?: string // 表格标题 ==> 非必传
   pagination?: boolean // 是否需要分页组件 ==> 非必传（默认为true）
-  initParam?: any // 初始化请求参数 ==> 非必传（默认为{}）
+  searchParam?: any // 初始化请求参数 ==> 非必传（默认为{}）
   border?: boolean // 是否带有纵向边框 ==> 非必传（默认为true）
   toolButton?: ('refresh' | 'setting' | 'search')[] | boolean // 是否显示表格功能按钮 ==> 非必传（默认为true）
   rowKey?: string // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
@@ -156,7 +147,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   columns: () => [],
   requestAuto: true,
   pagination: true,
-  initParam: {},
+  searchParam: {},
   border: false,
   toolButton: true,
   rowKey: 'id',
@@ -194,19 +185,27 @@ const {
   tableData,
   pageable,
   searchParam,
-  searchInitParam,
+  initSearchParam,
   getTableList,
   search,
   reset,
   handleSizeChange,
   handleCurrentChange
-} = useTable(
-  props.requestApi,
-  props.initParam,
-  props.pagination,
-  props.dataCallback,
-  props.requestError
-)
+} = useTable({
+  api: props.requestApi,
+  searchParam: props.searchParam,
+  pagination: props.pagination,
+  paramsHandler: props.paramsHandler,
+  dataCallback: props.dataCallback,
+  requestError: props.requestError
+})
+
+//重置
+const resetHandle = () => {
+  reset()
+  emit('update:searchParam', searchParam.value)
+  console.log(searchParam)
+}
 // 清空选中数据列表
 const clearSelection = () => tableRef.value!.clearSelection()
 
@@ -233,8 +232,8 @@ const processTableData = computed(() => {
   )
 })
 
-// 监听页面 initParam 改化，重新获取表格数据
-// watch(() => props.initParam, getTableList, { deep: true });
+// 监听页面 searchParam 改化，重新获取表格数据
+// watch(() => props.searchParam, getTableList, { deep: true });
 
 // 接收 columns 并设置为响应式
 // const tableColumns = reactive<ColumnProps[]>(props.columns);
@@ -311,7 +310,7 @@ searchColumns.value?.forEach((column, index) => {
   const key = column.search?.key ?? handleProp(column.prop!)
   const defaultValue = column.search?.defaultValue
   if (defaultValue !== undefined && defaultValue !== null) {
-    searchInitParam.value[key] = defaultValue
+    initSearchParam.value[key] = defaultValue
     searchParam.value[key] = defaultValue
   }
 })
@@ -331,16 +330,6 @@ const emit = defineEmits<{
   dargSort: [{ newIndex?: number; oldIndex?: number }]
   cellClick: [{ row: any; column: any; cell: any; event: any }]
 }>()
-
-const _search = () => {
-  search()
-  emit('search')
-}
-
-const _reset = () => {
-  reset()
-  emit('reset')
-}
 
 // 拖拽排序
 const dragSort = () => {
@@ -363,10 +352,10 @@ defineExpose({
   radio,
   pageable,
   searchParam,
-  searchInitParam,
+  initSearchParam,
   getTableList,
   search,
-  reset,
+  reset: resetHandle,
   handleSizeChange,
   handleCurrentChange,
   clearSelection,

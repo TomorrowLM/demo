@@ -18,12 +18,15 @@ export namespace Table {
 		searchParam: {
 			[key: string]: any;
 		};
-		searchInitParam: {
+		initSearchParam: {
 			[key: string]: any;
 		};
-		totalParam: {
+		searchHandledParam: {
 			[key: string]: any;
 		};
+		// totalParam: {
+		// 	[key: string]: any;
+		// };
 		icon?: {
 			[key: string]: any;
 		};
