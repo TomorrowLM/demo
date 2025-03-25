@@ -13,8 +13,8 @@ const createRouter = () =>
     base: window.__POWERED_BY_QIANKUN__
       ? '/qiankun/vue2-pc/' // 配置子应用的路由根路径
       : isProd
-      ? '/vue2-pc/' // 单一项目下的访问路径
-      : '/',
+        ? '/vue2-pc/' // 单一项目下的访问路径
+        : '/',
     routes: whiteRoutes,
   });
 const router: any = createRouter();
@@ -70,8 +70,8 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     console.log('getRoutes', router.getRoutes());
     // 解决登录或者刷新后路由找不到的问题：
     // 虽然to找不到对应的路由那么他会再执行一次beforeEach，但是登录或者刷新前路由表没有动态路由信息，那么to.name还是找不到对应的路由，最后会跳转到404页面
-    next({ ...to, replace: true }); // 解决刷新后路由失效的问题
-    // next(to.path); // 需要指向确切的地址
+    // next({ ...to, replace: true });
+    next(to.path); // 解决刷新后路由失效的问题
   } else {
     next();
   }

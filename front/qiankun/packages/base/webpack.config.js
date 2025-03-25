@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === "development" ? true : false;
 // const { PUBLIC_URL } = globalConstants;
 // console.log(PUBLIC_URL, globalConstants);
 require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.NODE_ENV) })
-console.log(process.env.NODE_ENV, 12)
+console.log(process.env.NODE_ENV, process.env.VUE_APP_API_HOST)
 const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
 module.exports = () => {
   const config = {
@@ -42,17 +42,13 @@ module.exports = () => {
       },
       proxy: [
         {
-          context: ['/vue2-mobile/api'],
-          target: 'http://localhost:8001',
-          // changeOrigin: true,
-          // secure: false,
-          // xfwd: false,
-          // pathRewrite: { '^/api': '' }  //重点：重写资源访问路径，避免转发请求 404问题
+          context: ['/vue2-mobile/api', '/vue2-pc/api'],
+          target: process.env.VUE_APP_API_HOST,
+          changeOrigin: true,
+          secure: false,
+          xfwd: false,
+          pathRewrite: { '/vue2-pc/api': '/', '/vue2-mobile/api': '/' }  //重点：重写资源访问路径，避免转发请求 404问题
         },
-        {
-          context: ['/vue2-pc/api'],
-          target: 'http://localhost:8002',
-        }
       ]
     },
     optimization: {

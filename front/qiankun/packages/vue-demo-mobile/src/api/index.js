@@ -1,3 +1,4 @@
+import $lm from '@lm/shared/lib/src/utils';
 const request = $lm.service(process.env.VUE_APP_PROXY_API)
 
 export const userInfo = (params) => {
