@@ -8,7 +8,12 @@ function Home() {
       <div className="d-flex qiankun-header">
         <span> qiankun 主应用</span>
         <div className="float-right">
-          <NavLink to="/qiankun/vue2-mobile">vue2-mobile</NavLink>
+          <NavLink to="/qiankun/vue3/qiankun-vue3-page">
+            qiankun-use
+          </NavLink>
+          <NavLink className="ml-8" to="/qiankun/vue2-mobile">
+            vue2-mobile
+          </NavLink>
           <NavLink className="ml-8" to="/qiankun/vue2-pc">
             vue2-pc
           </NavLink>

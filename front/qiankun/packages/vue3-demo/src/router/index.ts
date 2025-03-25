@@ -16,6 +16,11 @@ export const routes = [
     component: () => import('../views/home/index.vue')
   },
   {
+    path: '/qiankun-vue3-page',
+    name: 'qiankun-vue3-page',
+    component: () => import('../views/qiankun/index.vue')
+  },
+  {
     path: '/vue-grammar',
     name: 'vue-grammar',
     component: () => import('../views/vue-grammar/index.vue')

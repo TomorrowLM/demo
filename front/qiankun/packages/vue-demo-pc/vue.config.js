@@ -8,6 +8,7 @@ const packageName = require('./package.json').name
 const config = baseConfig(process.env)
 const { qiankunConfigFn, configAsset } = require('@lm/shared/src/config/qiankun')
 const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
+
 module.exports = defineConfig({
   ...config,
   configureWebpack: config => {

@@ -39,24 +39,7 @@ export default class Access extends Vue {
   }
 
   changeRole() {
-    // console.log(this.$refs.btn?.$el);
-    //设置按钮权限
-    // this.$store.commit('change_btn', {
-    //   mockButton:
-    //     this.role === 'admin'
-    //       ? {
-    //           'btn:access:createUser': 'hidden',
-    //           'btn:access:editUser': 'disabled',
-    //         }
-    //       : {
-    //           'btn:access:createUser': 'show',
-    //           'btn:access:editUser': 'show',
-    //         },
-    // });
-    //设置角色
-    this.$store.commit('change_role', {
-      role: this.role === 'admin' ? 'edit' : 'admin',
-    });
+
   }
 }
 </script>

@@ -52,18 +52,17 @@ const err = (error: any) => {
   return error;
 };
 /**
- * 处理参数
+ * 请求拦截
  * @param {*} config
  */
 const handleRequest = (config: any) => {
-  console.log(config, 222);
-
+  console.log('handleRequest', config,);
   const token = window.localStorage.getItem('token');
   config.headers.authorization = `Bearer ${token}`;
   return config;
 };
 /**
- * 处理参数
+ * 响应拦截
  * @param {*} config
  */
 const handleResponse = async (response: any) => {

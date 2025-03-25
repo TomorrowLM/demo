@@ -9,10 +9,10 @@ import {
   qiankunWindow,
   type QiankunProps
 } from 'vite-plugin-qiankun/dist/helper'
-import './style.scss';
 import ElementPlus from 'element-plus';
 import 'element-plus/theme-chalk/index.css';
 import './utils/element-default-config';
+// import './style.scss';
 
 let instance: any = null
 function render(props: any = {}) {
@@ -40,7 +40,7 @@ if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
     },
     unmount(props) {
       console.log('vite被卸载了')
-      instance.unmount(document.querySelector('#vue3-page'))
+      // instance.unmount(document.querySelector('#vue3-page'))
       instance._container.innerHTML = ''
       history.destroy() // 不卸载  router 会导致其他应用路由失败
       instance = null

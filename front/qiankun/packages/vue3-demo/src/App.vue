@@ -1,9 +1,11 @@
 <template>
   <div class="app h100">
-    <header class="d-l-center d-r-end">
-      <span @click="goHome" class="float-right point">回到首页</span>
-    </header>
-    <RouterView />
+    <el-config-provider namespace="custom">
+      <header class="d-l-center d-r-end">
+        <span @click="goHome" class="float-right point">回到首页</span>
+      </header>
+      <RouterView />
+    </el-config-provider>
   </div>
 </template>
 <script setup lang="ts">

@@ -42,7 +42,7 @@ export default {
       console.log(this.$route, 123);
       login(this.ruleForm).then(
         res => {
-          console.log(res);
+          console.log(res,1);
           Vue.ls.set('token', res.token);
           window.localStorage.setItem('token', res.token);
           this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
@@ -50,7 +50,7 @@ export default {
           this.$router.push(currentRouteInfo.path || '/');
         },
         err => {
-          console.log(err);
+          console.log(err,'err');
           this.$message.error(err.message);
         }
       );

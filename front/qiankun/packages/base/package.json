@@ -15,7 +15,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "serve": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
+    "start": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build:qiankun": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "test": "react-scripts test",
@@ -44,7 +44,11 @@
     "@babel/preset-env": "^7.24.6",
     "@babel/preset-react": "^7.24.6",
     "cross-env": "^7.0.3",
-    "mini-css-extract-plugin": "^2.9.0",
+    "css-loader": "^6.5.0",
+    "less": "^4.2.1",
+    "less-loader": "^10.2.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "style-loader": "^3.3.1",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
   }

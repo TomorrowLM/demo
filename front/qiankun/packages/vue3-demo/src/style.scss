@@ -1,3 +1,7 @@
+$eapNameSpace: custom;
+@forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
+  $namespace: $eapNameSpace
+);
 .main-content {
   @extend .d-center;
   height: calc(100% - 48px);

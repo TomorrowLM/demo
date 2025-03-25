@@ -7,9 +7,8 @@
     "pnpm": ">=7"
   },
   "scripts": {
-    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local",
-    "serve:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local.qiankun",
-    "start": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev",
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev",
+    "serve:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev.qiankun",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production",
     "build:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
     "lint": "vue-cli-service lint"

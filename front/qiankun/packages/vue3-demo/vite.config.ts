@@ -280,6 +280,12 @@ export default defineConfig(({ mode }) => {
         scss: {
           additionalData: `@use "@lm/shared/src/styles/index.scss" as *;`
         }
+      },
+      modules: {
+        // 启用 CSS 模块化
+        scopeBehaviour: 'local', // 或者 'global'
+        generateScopedName: '[name]__[local]___[hash:base64:5]', // 自定义生成的类名格式
+        hashPrefix: 'prefix', // 可选，用于生成哈希值的前缀
       }
     },
 

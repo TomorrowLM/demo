@@ -45,7 +45,7 @@ VueRouter.prototype.replace = function push(location: any, onResolve: any, onRej
   return originalReplace.call(this, location).catch((err: any) => err);
 };
 /**
- * 全局全局前置守卫
+ * 全局前置守卫
  * to : 将要进入的目标路由对象
  * from : 即将离开的目标路由对象
  */

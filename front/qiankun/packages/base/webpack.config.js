@@ -112,6 +112,35 @@ module.exports = () => {
           ],
         },
         {
+          test: /\.less$/i,
+          use: [
+            // {
+            //   loader: 'style-loader', // 从 JS 中创建样式节点
+            // },
+            { loader: MiniCssExtractPlugin.loader }, // 提取到单独的CSS文件
+            {
+              loader: 'css-loader', // 转化 CSS 为 CommonJS
+              options: {
+                sourceMap: true,
+                modules: {
+                  localIdentName: "[local]___[hash:base64:5]",
+                },
+                // exclude: [
+                //   path.resolve(__dirname, "node_modules")
+                // ],
+              }
+            },
+            {
+              loader: 'less-loader', // 编译 Less 为 CSS
+              options: {
+                lessOptions: {
+                  javascriptEnabled: true,
+                },
+              },
+            },
+          ],
+        },
+        {
           test: /\.(jsx|js|ts|tsx)$/,
           exclude: /node_modules/,
           // use: {

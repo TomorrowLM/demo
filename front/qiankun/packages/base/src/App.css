@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+#vue3-container>div{
+  width: 100%;
+  height: 100%;
+}

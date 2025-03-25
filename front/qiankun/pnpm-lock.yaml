@@ -298,9 +298,21 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      css-loader:
+        specifier: ^6.5.0
+        version: 6.11.0(webpack@5.97.1)
+      less:
+        specifier: ^4.2.1
+        version: 4.2.1
+      less-loader:
+        specifier: ^10.2.0
+        version: 10.2.0(less@4.2.1)(webpack@5.97.1)
       mini-css-extract-plugin:
-        specifier: ^2.9.0
+        specifier: ^2.9.2
         version: 2.9.2(webpack@5.97.1)
+      style-loader:
+        specifier: ^3.3.1
+        version: 3.3.4(webpack@5.97.1)
       webpack:
         specifier: ^5.91.0
         version: 5.97.1(webpack-cli@5.1.4)
@@ -21153,7 +21165,7 @@ snapshots:
       postcss-value-parser: 4.2.0
       semver: 7.6.3
     optionalDependencies:
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   css-loader@6.5.1(webpack@5.76.1):
     dependencies:
@@ -25249,7 +25261,7 @@ snapshots:
     dependencies:
       klona: 2.0.6
       less: 4.2.1
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   less@4.1.2:
     dependencies:
@@ -29665,7 +29677,7 @@ snapshots:
 
   style-loader@3.3.4(webpack@5.97.1):
     dependencies:
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   stylehacks@4.0.3:
     dependencies:
@@ -29867,7 +29879,7 @@ snapshots:
       schema-utils: 4.3.0
       serialize-javascript: 6.0.2
       terser: 5.37.0
-      webpack: 5.97.1(webpack-cli@4.10.0)
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   terser@4.8.1:
     dependencies:

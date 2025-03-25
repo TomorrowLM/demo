@@ -4,6 +4,7 @@ import Web2 from "../page/web2.jsx";
 import Web3 from "../page/web3.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home.jsx";
+import Qiankun from "../page/qiankun.jsx";
 import React, { lazy } from "react";
 export const router = createBrowserRouter([
   {
@@ -64,6 +65,18 @@ export const router = createBrowserRouter([
       {
         path: "vue3/*",
         element: <Web3></Web3>,
+        children: [
+          {
+            path: "qiankun-vue3-page",
+            element: <Qiankun></Qiankun>,
+            // children: [
+            //   {
+            //     path: "qiankun-vue3-page",
+            //     element: <Web3></Web3>,
+            //   },
+            // ],
+          },
+        ]
         // children: [
         //   {
         //     path: '3D',
@@ -93,6 +106,14 @@ export const router = createBrowserRouter([
         //   },
         // ],
       },
+      {
+        path: '*',
+        name: 'error',
+        meta: {
+          name: '404',
+        },
+        element: <div>404</div>,
+      }
     ]
   },
   // {

@@ -64,6 +64,7 @@ const pwa = {
   }
 }
 const devServerConfig = (BASE_URL, API_HOST, port) => {
+  console.log('devServerConfig', BASE_URL, API_HOST, port)
   return {
     devServer: {
       // contentBase: './src',//项目基本访问目录
@@ -197,7 +198,7 @@ const baseConfig = (processVars) => {
   const { NODE_ENV, VUE_APP_PORT, VUE_APP_PROXY_API, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_OUTPUTDIR, VUE_APP_API_HOST } = processVars;
   isProd = process.env.NODE_ENV === 'production'
   const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
-  console.log('baseConfig', VUE_APP_PROXY_API, NODE_ENV, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_API_HOST)
+  console.log('baseConfig', VUE_APP_PROXY_API, VUE_APP_API_HOST, NODE_ENV, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path)
   return {
     publicPath: isProd ? isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path : '/',
     // 打包文件输出路径，即打包到哪里

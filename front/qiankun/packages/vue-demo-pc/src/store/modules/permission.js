@@ -156,13 +156,10 @@ const permission = {
     async generateRoutes({ commit, state }) {
       return new Promise((resolve) => {
         (async () => {
-          const { data: { role, name, routes: asyncRoutes } } = await userInfoApi()
-          commit('change_role', {
-            role
-          })// 修改角色
+          const { data: { role = 'admin', name, routes: asyncRoutes } } = await userInfoApi()
           commit('SET_USER_INFO', {
             type: 'name',
-            data: name
+            data: { role, name }
           })// 修改用户信息
           console.log(state.whiteRoutes, 'state.whiteRoutes')
           state.routes = $lm.lodash.cloneDeep(state.whiteRoutes) // 初始化routes为静态路由，同时深拷贝防止影响静态路由
