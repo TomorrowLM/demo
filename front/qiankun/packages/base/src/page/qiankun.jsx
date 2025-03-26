@@ -10,6 +10,8 @@ class Qiankun extends React.Component {
     super(props);
   }
   componentDidMount() {
+    localStorage.setItem("appCommuicate", "我是主应用传递的值");
+    console.log("在main中设置了appCommuicate");
     // console.log(this.containerRef.current, 123123);
     // this.microApp = loadMicroApp({
     //   name: "vue3",

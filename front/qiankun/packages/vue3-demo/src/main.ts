@@ -16,14 +16,21 @@ import './utils/element-default-config';
 
 let instance: any = null
 function render(props: any = {}) {
-  const { container } = props
+  const { container, appCommuicate } = props
+  console.log('bootstrap render', props);
   instance = createApp(App)
   instance.use(createPinia())
   instance.use(ElementPlus)
   instance.use(router)
   instance.use(router)
+    // 将 appCommuicate 注入到全局属性中
+    if (appCommuicate) {
+      instance.config.globalProperties.$appCommuicate = appCommuicate;
+      console.log('appCommuicate', instance.config.globalProperties.$appCommuicate);
+    }
   instance.mount(container ? container.querySelector('#vue3-page') : '#vue3-page');
   document.documentElement.setAttribute('theme', window.localStorage.getItem('skin') || 'light')
+
 }
 
 // 独立运行时
