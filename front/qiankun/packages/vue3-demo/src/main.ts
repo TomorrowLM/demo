@@ -10,9 +10,9 @@ import {
   type QiankunProps
 } from 'vite-plugin-qiankun/dist/helper'
 import ElementPlus from 'element-plus';
-import 'element-plus/theme-chalk/index.css';
+// import 'element-plus/theme-chalk/index.css';
 import './utils/element-default-config';
-// import './style.scss';
+import './style.scss';
 
 let instance: any = null
 function render(props: any = {}) {

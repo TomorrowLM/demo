@@ -1,9 +1,4 @@
-$eapNameSpace: custom;
 @forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
-  $namespace: $eapNameSpace
+  $namespace: 'custom' // 自己需要的前缀
 );
-.main-content {
-  @extend .d-center;
-  height: calc(100% - 48px);
-  overflow: auto;
-}
+@import "element-plus/theme-chalk/src/index.scss";

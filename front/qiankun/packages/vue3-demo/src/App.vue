@@ -9,6 +9,7 @@
   </div>
 </template>
 <script setup lang="ts">
+// import './style.scss';
 import { RouterLink, RouterView } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
