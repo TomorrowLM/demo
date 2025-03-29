@@ -145,7 +145,7 @@
     <el-dialog v-model="dialogVisible" @close="closeDialog">
       <img w-full :src="viewImgSrc" v-if="viewImgSrc" alt="Preview Image" />
       <div class="office-content">
-        <vue-office-excel
+        <!-- <vue-office-excel
           :src="viewFileSrc"
           v-if="viewFileSrc && fileItem.type === 'excel'"
         />
@@ -156,7 +156,7 @@
         <vue-office-pdf
           :src="viewFileSrc"
           v-if="viewFileSrc && fileItem.type === 'pdf'"
-        />
+        /> -->
       </div>
     </el-dialog>
   </div>
@@ -181,10 +181,10 @@ import type {
 } from 'element-plus';
 // import { uploadApi, downloadById, deleteById } from '@/api/index';
 import dayjs from 'dayjs';
-import VueOfficeDocx from '@vue-office/docx';
-import VueOfficeExcel from '@vue-office/excel';
-import VueOfficePdf from '@vue-office/pdf';
-import { UploadComProps } from './index.d';
+// import VueOfficeDocx from '@vue-office/docx';
+// import VueOfficeExcel from '@vue-office/excel';
+// import VueOfficePdf from '@vue-office/pdf';
+import type { UploadComProps } from './index.d';
 
 const props = defineProps({
   bindData: {

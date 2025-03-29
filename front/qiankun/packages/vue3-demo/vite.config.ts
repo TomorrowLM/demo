@@ -199,12 +199,12 @@ export default defineConfig(({ mode }) => {
       importToCDN({
         // prodUrl：可选，默认指向 https://cdn.jsdelivr.net/npm/{name}@{version}/{path}
         modules: [
-          {
-            name: 'jquery',
-            var: 'jQuery',
-            version: '3.6.4',
-            path: 'dist/jquery.min.js'
-          }
+          // {
+          //   name: 'jquery',
+          //   var: 'jQuery',
+          //   version: '3.6.4',
+          //   path: 'dist/jquery.min.js'
+          // }
           // {
           //   name: 'element-plus',
           //   // ElementPlus 为什么不是同下面第二种配置的elementPlus是因为这个配置同CDN资源一致，而下面的配置同需同main.ts的引入名称一致

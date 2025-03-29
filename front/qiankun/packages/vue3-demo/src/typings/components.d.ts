@@ -9,7 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     ColSetting: typeof import('./../components/ProTable/components/ColSetting.vue')['default']
     CronItem: typeof import('./../components/CustomForm/com/cron-item.vue')['default']
-    CusTable: typeof import('./../components/cusTable/index.vue')['default']
     CustomForm: typeof import('./../components/CustomForm/index.vue')['default']
     CustomFormItem: typeof import('./../components/CustomForm/custom-form-item.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']

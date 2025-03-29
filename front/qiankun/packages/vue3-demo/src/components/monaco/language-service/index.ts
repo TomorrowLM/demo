@@ -51,7 +51,7 @@ export default class LanguageService {
         // label 是语言类型，比如：sql, AviatorScript, json等，这里可以根据需要自定义worker的加载方式
         console.log('getWorker', moduleId, label === 'AviatorScript', 2, label);
         if (label === 'AviatorScript') {
-          return new TodoLangWorker();
+          return new TodoLangWorker(); // 自定义worker，这里用的是自定义的worker文件路径
         }
         if (label === 'json') {
           return new jsonWorker();
