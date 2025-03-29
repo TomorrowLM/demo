@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import App from './App.vue';
+const App = resolved => require(['./App.vue'], resolved)
+// import App from './App.vue';
 import router from './router';
 import store from './store';
 import '@/utils/index';

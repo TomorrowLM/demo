@@ -173,7 +173,6 @@ const aliasConfigFn = (resolve) => {
   }
 }
 const webpackBaseConfig = (processVars, config, resolve) => {
-
   // 配置别名
   config.resolve.alias = {
     ...(aliasConfigFn(resolve) || {})
@@ -199,8 +198,9 @@ const baseConfig = (processVars) => {
   isProd = process.env.NODE_ENV === 'production'
   const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
   console.log('baseConfig', VUE_APP_PROXY_API, VUE_APP_API_HOST, NODE_ENV, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path)
+  const publicPath = isProd ? isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path : isQiankun ? `http://localhost:${VUE_APP_PORT}` : '/'
   return {
-    publicPath: isProd ? isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path : '/',
+    publicPath,
     // 打包文件输出路径，即打包到哪里
     outputDir: VUE_APP_OUTPUTDIR || 'dist',
     // assetsDir: 'assets',//静态资源目录(js,css,img,fonts)这些文件都可以写里面

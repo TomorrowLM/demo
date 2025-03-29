@@ -22,18 +22,16 @@ function qiankunConfigFn({ projectName, config }) {
 }
 
 function configAsset(config) {
-  console.log('configAsset')
-  // config.module.rule('fonts').use('url-loader').loader('url-loader').options({}).end();
-  // config.module.rule('images').use('url-loader').loader('url-loader').options({}).end();
-  const publicPath = process.env.NODE_ENV === 'production' ? 'https://production.com/activeRule/' : `http://localhost:8002/`;
+  console.log('configAsset', process.env.VUE_APP_IS_QIANKUN)
+  const publicPath = process.env.NODE_ENV === 'production' ? '' : `fonts/`;
   console.log('publicPath', publicPath)
   const fontRule = config.module.rule('fonts')
   fontRule.uses.clear() // 先清除 vue 默认的配置，不然会有问题
   fontRule
-    .use('url-loader')
-    .loader('url-loader')
+    .use('file-loader')
+    .loader('file-loader')
     .options({
-      name: 'fonts/[name].[hash:7].[ext]',
+      name: '[name].[hash:7].[ext]',
       publicPath
     })
     .end()

@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --mode development",
+    "serve": "vue-cli-service serve --mode dev",
     "serve:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev.qiankun",
     "build": "vue-cli-service build --mode production",
     "build:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
@@ -40,6 +40,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "element-ui": "^2.15.12",
     "escope": "^4.0.0",
+    "file-loader": "^6.2.0",
     "sass-loader": "^10.0.1",
     "tslib": "^2.3.0",
     "typescript": "~5.7.3",
