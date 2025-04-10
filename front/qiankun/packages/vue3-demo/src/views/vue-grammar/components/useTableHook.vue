@@ -3,7 +3,7 @@
     <custom-form :formData="searchModel" :config="formConfig" ref="customRef">
       <template #slot-item>
         <div class="d-inline-block">
-          <el-button type="primary" @click="tableRef.getTableList()">查询</el-button>
+          <el-button type="primary" @click="search">查询</el-button>
           <el-button @click="tableRef.reset()">重置</el-button>
         </div>
       </template>
@@ -17,6 +17,7 @@
       :requestApi="gainPersonnePage"
       :dataCallback="dataCallback"
       :paramsHandler="paramsHandler"
+      :requestAuto="false"
     ></Pro-table>
   </div>
 </template>
@@ -117,7 +118,11 @@ const paramsHandler = (data) => {
   return data
 }
 
-const { setResetField, isArray } = useFun()
+const search = () => {
+  tableRef.value.getTableList()
+  console.log(searchModel.value)
+}
+
 // const search = (isReset?: boolean) => {
 //   console.log(tableRef.value)
 //   if (isReset) {

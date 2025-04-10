@@ -66,6 +66,7 @@ export const useTable = (
 			const requestData = { ...state.searchParam, ...params }
 			requestData.current = state.pageable.pageNum;
 			requestData.size = state.pageable.pageSize;
+			// state.searchParam.employeeName = '小玉'
 			state.searchHandledParam = paramsHandler ? paramsHandler(requestData) : requestData
 			console.log(state.searchHandledParam, '我是查询参数')
 			let { data } = await api(state.searchHandledParam);

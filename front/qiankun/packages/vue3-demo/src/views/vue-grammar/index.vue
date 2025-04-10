@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>
+      <h1>生命周期</h1>
       <h1>父子组件双向绑定</h1>
       <h2>prop: 值类型</h2>
       {{ parentNum }}

@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- v-model和v-bind区别 -->
+
     <h1>一：v-model和v-bind区别</h1>
     <el-input v-model="inputData" v-bind:aa="inputData"></el-input>
     {{ inputData }}
@@ -14,6 +15,9 @@
     <h1>透传</h1>
     <!-- 透传 -->
     <attributeCom class="parent-class" attr1="1" :num="num" @click="changeAttribute"></attributeCom>
+    <h1>三：生命周期执行</h1>
+    在控制台查看
+
   </div>
 </template>
 
@@ -34,7 +38,7 @@ export default {
       num: 1,
       inputData: '',
       provideData: {
-        mainMessage:'这是一个从祖先组件提供的信息'
+        mainMessage: '这是一个从祖先组件提供的信息',
       },
     };
   },
@@ -48,8 +52,40 @@ export default {
       // },
     };
   },
+  computed: {
+    // 计算属性
+    computedNum() {
+      console.log('computed什么时候使用该变量，什么时候执行');
+      return this.num + 1;
+    },
+  },
+  watch: {
+    num: {
+      handler(newVal, oldVal) {
+        console.log('watch:num1', newVal, oldVal);
+      },
+    },
+    inputData: {
+      handler(newVal, oldVal) {
+        console.log('watch', newVal, oldVal);
+      },
+      immediate: true,
+    },
+  },
+  beforeCreate() {
+    console.log('beforeCreate');
+  },
+  created() {
+    console.log('created');
 
+    // console.log(this.$options.provide().mainMessage);
+  },
+  beforeMount() {
+    console.log('beforeMount');
+  },
   mounted() {
+    console.log('mounted');
+    console.log(this.computedNum,'computedNum');
     this.$on('update:num', a => {
       console.log(a, 12);
     });
@@ -59,7 +95,6 @@ export default {
       console.log('父组件');
     },
   },
-  watch: {},
 };
 </script>
 

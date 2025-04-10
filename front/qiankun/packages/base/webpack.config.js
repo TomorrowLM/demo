@@ -14,7 +14,7 @@ const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
 module.exports = () => {
   const config = {
     mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
-    devtool: isDev ? "eval-cheap-module-source-map" : 'source-map',
+    devtool: isDev ? "eval-cheap-module-source-map" : 'cheap-source-map',
     entry: {
       app: path.resolve(__dirname, "./src/main.js"),
     },

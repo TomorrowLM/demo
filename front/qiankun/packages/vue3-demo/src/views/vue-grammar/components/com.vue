@@ -14,6 +14,7 @@ const RenderTableColumn = () => {
   return (
     <>
       <div>{slots.default(data)}</div>
+      <div>这是属性的attr值:{attrs.attr}</div>
     </>
   )
 }

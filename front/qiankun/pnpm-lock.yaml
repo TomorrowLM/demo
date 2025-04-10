@@ -661,6 +661,9 @@ importers:
       escope:
         specifier: ^4.0.0
         version: 4.0.0
+      file-loader:
+        specifier: ^6.2.0
+        version: 6.2.0(webpack@5.97.1)
       sass-loader:
         specifier: ^10.0.1
         version: 10.5.2(node-sass@9.0.0)(sass@1.83.0)(webpack@5.97.1)
@@ -27118,7 +27121,7 @@ snapshots:
       klona: 2.0.6
       postcss: 8.4.49
       semver: 7.6.3
-      webpack: 5.97.1(webpack-cli@5.1.4)
+      webpack: 5.97.1(webpack-cli@4.10.0)
 
   postcss-loader@6.2.1(postcss@8.4.5)(webpack@5.76.1(esbuild@0.14.22)):
     dependencies:
@@ -29879,7 +29882,7 @@ snapshots:
       schema-utils: 4.3.0
       serialize-javascript: 6.0.2
       terser: 5.37.0
-      webpack: 5.97.1(webpack-cli@5.1.4)
+      webpack: 5.97.1(webpack-cli@4.10.0)
 
   terser@4.8.1:
     dependencies:
