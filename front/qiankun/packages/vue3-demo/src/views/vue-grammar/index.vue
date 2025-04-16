@@ -25,6 +25,8 @@
     </div>
     <div>
       <h1>useTableHook</h1>
+      <useDataCom></useDataCom>
+      <useDataNextCom></useDataNextCom>
       <useTableHook></useTableHook>
     </div>
   </div>
@@ -35,7 +37,8 @@ import { ref, reactive } from 'vue'
 import child from './components/child.vue'
 import com from './components/com.vue'
 import useTableHook from './components/useTableHook.vue'
-
+import useDataCom from './components/useHooks/index.vue'
+import useDataNextCom from './components/useHooks/nextIndex.vue'
 /**解构 */
 const state = ref({ a: 1 })
 const { a } = state.value

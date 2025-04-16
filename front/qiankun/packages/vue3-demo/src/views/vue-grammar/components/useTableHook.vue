@@ -117,7 +117,9 @@ const paramsHandler = (data) => {
   }
   return data
 }
-
+if(1){
+  const tableRef = ref(1)
+}
 const search = () => {
   tableRef.value.getTableList()
   console.log(searchModel.value)
