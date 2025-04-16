@@ -47,6 +47,7 @@ router.post('/setDataList', function (req, res) {
         },
     } = req;
     var p = URL.parse(referer);
+
     // console.log('哈哈哈哈', p)
     /* 校验referer */
     // if(p.href !== 'http://localhost:4000/home') throw '校验referer-非法请求'
@@ -55,8 +56,11 @@ router.post('/setDataList', function (req, res) {
     // if (!bol) throw '校验nonce-非法请求'
 
     /* 不做任何校验 */
-    let sql = `
-        UPDATE todo_tbl SET data='${body.value}' WHERE author = '${cookies.username}'`
+    let sql = `UPDATE todo_tbl SET data='${body.value}' WHERE author = '${cookies.username}'`
+    console.log(sql)
+    // res.status(200).json({
+    //     message: '请求成功',
+    // })
     connection.query(sql, function (error, results, fields) {
         if (error) throw error;
         if (results) {

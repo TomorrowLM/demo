@@ -16,6 +16,7 @@
 <body>
   <div id="example"></div>
 </body>
+
 <script type="text/babel">
   const compsButton = React.createElement(() => {
     const { useEffect, useRef, useState } = window.React;
@@ -23,37 +24,38 @@
     const [name, setName] = useState('');
     const [pass, setPass] = useState('');
 
-    const onchange=(type, e)=>{
+    const onchange = (type, e) => {
       e.persist();
       const value = e.target.value;
-      if(type === 'name') {
+      if (type === 'name') {
         setName(value)
-      }else {
+      } else {
         setPass(value)
       }
     }
 
-    const onsubmit = ()=>{
+    const onsubmit = () => {
       var qs = Qs
-        const params = qs.stringify({username:name,password:pass})
-        axios({
-            // headers: {'Content-Type': 'application/x-www-form-urlencoded/json'},
-            url: '/login',
-            method: 'POST',
-            data: params
-            // data: {"data":`"${value}"`}
-        }).then(res=>{
-            if(res.status === 200) {
-                window.sessionStorage.setItem('token', res.data.data)
-                window.location.href = '/home';
-            }
-        })
+      const params = qs.stringify({ username: name, password: pass });
+      console.log(params)
+      axios({
+        // headers: {'Content-Type': 'application/x-www-form-urlencoded/json'},
+        url: '/login',
+        method: 'POST',
+        data: params
+        // data: {"data":`"${value}"`}
+      }).then(res => {
+        if (res.status === 200) {
+          window.sessionStorage.setItem('token', res.data.data)
+          window.location.href = '/home';
+        }
+      })
     }
 
     return <div>
-        用户名：<input type="text" name="username" value={name} onChange={onchange.bind(this,'name')} /><br />
-            密码：<input type="pass" name="password"  value={pass} onChange={onchange.bind(this, 'pass')} /><br />
-        <button onClick={onsubmit}>提交</button>
+      用户名：<input type="text" name="username" value={name} onChange={onchange.bind(this, 'name')} /><br />
+      密码：<input type="pass" name="password" value={pass} onChange={onchange.bind(this, 'pass')} /><br />
+      <button onClick={onsubmit}>提交</button>
     </div>
   })
   ReactDOM.render(compsButton, document.getElementById("example"));

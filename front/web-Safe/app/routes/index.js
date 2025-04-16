@@ -31,9 +31,9 @@ router.get('/home', isLogin, function (req, res) {
     res.render("home")
 });
 
-router.get("/", isLogin, function (req, res) {
-    res.redirect("login")
-})
+// router.get("/", isLogin, function (req, res) {
+//     res.redirect("login")
+// })
 
 router.post("/login", function (req, res) {
     let {
@@ -43,7 +43,7 @@ router.post("/login", function (req, res) {
     password = crypto.createHmac("md5", "cyl54726gsbt$%^$#*&*@").update(password).digest("hex");
     let sql = `
     SELECT *
-    FROM user
+    FROM USER
     WHERE name = '${username}' AND pass = '${password}'`
     connection.query(sql, function (error, results, fields) {
         if (error) throw error;
@@ -57,7 +57,7 @@ router.post("/login", function (req, res) {
 
             res.cookie('username', username, {
                 maxAge: 1 * 86400 * 1000,
-                httpOnly: true,
+                // httpOnly: true,
                 // sameSite: 'None',
                 // secure : true,    //只有https才可以用
                 // signed: true,
