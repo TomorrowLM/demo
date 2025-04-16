@@ -1,5 +1,5 @@
 // lib.js
-var counter = 3;
+var counter = 1;
 function incCounter() {
   counter++;
 }

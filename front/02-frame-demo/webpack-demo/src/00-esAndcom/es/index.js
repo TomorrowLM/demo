@@ -5,6 +5,6 @@ import { counter, incCounter, returnObj } from './copy';
 
 
 const { add, data } = returnObj();
-
+console.log('init',data.a);
 add();
-console.log(data);
+console.log('add',data.a);

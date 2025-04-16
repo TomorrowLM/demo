@@ -71,6 +71,7 @@ const handleStyle = {
   }
 }
 
+
 //处理事件
 const handleEvent = {
   removeEvent: (oldVNode) => {
