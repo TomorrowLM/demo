@@ -45,6 +45,7 @@
         data: params
         // data: {"data":`"${value}"`}
       }).then(res => {
+        console.log(res, 'res')
         if (res.status === 200) {
           window.sessionStorage.setItem('token', res.data.data)
           window.location.href = '/home';

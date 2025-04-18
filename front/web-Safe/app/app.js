@@ -10,11 +10,11 @@ const assert = require("http-assert");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-
+const cors = require('cors');
 const secret = 'token';
 
 var app = express();
-
+app.use(cors());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "html");
 app.engine("html", require("ejs").__express);

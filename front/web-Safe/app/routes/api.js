@@ -57,10 +57,7 @@ router.post('/setDataList', function (req, res) {
 
     /* 不做任何校验 */
     let sql = `UPDATE todo_tbl SET data='${body.value}' WHERE author = '${cookies.username}'`
-    console.log(sql)
-    // res.status(200).json({
-    //     message: '请求成功',
-    // })
+    console.log('我是5000的cookies.username', cookies.username)
     connection.query(sql, function (error, results, fields) {
         if (error) throw error;
         if (results) {

