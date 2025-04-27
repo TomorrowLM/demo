@@ -2,9 +2,9 @@
   <div class="main-content" style="display: flex; align-items: center; justify-content: center">
     <div class="wrapper">
       <nav>
-        <RouterLink v-for="item in routes3d" :key="item.path" :to="'/3D/' + item.path">{{
-          item.name
-        }}</RouterLink>
+        <RouterLink v-for="item in routes3d" :key="item.path" :to="'/3D/' + item.path">
+          {{ item.path }}
+        </RouterLink>
         <!-- <RouterLink to="/3D/canvas/moon">canvas:moon</RouterLink>
         <RouterLink to="/3D/webgl/basic">webgl:webgl</RouterLink>
         <RouterLink to="/3D/webgl/attribute">webgl:attribute</RouterLink>
@@ -20,8 +20,8 @@
 import { onMounted } from 'vue'
 import { routes } from '@/router/index.ts'
 
-console.log(routes,123)
-const routes3d = routes[2].children
+console.log(routes, 123)
+const routes3d = routes[3].children
 </script>
 
 <style scoped>

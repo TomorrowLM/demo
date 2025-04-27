@@ -6,6 +6,7 @@ import App from "./App.js";
 import { router } from "./router/index.js";
 import { RouterProvider } from "react-router-dom";
 import { registerMicroApps, start } from "qiankun";
+import './public-path'
 const isDev = process.env.NODE_ENV === 'development';
 // console.log(process.env.NODE_ENV, API,);
 const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
@@ -18,20 +19,19 @@ registerMicroApps(
     //   activeRule: "/qiankun/vue2-mobile",
     //   // activeRule: getActiveRule('#/vue2-mobile'),
     // },
-    {
-      name: "vue2-pc",
-      entry: isDev ? "//localhost:8002" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
-      container: "#vue2-pc",
-      activeRule: "/qiankun/vue2-pc",
-      // loader: (loading) => setLoading(loading)
-    },
+    // {
+    //   name: "vue2-pc",
+    //   entry: isDev ? "//localhost:8002" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+    //   container: "#vue2-pc",
+    //   activeRule: "/qiankun/vue2-pc",
+    //   // loader: (loading) => setLoading(loading)
+    // },
     {
       name: "vue3",
       entry: isDev ? "//localhost:8003" : '/qiankun/child/vue3',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
       container: "#vue3-container", // 微应用的容器节点的选择器
       activeRule: "/qiankun/vue3",// 微应用的激活规则
       activeWhen: location => location.pathname.startsWith('/qiankun/vue3'),
-
       publicLibraryProviders: ['vue', 'element-plus'], // 共享库列表
       props: {
         appCommuicate: { mes: '我是主应用传递的值' }

@@ -16,7 +16,7 @@ onMounted(() => {
   //create a blue LineBasicMaterial
   //创建材质
   const material = new THREE.LineBasicMaterial({ color: 0x0000ff })
-//带有一些顶点的geometry（几何体）
+  //带有一些顶点的geometry（几何体）
   const points = []
   points.push(new THREE.Vector3(-10, 0, 0))
   points.push(new THREE.Vector3(0, 20, 0))

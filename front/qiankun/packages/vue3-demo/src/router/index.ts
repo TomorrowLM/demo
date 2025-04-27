@@ -62,19 +62,24 @@ export const routes = [
         component: () => import('../views/3D/three/00-camera.vue')
       },
       {
-        path: 'three/01-axis',
+        path: 'three/axis',
         name: '坐标轴-01',
-        component: () => import('../views/3D/three/01-axis-01.vue')
+        component: () => import('../views/3D/three/01-axis.vue')
       },
       {
-        path: 'three/02-axis',
+        path: 'three/helper',
         name: '坐标轴+OrbitControls+gui',
-        component: () => import('../views/3D/three/01-axis-02.vue')
+        component: () => import('../views/3D/three/01-helper.vue')
       },
       {
         path: 'three/cube',
-        name: 'scence',
+        name: 'cube',
         component: () => import('../views/3D/three/02-geometry-cube.vue')
+      },
+      {
+        path: 'three/buffer',
+        name: 'buffer',
+        component: () => import('../views/3D/three/02-geometry-buffer.vue')
       },
       {
         path: 'three/line',
@@ -88,21 +93,35 @@ export const routes = [
       },
       {
         path: 'three/light',
-        name: 'light+OrbitControls',
+        name: 'light',
         component: () => import('../views/3D/three/03-light-OrbitControls.vue')
+      }, {
+        path: 'three/group',
+        name: 'group',
+        component: () => import('../views/3D/three/04-group.vue')
+      }, {
+        path: 'three/texture',
+        name: 'texture',
+        component: () => import('../views/3D/three/05-texture.vue')
+      }, {
+        path: 'three/gltf',
+        name: 'gltf',
+        component: () => import('../views/3D/three/06-gltf.vue')
+      },
+      {
+        path: 'three/demo/array',
+        name: 'light+OrbitControls',
+        component: () => import('../views/3D/three/demo/array.vue')
       }
-      // {
-      //   path: 'three/OrbitControls',
-      //   name: 'OrbitControls',
-      //   component: () => import('../views/3D/three/04-OrbitControls.vue')
-      // }
+
     ]
   },
   {
     path: '/editor',
     name: 'editor',
     component: () => import('../views/editor/index.vue')
-  }, {
+  },
+  {
     path: '/media',
     name: 'media',
     component: () => import('../views/media/index.vue')

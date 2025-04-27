@@ -46,6 +46,7 @@ class WebsocketObj {
       console.log('Websocket通道建立成功', this.ws);
       this.status = 'open';
       store().wsStore.setWsStatus(this.status);
+      //添加onmessage回调函数
       this.onmessage();
       // this.heartCheck();
     };

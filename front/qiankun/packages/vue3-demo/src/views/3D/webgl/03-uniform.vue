@@ -8,9 +8,11 @@
 import { onMounted } from 'vue'
 
 function initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE) {
-  const vertexShader = gl.createShader(gl.VERTEX_SHADER)
-  const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
+  //创建着色器对象
+  const vertexShader = gl.createShader(gl.VERTEX_SHADER) // 顶点着色器
+  const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER) // 片元着色器
 
+  //指定着色器源码
   gl.shaderSource(vertexShader, VERTEX_SHADER_SOURCE) // 指定顶点着色器的源码
   gl.shaderSource(fragmentShader, FRAGMENT_SHADER_SOURCE) // 指定片元着色器的源码
 
@@ -18,19 +20,19 @@ function initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE) {
   gl.compileShader(vertexShader)
   gl.compileShader(fragmentShader)
 
-  // 创建一个程序对象
+  // 创建程序对象
   const program = gl.createProgram()
 
-  gl.attachShader(program, vertexShader)
-  gl.attachShader(program, fragmentShader)
+  //附加着色器到程序对象
+  gl.attachShader(program, vertexShader) //附加顶点着色器
+  gl.attachShader(program, fragmentShader) //附加片元着色器:
 
-  gl.linkProgram(program)
+  gl.linkProgram(program) //链接程序对象
 
   gl.useProgram(program)
 
   return program
 }
-
 onMounted(() => {
   const ctx = document.getElementById('webgl')
   console.log(ctx)
@@ -38,6 +40,7 @@ onMounted(() => {
   console.log(gl, 12)
 
   // 创建着色器源码
+  // 顶点着色器源码
   const VERTEX_SHADER_SOURCE = `
   uniform vec4 uPosition; // 虽然可以用在定点着色器中，但是他不能传递顶点数据。这个是对所有的顶点都生效的。但是对于顶点来说每个坐标都是不一样的。
   // 只传递顶点数据
@@ -46,15 +49,15 @@ onMounted(() => {
     gl_Position = aPosition; // vec4(0.0,0.0,0.0,1.0)
     gl_PointSize = 10.0;
   }
-` // 顶点着色器
-
+`
+  // 片元着色器源码
   const FRAGMENT_SHADER_SOURCE = `
-  precision mediump float; // 必须设置精度
+  precision mediump float; // 告诉编译器在片元着色器中设置浮点数的精度为中等精度
   uniform vec2 uColor; // 这里定义的vec和下面的赋值需要对应。
   void main() {
     gl_FragColor = vec4(uColor.r, uColor.g, 0.0,1.0); // vec4
   }
-` // 片元着色器
+`
 
   const program = initShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE)
 

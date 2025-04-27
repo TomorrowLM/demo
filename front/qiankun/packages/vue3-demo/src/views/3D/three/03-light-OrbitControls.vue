@@ -8,15 +8,15 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 const geometry = new THREE.BoxGeometry(100, 100, 100)
 //材质对象Material:网格漫反射材质
 //MeshLambertMaterial受光照影响
-// const material = new THREE.MeshLambertMaterial()
+const material = new THREE.MeshLambertMaterial()
 
 //材质对象Material:高光网格材质
 //模拟镜面反射，产生一个高光效果
-const material = new THREE.MeshPhongMaterial({
-  color: 0xdfdf,
-  shininess: 25, //高光部分的亮度，默认30
-  specular: 0xdfdf //高光部分的颜色
-})
+// const material = new THREE.MeshPhongMaterial({
+//   color: 0xdfdf,
+//   shininess: 25, //高光部分的亮度，默认30
+//   specular: 0xdfdf //高光部分的颜色
+// })
 
 // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
 const mesh = new THREE.Mesh(geometry, material) //网格模型对象Mesh
@@ -39,13 +39,13 @@ const pointLightHelper = new THREE.PointLightHelper(pointLight, 10)
 scene.add(pointLightHelper)
 
 //环境光:没有特定方向，整体改变场景的光照明暗
-const ambient = new THREE.AmbientLight(0xdfdf, 1.0)
-scene.add(ambient)
+// const ambient = new THREE.AmbientLight(0xdfdf, 1.0)
+// scene.add(ambient)
 
 // 平行光
 const directionalLight = new THREE.DirectionalLight(0xdfdf, 0.5)
 // 设置光源的方向：通过光源position属性和目标指向对象的position属性计算
-directionalLight.position.set(0, 0, 50)
+directionalLight.position.set(100, 100, 150)
 // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
 directionalLight.target = mesh
 scene.add(directionalLight)

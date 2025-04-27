@@ -9,7 +9,7 @@ const scene = new THREE.Scene()
 const geometry = new THREE.BoxGeometry(100, 100, 100)
 //材质对象Material
 const material = new THREE.MeshLambertMaterial({
-  // color: 0x00ffff, //设置材质颜色
+  color: 0x00ffff, //设置材质颜色
   transparent: true, //开启透明
   opacity: 0.5 //设置透明度
 }) //网格漫反射材质
