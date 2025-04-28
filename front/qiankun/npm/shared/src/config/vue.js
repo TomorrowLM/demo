@@ -190,6 +190,13 @@ const webpackBaseConfig = (processVars, config, resolve) => {
   }
 };
 
+/**
+ * 获取公共路径
+ *
+ * @param {boolean} isProd - 是否为生产环境
+ * @param {boolean} isQiankun - 是否为微前端项目
+ * @returns {string} 公共路径
+ */
 const publicPath = (isProd, isQiankun) => {
   return isProd ? (isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path) : '/'
 }

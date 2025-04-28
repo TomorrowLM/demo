@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "serve": "vite",
-    "serve:qiankun": "vite",
+    "serve:qiankun": "vite --mode dev.qiankun",
     "build": "vite build",
     "build:qiankun": "vite build --mode production.qiankun",
     "preview": "vite preview",

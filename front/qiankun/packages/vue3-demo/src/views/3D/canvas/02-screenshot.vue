@@ -61,7 +61,10 @@
 <script setup>
 import '@lm/shared/src/dependencies/canvas/html2canvas.min.js'
 import Canvas2Image from '@lm/shared/src/dependencies/canvas/canvas2image.js'
-console.log(Canvas2Image, 123)
+// console.log('BASE_URL', 123, import.meta.url, import.meta.env.BASE_URL)
+// const demoImagePath = computed(() => `${import.meta.env.BASE_URL}src/assets/demo.png`)
+// const imgSrc = computed(() => new URL('@/assets/demo.png', import.meta.url).href)
+// console.log('imgSrc', imgSrc.value)
 let canvas,
   ctx,
   canvas1,
@@ -81,7 +84,6 @@ let canvas,
   spreadY,
   pixelRatio
 onMounted(() => {
-
   //图像层
   canvas = document.getElementById('canvas')
   ctx = canvas.getContext('2d')

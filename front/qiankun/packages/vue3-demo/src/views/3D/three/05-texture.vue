@@ -24,7 +24,8 @@ onMounted(() => {
   //纹理贴图加载器TextureLoader
   const texLoader = new THREE.TextureLoader()
   // .load()方法加载图像，返回一个纹理对象Texture
-  texLoader.load('../../../../texture.webp', (loadedTexture) => {
+  const gltfPath = new URL('@/assets/texture.webp', import.meta.url).href
+  texLoader.load(gltfPath, (loadedTexture) => {
     const material = new THREE.MeshBasicMaterial({ map: loadedTexture })
     const cube = new THREE.Mesh(geometry, material)
     scene.add(cube)

@@ -44,8 +44,10 @@ const scene = new THREE.Scene()
 // 创建GLTF加载器对象
 const loader = new GLTFLoader()
 let draggableObjects = []
-
-loader.load('../../../../demo.gltf', function (gltf) {
+// 由于 GLTFLoader 需要一个 URL 路径来加载文件，你可以使用 new URL 构造函数来获取文件的 URL。
+const gltfPath = new URL('/demo.gltf', import.meta.url).href
+console.log('gltfPath', gltfPath,import.meta.url)
+loader.load(gltfPath, function (gltf) {
   console.log('控制台查看加载gltf文件返回的对象结构', gltf)
   console.log('gltf对象场景属性', gltf.scene)
   // 遍历所有子对象并修改材质

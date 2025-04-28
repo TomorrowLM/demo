@@ -26,23 +26,28 @@ export default defineConfig(({ mode }) => {
   const proxyTarget = `http://${env.CONFIG_API_PROXY}`
   const srcPath = fileURLToPath(new URL('./src', import.meta.url))
   const typingsPath = resolve(srcPath, 'typings')
-  const isQiankun = mode === 'production.qiankun'
-  const appPublicPath = isQiankun ? env.VUE_APP_Build_Qiankun_Path : ''
-  const basePath = mode === 'elecPro' ? './' : env.CONFIG_APP_PUBLIC || '/'
-  const appBuildDir = isQiankun ? env.VUE_APP_OUTPUTDIR : 'dist'
-  const isDev = mode === 'development' || mode === 'elecDev'
+  const isQiankun = mode.includes('qiankun')
+  const isDev = mode.includes('dev')
+  // const appPublicPath = isQiankun ? env.VUE_APP_Build_Qiankun_Path : ''
+  const appPublicPath = isQiankun ? isDev ? `http://localhost:8003` : env.VUE_APP_Build_Qiankun_Path : '' // 打包路径
+  const appBuildDir = isQiankun ? env.VUE_APP_OUTPUTDIR : 'dist' // 打包目录
   const name = require('./package.json').name
   const externals = {
-    jquery: 'jQuery'
+    // jquery: 'jQuery'
   }
   console.log(
-    '========> mode = ',
-    mode,
-    ' appPublicPath = ',
-    appPublicPath,
-    '  proxyTarget = ',
-    proxyTarget,
+    import.meta.BASE_URL,
+    '========> env = ',
+    env,
+    '========> srcPath',
     srcPath,
+    '========> mode',
+    mode,
+    '========> appPublicPath',
+    appPublicPath,
+    '========> isQiankun = ',
+    isQiankun,
+    '========> VUE_APP_Build_Qiankun_Path = ',
     env.VUE_APP_Build_Qiankun_Path
   )
   const output = isQiankun ? {
@@ -53,7 +58,7 @@ export default defineConfig(({ mode }) => {
     // formats: ['es'],
   } : {}
   return {
-    // publicPath: appPublicPath,
+    //vite 目前在development模式的时候，base设置了之后是不生效的
     base: appPublicPath,
     // assetsPublicPath: './',
     // productionSourceMap: true,
@@ -75,7 +80,7 @@ export default defineConfig(({ mode }) => {
             moment: 'moment',
             uuid: 'uuid',
             lodash: 'lodash',
-            jquery: '$'
+
           },
           // 分包
           manualChunks(id) {
@@ -89,20 +94,18 @@ export default defineConfig(({ mode }) => {
     server: {
       host: true,
       port: 8003,
+      origin: isDev ? 'http://localhost:8003' : null,
       proxy: {
         '/api': {
           target: 'http://192.168.110.59:7000'
         },
-
-        '/mock': {
-          target: '192.168.110.41:7000'
-        }
       }
     },
-    external: ['jquery'],
+    external: [],
     resolve: {
       alias: {
-        '@': srcPath,
+        // '@': srcPath,
+        '@': resolve(__dirname, 'src/'),
       }
     },
     // optimizeDeps: {
@@ -118,7 +121,6 @@ export default defineConfig(({ mode }) => {
       AutoImport({
         // Auto import functions from Vue, e.g. ref, reactive, toRef...
         // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
-        // , '@vueuse/core'
         imports: [
           'vue',
           {
@@ -193,8 +195,6 @@ export default defineConfig(({ mode }) => {
       }),
       inject({
         $: 'jquery', // 这里会自动载入 node_modules 中的 jquery
-        jQuery: 'jquery',
-        'windows.jQuery': 'jquery'
       }),
       importToCDN({
         // prodUrl：可选，默认指向 https://cdn.jsdelivr.net/npm/{name}@{version}/{path}
