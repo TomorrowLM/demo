@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<head>
+  <link rel="preload" href="/style.css?t=3000" as="style">
+  <link rel="preload" href="/main.js?t=3000" as="script">
+  <link rel="preload" href="/main.js?t=3000" as="script">
+  <link rel="preload" href="/preload.js?t=3000" as="script">
+
+  <link rel="prefetch" href="/prefetch.css?t=1000" as="style">
+  <link rel="prefetch" href="/prefetch.js?t=1000" as="script">
+  <link rel="prefetch" href="/main.js?t=1000" as="script">
+
+  <!-- 引用脚本 -->
+  <!-- 
+    当页面中实际用到的资源与 preload、prefetch 加载的资源重复时，
+    浏览器不会进行重复请求（这个例子中不会出现第二个 main.js 的请求）
+   -->
+  <script src="/main.js?t=3000"></script>
+</head>
+
+<body>
+  <p>hello world</p>
+  <p class="preload">preload</p>
+  <p class="prefetch">prefetch</p>
+</body>
+
+</html>
