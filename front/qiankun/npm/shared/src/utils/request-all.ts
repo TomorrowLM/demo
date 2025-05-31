@@ -1,5 +1,5 @@
 // import Vue from 'vue'
-import axios, { CancelToken } from 'axios';
+import axios from 'axios';
 import qs from "qs";
 import md5 from 'js-md5';
 const CancelToken = axios.CancelToken;
@@ -95,7 +95,7 @@ const codeMessage = {
   504: "网关超时。",
 };
 
-const err = (error: any) => {
+const err = (error) => {
   console.log('error', error);
   if (error.response) {
     const data = error.response.data;
@@ -126,7 +126,7 @@ const err = (error: any) => {
  * 处理参数
  * @param {*} config
  */
-const handleRequest = (config: any) => {
+const handleRequest = (config) => {
   const token = window.localStorage.getItem('token');
   config.headers.authorization = `Bearer ${token}`;
   // 检查是否存在重复请求，若存在则取消当前的请求
@@ -147,7 +147,7 @@ const handleRequest = (config: any) => {
  * 处理参数
  * @param {*} config
  */
-const handleResponse = async (response: any) => {
+const handleResponse = async (response) => {
   if (response.data.code !== 200) {
     return Promise.reject(response.data);
   }

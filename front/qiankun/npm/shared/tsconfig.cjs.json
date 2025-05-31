@@ -1,11 +1,14 @@
 {
   "baseUrl": "./",
-  "extends": "../../tsconfig.base.json",
+  // "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
-    "outDir": "./lib",
-    "lib": ["dom", "es2015"],
+    "outDir": "./lib/cjs",
+    "lib": [
+      "dom",
+      "es2015"
+    ],
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -16,6 +19,12 @@
     // "declarationDir": "./lib/ts",
     // "declarationMap": true  // 生成类型声明映射文件（可选）
   },
-  "include": ["**/*", "./src/styles/*"],
-  "exclude": ["lib"]
+  "include": [
+    "**/*",
+    "./src/styles/*"
+  ],
+  "exclude": [
+
+    "./config", // 具体排除外部 config 文件夹
+  ]
 }

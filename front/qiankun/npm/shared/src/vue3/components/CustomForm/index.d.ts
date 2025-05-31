@@ -69,7 +69,7 @@ interface SelectProps {
   multiple: boolean;
   fetch: Function
 }
-export interface ElementProps implements SelectProps{
+export interface ElementProps extends SelectProps {
   prop: string; //表单项参数
   type: ComType | DatePickerTypeEnum | string; //组件类型
   label: string;
@@ -77,7 +77,6 @@ export interface ElementProps implements SelectProps{
   width?: string;
   isRender?: boolean; //是否渲染完成，主要用于在进入编辑页面时联动表单项的渲染时机
   disabled?: boolean;
-  filterable?: boolean; //搜索
   labelWidth?: string;
   placeholder?: string;
   optionProp?: {
