@@ -11,10 +11,10 @@
 
 <script>
 import { Component, Vue } from 'vue-property-decorator';
-import $lm from '@lm/shared/lib/src/utils';
+import $lm from '@lm/shared/lib/cjs/utils';
 import { method } from 'lodash';
 const request = $lm.service(process.env.VUE_APP_PROXY_API);
-import useRequest from '@lm/shared/lib/src/utils/useRequest';
+import useRequest from '@lm/shared/lib/cjs/utils/useRequest';
 function setTimeOutApi() {
   const params = { url: '/common/setTimeOut', method: 'get' };
   return {

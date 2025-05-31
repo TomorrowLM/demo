@@ -1,4 +1,4 @@
-import $lm from '@lm/shared/lib/src/utils'
+import $lm from '@lm/shared/lib/cjs/utils'
 
 import { userInfoApi } from '@/api'
 //网上说后端给的动态路由组件地址不能包含@/views/

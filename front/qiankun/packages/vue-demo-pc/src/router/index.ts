@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import $lm from '@lm/shared/lib/src/utils';
+import $lm from '@lm/shared/lib/cjs/utils';
 import store from '@/store';
 Vue.use(VueRouter); // 安装路由功能
 const isProd = process.env.NODE_ENV === 'production';
