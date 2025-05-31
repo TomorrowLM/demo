@@ -61,7 +61,7 @@ export default {
     num: {
       handler(newVal, oldVal) {
         console.log('这是父组件：watch:num', newVal, oldVal);
-      },
+      }, 
     },
     numObj: {
       handler(newVal, oldVal) {
