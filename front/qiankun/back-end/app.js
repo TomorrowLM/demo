@@ -8,11 +8,6 @@ const logger = require("morgan");
 const app = express();
 const { routes, whitePaths } = require("./utils/getRoutes")
 
-// const usersRouter = require("./routes/users");
-// const login = require("./routes/login");
-// const token = require("./routes/token");
-// const access = require("./routes/access");
-// const test = require("./routes/test");
 const expressJwt = require("express-jwt");
 // 配置ejs视图的目录
 app.set("views", path.join(__dirname, "views")); // views代表存放视图的目录
@@ -62,39 +57,18 @@ app.use(
 // 如果token过期或者 错误的处理
 app.use((err, req, res, next) => {
   console.log(req.cookies);
-
   if (err.name === "UnauthorizedError") {
     //  这个需要根据自己的业务逻辑来处理（ 具体的err值 请看下面）
     res.status(401).send({ code: -1, message: "token失效，请重新登录" });
   }
 });
 
-// const commonConfig = {
-//   proxyPath: '/common',
-//   path: ['login','users']
-// }
-
-// commonConfig.path.forEach(val=>{
-//   app.use(`${commonConfig.proxyPath}/${val}`,)
-// })
-
-// const proxy = ['/common','/vue2-mobile']
-
-// proxy.forEach(val => {
-//   app.use("/api/users", usersRouter);
-//   app.use(`${val}/api/login`, login);
-// })
-
 Object.keys(routes).forEach(base => {
   routes[base].forEach(item => {
     console.log(item.path);
     app.use(item.path, item.importVal);
   })
-})
-
-// app.use("/api/token", token);
-// app.use("/api/access", access);
-// app.use("/api/test", test);
+}) 
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

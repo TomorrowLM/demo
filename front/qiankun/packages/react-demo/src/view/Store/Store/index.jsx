@@ -72,4 +72,8 @@ function mapDispatchToProps(dispatch) {
     getuserInfo: (action) => dispatch(action),
   };
 }
+// 使用connect高阶组件将Counter组件连接到Redux store
+// connect函数接受两个参数：mapStateToProps和mapDispatchToProps
+// 它返回一个新的组件，这个组件能够访问Redux store中的状态和分派actions
+
 export default connect(mapStateToProps, mapDispatchToProps)(Store); // 挂载到props

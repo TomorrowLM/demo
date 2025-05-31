@@ -112,8 +112,12 @@ export const routes = [
         path: 'three/demo/array',
         name: 'light+OrbitControls',
         component: () => import('../views/3D/three/demo/array.vue')
+      },
+      {
+        path: 'three/demo/people',
+        name: '',
+        component: () => import('../views/3D/three/demo/people.vue')
       }
-
     ]
   },
   {

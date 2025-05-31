@@ -16,6 +16,7 @@ import importToCDN from 'vite-plugin-cdn-import'
 import inject from '@rollup/plugin-inject'
 import monacoEditorPlugin from "vite-plugin-monaco-editor"
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import commonjs from '@rollup/plugin-commonjs'
 
 // import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';// 引入rollup-plugin-visualizer模块
 // import Inspect from 'vite-plugin-inspect'; //可以让开发者在浏览器端就可以看到vue文件编译后的代码、vue文件的相互依赖关系
@@ -96,8 +97,8 @@ export default defineConfig(({ mode }) => {
       port: 8003,
       origin: isDev ? 'http://localhost:8003' : null,
       proxy: {
-        '/api': {
-          target: 'http://192.168.110.59:7000'
+        '/vue3/api': {
+          target: 'http://127.0.0.1:3600'
         },
       }
     },
@@ -115,6 +116,7 @@ export default defineConfig(({ mode }) => {
     //   ]
     // },
     plugins: [
+      commonjs(), // 支持 CommonJS 模块
       Vue(),
       vueJsx(),
       nodePolyfills(),

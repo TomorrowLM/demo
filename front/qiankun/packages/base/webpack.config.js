@@ -42,12 +42,12 @@ module.exports = () => {
       },
       proxy: [
         {
-          context: ['/vue2-mobile/api', '/vue2-pc/api'],
+          context: ['/vue2-mobile/api', '/vue2-pc/api', '/vue3/api'],
           target: process.env.VUE_APP_API_HOST,
           changeOrigin: true,
           secure: false,
           xfwd: false,
-          pathRewrite: { '/vue2-pc/api': '/', '/vue2-mobile/api': '/' }  //重点：重写资源访问路径，避免转发请求 404问题
+          pathRewrite: { '/vue2-pc/api': '/', '/vue2-mobile/api': '/', '/vue3/api': '/' }  //重点：重写资源访问路径，避免转发请求 404问题
         },
       ]
     },
