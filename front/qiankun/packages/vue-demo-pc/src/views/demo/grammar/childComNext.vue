@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="type === 2">
+      这是子组件二：
       {{ provideData.mainMessage }}
     </div>
   </div>
