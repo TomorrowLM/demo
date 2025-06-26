@@ -1,0 +1,27 @@
+{
+  "name": "vue3-demo",
+  "version": "1.0.0",
+  "description": "Vue3 组件文档",
+  "scripts": {
+    "storybook": "start-storybook -p 6007",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "vue": "^3.2.47",
+    "element-plus": "^2.3.12",
+    "@vue/compiler-sfc": "^3.2.47"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-interactions": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/builder-webpack5": "^6.5.16",
+    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/vue3": "^6.5.16",
+    "@storybook/testing-library": "^0.0.13",
+    "babel-loader": "^8.2.5",
+    "sass": "^1.69.5",
+    "sass-loader": "^10.4.1",
+    "vue-loader": "^17.0.1"
+  }
+} 

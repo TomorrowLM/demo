@@ -1,0 +1,20 @@
+{
+  "name": "component-doc-generator",
+  "version": "1.0.0",
+  "description": "自动化组件文档生成工具",
+  "private": true,
+  "scripts": {
+    "dev:vue2": "pnpm --filter vue2-demo storybook",
+    "dev:vue3": "pnpm --filter vue3-demo storybook",
+    "build:vue2": "pnpm --filter vue2-demo build-storybook",
+    "build:vue3": "pnpm --filter vue3-demo build-storybook",
+    "generate": "npx ts-node scripts/generate.ts"
+  },
+  "devDependencies": {
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "author": "",
+  "license": "ISC"
+}
