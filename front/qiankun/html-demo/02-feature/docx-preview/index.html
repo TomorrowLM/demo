@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  ...
+  <div id="container"></div>
+  ...
+  <input type="file" id="file">
+</body>
+  <!--lib uses jszip-->
+  <script src="../dependencies/docx-preview.min.js"></script>
+  <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+  <script>
+    document.getElementById('file').addEventListener('change', function(event) {
+    // 获取文件列表
+    const files = document.getElementById('file').files;
+    // 输出文件名
+    // for (let i = 0; i < files.length; i++) {
+    //     console.log(files[i].name);
+    // }
+    console.log(files)
+    docx.renderAsync(files[0], document.getElementById("container"))
+    .then(x => console.log("docx: finished"));
+});
+  </script>
+
+</html>
