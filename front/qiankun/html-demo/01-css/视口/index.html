@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">   -->
+  <meta name="viewport" content="width=device-width">
+  <title>布局视口和视觉视口示例</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+    }
+
+    .content {
+      width: 80%;
+      max-width: 600px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .large-content {
+      width: 2000px;
+      height: 2000px;
+      background-color: rgba(0, 0, 255, 0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .viewport-info {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="large-content"></div>
+  <div class="container">
+    <div class="content">
+      <h1>布局视口和视觉视口示例</h1>
+      <p>调整浏览器窗口的大小，观察布局视口和视觉视口的变化。</p>
+      <p>这个示例展示了如何使用视口元标签来控制页面的布局和缩放。</p>
+      <div class="viewport-info">
+        <p>布局视口宽度: <span id="layout-viewport-width">0</span>px</p>
+        <p>布局视口高度: <span id="layout-viewport-height">0</span>px</p>
+        <p>视觉视口宽度: <span id="visual-viewport-width">0</span>px</p>
+        <p>视觉视口高度: <span id="visual-viewport-height">0</span>px</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateViewportInfo() {
+      const layoutViewportWidth = document.documentElement.clientWidth;
+      const layoutViewportHeight = document.documentElement.clientHeight;
+      const visualViewportWidth = window.visualViewport ? window.visualViewport.width : layoutViewportWidth;
+      const visualViewportHeight = window.visualViewport ? window.visualViewport.height : layoutViewportHeight;
+
+      document.getElementById('layout-viewport-width').textContent = layoutViewportWidth;
+      document.getElementById('layout-viewport-height').textContent = layoutViewportHeight;
+      document.getElementById('visual-viewport-width').textContent = visualViewportWidth;
+      document.getElementById('visual-viewport-height').textContent = visualViewportHeight;
+    }
+
+    window.addEventListener('resize', updateViewportInfo);
+    window.addEventListener('orientationchange', updateViewportInfo);
+    updateViewportInfo(); // 初始化时更新一次
+  </script>
+</body>
+
+</html>
