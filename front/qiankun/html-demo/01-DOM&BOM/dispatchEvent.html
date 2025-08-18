@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="btn">测试dispatchEvent()方法</button>
+    <h1 id="elem">Hello from the script!</h1>
+  </body>
+  <script>
+    let btn = document.querySelector(".btn");
+
+    btn.addEventListener("click", function () {
+      alert("点击了");
+      elem.dispatchEvent(event);
+    });
+
+    let clickEvent = new Event("click");
+    btn.dispatchEvent(clickEvent);
+    btn.dispatchEvent(clickEvent);
+
+    document.addEventListener("hello", function (event) {
+      // (1)
+      alert("Hello from " + event.target.tagName); // Hello from H1
+    });
+
+    // ...在 elem 上 dispatch！
+    let event = new Event("hello", { bubbles: true }); // (2)
+    elem.dispatchEvent(event);
+  </script>
+</html>
+
+//https://blog.51cto.com/u_16213334/6955340

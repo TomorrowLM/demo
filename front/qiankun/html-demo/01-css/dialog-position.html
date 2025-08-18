@@ -1,0 +1,48 @@
+<div class="modal">
+  <div class="modal-outer">
+    <div class="modal-content">
+      <!-- 弹框内容 -->
+      <div class="absolute-element">
+        这是绝对定位的内容
+      </div>
+      <div class="modal-content-inner">11111</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal {
+    border-radius: 32px;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+  }
+
+  .modal-outer {
+    position: relative;
+    /* 圆角设置在外层 */
+    overflow: visible;
+    width: 100%;
+  }
+
+  .modal-content {
+    position: relative;
+    overflow: visible;
+    /* 内层允许溢出 */
+  }
+
+  .absolute-element {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    /* 其他样式 */
+  }
+
+  .modal-content-inner {
+    position: relative;
+    overflow: visible;
+    /* 内层允许溢出 */
+    background: linear-gradient(0.06deg, #ffffff 60%, #c1dfff 100%);
+    
+  }
+</style>
