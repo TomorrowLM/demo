@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import React from "react";
 import { loadMicroApp } from "qiankun"; //TODO:这里容器必须设置在父路径上
-import styles from "./qiankun.less";
+import styles from "./qiankun.module.less";
 
 class Qiankun extends React.Component {
   containerRef = React.createRef();

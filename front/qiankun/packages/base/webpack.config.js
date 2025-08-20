@@ -7,7 +7,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const isDev = process.env.NODE_ENV === "development" ? true : false;
 require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.NODE_ENV) })
 console.log('process.env.NODE_ENV:', process.env.NODE_ENV, process.env.VUE_APP_API_HOST)
-
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 module.exports = () => {
   const config = {
     mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
@@ -105,7 +106,31 @@ module.exports = () => {
           ],
         },
         {
-          test: /\.less$/i,
+          test: lessRegex,
+          exclude: lessModuleRegex,
+          use: [
+            // {
+            //   loader: 'style-loader', // 从 JS 中创建样式节点
+            // },
+            { loader: MiniCssExtractPlugin.loader }, // 提取到单独的CSS文件
+            {
+              loader: 'css-loader', // 转化 CSS 为 CommonJS
+              options: {
+                sourceMap: true,
+              }
+            },
+            {
+              loader: 'less-loader', // 编译 Less 为 CSS
+              options: {
+                lessOptions: {
+                  javascriptEnabled: true,
+                },
+              },
+            },
+          ],
+        },
+        {
+          test: lessModuleRegex,
           use: [
             // {
             //   loader: 'style-loader', // 从 JS 中创建样式节点

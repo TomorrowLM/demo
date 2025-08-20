@@ -41,7 +41,7 @@ function Com1() {
   };
   return (
     <>
-      <h1>这是主应用的Header</h1>
+      <h1>这是主应用的页面组件：使用react-web-component实现</h1>
       <button onClick={handleClick}>count is: {count}</button>
       <button onClick={navigateClick}>navigate:page2</button>
       <div className="pageCom">{pageCom}</div>

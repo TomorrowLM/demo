@@ -11,7 +11,7 @@
         <div :style="{ width: fullScreenStatus ? '100%' : 'calc(100% - 220px)' }">
           <TagNav v-if="!fullScreenStatus" />
           <!-- <button @click="goRouter">跳转</button> -->
-          <el-main :style="{ padding: padding, height: fullScreenStatus ? '100%' : 'calc(100% - 92px)' }">
+          <el-main :style="{ padding: padding, height: fullScreenStatus ? '100%' : 'calc(100% - 40px)' }">
             <div class="contentContainer">
               <router-view></router-view>
             </div>
@@ -134,6 +134,6 @@ export default class Layout extends Vue {
   height: 100%;
 }
 .el-container {
-  height: 100%;
+  height: calc(100% - 30px);
 }
 </style>

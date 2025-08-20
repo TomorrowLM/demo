@@ -1,0 +1,34 @@
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+}
+.float-right {
+  float: right;
+}
+.qiankun {
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+.qiankun-app {
+  /* overflow: scroll; */
+  display: flex;
+  width: 100%;
+  height: calc(100% - 32px);
+  /* padding: 20px; */
+  box-sizing: border-box;
+}
+.qiankun-header {
+  height: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.ml-8 {
+  margin-left: 8px;
+}
