@@ -5,12 +5,9 @@ const packageName = require("./package.json").name;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const isDev = process.env.NODE_ENV === "development" ? true : false;
-// const globalConstants = require('../config/envConfig/env.dev.js')
-// const { PUBLIC_URL } = globalConstants;
-// console.log(PUBLIC_URL, globalConstants);
 require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.NODE_ENV) })
-console.log(process.env.NODE_ENV, process.env.VUE_APP_API_HOST)
-const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
+console.log('process.env.NODE_ENV:', process.env.NODE_ENV, process.env.VUE_APP_API_HOST)
+
 module.exports = () => {
   const config = {
     mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',

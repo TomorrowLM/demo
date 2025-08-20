@@ -1,6 +1,5 @@
 // import Vue from 'vue'
 import axios from 'axios';
-
 // const axios = require('axios');
 let service = null;
 
@@ -98,4 +97,3 @@ const serveceHandle = (baseURL: string) => {
 }
 
 module.exports = serveceHandle
-// export default serveceHandle

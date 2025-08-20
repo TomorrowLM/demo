@@ -12,7 +12,6 @@ function MainPage() {
     <div>
       <Router>
         <Com1 />
-        {/* <Com2 /> */}
       </Router>
     </div>
   );
@@ -33,7 +32,9 @@ function Com1() {
   }, [location]); // 依赖项是location，这样每当location改变时，effect就会重新运行
   const handleClick = () => {
     setCount(count + 1);
-    navigate("/qiankun/vue2-pc/page2", {
+  };
+  const navigateClick = () => {
+    navigate("/qiankun/vue2-pc/mainApp/page2", {
       replace: false,
       state: { a: 1, b: 2 },
     });
@@ -41,9 +42,8 @@ function Com1() {
   return (
     <>
       <h1>这是主应用的Header</h1>
-      <img src="../assets/123.png" alt="" />
-      <img src="../assets/4.gif" alt="" />
       <button onClick={handleClick}>count is: {count}</button>
+      <button onClick={navigateClick}>navigate:page2</button>
       <div className="pageCom">{pageCom}</div>
     </>
   );
@@ -55,24 +55,4 @@ function ComponentPage() {
   return <div className="App">5581</div>;
 }
 
-// 创建Web Component类
-class ReactComponentPage extends HTMLElement {
-  connectedCallback() {
-    const mountPoint = document.createElement("div");
-    this.attachShadow({ mode: "open" }).appendChild(mountPoint);
-
-    ReactDOM.render(<ComponentPage />, mountPoint);
-  }
-
-  disconnectedCallback() {
-    const mountPoint = this.shadowRoot.firstChild;
-    ReactDOM.unmountComponentAtNode(mountPoint);
-  }
-}
-
-// 注册Web Component
-if (!customElements.get("react-component-page")) {
-  customElements.define("react-component-page", ReactComponentPage);
-}
-
-export default ComponentPage;
+export default MainPage;

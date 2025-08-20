@@ -72,7 +72,7 @@ export default class Sidebar extends Vue {
 .el-menu {
   width: 220px;
   border-right: initial;
-  height: calc(100vh - 60px);
+  height: calc(100% - 60px);
   /* overflow-y: scroll; */
 }
 .el-menu-item.is-active {

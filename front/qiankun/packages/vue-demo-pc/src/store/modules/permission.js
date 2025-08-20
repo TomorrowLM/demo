@@ -52,22 +52,30 @@ export const whiteRoutes = [
         component: () => import('@/views/dashboard/index.vue')
       },
       {
-        path: 'page1',
-        name: 'page1',
+        path: 'mainApp',
+        name: 'mainApp',
         meta: {
           sidebar: true,
           menuName: '主应用页面组件'
-        }
-        // component: () => import('@/views/ReactPageWrapper.vue')
-      },
-      {
-        path: 'page2',
-        name: 'page2',
-        meta: {
-          sidebar: true,
-          menuName: '主应用页面组件'
-        }
-        // component: () => import('@/views/ReactPageWrapper.vue')
+        },
+        component: () => import('@/views/mainApp/index.vue'),
+        children: [
+          {
+            path: 'page1',
+            name: 'page1',
+            meta: {
+              sidebar: true,
+              menuName: '主应用页面组件'
+            }
+          }, {
+            path: 'page2',
+            name: 'page2',
+            meta: {
+              sidebar: true,
+              menuName: '主应用页面组件'
+            }
+          },
+        ]
       },
       {
         path: 'demo',

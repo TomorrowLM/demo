@@ -91,7 +91,7 @@ export default {
 <style lang="scss" scoped>
 .form_login {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background: url(../../assets/bg.jpg) snow -200px;
   box-sizing: border-box;
   display: flex;

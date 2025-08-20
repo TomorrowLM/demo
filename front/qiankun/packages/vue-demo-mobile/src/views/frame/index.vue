@@ -1,13 +1,13 @@
 <template>
   <div
     class="container"
-    :style="{ height: '100vh' }"
+    :style="{ height: '100%' }"
   >
     <el-container>
       <el-header>
         <header-com />
       </el-header>
-      <el-main :style="{ height: 'calc(100vh - 0.82rem)' }">
+      <el-main :style="{ height: 'calc(100% - 0.82rem)' }">
         <transition name="slide-left">
           <router-view />
         </transition>

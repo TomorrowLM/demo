@@ -14,7 +14,7 @@ function Page1() {
   };
   return (
     <div className="qq">
-      我是page11
+      <h1>page1</h1>
       <Link
         to={{
           pathname: "/qiankun/vue2-pc/page2",

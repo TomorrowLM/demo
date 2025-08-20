@@ -133,7 +133,7 @@ export default class PickupTask extends Vue {
   margin: 16px;
 }
 #components-layout-demo-custom-trigger {
-  height: 100vh;
+  height: 100%;
 }
 .ant-layout-content {
   min-height: initial;

@@ -11,11 +11,11 @@
   box-sizing: border-box;
 }
 .qiankun-app {
-  overflow: scroll;
+  /* overflow: scroll; */
   display: flex;
   width: 100%;
   height: calc(100% - 32px);
-  padding: 20px;
+  /* padding: 20px; */
   box-sizing: border-box;
 }
 .qiankun-header {
@@ -31,4 +31,7 @@
 }
 .ml-8 {
   margin-left: 8px;
+}
+#__qiankun_microapp_wrapper_for_vue_2_pc__ {
+  height: calc(100vh - 32px);
 }
