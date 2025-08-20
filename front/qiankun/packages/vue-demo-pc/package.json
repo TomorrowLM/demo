@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode dev",
-    "serve:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode dev.qiankun",
+    "serve:qiankun": "vue-cli-service serve --mode dev.qiankun",
     "build": "vue-cli-service build --mode production",
     "build:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
     "lint": "vue-cli-service lint"

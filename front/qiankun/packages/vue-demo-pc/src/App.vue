@@ -10,10 +10,12 @@
         </el-aside>
         <div :style="{ width: fullScreenStatus ? '100%' : 'calc(100% - 220px)' }">
           <TagNav v-if="!fullScreenStatus" />
+          <button @click="goRouter">跳转</button>
           <el-main :style="{ padding: padding, height: fullScreenStatus ? '100%' : 'calc(100vh - 92px)' }">
             <div class="contentContainer">
               <router-view></router-view>
             </div>
+            <main-page-com></main-page-com>
           </el-main>
         </div>
       </el-container>
@@ -23,8 +25,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import Header from '@/views/frame/Header.vue';
 import Sidebar from '@/views/frame/Sidebar.vue';
 import TagNav from '@/views/frame/TagNav.vue';
@@ -38,12 +39,24 @@ import { userInfo } from '@/api';
       return JSON.stringify(window.localStorage.getItem('token'));
     },
   },
+  Watch: {
+    $route() {
+      console.log(document.querySelector('.qiankun-app1'), 'qiankun-app1');
+    },
+  },
 })
 export default class Layout extends Vue {
   private name = 'Layout';
   private isCollapse = false;
   private ws: any = null;
   padding = '20px';
+  @Watch('$route', { immediate: true, deep: true })
+  onRouteChange() {
+    // this.$nextTick(() => {
+    //   console.log(document.querySelector('.qiankun-app1'),document.querySelector('.contentContainer'), 'qiankun-app1');
+    //   document.querySelector('.contentContainer').appendChild(document.querySelector('.qiankun-app1'));
+    // });
+  }
   async created() {
     console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
     this.$nextTick(() => {
@@ -75,11 +88,21 @@ export default class Layout extends Vue {
       window.localStorage.setItem('skin', 'light');
       (document.querySelector(':root') as any).style.setProperty('--theme-name', 'light');
     }
+
+    // 动态加载主应用注册的web components
+    if (window.mainAppComponents && window.mainAppComponents.registerWebComponents) {
+      window.mainAppComponents.registerWebComponents();
+    }
   }
 
-  // updated () {
-  //   this.isToken = (Vue as any).ls.get('token')
-  // }
+  goRouter() {
+    console.log('this.$route', this.$route);
+    if (this.$route.name === 'page1') {
+      this.$router.push('/page2');
+    } else if (this.$route.name === 'page2') {
+      this.$router.push('/page1');
+    }
+  }
 
   get fullScreenStatus() {
     return this.$store.state.fullscreenStatus;
@@ -91,7 +114,7 @@ export default class Layout extends Vue {
 :root {
   // --theme-text: blue;
 }
-#vue2-pc{
+#vue2-pc {
   height: 100%;
 }
 #app {

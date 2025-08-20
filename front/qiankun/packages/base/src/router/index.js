@@ -6,6 +6,8 @@ import Empty from "../page/404.jsx";
 import Home from "../page/Home.jsx";
 import Qiankun from "../page/qiankun.jsx";
 import React, { lazy } from "react";
+import ComponentPage from "../page/componentPage/index.jsx";
+
 export const router = createBrowserRouter([
   {
     path: "/qiankun",
@@ -35,6 +37,19 @@ export const router = createBrowserRouter([
       {
         path: "vue2-pc/*",
         element: <Web2></Web2>,
+        children: [
+          {
+            path: 'dashboard', // 子应用中可以访问主应用页面
+          },
+          {
+            path: 'page1', // 子应用中可以访问主应用页面
+            element: <ComponentPage></ComponentPage>
+          },
+          {
+            path: 'page2', // 子应用中可以访问主应用页面
+            element: <ComponentPage></ComponentPage>
+          },
+        ]
         // children: [
         //   {
         //     path: "login",
@@ -116,6 +131,7 @@ export const router = createBrowserRouter([
       }
     ]
   },
+
   // {
   //   path: '/:catchAll(.*)*',
   //   // name: 'error',
