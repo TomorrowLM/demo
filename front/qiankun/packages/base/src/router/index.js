@@ -1,10 +1,11 @@
-import { createHashRouter, createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, createBrowserRouter, RouterProvider, redirect, Navigate } from "react-router-dom";
 import Web1 from "../page/subApp/web1.jsx";
 import Web2 from "../page/subApp/web2.jsx";
 import Web3 from "../page/subApp/web3.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home/index.jsx";
 import Qiankun from "../page/communication/qiankun.jsx";
+import ComPage from "../page/comPage/index.jsx";
 import React, { lazy } from "react";
 import ComponentPage from "../page/componentPage/index.jsx";
 
@@ -12,7 +13,18 @@ export const router = createBrowserRouter([
   {
     path: "/qiankun",
     element: <Home></Home>,
+    // loader: async () => {
+    //   return redirect('/qiankun/base');
+    // },
     children: [
+      {
+        index: true,
+        element: <Navigate to="/qiankun/base"></Navigate>,
+      },
+      {
+        path: "base",
+        element: <ComPage></ComPage>,
+      },
       {
         path: "vue2-mobile/*",
         element: <Web1></Web1>,

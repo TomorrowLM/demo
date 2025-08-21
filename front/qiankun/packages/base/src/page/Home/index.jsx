@@ -1,6 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
 import "./Home.css";
-
 //TODO:这里容器必须设置在父路径上
 function Home() {
   return (
@@ -8,9 +7,7 @@ function Home() {
       <div className="d-flex qiankun-header">
         <span> qiankun 主应用</span>
         <div className="float-right">
-          <NavLink to="/qiankun/vue3/qiankun-vue3-page">
-            qiankun-use
-          </NavLink>
+          <NavLink to="/qiankun/vue3/qiankun-vue3-page">qiankun-use</NavLink>
           <NavLink className="ml-8" to="/qiankun/vue2-mobile">
             vue2-mobile
           </NavLink>
