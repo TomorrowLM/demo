@@ -5,7 +5,7 @@ function Home() {
   return (
     <div className="qiankun">
       <div className="d-flex qiankun-header">
-        <span> qiankun 主应用</span>
+        <NavLink to="/qiankun"> qiankun 主应用</NavLink>
         <div className="float-right">
           <NavLink to="/qiankun/vue3/qiankun-vue3-page">qiankun-use</NavLink>
           <NavLink className="ml-8" to="/qiankun/vue2-mobile">

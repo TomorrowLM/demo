@@ -51,7 +51,7 @@ export default {
         },
         err => {
           console.log(err,'err');
-          this.$message.error(err.message);
+          this.$message.error(err.msg);
         }
       );
     },
