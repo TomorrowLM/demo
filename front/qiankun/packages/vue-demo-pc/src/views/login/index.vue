@@ -42,15 +42,19 @@ export default {
       console.log(this.$route, 123);
       login(this.ruleForm).then(
         res => {
-          console.log(res,1);
-          Vue.ls.set('token', res.token);
-          window.localStorage.setItem('token', res.token);
-          this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
-          const currentRouteInfo = this.$store.getters.currentRouteInfo;
-          this.$router.push(currentRouteInfo.path || '/');
+          console.log(res, 1);
+          if (res.code == 200) {
+            Vue.ls.set('token', res.token);
+            window.localStorage.setItem('token', res.token);
+            this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
+            const currentRouteInfo = this.$store.getters.currentRouteInfo;
+            this.$router.push(currentRouteInfo.path || '/');
+          } else {
+            this.$message.error(res.message);
+          }
         },
         err => {
-          console.log(err,'err');
+          console.log(err, 'err');
           this.$message.error(err.msg);
         }
       );

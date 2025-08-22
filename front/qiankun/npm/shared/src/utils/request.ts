@@ -67,9 +67,6 @@ const handleRequest = (config: any) => {
  * @param {*} config
  */
 const handleResponse = async (response: any) => {
-  if (response.data.code !== 200) {
-    return Promise.reject(response.data);
-  }
   return Promise.resolve(response.data);
 };
 
