@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "antd";
-import ReactDOM, { unstable_batchedUpdates, flushSync } from "react-dom";
+import { unstable_batchedUpdates, flushSync } from "react-dom";
 export default class UseState extends React.Component {
   constructor(props) {
     super(props);

@@ -107,7 +107,7 @@ const AuthRoute = (props) => {
         tip="loading"
         spinning={isCheckingTokenStatus}
       >
-        {mapRouteMethod([routes[1]])}
+        {mapRouteMethod([routes[0]])}
         {/* <Redirect from="/*" to="/"></Redirect> */}
       </Spin>
     </div>

@@ -1,21 +1,15 @@
 import axios from "axios";
-import store from "../store";
-import { message, notification, Button, Space, Spin } from 'antd';
-import ReactDOM from 'react-dom';
+import { message, notification, Spin } from 'antd';
+import ReactDom from 'react-dom';
 import React from 'react';
-// import {HashRouter} from 'react-router-dom'    //如果使用的是hash路由类型，使用这个
-// const router = new HashRouter()
-
-import { BrowserRouter } from 'react-router-dom'
-const router = new BrowserRouter()
 
 const API_BASE_URLS = {
-  development: "http://0.0.0.0:3600",
+  development: "http://127.0.0.1:3600",
   production: "http://121.40.61.99:3600"
 };
-console.log(EnvConfig)
+// console.log(EnvConfig)
 const request = axios.create({
-  baseURL: EnvConfig.apiPath,
+  baseURL: API_BASE_URLS[process.env.NODE_ENV],
 });
 
 const codeMessage = {
@@ -48,7 +42,7 @@ function showLoading() {
 
     })
     document.body.appendChild(dom)
-    ReactDOM.render(<Spin tip="努力加载中..." delay={2000} size="large" />, dom)
+    ReactDom.render(<Spin tip="努力加载中..." delay={2000} size="large" />, dom)
   }
   requestCount += 1;
 }

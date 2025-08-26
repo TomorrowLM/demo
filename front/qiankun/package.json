@@ -10,6 +10,7 @@
     "start:web1": "cd packages/vue-demo-mobile && npm run serve:qiankun",
     "start:web2": "cd packages/vue-demo-pc && npm run serve:qiankun",
     "start:web3": "cd packages/vue3-demo && npm run serve:qiankun",
+    "start:web4": "cd packages/react-demo && npm run serve:qiankun",
     "install:npm": "pnpm --filter \"{npm/**}\" build",
     "build:npm": "pnpm --filter \"{npm/**}\" build",
     "build": "npm-run-all --serial build:*",

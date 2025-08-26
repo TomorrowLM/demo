@@ -20,7 +20,7 @@ console.log("当前环境", NODE_ENV);
 module.exports = {
   //webpack 入口文件
   entry: {
-    app: path.resolve(__dirname, "./src/main.js"),
+    app: path.resolve(__dirname, "./src/index.js"),
   },
   //多文件配置
   // entry: {
@@ -38,7 +38,14 @@ module.exports = {
     // publicPath: process.env.NODE_ENV === 'production'
     // ? '/react-demo/'
     // : '/',
-    assetModuleFilename: 'img/[name].[hash:10][ext]'
+    // assetModuleFilename: 'img/[name].[hash:10][ext]',
+    // library: {
+    //   name: 'app',
+    //   type: 'umd',
+    // },
+    // libraryTarget: 'umd',
+    // chunkLoadingGlobal: `webpackJsonp_react`,
+    // globalObject: 'window',
   },
   devServer: {
     proxy: {
@@ -207,7 +214,7 @@ module.exports = {
   //通过script标签外部链接引入公共库文件，减少打包速度和公共包体积
   // externals: {
   //   'react': 'React',
-  //   'react-dom': 'ReactDOM',
+  //   'react-dom': 'ReactDom',
   //   'jquery': 'jQuery',
   // },
   //缓存生成的 webpack 模块和 chunk，能够改善构建速度

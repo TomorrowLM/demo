@@ -18,4 +18,4 @@
 
   "webpack-dev-server": "^4.7.2",
 
-  node<18
+  node=20

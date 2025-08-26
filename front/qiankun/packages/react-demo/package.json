@@ -1,11 +1,14 @@
 {
-  "name": "demo",
+  "name": "app-react",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cross-env NODE_ENV=development craco start",
+    "serve:qiankun": "cross-env NODE_ENV=development PORT=8004 webpack-dev-server --config webpack.dev.js --profile",
     "serve": "cross-env NODE_ENV=development webpack-dev-server --config webpack.dev.js --profile",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js"
+    "build": "cross-env NODE_ENV=production craco build",
+    "build:qiankun": "cross-env NODE_ENV=production craco build"
   },
   "author": "tom",
   "license": "ISC",
@@ -15,14 +18,17 @@
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",
+    "@rescripts/cli": "^0.0.16",
     "@types/react-redux": "^7.1.23",
     "antd": "^4.16.13",
     "array-move": "^4.0.0",
     "autoprefixer": "^10.4.1",
     "axios": "^0.22.0",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "8.1.0",
     "babel-plugin-import": "^1.13.3",
+    "babel-plugin-module-resolver": "^5.0.2",
     "clean-webpack-plugin": "^4.0.0",
+    "craco": "^0.0.3",
     "cross-env": "^7.0.3",
     "css-loader": "^6.5.0",
     "css-minimizer-webpack-plugin": "^3.1.1",
@@ -37,6 +43,7 @@
     "react-redux": "^7.2.5",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.3.0",
+    "react-scripts": "^5.0.1",
     "react-sortable-hoc": "^2.0.0",
     "redux": "^4.1.1",
     "redux-logger": "^3.0.6",
@@ -67,5 +74,17 @@
     "ahooks": "^3.0.6",
     "hox": "^1.1.5",
     "less-loader": "^10.2.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

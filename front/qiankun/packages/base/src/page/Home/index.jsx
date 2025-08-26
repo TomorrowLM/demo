@@ -17,6 +17,9 @@ function Home() {
           <NavLink className="ml-8" to="/qiankun/vue3">
             vue3
           </NavLink>
+          <NavLink className="ml-8" to="/qiankun/react">
+            react
+          </NavLink>
         </div>
       </div>
       <div className="qiankun-app">

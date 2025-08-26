@@ -1,0 +1,20 @@
+{
+  "name": "your-micro-app",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "bsc-flags": ["-bs-super-errors"],
+  "bs-dependencies": [],
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": true
+    }
+  ],
+  "suffix": ".bs.js",
+  "namespace": true,
+  "refmt": 3
+}

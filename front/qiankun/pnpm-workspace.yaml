@@ -2,7 +2,6 @@ packages:
   - 'npm/**'
   - 'packages/*'
   - 'html-demo/*'
-  - 'backend/*'
 #   - '!**/npm/lm-lint/src'
 # overrides:
 #   '**/npm/lm-lint/src':

@@ -1,4 +1,3 @@
-import { Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { increment, decrement } from "../../../store/actions/counter";
@@ -32,7 +31,7 @@ const Store = function (props) {
     <div>
       <Title level={4}>couter例子</Title>
       <div>
-        <Button variant="contained" color="primary" onClick={onincrement}>
+        {/* <Button variant="contained" color="primary" onClick={onincrement}>
           increment
         </Button>
         <Button
@@ -42,7 +41,7 @@ const Store = function (props) {
           style={{ marginLeft: "30px" }}
         >
           decrement
-        </Button>
+        </Button> */}
         <p style={{ fontSize: "30px" }}>{count}</p>
       </div>
       <Divider />

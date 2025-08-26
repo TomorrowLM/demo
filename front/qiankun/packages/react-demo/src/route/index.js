@@ -194,10 +194,12 @@ export const whiteRoute = [
 ]
 
 export const routes = [
-  ...whiteRoute,
   {
-    path: "/",
+    path: "/react",
     component: Index,
-    children: menuRoutes
-  },
+    children: [
+      ...whiteRoute,
+      ...menuRoutes
+    ]
+  }
 ];
