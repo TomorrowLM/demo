@@ -85,3 +85,12 @@ copyDir(sourcePath, destinationPath, (err) => {
   }
   console.log('Directory copied successfully.');
 });
+
+// 创建目录
+const stylesDir = path.resolve(__dirname, '../styles');
+if (!fs.existsSync(stylesDir)) {
+  fs.mkdirSync(stylesDir);
+}
+
+// 空实现，如果没有样式文件可以忽略
+console.log('Styles build completed');

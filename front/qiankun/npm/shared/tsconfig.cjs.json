@@ -9,22 +9,27 @@
       "dom",
       "es2015"
     ],
-    "strict": true,
+    "strict": false, //严格模式，
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    // "declaration": true,
-    // "declarationDir": "./lib/ts",
-    // "declarationMap": true  // 生成类型声明映射文件（可选）
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "types": [
+      "vue"
+    ],
   },
   "include": [
     "**/*",
-    "./src/styles/*"
+    "./src/styles/*",
+    "src/types/*.d.ts"
   ],
   "exclude": [
-
     "./config", // 具体排除外部 config 文件夹
   ]
 }

@@ -1,16 +1,6 @@
-// import lodash from "lodash";
-// import moment from "moment";
-// import service from "./request"
-// export default {
-//   lodash: lodash,
-//   moment,
-//   service
-// }
-const lodash = require('lodash');
-const service = require('./request');
-const useRequest = require('./useRequest');
-module.exports = {
-  lodash: lodash,
+import service from "./request/request";
+import useRequest from "./request/useRequest"
+export default {
   service,
   useRequest
 }

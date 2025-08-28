@@ -1,77 +1,9 @@
-// import Vue from 'vue'
 import axios from 'axios';
-import qs from "qs";
-import md5 from 'js-md5';
+import { repeatHandle } from './util'
+// const axios = require('axios');
+// const qs = require('qs');
+const preventRequest = repeatHandle
 const CancelToken = axios.CancelToken;
-// 缓存请求的接口信息
-const requestMap = new Map();
-// 缓存时间
-const cacheTime = 5000
-/**
- * 检查是不是重复请求
- * @param {Object} config
- */
-const checkRepeatRequest = config => {
-  const requestInfo = getRequestKey(config)
-  console.log(requestInfo, requestInfo.triggerTime, 'requestInfo');
-  return requestMap.has(requestInfo) && new Date().valueOf() - getRequestMapInfo(config).triggerTime < cacheTime
-}
-
-/**
- * 添加请求
- * @param {Object} config
- */
-const addRequest = ({ config, triggerTime, cancel }) => {
-  // 获取当前请求信息
-  const requestInfo = getRequestKey(config)
-  requestMap.set(requestInfo, { config, triggerTime, cancel })
-}
-/**
- * 移除请求
- * @param {Object} config
- */
-const removeRequest = config => {
-  const requestInfo = getRequestKey(config)
-  requestMap.delete(requestInfo)
-}
-
-/**
- * 生成标识
- * @param {Object} config
- */
-function getRequestKey(config) {
-  const { url, data, method, param } = config
-  const obj = {
-    data,
-    param,
-    url,
-    method
-  }
-  const sign = md5(qs.stringify(obj)).toUpperCase(); // 这样才能区分是不是同接口且同参数
-  return sign
-}
-
-// 获取请求信息
-function getRequestMapInfo(config) {
-  const requestInfo = getRequestKey(config)
-  return requestMap.get(requestInfo)
-}
-/**
- * 清空请求数组
- */
-function clearRequestMap() {
-  requestMap.clear()
-}
-
-const preventRequest = {
-  checkRepeatRequest,
-  addRequest,
-  removeRequest,
-  clearRequestMap,
-  getRequestMapInfo,
-  getRequestKey
-}
-
 // const axios = require('axios');
 let service = null;
 
@@ -126,7 +58,7 @@ const err = (error) => {
  * 处理参数
  * @param {*} config
  */
-const handleRequest = (config) => {
+const handleRequest = (config:any) => {
   const token = window.localStorage.getItem('token');
   config.headers.authorization = `Bearer ${token}`;
   // 检查是否存在重复请求，若存在则取消当前的请求
@@ -177,7 +109,6 @@ const serveceHandle = (baseURL: string) => {
     console.log('interceptors.response', response);
     return handleResponse(response);
   }, err)
-  return service
+  return service;
 }
-
-module.exports = serveceHandle
+export default serveceHandle

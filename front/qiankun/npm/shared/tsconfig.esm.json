@@ -10,22 +10,31 @@
       "es2015"
     ],
     "moduleResolution": "Node",
-    "strict": true,
+    "strict": false, //严格模式，
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "declaration": true,
-    "declarationDir": "./lib/types",
-    "declarationMap": false  // 生成类型声明映射文件（可选）
+    "declarationMap": true, // 生成类型声明映射文件（可选）
+    "declarationDir": "./lib/esm/types",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "types": [
+      "vue"
+    ],
   },
-  "include": [
-    "**/*",
-    "./src/styles/*"
-  ],
   "exclude": [
-    "lib",
-    "zlib"
-  ]
+    "node_modules",
+    "**/*.vue"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/types/*.d.ts"
+  ],
 }

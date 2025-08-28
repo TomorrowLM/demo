@@ -1,8 +1,15 @@
 {
   "name": "@lm/shared",
   "version": "1.0.0",
-  "main": "./lib/cjs/src",
+  "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
+  "types": "./lib/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index",
+      "require": "./lib/cjs/index"
+    }
+  },
   "directories": {
     "lib": "lib"
   },
@@ -12,8 +19,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:cjs": "rm -rf ./lib/cjs && tsc -p tsconfig.cjs.json && npm run build-styles",
-    "build:babel:cjs": "rm -rf ./lib/cjs && npx babel src --out-dir lib/cjs --extensions .js,.ts --plugins @babel/plugin-transform-modules-commonjs && npm run build-styles",
     "build:esm": "rm -rf ./lib/esm && npx rollup -c && npm run build-styles",
+    "build:rollup": "rm -rf ./lib && rollup -c rollup.config.js && npm run build-styles",
     "build-styles": "node ./config/buildStyles.cjs"
   },
   "author": "liming",
@@ -23,14 +30,12 @@
     "access": "public"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "js-md5": "^0.7.3",
+    "lodash": "^4.17.21",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.27.2",
-    "@babel/core": "^7.27.1",
-    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
-    "@babel/preset-env": "^7.27.2",
-    "@babel/preset-typescript": "^7.15.0",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -39,21 +44,12 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.17",
     "@types/webpack-env": "^1.18.5",
-    "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
-    "css-loader": "^6.5.0",
-    "element-ui": "2.15.6",
-    "js-md5": "^0.8.3",
-    "mini-css-extract-plugin": "^2.9.2",
     "moment": "^2.29.1",
-    "postcss-pxtorem": "5.1.1",
     "qs": "^6.14.0",
     "rollup": "^4.40.2",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
-    "style-loader": "^3.3.1",
-    "typescript": "^5.4.5",
-    "vant": "2.12.35",
-    "webpack": "^4.0.0",
-    "webpack-cli": "^6.0.1"
+    "typescript": "^5.4.5"
   }
 }
