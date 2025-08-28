@@ -6,7 +6,7 @@ import Web4 from "../page/subApp/web4.jsx";
 import Empty from "../page/404.jsx";
 import Home from "../page/Home/index.jsx";
 import Qiankun from "../page/communication/qiankun.jsx";
-import ComPage from "../page/comPage/index.jsx";
+import ComPage from "../page/comPage/index.tsx";
 import React, { lazy } from "react";
 import ComponentPage from "../page/componentPage/index.jsx";
 

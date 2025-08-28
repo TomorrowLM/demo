@@ -161,12 +161,6 @@ module.exports = () => {
         {
           test: /\.(jsx|js|ts|tsx)$/,
           exclude: /node_modules/,
-          // use: {
-          //   loader: "babel-loader?cacheDirectory", // 开启缓存
-          //   options: {
-          //     // ...
-          //   },
-          // },
           loader: "babel-loader",
           options: {
             cacheDirectory: true, //缓存，第二次打包速度会提高
@@ -175,6 +169,7 @@ module.exports = () => {
             presets: [
               "@babel/preset-env",
               ["@babel/preset-react", { runtime: "automatic" }],
+              "@babel/preset-typescript" // 添加这一行
             ],
           },
         },

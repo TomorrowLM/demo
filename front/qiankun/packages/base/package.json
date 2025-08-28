@@ -2,6 +2,13 @@
   "name": "qiankun",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "build:qiankun": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -15,12 +22,24 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
-    "build:qiankun": "cross-env NODE_ENV=production webpack --config webpack.config.js",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@babel/core": "^7.24.6",
+    "@babel/preset-env": "^7.24.6",
+    "@babel/preset-react": "^7.24.6",
+    "@r2wc/react-to-web-component": "^2.0.4",
+    "@types/react": "^17.0.87",
+    "@types/react-dom": "^17.0.26",
+    "babel-loader": "^8.4.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.5.0",
+    "less": "^4.4.0",
+    "less-loader": "^10.2.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "react-web-component": "^2.0.2",
+    "react-web-component-style-loader": "^0.1.4-alpha",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   },
   "eslintConfig": {
     "extends": [
@@ -39,22 +58,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/core": "^7.24.6",
-    "@babel/preset-env": "^7.24.6",
-    "@babel/preset-react": "^7.24.6",
-    "@r2wc/react-to-web-component": "^2.0.4",
-    "babel-loader": "^8.4.1",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.5.0",
-    "less": "^4.4.0",
-    "less-loader": "^10.2.0",
-    "mini-css-extract-plugin": "^2.9.2",
-    "react-web-component": "^2.0.2",
-    "react-web-component-style-loader": "^0.1.4-alpha",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4"
   }
 }
