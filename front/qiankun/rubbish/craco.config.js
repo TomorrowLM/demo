@@ -6,12 +6,39 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const envConfig = require("./config/env");
+const envConfig = require("../packages/react-demo/config/env");
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const NODE_ENV = process.env.NODE_ENV;
 console.log("当前环境", NODE_ENV);
 
 module.exports = {
+  babel: {
+    presets: [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "entry",
+          "corejs": {
+            // core-js的版本
+            "version": 3
+          },
+          "targets": {
+            "edge": "17",
+            "firefox": "60",
+            "chrome": "67",
+            "safari": "11.1",
+            "ie": "8"
+          }
+        }
+      ],
+      "@babel/preset-react",
+      "@babel/preset-typescript"
+    ],
+    plugins: [
+      //按需加载
+      ["import", { "libraryName": "antd", "style": true }]
+    ]
+  },
   webpack: (config) => {
     config.output.library = `${name}-[name]`;
     config.output.libraryTarget = 'umd';

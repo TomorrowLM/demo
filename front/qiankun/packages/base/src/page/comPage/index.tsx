@@ -1,13 +1,13 @@
 import React from 'react'
-const UseReducer: React.FC = () => {
-  return <div>UseReducer</div>
-}
+import UseReducerCom from './hooks/UseReducerCom'
 
 const ComPage: React.FC = () => {
-  return <div>
-    <h1>UseReducer</h1>
-    <UseReducer />
-  </div>
+  return (
+    <div>
+      <h1>UseReducer</h1>
+      <UseReducerCom />
+    </div>
+  )
 }
 
 export default ComPage

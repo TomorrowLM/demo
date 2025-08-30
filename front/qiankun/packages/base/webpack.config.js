@@ -49,6 +49,9 @@ module.exports = () => {
         },
       ]
     },
+    resolve: {
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+    },
     optimization: {
       // moduleIds: isDev ? 'named' : 'deterministic',
       // chunkIds: isDev ? 'named' : 'deter

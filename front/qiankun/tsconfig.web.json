@@ -10,6 +10,6 @@
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "types": ["webpack-env", "node", "jsdom"],
   },
-  "include": ["packages", "typings", "packages/**/typings"],
+  "include": ["packages", "typings", "packages/**/typings", "config/tsconfig.json", "rubbish/craco.config.js"],
   "exclude": ["node_modules", "**/dist", "**/__tests__/**/*", "**/*.md"]
 }

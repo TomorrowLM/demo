@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development craco start",
-    "serve:qiankun": "cross-env NODE_ENV=development PORT=8004 webpack-dev-server --config webpack.dev.js --profile",
     "serve": "cross-env NODE_ENV=development webpack-dev-server --config webpack.dev.js --profile",
-    "build": "cross-env NODE_ENV=production craco build",
-    "build:qiankun": "cross-env NODE_ENV=production craco build"
+    "serve:qiankun": "cross-env NODE_ENV=development PORT=8004 webpack-dev-server --config webpack.dev.js --profile",
+    "build": "cross-env NODE_ENV=production webpack-dev-server build",
+    "build:qiankun": "cross-env NODE_ENV=production webpack-dev-server build"
   },
   "author": "tom",
   "license": "ISC",
@@ -64,6 +63,7 @@
     "@antv/data-set": "^0.11.8",
     "@antv/g2": "^4.1.35",
     "@antv/l7": "^2.6.22",
+    "@lm/shared": "workspace:*",
     "@material-ui/core": "^4.12.3",
     "@tuyeye/cron": "^1.0.0",
     "@types/node": "^17.0.23",

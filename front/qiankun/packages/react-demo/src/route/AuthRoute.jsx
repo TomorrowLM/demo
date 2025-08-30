@@ -1,5 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
-import { useHistory, Route, Switch, Redirect } from "react-router-dom";
+import { useHistory, Route } from "react-router-dom";
 import { Spin } from "antd";
 import request from "@/utils/request";
 import { connect } from "react-redux";

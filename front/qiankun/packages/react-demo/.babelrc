@@ -5,7 +5,6 @@
       {
         "useBuiltIns": "entry",
         "corejs": {
-          // core-js的版本
           "version": 3
         },
         "targets": {
@@ -21,7 +20,12 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    //按需加载
-    ["import", { "libraryName": "antd", "style": true }]
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": true
+      }
+    ]
   ]
 }
