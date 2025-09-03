@@ -32,6 +32,7 @@ module.exports = merge(base, {
     hot: true,
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),//new一个热更新的模块对象
+    // webpack.HotModuleReplacementPlugin() 在 webpack 5 中不再需要手动添加
+    // 当 devServer.hot: true 时会自动启用
   ],
 });

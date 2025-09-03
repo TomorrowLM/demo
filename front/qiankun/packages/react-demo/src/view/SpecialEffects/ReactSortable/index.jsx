@@ -1,5 +1,4 @@
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
-import { arrayMoveImmutable } from "array-move";
 import Gif from "./Gif";
 import React, { useState } from "react";
 
@@ -12,14 +11,11 @@ export default function ReactSortable(params) {
       {children}
     </div>
   ));
-  //   let a = [1,2]
-  //   a = arrayMoveImmutable(a,0,1)
-  //   console.log(a)
   const SortableGif = SortableElement(({ gif }) => <Gif key={gif} gif={gif} />);
   const [gifs, setGifs] = useState([1, 2, 3]);
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    console.log(oldIndex, arrayMoveImmutable(gifs, oldIndex - 1, newIndex - 1));
-    setGifs(arrayMoveImmutable(gifs, oldIndex, newIndex));
+    // console.log(oldIndex, arrayMoveImmutable(gifs, oldIndex - 1, newIndex - 1));
+    // setGifs(arrayMoveImmutable(gifs, oldIndex, newIndex));
   };
   return (
     <div>
