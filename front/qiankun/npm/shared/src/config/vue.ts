@@ -1,21 +1,29 @@
-const path = require("path");
+// 注意：这些依赖应该在使用时动态引入，而不是在模块级别引入
+// const path = require("path");
+// const autoprefixer = require('autoprefixer');
+// const pxtorem = require('postcss-pxtorem');
+// const webpack = require("webpack");
 
-const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
-const pxtorem = require('postcss-pxtorem');
-const webpack = require("webpack");
-const resolveFn = (dir) => path.join(__dirname, dir);
-const qiankunPath = path.resolve(__dirname, '../../').replace(/\\/g, '//');
+const resolveFn = (dir: string) => {
+  // 在实际使用时需要动态引入path模块
+  const path = require("path");
+  return path.join(__dirname, dir);
+};
 let isProd = false;
-const commonPlugin = [
-  // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
-  new webpack.ProvidePlugin({
-    $lm: '@lm/shared/lib/src/utils',
-    // $lm: '@lm/shared/src/utils',
-  }),
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
-  })
-];
+const commonPlugin = () => {
+  // 动态引入webpack
+  const webpack = require("webpack");
+  return [
+    // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
+    new webpack.ProvidePlugin({
+      $lm: '@lm/shared/lib/src/utils',
+      // $lm: '@lm/shared/src/utils',
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+    })
+  ];
+};
 const assetsCDN = {
   // webpack build externals
   // externals: {
@@ -87,7 +95,7 @@ const devServerConfig = (BASE_URL, API_HOST, port) => {
     }
   }
 }
-const cssConfig = (isMobile = false) => {
+const cssConfig = (isMobile: boolean = false) => {
   return {
     css: {
       extract: {
@@ -157,7 +165,7 @@ const cssConfig = (isMobile = false) => {
 //   new webpack.ProvidePlugin({
 //     $lm: '@lm/shared/lib/src/utils',
 //   }),]
-const aliasConfigFn = (resolve) => {
+const aliasConfigFn = (resolve: (path: string) => string) => {
   return {
     '@': resolve('./src'),
     '@shared': resolveFn('..'),
@@ -172,13 +180,13 @@ const aliasConfigFn = (resolve) => {
     //   public: resolve('public')
   }
 }
-const webpackBaseConfig = (processVars, config, resolve) => {
+const webpackBaseConfig = (processVars: any, config: any, resolve: (path: string) => string) => {
   // 配置别名
   config.resolve.alias = {
     ...(aliasConfigFn(resolve) || {})
   }
-  // config.plugins.push(...commonPlugin)
-  config.plugins = [...config.plugins || [], ...commonPlugin]
+  // config.plugins.push(...commonPlugin())
+  config.plugins = [...config.plugins || [], ...commonPlugin()]
   if (isProd) {
     // 在生产模式下使用 chunkhash 或 contenthash
     config.output.filename = 'js/[name].[contenthash].js';
@@ -195,12 +203,14 @@ const webpackBaseConfig = (processVars, config, resolve) => {
  *
  * @param {boolean} isProd - 是否为生产环境
  * @param {boolean} isQiankun - 是否为微前端项目
+ * @param {string} qiankunPath - 微前端路径
+ * @param {string} buildPath - 构建路径
  * @returns {string} 公共路径
  */
-const publicPath = (isProd, isQiankun) => {
-  return isProd ? (isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path) : '/'
+const publicPath = (isProd: boolean, isQiankun: boolean, qiankunPath?: string, buildPath?: string) => {
+  return isProd ? (isQiankun ? qiankunPath || '/' : buildPath || '/') : '/'
 }
-const baseConfig = (processVars) => {
+const baseConfig = (processVars: any) => {
   const { NODE_ENV, VUE_APP_PORT, VUE_APP_PROXY_API, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_OUTPUTDIR, VUE_APP_API_HOST } = processVars;
   isProd = process.env.NODE_ENV === 'production'
   const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
@@ -219,7 +229,7 @@ const baseConfig = (processVars) => {
   }
 }
 
-module.exports = {
+export default {
   commonPlugin,
   aliasConfigFn,
   webpackBaseConfig,

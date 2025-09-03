@@ -1,4 +1,9 @@
-export { default } from './utils/index';
+import utils from "./utils";
+import config from './config'
 
-// import utils from './utils/index';
-// export default utils;
+const sharedConfig = {
+  config,
+  utils
+};
+
+export default sharedConfig

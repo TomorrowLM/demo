@@ -6,8 +6,8 @@
   "types": "./lib/esm/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./lib/esm/index",
-      "require": "./lib/cjs/index"
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js"
     }
   },
   "directories": {
@@ -18,9 +18,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:cjs": "rm -rf ./lib/cjs && tsc -p tsconfig.cjs.json && npm run build-styles",
-    "build:esm": "rm -rf ./lib/esm && npx rollup -c && npm run build-styles",
-    "build:rollup": "rm -rf ./lib && rollup -c rollup.config.js && npm run build-styles",
+    "build:rollup": "rmdir /s /q lib 2>nul || echo \"lib directory not found\" && rollup -c rollup.config.js && npm run build-styles",
     "build-styles": "node ./config/buildStyles.cjs"
   },
   "author": "liming",

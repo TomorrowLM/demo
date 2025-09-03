@@ -1,10 +1,7 @@
 import axios from 'axios';
 import { repeatHandle } from './util'
-// const axios = require('axios');
-// const qs = require('qs');
 const preventRequest = repeatHandle
 const CancelToken = axios.CancelToken;
-// const axios = require('axios');
 let service = null;
 
 //code信息
@@ -32,7 +29,6 @@ const err = (error) => {
   if (error.response) {
     const data = error.response.data;
     if (error.response.status === 403) {
-      // Message.error('Forbidden');
       error.msg = "Forbidden"
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
@@ -44,11 +40,9 @@ const err = (error) => {
   } else {
     // 请求超时状态
     if (error.message.includes('timeout')) {
-      // Message.error('请求超时，请检查网络是否连接正常');
       error.msg = "请求超时，请检查网络是否连接正常"
     } else if (!window.navigator.onLine) {
       // 可以展示断网组件
-      // Message.error('请求失败，请检查网络是否已连接');
       error.msg = "请求失败，请检查网络是否已连接"
     }
   }
@@ -58,14 +52,12 @@ const err = (error) => {
  * 处理参数
  * @param {*} config
  */
-const handleRequest = (config:any) => {
+const handleRequest = (config: any) => {
   const token = window.localStorage.getItem('token');
   config.headers.authorization = `Bearer ${token}`;
   // 检查是否存在重复请求，若存在则取消当前的请求
   if (preventRequest.checkRepeatRequest(config)) {
     // 其他模块触发相同接口
-    // return Promise.reject(getRequestMapInfo(config).data)
-    // return Promise.resolve(new Error('重复请求'))
     preventRequest.getRequestMapInfo(config).cancel('重复请求')
   }
   let cancel = null

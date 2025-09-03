@@ -1,4 +1,4 @@
-import store from '@/store';
+// import store from '@/store'; // 注释掉，避免构建时的依赖问题
 class WebsocketObj {
   ws: any;
   returnFn: any;
@@ -45,7 +45,7 @@ class WebsocketObj {
     this.ws.onopen = () => {
       console.log('Websocket通道建立成功', this.ws);
       this.status = 'open';
-      store().wsStore.setWsStatus(this.status);
+      // store().wsStore.setWsStatus(this.status); // 注释掉，避免构建时的依赖问题
       //添加onmessage回调函数
       this.onmessage();
       // this.heartCheck();

@@ -1,4 +1,9 @@
-import { Directive, DirectiveBinding } from 'vue';
+// 条件导入Vue类型，避免构建时的依赖问题
+type Directive = any;
+type DirectiveBinding = any;
+
+// 如果在Vue环境中使用，可以取消注释下面的导入
+// import { Directive, DirectiveBinding } from 'vue';
 
 /**
  * 按钮权限校验
