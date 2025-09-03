@@ -1,6 +1,6 @@
 import React from "react";
 import { Chart } from "@antv/g2";
-import styles from "./index.less";
+import styles from "./index.module.less";
 import { Card, Col, Row } from "antd";
 import { useEffect } from "react";
 import Zhexiang from "./AntV-G2/zhexiang";

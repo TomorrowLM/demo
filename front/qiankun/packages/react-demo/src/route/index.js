@@ -1,7 +1,7 @@
 import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
 import React from "react";
 import Index from '@/view/index'
-import Dashboard from "@/view/DashBoard/index.jsx";
+// import Dashboard from "@/src/view/DashBoard/index.jsx";
 import Second from "@/view/Router/components/Second"
 import Login from "@/view/User/Login";
 

@@ -13,10 +13,20 @@ const WebpackBar = require("webpackbar");
 //const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 // const smp = new SpeedMeasurePlugin();
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
+// 读取 package.json 信息
+const packageJson = require("./package.json");
+
 //配置域名环境
-const envConfig = require("./config/env");
 const NODE_ENV = process.env.NODE_ENV;
-console.log("当前环境", NODE_ENV);
+// 导入共享的环境配置
+// const sharedConfig = require("@lm/shared");
+// console.log("当前环境", NODE_ENV, sharedConfig);
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
+
+
+
 module.exports = {
   //webpack 入口文件
   entry: {
@@ -47,18 +57,18 @@ module.exports = {
     // chunkLoadingGlobal: `webpackJsonp_react`,
     // globalObject: 'window',
   },
-  devServer: {
-    proxy: {
-      [envConfig.apiPath]: {
-        target: envConfig.api,
-        ws: true,
-        changeOrigin: true,
-        pathRewrite:{
-          [`^${envConfig.apiPath}`]: ''
-        }
-      }
-    }
-  },
+  // devServer: {
+  //   proxy: {
+  //     [sharedConfig.config.reactConfig.apiPath]: {
+  //       target: sharedConfig.config.reactConfig.api,
+  //       ws: true,
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         [`^${sharedConfig.config.reactConfig.apiPath}`]: ''
+  //       }
+  //     }
+  //   }
+  // },
   //配置插件
   plugins: [
     new WebpackBar(),
@@ -93,14 +103,22 @@ module.exports = {
       // cdn: assetsCDN
     }),
     new MiniCssExtractPlugin({
-      filename: `css/[name]-[hash].css`
+      filename: `css/[name]-[hash].css`,
+      ignoreOrder: true, // 添加这行
     }),
     new CssMinimizerWebpackPlugin(),
-    //定义全局变量
+    //定义全局变量 - 注入项目信息到环境变量中
     new webpack.DefinePlugin({
       //定义全局变量
-      EnvConfig: JSON.stringify(envConfig),
-    }), 
+      'process.env.APP_NAME': JSON.stringify(packageJson.name),
+      'process.env.APP_VERSION': JSON.stringify(packageJson.version),
+      // 共享的环境配置
+      // AppConfig: JSON.stringify(sharedEnvConfig),
+    }),
+    // 自动加载模块，而不必到处 import 或 require
+    new webpack.ProvidePlugin({
+      $lm: ['@lm/shared', 'default'],
+    }),
     new NodePolyfillPlugin()
   ],
   resolve: {
@@ -116,20 +134,43 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          //'style-loader', 'css-loader'
+          // "style-loader",
           MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-          },// 如果想要启用 CSS 模块化，可以为 css-loader 添加 modules 参数即可
-        ]
+          "css-loader",
+          // 如果想要启用 CSS 模块化，可以为 css-loader 添加 modules 参数即可
+        ],
       },
       {
-        test: /\.less$/i,
+        test: lessRegex,
+        exclude: lessModuleRegex,
         use: [
           // {
           //   loader: 'style-loader', // 从 JS 中创建样式节点
           // },
-          MiniCssExtractPlugin.loader,
+          { loader: MiniCssExtractPlugin.loader }, // 提取到单独的CSS文件
+          {
+            loader: 'css-loader', // 转化 CSS 为 CommonJS
+            options: {
+              sourceMap: true,
+            }
+          },
+          {
+            loader: 'less-loader', // 编译 Less 为 CSS
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: lessModuleRegex,
+        use: [
+          // {
+          //   loader: 'style-loader', // 从 JS 中创建样式节点
+          // },
+          { loader: MiniCssExtractPlugin.loader }, // 提取到单独的CSS文件
           {
             loader: 'css-loader', // 转化 CSS 为 CommonJS
             options: {
@@ -193,12 +234,6 @@ module.exports = {
           filename: "font/[name].[hash:4][ext]"
         },
       },
-      // {
-      //   test: /(\.jsx|\.js)$/,
-      //   use: ["babel-loader"],
-      //   // include: path.resolve(__dirname, "./src"),
-      //   exclude: /node_modules/,
-      // },
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,

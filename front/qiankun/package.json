@@ -14,6 +14,7 @@
     "install:npm": "pnpm --filter \"{npm/**}\" build",
     "build:npm": "pnpm --filter \"{npm/**}\" build",
     "build": "npm-run-all --serial build:*",
+    "build:shared": "cd npm/shared && npm run build:rollup",
     "build:qiankun": "cd packages && rm -rf dist && npm run build:base && npm run build:web1 && npm run build:web2 && npm run build:web3",
     "build:base": "cd packages/base && npm run build:qiankun",
     "build:web1": "cd packages/vue-demo-mobile && npm run build:qiankun",
@@ -22,16 +23,12 @@
     "build:tsc": "tsc --build"
   },
   "devDependencies": {
+    "@babel/preset-env": "7.24.6",
     "nodemon": "^3.1.7",
     "npm-run-all": "^4.1.5",
-    "sass": "^1.77.6",
-    "themes-switch": "^1.1.0",
-    "vite-plugin-qiankun": "^1.0.15"
+    "themes-switch": "^1.1.0"
   },
   "dependencies": {
-    "@babel/preset-env": "7.24.6",
-    "lodash": "^4.17.21",
-    "vue-router": "2.8.0",
-    "webpack": "4.44.2"
+    "lodash": "^4.17.21"
   }
 }

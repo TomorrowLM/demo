@@ -19,3 +19,6 @@
   "webpack-dev-server": "^4.7.2",
 
   node=20
+
+
+  暂时用不了pnpm
