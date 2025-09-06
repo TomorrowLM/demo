@@ -1,15 +1,14 @@
 {
-  "baseUrl": "./",
-  // "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext", // 改为 ESNext，让 Rollup 处理模块转换
     "outDir": "./lib/cjs",
     "lib": [
       "dom",
       "es2015"
     ],
-    "strict": false, //严格模式，
+    "strict": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
@@ -23,7 +22,7 @@
     "types": [
       "vue",
       "node"
-    ],
+    ]
   },
   "include": [
     "src/**/*.ts",
@@ -31,8 +30,7 @@
     "src/types/*.d.ts"
   ],
   "exclude": [
-    "./config", // 具体排除外部 config 文件夹
     "node_modules",
     "**/*.vue",
-  ],
+  ]
 }

@@ -8,7 +8,7 @@ const commonjs = require('@rollup/plugin-commonjs')       // 将 CommonJS 模块
 const json = require('@rollup/plugin-json')              // 允许导入 JSON 文件
 const resolve = require('@rollup/plugin-node-resolve')   // 解析 node_modules 中的依赖
 const typescript = require('@rollup/plugin-typescript') // TypeScript 编译支持
-const nodePolyfills = require('rollup-plugin-node-polyfills') // 提供 Node.js 核心模块的浏览器 polyfills
+// const nodePolyfills = require('rollup-plugin-node-polyfills') // 提供 Node.js 核心模块的浏览器 polyfills
 const replace = require('@rollup/plugin-replace')        // 用于替换代码中的变量，如环境变量
 // const esbuild = require('rollup-plugin-esbuild').default;
 /**
@@ -42,8 +42,7 @@ const createPlugins = (isBrowser) => [
 
   // TypeScript 编译配置
   typescript({
-    tsconfig: isBrowser ? './tsconfig.esm.json' : './tsconfig.cjs.json',
-    sourceMap: false,
+    tsconfig: isBrowser ? './tsconfig.esm.json' : './tsconfig.cjs.json'
   }),
 
   // 解析模块路径和第三方依赖
@@ -59,7 +58,7 @@ const createPlugins = (isBrowser) => [
 
   // 将 CommonJS 模块转换为 ES 模块
   commonjs({
-    extensions: ['.js'],
+    extensions: ['.js', 'ts'],
     transformMixedEsModules: true,
     sourceMap: false,
     ignoreDynamicRequires: true
@@ -75,11 +74,7 @@ const createPlugins = (isBrowser) => [
       'typeof window': isBrowser ? '"object"' : '"undefined"',
       'typeof process': isBrowser ? '"undefined"' : '"object"'
     }
-  }),
-
-  // 只在浏览器环境使用 polyfills（如果需要的话）
-  // 注释掉有问题的 nodePolyfills 插件
-  // ...(isBrowser ? [nodePolyfills({ fs: true })] : [])
+  })
 ]
 
 /**
