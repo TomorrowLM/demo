@@ -1,7 +1,7 @@
 // 全局环境变量配置 - TypeScript 版本
 // 支持在线编辑和多个项目共用
-export type ProjectNameProps = 'react' | 'vue' | 'angular';
 export type EnvProps = 'development' | 'production' | 'test';
+export type ProjectNameProps = 'react-app' | 'vue' | 'angular';
 export type EnvProjectProps = Record<EnvProps, Partial<Record<ProjectNameProps, Partial<AppConfig>>>>;
 
 

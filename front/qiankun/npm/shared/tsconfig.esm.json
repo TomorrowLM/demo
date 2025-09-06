@@ -2,6 +2,7 @@
   "baseUrl": "./",
   // "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "rootDir": "src",
     "outDir": "./lib/esm",
     "target": "ESNext",
     "module": "ESNext",
@@ -25,12 +26,14 @@
       ]
     },
     "types": [
-      "vue"
+      "vue",
+      "node"
     ],
   },
   "exclude": [
     "node_modules",
-    "**/*.vue"
+    "**/*.vue",
+
   ],
   "include": [
     "src/**/*.ts",

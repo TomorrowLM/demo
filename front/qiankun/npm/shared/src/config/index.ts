@@ -1,9 +1,9 @@
-import vueConfig from './vue'
-import reactConfig from './react'
+import * as envConfig from "./env";
+// import * as webpackConfig from "./webpack/webpack.base.js"; // 注释掉这行
+import * as qiankunConfig from "./qiankun/index.js";
 
-const config = {
-  vueConfig,
-  // reactConfig,
+export default {
+  // webpackConfig, // 注释掉这行
+  envConfig,
+  qiankunConfig,
 };
-
-export default config

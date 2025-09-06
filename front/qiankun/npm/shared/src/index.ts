@@ -1,9 +1,9 @@
 import utils from "./utils";
-import config from './config'
+import config  from "./config";
 
-const sharedConfig = {
-  config,
-  utils
+const $shared = {
+  utils,
+  config
 };
 
-export default sharedConfig
+export default $shared

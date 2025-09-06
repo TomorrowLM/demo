@@ -1,87 +1,126 @@
-const commonjs = require('@rollup/plugin-commonjs')
-const json = require('@rollup/plugin-json')
-const resolve = require('@rollup/plugin-node-resolve')
-const typescript = require('@rollup/plugin-typescript')
-
-// 所有需要标记为外部依赖的包
+/**
+ * Rollup 配置文件
+ * 该配置文件用于构建同时支持浏览器和 Node.js 环境的库
+ * 生成两种格式：ESM（浏览器）和 CommonJS（Node.js）
+ */
+// 导入 Rollup 插件
+const commonjs = require('@rollup/plugin-commonjs')       // 将 CommonJS 模块转换为 ES 模块
+const json = require('@rollup/plugin-json')              // 允许导入 JSON 文件
+const resolve = require('@rollup/plugin-node-resolve')   // 解析 node_modules 中的依赖
+const typescript = require('@rollup/plugin-typescript') // TypeScript 编译支持
+const nodePolyfills = require('rollup-plugin-node-polyfills') // 提供 Node.js 核心模块的浏览器 polyfills
+const replace = require('@rollup/plugin-replace')        // 用于替换代码中的变量，如环境变量
+const esbuild = require('rollup-plugin-esbuild').default;
+/**
+ * 外部依赖配置
+ * 这些依赖不会被打包到最终产物中，而是作为外部依赖引用
+ * 可以减小打包体积，避免重复打包常用库
+ */
+// 外部依赖配置
 const external = [
-  'axios',
-  'js-md5',
-  'lodash',
-  'qs',
-  'tslib',
-  'vue',
-  'webpack',
-  'path',
-  'autoprefixer',
-  'postcss-pxtorem',
-  'tapable',
-  'webpack-sources',
-  'glob-to-regexp',
-  'schema-utils',
-  'acorn',
-  '@webassemblyjs/ast',
-  '@webassemblyjs/wasm-parser',
-  '@webassemblyjs/wasm-edit',
-  'querystring-es3',
-  'punycode/'
+  'axios', 'js-md5', 'lodash', 'qs', 'tslib', 'vue', 'webpack', 'path', 'fs',
+  'autoprefixer', 'postcss-pxtorem', 'tapable', 'webpack-sources',
+  'glob-to-regexp', 'schema-utils', 'acorn', '@webassemblyjs/ast',
+  '@webassemblyjs/wasm-parser', '@webassemblyjs/wasm-edit',
+  'querystring-es3', 'punycode/', 'css-minimizer-webpack-plugin', '@parcel/css',
+  'url', '@swc/core',
+  /webpack/, // 使用正则表达式排除所有 webpack 相关的模块
+  /node_modules.*\.json$/ // 排除所有 node_modules 中的 JSON 文件
 ]
 
-module.exports = [
-  // 浏览器 ESM 构建 - 使用browser.ts入口
-  {
-    input: 'src/browser.ts',
-    output: {
-      file: 'lib/esm/index.js',
-      format: 'esm',
-      exports: 'default'
-    },
-    plugins: [
-      resolve({
-        browser: true,
-        preferBuiltins: false,
-        extensions: ['.js', '.ts', '.json']
-      }),
-      commonjs({
-        extensions: ['.js', '.ts']
-      }),
-      json(),
-      typescript({
-        tsconfig: false,
-        target: 'es2015',
-        module: 'esnext',
-        declaration: false,
-        sourceMap: false
-      })
-    ],
-    external: ['axios', 'js-md5', 'lodash', 'qs', 'tslib'] // 只保留必要的外部依赖
-  },
-  // Node.js CommonJS 构建 - 使用完整的index.ts入口
-  {
-    input: 'src/index.ts',
-    output: {
-      file: 'lib/cjs/index.js',
-      format: 'cjs',
-      exports: 'default'
-    },
-    plugins: [
-      resolve({
-        browser: false,
-        preferBuiltins: true,
-        extensions: ['.js', '.ts', '.json']
-      }),
-      commonjs({
-        extensions: ['.js', '.ts']
-      }),
-      json(),
-      typescript({
-        tsconfig: false,
-        target: 'es5',
-        module: 'esnext',
-        declaration: false,
-        sourceMap: false
-      })
-    ],
-    external: ['axios', 'js-md5', 'lodash', 'qs', 'tslib'] // 只保留必要的外部依赖
-  }
+/**
+ * 创建插件配置函数
+ * @param {boolean} isBrowser - 是否为浏览器环境构建
+ * @returns {Array} - 插件配置数组
+ */
+const createPlugins = (isBrowser) => [
+  // 支持导入 JSON 文件 - 放在最前面
+  json({
+    // preferConst: true, // 使用 const 声明而不是 var
+    // compact: true, // 压缩 JSON
+    // namedExports: false, // 不使用命名导出
+    // exclude: ['**/node_modules/**/*.json'] // 排除所有 node_modules 中的 JSON 文件
+  }),
+  
+  // TypeScript 编译配置
+  typescript({
+    tsconfig: isBrowser ? './tsconfig.esm.json' : './tsconfig.cjs.json',
+    sourceMap: false,
+  }),
+  
+  // 解析模块路径和第三方依赖
+  resolve({
+    browser: isBrowser,
+    preferBuiltins: !isBrowser,
+    extensions: ['.js', '.ts', '.json'],
+    mainFields: ['module', 'main'],
+    alias: {
+      '@': './src',
+      './utils': './src/utils'
+    }
+  }),
+  
+  // 将 CommonJS 模块转换为 ES 模块
+  commonjs({
+    extensions: ['.js'],
+    transformMixedEsModules: true,
+    sourceMap: false,
+    ignoreDynamicRequires: true
+  }),
+  // 允许在项目中混合使用 ES 模块(export default)和 CommonJS(module.exports)导出方式
+  // Rollup 会根据目标格式(ESM 或 CJS)正确处理这些不同的导出方式
+  // 替换环境变量
+  replace({
+    preventAssignment: true,           // 防止替换变量赋值语句
+    values: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.VUE_APP_IS_QIANKUN': JSON.stringify(process.env.VUE_APP_IS_QIANKUN || 'false')
+    }
+  }),
+  // 提供 Node.js 核心模块的浏览器 polyfills
+  // nodePolyfills({
+  //   fs: true                           // 启用 fs 模块的 polyfill
+  // })
 ]
+
+/**
+ * 创建 Rollup 配置对象
+ * @param {string} input - 入口文件路径
+ * @param {Object} output - 输出配置
+ * @param {boolean} isBrowser - 是否为浏览器环境构建
+ * @returns {Object} - Rollup 配置对象
+ */
+const createConfig = (input, output, isBrowser = false) => ({
+  input,                              // 入口文件
+  output,                             // 输出配置
+  plugins: createPlugins(isBrowser),  // 根据环境创建插件配置
+  external: isBrowser ? ['axios', 'js-md5', 'lodash', 'qs', 'tslib'] : external // 外部依赖配置
+  // 浏览器环境只排除基本依赖，Node.js 环境排除所有 external 数组中的依赖
+})
+
+/**
+ * Rollup 配置数组
+ * 包含两种构建配置：浏览器 ESM 和 Node.js CommonJS
+ */
+const configs = [
+  // 浏览器 ESM 构建配置
+  createConfig('src/index.ts', {       // 入口文件
+    dir: 'lib/esm',                    // 输出目录
+    format: 'esm',                     // 输出格式：ES 模块
+    preserveModules: true,             // 保持模块结构，不合并模块
+    preserveModulesRoot: 'src',        // 模块根目录，输出路径会从这里开始
+    exports: 'auto',                   // 自动检测模块的导出类型
+  }, true),                            // 指定为浏览器环境
+
+  // Node.js CommonJS 构建配置
+  createConfig('src/index.ts', {       // 入口文件
+    dir: 'lib/cjs',                    // 输出目录
+    format: 'cjs',                     // 输出格式：CommonJS
+    preserveModules: true,             // 保持模块结构，不合并模块
+    preserveModulesRoot: 'src',        // 模块根目录
+    exports: 'auto'                    // 自动检测模块的导出类型
+  }),                                  // 默认为 Node.js 环境
+]
+
+// 导出配置数组，Rollup 将处理每个配置项
+module.exports = configs

@@ -21,7 +21,8 @@
       ]
     },
     "types": [
-      "vue"
+      "vue",
+      "node"
     ],
   },
   "include": [
@@ -31,5 +32,8 @@
   ],
   "exclude": [
     "./config", // 具体排除外部 config 文件夹
-  ]
+    "node_modules",
+    "**/*.vue",
+
+  ],
 }
