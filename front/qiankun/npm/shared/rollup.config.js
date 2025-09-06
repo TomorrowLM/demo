@@ -24,6 +24,11 @@ const external = [
   '@webassemblyjs/wasm-parser', '@webassemblyjs/wasm-edit',
   'querystring-es3', 'punycode/', 'css-minimizer-webpack-plugin', '@parcel/css',
   'url', '@swc/core',
+  // 添加所有 webpack 相关的依赖
+  'webpackbar', 'html-webpack-plugin', 'mini-css-extract-plugin',
+  'css-minimizer-webpack-plugin', 'node-polyfill-webpack-plugin',
+  'webpack-bundle-analyzer', 'css-loader', 'style-loader', 'less-loader',
+  'less', 'babel-loader', '@babel/core',
 ]
 
 /**
