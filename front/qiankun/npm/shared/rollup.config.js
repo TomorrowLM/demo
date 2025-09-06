@@ -10,7 +10,7 @@ const resolve = require('@rollup/plugin-node-resolve')   // 解析 node_modules 
 const typescript = require('@rollup/plugin-typescript') // TypeScript 编译支持
 const nodePolyfills = require('rollup-plugin-node-polyfills') // 提供 Node.js 核心模块的浏览器 polyfills
 const replace = require('@rollup/plugin-replace')        // 用于替换代码中的变量，如环境变量
-const esbuild = require('rollup-plugin-esbuild').default;
+// const esbuild = require('rollup-plugin-esbuild').default;
 /**
  * 外部依赖配置
  * 这些依赖不会被打包到最终产物中，而是作为外部依赖引用
@@ -24,8 +24,6 @@ const external = [
   '@webassemblyjs/wasm-parser', '@webassemblyjs/wasm-edit',
   'querystring-es3', 'punycode/', 'css-minimizer-webpack-plugin', '@parcel/css',
   'url', '@swc/core',
-  /webpack/, // 使用正则表达式排除所有 webpack 相关的模块
-  /node_modules.*\.json$/ // 排除所有 node_modules 中的 JSON 文件
 ]
 
 /**
@@ -34,32 +32,31 @@ const external = [
  * @returns {Array} - 插件配置数组
  */
 const createPlugins = (isBrowser) => [
-  // 支持导入 JSON 文件 - 放在最前面
+  // 支持导入 JSON 文件
   json({
-    // preferConst: true, // 使用 const 声明而不是 var
-    // compact: true, // 压缩 JSON
-    // namedExports: false, // 不使用命名导出
-    // exclude: ['**/node_modules/**/*.json'] // 排除所有 node_modules 中的 JSON 文件
+    preferConst: true,
+    compact: true,
+    namedExports: false,
+    exclude: ['**/node_modules/**/*.json']
   }),
-  
+
   // TypeScript 编译配置
   typescript({
     tsconfig: isBrowser ? './tsconfig.esm.json' : './tsconfig.cjs.json',
     sourceMap: false,
   }),
-  
+
   // 解析模块路径和第三方依赖
   resolve({
     browser: isBrowser,
     preferBuiltins: !isBrowser,
     extensions: ['.js', '.ts', '.json'],
-    mainFields: ['module', 'main'],
     alias: {
       '@': './src',
       './utils': './src/utils'
     }
   }),
-  
+
   // 将 CommonJS 模块转换为 ES 模块
   commonjs({
     extensions: ['.js'],
@@ -67,20 +64,22 @@ const createPlugins = (isBrowser) => [
     sourceMap: false,
     ignoreDynamicRequires: true
   }),
-  // 允许在项目中混合使用 ES 模块(export default)和 CommonJS(module.exports)导出方式
-  // Rollup 会根据目标格式(ESM 或 CJS)正确处理这些不同的导出方式
+
   // 替换环境变量
   replace({
-    preventAssignment: true,           // 防止替换变量赋值语句
+    preventAssignment: true,
     values: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-      'process.env.VUE_APP_IS_QIANKUN': JSON.stringify(process.env.VUE_APP_IS_QIANKUN || 'false')
+      'process.env.VUE_APP_IS_QIANKUN': JSON.stringify(process.env.VUE_APP_IS_QIANKUN || 'false'),
+      // 添加环境检测
+      'typeof window': isBrowser ? '"object"' : '"undefined"',
+      'typeof process': isBrowser ? '"undefined"' : '"object"'
     }
   }),
-  // 提供 Node.js 核心模块的浏览器 polyfills
-  // nodePolyfills({
-  //   fs: true                           // 启用 fs 模块的 polyfill
-  // })
+
+  // 只在浏览器环境使用 polyfills（如果需要的话）
+  // 注释掉有问题的 nodePolyfills 插件
+  // ...(isBrowser ? [nodePolyfills({ fs: true })] : [])
 ]
 
 /**

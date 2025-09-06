@@ -1,6 +1,6 @@
 {
-  "baseUrl": "./",
   // "extends": "../../tsconfig.base.json",
+  "baseUrl": "./",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "./lib/esm",
@@ -30,14 +30,13 @@
       "node"
     ],
   },
-  "exclude": [
-    "node_modules",
-    "**/*.vue",
-
-  ],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/types/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.vue",
   ],
 }
