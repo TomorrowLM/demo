@@ -5,7 +5,8 @@
 
 // 环境检测
 const isNode = typeof process !== 'undefined' && process.versions && process.versions.node;
-const isBuildTime = typeof __webpack_require__ === 'undefined';
+// 修改构建时检测逻辑，只在真正的构建打包时（如 Rollup）禁用功能
+const isBuildTime = typeof global !== 'undefined' && global.__ROLLUP_BUILD__ === true;
 
 /**
  * 安全的 require 函数，在非 Node.js 环境中返回 null
@@ -56,22 +57,22 @@ class WebpackConfigBuilder {
   constructor() {
     this.config = {};
     this.initialized = false;
-    
+
     // 只在 Node.js 环境中初始化环境变量
     if (isNode && !isBuildTime) {
       this.initEnvironment();
     }
-    
+
     this.pluginsRegistry = {};
     this.loadersRegistry = {};
-    
+
     // 延迟注册，避免构建时的依赖问题
     if (isNode && !isBuildTime) {
       this.registerPlugins();
       this.registerLoaders();
     }
   }
-  
+
   initEnvironment() {
     this.isDev = process.env.NODE_ENV === 'development';
     this.isProd = process.env.NODE_ENV === 'production';
@@ -83,37 +84,37 @@ class WebpackConfigBuilder {
     this.outputPath = process.env.OUTPUT_PATH || 'dist';
     this.port = process.env.PORT || 8000;
   }
-  
+
   init() {
     if (this.initialized) return this;
-    
+
     if (!isNode || isBuildTime) {
       console.warn('WebpackConfigBuilder: Not in Node.js environment, returning empty config');
       this.config = {};
       this.initialized = true;
       return this;
     }
-    
+
     if (!checkDependency('webpack')) {
       throw new Error(getMissingDependencyMessage('webpack'));
     }
-    
+
     const path = safeRequire('path');
     const webpack = safeRequire('webpack');
-    
+
     if (!path || !webpack) {
       throw new Error('Failed to load required Node.js modules');
     }
-    
+
     let packageJson;
     try {
       packageJson = safeRequire(path.resolve(process.cwd(), 'package.json')) || { name: 'app' };
     } catch (e) {
       packageJson = { name: 'app' };
     }
-    
+
     const appName = process.env.APP_NAME || packageJson.name;
-    
+
     // 创建基础配置
     this.config = {
       mode: this.isDev ? 'development' : 'production',
@@ -155,15 +156,15 @@ class WebpackConfigBuilder {
         rules: [],
       },
     };
-    
+
     this.initialized = true;
     return this;
   }
-  
+
   registerPlugins() {
     // 只在运行时注册插件
     if (!isNode || isBuildTime) return;
-    
+
     // WebpackBar plugin
     this.pluginsRegistry.WebpackBar = () => {
       if (!checkDependency('webpackbar')) {
@@ -172,23 +173,87 @@ class WebpackConfigBuilder {
       const WebpackBar = safeRequire('webpackbar');
       return WebpackBar ? new WebpackBar() : null;
     };
-    
-    // 其他插件注册...
-    // 为了简化，这里只展示关键部分
+
+    // HtmlWebpackPlugin
+    this.pluginsRegistry.HtmlWebpackPlugin = (options = {}) => {
+      if (!checkDependency('html-webpack-plugin')) {
+        throw new Error(getMissingDependencyMessage('html-webpack-plugin'));
+      }
+      const HtmlWebpackPlugin = safeRequire('html-webpack-plugin');
+      return HtmlWebpackPlugin ? new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'index.html',
+        ...options
+      }) : null;
+    };
+
+    // DefinePlugin (webpack 内置)
+    this.pluginsRegistry.DefinePlugin = (options = {}) => {
+      const webpack = safeRequire('webpack');
+      return webpack ? new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(this.isDev ? 'development' : 'production'),
+        ...options
+      }) : null;
+    };
+
+    // ProvidePlugin (webpack 内置)
+    this.pluginsRegistry.ProvidePlugin = (options = {}) => {
+      const webpack = safeRequire('webpack');
+      return webpack ? new webpack.ProvidePlugin({
+        process: 'process/browser',
+        ...options
+      }) : null;
+    };
+
+    // NodePolyfillPlugin
+    this.pluginsRegistry.NodePolyfillPlugin = (options = {}) => {
+      if (!checkDependency('node-polyfill-webpack-plugin')) {
+        throw new Error(getMissingDependencyMessage('node-polyfill-webpack-plugin'));
+      }
+      const NodePolyfillPlugin = safeRequire('node-polyfill-webpack-plugin');
+      return NodePolyfillPlugin ? new NodePolyfillPlugin(options) : null;
+    };
   }
-  
+
   registerLoaders() {
     // 只在运行时注册加载器
     if (!isNode || isBuildTime) return;
-    
+
+    // Babel Loader
+    this.loadersRegistry.babel = (options = {}) => {
+      if (!checkDependency('babel-loader')) {
+        throw new Error(getMissingDependencyMessage('babel-loader'));
+      }
+
+      return {
+        test: /\.(js|jsx|ts|tsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', { targets: 'defaults' }],
+              '@babel/preset-react',
+              '@babel/preset-typescript'
+            ],
+            plugins: [
+              '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-transform-runtime'
+            ],
+            ...options
+          }
+        }
+      };
+    };
+
     // CSS Loader
     this.loadersRegistry.css = () => {
       if (!checkDependency('css-loader')) {
         throw new Error(getMissingDependencyMessage('css-loader'));
       }
-      
+
       const MiniCssExtractPlugin = !this.isDev ? safeRequire('mini-css-extract-plugin') : null;
-      
+
       return {
         test: /\.css$/,
         use: [
@@ -197,22 +262,120 @@ class WebpackConfigBuilder {
         ],
       };
     };
-    
-    // 其他加载器注册...
+
+    // SCSS/SASS Loader
+    this.loadersRegistry.scss = () => {
+      if (!checkDependency('sass-loader')) {
+        throw new Error(getMissingDependencyMessage('sass-loader'));
+      }
+
+      const MiniCssExtractPlugin = !this.isDev ? safeRequire('mini-css-extract-plugin') : null;
+
+      return {
+        test: /\.(scss|sass)$/,
+        use: [
+          this.isDev ? 'style-loader' : (MiniCssExtractPlugin ? MiniCssExtractPlugin.loader : 'style-loader'),
+          'css-loader',
+          'sass-loader',
+        ],
+      };
+    };
+
+    // LESS Loader
+    this.loadersRegistry.less = () => {
+      if (!checkDependency('less-loader')) {
+        throw new Error(getMissingDependencyMessage('less-loader'));
+      }
+
+      const MiniCssExtractPlugin = !this.isDev ? safeRequire('mini-css-extract-plugin') : null;
+
+      return {
+        test: /\.less$/,
+        use: [
+          this.isDev ? 'style-loader' : (MiniCssExtractPlugin ? MiniCssExtractPlugin.loader : 'style-loader'),
+          'css-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+                // 忽略弃用警告
+                silent: true
+              }
+            }
+          }
+        ],
+      };
+    };
+
+    // File Loader
+    this.loadersRegistry.file = (options = {}) => {
+      return {
+        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[name].[hash][ext]',
+          ...options
+        }
+      };
+    };
+
+    // URL Loader (for small files)
+    this.loadersRegistry.url = (options = {}) => {
+      return {
+        test: /\.(png|jpe?g|gif|svg)$/,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024, // 8kb
+            ...options
+          }
+        }
+      };
+    };
+
+    // Images Loader
+    this.loadersRegistry.images = (options = {}) => {
+      const maxSize = options.maxSize || 8 * 1024; // 默认 8kb
+      return {
+        test: /\.(png|jpe?g|gif|svg|webp|ico)$/,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: maxSize
+          }
+        },
+        generator: {
+          filename: 'images/[name].[hash:8][ext]'
+        }
+      };
+    };
+
+    // Fonts Loader
+    this.loadersRegistry.fonts = (options = {}) => {
+      return {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[hash:8][ext]',
+          ...options
+        }
+      };
+    };
   }
-  
+
   addPlugin(pluginName, options = {}) {
     if (!isNode || isBuildTime) {
       console.warn(`WebpackConfigBuilder: Cannot add plugin ${pluginName} in build environment`);
       return this;
     }
-    
+
     this.init();
-    
+
     if (!this.pluginsRegistry[pluginName]) {
       throw new Error(`Plugin ${pluginName} is not registered`);
     }
-    
+
     try {
       const plugin = this.pluginsRegistry[pluginName](options);
       if (plugin) {
@@ -222,22 +385,22 @@ class WebpackConfigBuilder {
       console.error(`Error adding plugin ${pluginName}:`, error.message);
       throw error;
     }
-    
+
     return this;
   }
-  
+
   addLoader(loaderName, options = {}) {
     if (!isNode || isBuildTime) {
       console.warn(`WebpackConfigBuilder: Cannot add loader ${loaderName} in build environment`);
       return this;
     }
-    
+
     this.init();
-    
+
     if (!this.loadersRegistry[loaderName]) {
       throw new Error(`Loader ${loaderName} is not registered`);
     }
-    
+
     try {
       const loader = this.loadersRegistry[loaderName](options);
       if (loader) {
@@ -247,32 +410,32 @@ class WebpackConfigBuilder {
       console.error(`Error adding loader ${loaderName}:`, error.message);
       throw error;
     }
-    
+
     return this;
   }
-  
+
   getConfig() {
     if (!isNode || isBuildTime) {
       console.warn('WebpackConfigBuilder: Returning empty config in build environment');
       return {};
     }
-    
+
     this.init();
     return this.config;
   }
-  
+
   createDefaultConfig() {
     if (!isNode || isBuildTime) {
       console.warn('WebpackConfigBuilder: Cannot create default config in build environment');
       return this;
     }
-    
+
     this.init()
       .addPlugin('WebpackBar')
       .addPlugin('HtmlWebpackPlugin')
       .addLoader('css')
       .addLoader('babel');
-      
+
     return this;
   }
 }

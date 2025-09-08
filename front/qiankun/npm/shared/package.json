@@ -9,13 +9,9 @@
       "import": "./lib/esm/index.js",
       "require": "./lib/cjs/index.js"
     },
-    "./webpack": {
-      "import": "./lib/esm/config/webpack/webpack.base.js",
-      "require": "./lib/cjs/config/webpack/webpack.base.js"
-    },
-    "./qiankun": {
-      "import": "./lib/esm/config/qiankun/index.js",
-      "require": "./lib/cjs/config/qiankun/index.js"
+    "./config": {
+      "import": "./lib/esm/config/index.js",
+      "require": "./lib/cjs/config/index.js"
     }
   },
   "directories": {
@@ -51,11 +47,18 @@
     "@types/node": "^22.15.17",
     "@types/webpack-env": "^1.18.5",
     "axios": "^1.7.9",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "qs": "^6.14.0",
     "rimraf": "^5.0.5",
     "rollup": "^4.40.2",
     "rollup-plugin-esbuild": "^6.2.1",
-    "typescript": "^5.4.5"
+    "stream-browserify": "^3.0.0",
+    "typescript": "^5.4.5",
+    "util": "^0.12.5",
+    "vm-browserify": "^1.1.2"
   },
   "peerDependencies": {
     "css-minimizer-webpack-plugin": "^3.0.0 || ^4.0.0",
