@@ -18,7 +18,8 @@ const replace = require('@rollup/plugin-replace')        // 用于替换代码�
  */
 // 外部依赖配置
 const external = [
-  'axios', 'js-md5', 'lodash', 'qs', 'tslib', 'vue', 'webpack', 'path', 'fs',
+  // 'axios', 
+  'js-md5', 'lodash', 'qs', 'tslib', 'vue', 'webpack', 'path', 'fs',
   'autoprefixer', 'postcss-pxtorem', 'tapable', 'webpack-sources',
   'glob-to-regexp', 'schema-utils', 'acorn', '@webassemblyjs/ast',
   '@webassemblyjs/wasm-parser', '@webassemblyjs/wasm-edit',
@@ -37,19 +38,6 @@ const external = [
  * @returns {Array} - 插件配置数组
  */
 const createPlugins = (isBrowser) => [
-  // 支持导入 JSON 文件
-  json({
-    preferConst: true,
-    compact: true,
-    namedExports: false,
-    exclude: ['**/node_modules/**/*.json']
-  }),
-
-  // TypeScript 编译配置
-  typescript({
-    tsconfig: isBrowser ? './tsconfig.esm.json' : './tsconfig.cjs.json'
-  }),
-
   // 解析模块路径和第三方依赖
   resolve({
     browser: isBrowser,
@@ -61,12 +49,26 @@ const createPlugins = (isBrowser) => [
     }
   }),
 
+  // 支持导入 JSON 文件 - 必须在 commonjs 之前
+  json({
+    preferConst: true,
+    compact: true,
+    namedExports: false
+  }),
+
   // 将 CommonJS 模块转换为 ES 模块
   commonjs({
-    extensions: ['.js', 'ts'],
+    extensions: ['.js', '.ts'],
     transformMixedEsModules: true,
     sourceMap: false,
-    ignoreDynamicRequires: true
+    ignoreDynamicRequires: true,
+    // 排除 JSON 文件，让 json 插件处理
+    exclude: ['**/*.json']
+  }),
+
+  // TypeScript 编译配置
+  typescript({
+    tsconfig: isBrowser ? './tsconfig.esm.json' : './tsconfig.cjs.json'
   }),
 
   // 替换环境变量
@@ -93,7 +95,7 @@ const createConfig = (input, output, isBrowser = false) => ({
   input,                              // 入口文件
   output,                             // 输出配置
   plugins: createPlugins(isBrowser),  // 根据环境创建插件配置
-  external: isBrowser ? ['axios', 'js-md5', 'lodash', 'qs', 'tslib'] : external // 外部依赖配置
+  external: isBrowser ? ['js-md5', 'lodash', 'qs', 'tslib'] : external.filter(dep => dep !== 'axios') // 外部依赖配置，移除 axios
   // 浏览器环境只排除基本依赖，Node.js 环境排除所有 external 数组中的依赖
 })
 

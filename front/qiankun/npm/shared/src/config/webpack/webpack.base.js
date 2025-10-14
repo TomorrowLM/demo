@@ -150,6 +150,8 @@ class WebpackConfigBuilder {
           fs: false,
           path: false,
           crypto: false,
+          process: require.resolve('process/browser'),
+          buffer: require.resolve('buffer'),
         },
       },
       module: {

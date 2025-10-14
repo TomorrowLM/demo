@@ -6,7 +6,7 @@ const resolve = dir => path.join(__dirname, dir)
 const packageName = require('./package.json').name
 
 const { webpackBaseConfig, baseConfig } = require('@lm/shared/src/config/vue')
-const { qiankunConfigFn, configAsset } = require('@lm/shared/src/config/qiankun/qiankun')
+const { qiankunConfigFn, configAsset } = require('@lm/shared/src/config/qiankun')
 const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
 const config = baseConfig(process.env)
 

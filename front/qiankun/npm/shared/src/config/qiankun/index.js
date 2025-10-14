@@ -5,7 +5,7 @@
  * @param {Object} param0.config webpack配置对象
  */
 // 确保这个路径指向正确的位置
-const { getProjectName } = require('../../scripts/getProjectPackageJson');
+const { getProjectName } = require('../../scripts/config/getProjectPackageJson');
 
 function qiankunConfigFn({ projectName, config }) {
   console.log('qiankunConfig',getProjectName());

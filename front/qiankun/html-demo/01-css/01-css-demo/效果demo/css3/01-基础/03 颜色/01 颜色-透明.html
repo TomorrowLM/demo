@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CSS3 颜色</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: '微软雅黑';
+			background-color: #F7F7F7;
+		}
+
+		.wrapper {
+			width: 1024px;
+			margin: 0 auto;
+		}
+
+		.wrapper > section {
+			min-height: 300px;
+			margin-bottom: 30px;
+			box-shadow: 1px 1px 4px #DDD;
+			background-color: #FFF;
+		}
+
+		.wrapper > header {
+			text-align: center;
+			line-height: 1;
+			padding: 20px;
+			margin-bottom: 10px;
+			font-size: 30px;
+		}
+
+		.wrapper section > header {
+			line-height: 1;
+			padding: 10px;
+			font-size: 22px;
+			color: #333;
+			background-color: #EEE;
+		}
+
+		.wrapper .wrap-box {
+			padding: 20px;
+		}
+
+		/* 颜色的表达方式 red、rgb() #FFF */
+		/* 透明度 opacity transparent */
+
+		.parent {
+			width: 200px;
+			height: 200px;
+			background: red;
+		}
+
+		.child {
+			width: 100px;
+			height: 100px;
+			background: transparent;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<header>CSS3-透明度</header>
+		<section>
+			<header>opacity</header>
+			<div class="wrap-box">
+				<p>子元素会继承父元素的透明度</p>
+			</div>
+		</section>
+		<section>
+			<header>transparent</header>
+			<div class="wrap-box">
+				<p>完全透明，类似玻璃一样</p>
+				<div class="parent">
+					<div class="child"></div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

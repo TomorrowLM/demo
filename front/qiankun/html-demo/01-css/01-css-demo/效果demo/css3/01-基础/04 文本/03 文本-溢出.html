@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CSS3文本</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: '微软雅黑';
+			background-color: #F7F7F7;
+		}
+
+		.wrapper {
+			width: 1024px;
+			margin: 0 auto;
+		}
+
+		.wrapper > section {
+			min-height: 300px;
+			margin-bottom: 30px;
+			box-shadow: 1px 1px 4px #DDD;
+			background-color: #FFF;
+		}
+
+		.wrapper > header {
+			text-align: center;
+			line-height: 1;
+			padding: 20px;
+			margin-bottom: 10px;
+			font-size: 30px;
+		}
+
+		.wrapper section > header {
+			line-height: 1;
+			padding: 10px;
+			font-size: 22px;
+			color: #333;
+			background-color: #EEE;
+		}
+
+		.wrapper .wrap-box {
+			padding: 20px;
+		}
+
+		section:nth-child(2) p {
+			width: 200px;
+			border: 1px solid #CCC;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		section:nth-child(3) p {
+			width: 200px;
+			border: 1px solid #CCC;
+			text-overflow: ellipsis;
+			/*white-space: nowrap;*/
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<header>CSS3-文本</header>
+		<section>
+			<header>单行文字溢出</header>
+			<div class="wrap-box">
+				<p>文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				</p>
+			</div>
+		</section>
+		<section>
+			<header>多行溢出</header>
+			<div class="wrap-box">
+				<p>文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				文字阴影文字阴影文字阴影
+				</p>
+			</div>
+		</section>
+	</div>
+</body>
+</html>

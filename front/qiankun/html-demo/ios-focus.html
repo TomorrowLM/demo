@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iOS Focus Example</title>
+  <style>
+    #fakeButton {
+      width: 200px;
+      padding: 20px;
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+    }
+
+    #hiddenInput {
+      /* 将其移出可视区域，而不是 display: none */
+      /* position: absolute;
+      left: -1000px;
+      top: -1000px; */
+    }
+  </style>
+</head>
+
+<body>
+  <p>点击下面的蓝色按钮，“自动”弹出键盘</p>
+  <div id="fakeButton">点击我输入</div>
+
+  <!-- 一个隐藏的输入框 -->
+  <input type="text" id="hiddenInput" placeholder="开始输入...">
+
+  <script>
+    const fakeButton = document.getElementById('fakeButton');
+    const hiddenInput = document.getElementById('hiddenInput');
+
+    fakeButton.addEventListener('click', function () {
+      // 在用户点击事件的回调中，立即让输入框获得焦点
+      hiddenInput.focus();
+
+      // 可选：你也可以将隐藏的输入框移动到屏幕上的某个位置，而不是完全隐藏它。
+      // hiddenInput.style.position = 'fixed';
+      // hiddenInput.style.top = '50%';
+      // hiddenInput.style.left = '50%';
+    });
+
+    // // 可选：当用户输入完成， blur 时，可以再次隐藏输入框
+    // hiddenInput.addEventListener('blur', function () {
+    //   // hiddenInput.style.position = 'absolute';
+    //   // hiddenInput.style.top = '-1000px';
+    // });
+  </script>
+</body>
+
+</html>

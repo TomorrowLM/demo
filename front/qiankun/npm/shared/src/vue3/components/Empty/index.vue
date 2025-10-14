@@ -1,55 +1,57 @@
 <template>
-  <div class="emptyComponent">
-    <div class="emptyComponent-img">
-      <img class="set-img" :src="emptyInfo.imgSrc" />
+  <div style="height: 100%; width: 100%" class="wrap">
+    <div style="display: flex; justify-content: center" v-if="props.loading">
+      <img class="rotate" src="@/assets/icon-svg/loading.svg" alt="" />
     </div>
-
-    <div class="emptyComponent-remark">{{ emptyInfo.title }}</div>
-
-    <el-button v-if="!!emptyInfo.btnName" type="primary" @click="toBack()">{{
-      emptyInfo.btnName
-    }}</el-button>
+    <div class="wrap" v-else>
+      <img
+        style="width: 50%; object-fit: contain; margin-left: 10px"
+        src="@/assets/img/data_empty.png"
+        alt=""
+      />
+      <div class="no-data">{{ props.title ? props.title : '暂无数据' }}</div>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts" name="EmptyComponent">
-import { PropType } from 'vue';
-defineProps({
-  emptyInfo: {
-    type: Object as PropType<{ [key: string]: any }>,
-    default: () => ({})
-  }
+<script setup lang="ts">
+import { computed, PropType } from 'vue';
+const props = defineProps({
+  title: String,
+  loading: Boolean
 });
-// emptyInfo参数
-// {
-//  imgSrc 图片路径
-//  title 空状态名称
-//  btnName 按钮名称
-// }
-const emit = defineEmits(['toBack']);
-
-// 返回操作
-const toBack = () => {
-  emit('toBack');
-};
+console.log(props);
 </script>
 
-<style lang="scss" scoped>
-.emptyComponent {
-  text-align: center;
-  &-img {
-    margin: 0 auto;
-    margin-top: 167px;
-    width: 271px;
-    height: 270px;
-  }
-  &-remark {
-    margin: 38px 0 20px 0;
+<style scoped>
+.data-empty {
+  min-width: none;
+}
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .no-data {
     font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
     color: rgba(34, 34, 34, 0.55);
+    line-height: 14px;
+    margin-top: 20px;
   }
-  .set-img {
-    height: 270px;
+}
+.rotate {
+  animation: rotate-ani 2s linear infinite;
+  width: 50%;
+  object-fit: contain;
+}
+@keyframes rotate-ani {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

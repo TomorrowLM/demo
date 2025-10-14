@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    .slider {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 928px;
+      border: 1px solid #000;
+    }
+
+    .slide {
+      display: inline-block;
+      width: 160px;
+      height: 106px;
+      line-height: 100px;
+      text-align: center;
+      background: #f0f0f0;
+      margin-right: 28px;
+      /* animation: slide 10s linear infinite; */
+    }
+
+    @keyframes slide {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+  </style>
+  <body>
+    <div>
+      <button id="arrow-left">1</button>
+      <div class="slider">
+        <div class="slide">1</div>
+        <div class="slide">2</div>
+        <div class="slide">3</div>
+        <div class="slide">4</div>
+        <div class="slide">5</div>
+        <div class="slide">6</div>
+        <div class="slide">7</div>
+        <!-- 更多幻灯片 -->
+      </div>
+      <button id="arrow-right">2</button>
+    </div>
+  </body>
+  <script>
+    let i = 0; // 切换次数
+    let maxI = 7 - 5; //最大次数
+    document.getElementById("arrow-left").addEventListener("click", () => {
+      console.log(i,maxI);
+      if (i >= maxI || maxI < 0) {
+        return;
+      }
+      i++;
+      // 循环获取到的元素集合
+      Array.prototype.forEach.call(
+        document.getElementsByClassName("slide"),
+        function (element) {
+          element.setAttribute("style", `transform: translateX(-${i * 228}px)`);
+        }
+      );
+    });
+    document.getElementById("arrow-right").addEventListener("click", () => {
+      console.log(i,maxI);
+      if (i <= 0) {
+        return;
+      }
+      i--;
+      // 循环获取到的元素集合
+      Array.prototype.forEach.call(
+        document.getElementsByClassName("slide"),
+        function (element) {
+          element.setAttribute("style", `transform: translateX(-${i * 228}px)`);
+        }
+      );
+    });
+  </script>
+</html>

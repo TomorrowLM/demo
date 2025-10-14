@@ -4,7 +4,6 @@ export type EnvProps = 'development' | 'production' | 'test';
 export type ProjectNameProps = 'react-app' | 'vue' | 'angular';
 export type EnvProjectProps = Record<EnvProps, Partial<Record<ProjectNameProps, Partial<AppConfig>>>>;
 
-
 export interface AppConfig {
   // 应用信息
   APP_NAME: string;
