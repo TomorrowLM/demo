@@ -160,11 +160,6 @@ const cssConfig = (isMobile: boolean = false) => {
     // }
   }
 }
-// config.plugins = [
-//   ...config.plugins || [],
-//   new webpack.ProvidePlugin({
-//     $lm: '@lm/shared/lib/src/utils',
-//   }),]
 const aliasConfigFn = (resolve: (path: string) => string) => {
   return {
     '@': resolve('./src'),
@@ -197,7 +192,6 @@ const webpackBaseConfig = (processVars: any, config: any, resolve: (path: string
     config.output.chunkFilename = 'js/[name].[hash].js';
   }
 };
-
 /**
  * 获取公共路径
  *
@@ -228,8 +222,15 @@ const baseConfig = (processVars: any) => {
     ...cssConfig()
   }
 }
+// export default {
+//   commonPlugin,
+//   aliasConfigFn,
+//   webpackBaseConfig,
+//   baseConfig,
+//   cssConfig
+// };
 
-export default {
+module.exports = {
   commonPlugin,
   aliasConfigFn,
   webpackBaseConfig,

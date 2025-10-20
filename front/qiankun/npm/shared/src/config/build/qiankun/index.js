@@ -5,15 +5,16 @@
  * @param {Object} param0.config webpack配置对象
  */
 // 确保这个路径指向正确的位置
-const { getProjectName } = require('../../scripts/config/getProjectPackageJson');
+// const { getProjectName } = require('@/scripts/config/getProjectPackageJson');
+import { getProjectName }  from '@/scripts/config/getProjectPackageJson.js';
 
 function qiankunConfigFn({ projectName, config }) {
-  console.log('qiankunConfig',getProjectName());
+  console.log('qiankunConfig', getProjectName());
   console.log(config.output);
-  
+
   // 如果没有提供项目名称，尝试从 package.json 获取
   const actualProjectName = projectName || getProjectName();
-  
+
   // 根据项目名称配置输出选项
   if (actualProjectName === 'web1') {
     Object.assign(config.output,
@@ -61,7 +62,7 @@ function configAsset(config) {
 function getQiankunConfig(name) {
   // 如果没有提供名称，尝试从 package.json 获取
   const actualName = name || getProjectName();
-  
+
   return {
     library: `${actualName}-[name]`,
     libraryTarget: 'umd',
@@ -74,3 +75,8 @@ module.exports = {
   configAsset,
   getQiankunConfig
 };
+// export default {
+//   qiankunConfigFn,
+//   configAsset,
+//   getQiankunConfig
+// }

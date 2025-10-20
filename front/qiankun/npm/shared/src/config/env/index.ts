@@ -1,38 +1,7 @@
-import { AppConfig, EnvProjectProps } from '../types';
+// import type { AppConfig } from '../types'; // 类型导入，仅编译期有效
+import getEnv from '@/scripts/config/getEnv'; // 获取环境变量
 const env = process.env.NODE_ENV || 'development';
-const devApiBaseApi = 'http://0.0.0.0:3600'
-const testApiBaseApi = 'http://121.40.61.99:3600'
-const proApiBaseApi = testApiBaseApi
+console.log('当前环境：', env, getEnv(), process.env.APP_ENV);
+const LM_ENV_CONFIG = getEnv()
 
-// 环境特定配置
-const envConfig: EnvProjectProps = {
-  development: {
-    'react-app': {
-      PROXY_PATH: '/react-app',
-      API_BASE_URL: devApiBaseApi,
-    },
-  },
-  test: {
-    'react-app': {
-      PROXY_PATH: '/react-app',
-      API_BASE_URL: testApiBaseApi,
-    },
-  },
-  production: {
-    'react-app': {
-      PROXY_PATH: '/react-app',
-      API_BASE_URL: proApiBaseApi,
-    },
-  },
-};
-// 合并配置
-const __APP_CONFIG__ = {
-  envConfig,
-};
-// 浏览器全局变量（用于非模块化环境）
-if (typeof window !== 'undefined') {
-  (window as any).__APP_CONFIG__ = __APP_CONFIG__;
-}
-
-// 导出配置
-export default __APP_CONFIG__;
+module.exports = LM_ENV_CONFIG[process.env.APP_ENV] || {};

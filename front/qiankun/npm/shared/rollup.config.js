@@ -6,7 +6,9 @@
 // 导入 Rollup 插件
 const commonjs = require('@rollup/plugin-commonjs')       // 将 CommonJS 模块转换为 ES 模块
 const json = require('@rollup/plugin-json')              // 允许导入 JSON 文件
-const resolve = require('@rollup/plugin-node-resolve')   // 解析 node_modules 中的依赖
+const resolve = require('@rollup/plugin-node-resolve')
+const alias = require('@rollup/plugin-alias')
+const path = require('path')
 const typescript = require('@rollup/plugin-typescript') // TypeScript 编译支持
 // const nodePolyfills = require('rollup-plugin-node-polyfills') // 提供 Node.js 核心模块的浏览器 polyfills
 const replace = require('@rollup/plugin-replace')        // 用于替换代码中的变量，如环境变量
@@ -16,7 +18,6 @@ const replace = require('@rollup/plugin-replace')        // 用于替换代码�
  * 这些依赖不会被打包到最终产物中，而是作为外部依赖引用
  * 可以减小打包体积，避免重复打包常用库
  */
-// 外部依赖配置
 const external = [
   // 'axios', 
   'js-md5', 'lodash', 'qs', 'tslib', 'vue', 'webpack', 'path', 'fs',
@@ -38,6 +39,13 @@ const external = [
  * @returns {Array} - 插件配置数组
  */
 const createPlugins = (isBrowser) => [
+  // 先处理路径别名
+  alias({
+    entries: [
+      { find: '@', replacement: path.resolve(__dirname, 'src') },
+      { find: './utils', replacement: path.resolve(__dirname, 'src/utils') }
+    ]
+  }),
   // 解析模块路径和第三方依赖
   resolve({
     browser: isBrowser,
@@ -48,29 +56,25 @@ const createPlugins = (isBrowser) => [
       './utils': './src/utils'
     }
   }),
-
   // 支持导入 JSON 文件 - 必须在 commonjs 之前
   json({
     preferConst: true,
     compact: true,
     namedExports: false
   }),
-
   // 将 CommonJS 模块转换为 ES 模块
   commonjs({
     extensions: ['.js', '.ts'],
     transformMixedEsModules: true,
     sourceMap: false,
-    ignoreDynamicRequires: true,
-    // 排除 JSON 文件，让 json 插件处理
-    exclude: ['**/*.json']
+    ignoreDynamicRequires: true
+    // 不要排除所有 JSON 文件，否则 json 插件无法处理 webpack 的 JSON schema
+    // exclude: ['**/*.json'] // <-- 删除这一行
   }),
-
   // TypeScript 编译配置
   typescript({
     tsconfig: isBrowser ? './tsconfig.esm.json' : './tsconfig.cjs.json'
   }),
-
   // 替换环境变量
   replace({
     preventAssignment: true,
@@ -105,21 +109,22 @@ const createConfig = (input, output, isBrowser = false) => ({
  */
 const configs = [
   // 浏览器 ESM 构建配置
-  createConfig('src/index.ts', {       // 入口文件
-    dir: 'lib/esm',                    // 输出目录
-    format: 'esm',                     // 输出格式：ES 模块
-    preserveModules: true,             // 保持模块结构，不合并模块
-    preserveModulesRoot: 'src',        // 模块根目录，输出路径会从这里开始
-    exports: 'auto',                   // 自动检测模块的导出类型
-  }, true),                            // 指定为浏览器环境
+  // createConfig('src/index.ts', {       // 入口文件
+  //   dir: 'lib/esm',                    // 输出目录
+  //   format: 'esm',                     // 输出格式：ES 模块
+  //   preserveModules: true,             // 保持模块结构，不合并模块
+  //   preserveModulesRoot: 'src',        // 模块根目录，输出路径会从这里开始
+  //   exports: 'auto',                   // 自动检测模块的导出类型
+  // }, true),                 // 指定为浏览器环境
 
-  // Node.js CommonJS 构建配置
+  // // Node.js CommonJS 构建配置
   createConfig('src/index.ts', {       // 入口文件
     dir: 'lib/cjs',                    // 输出目录
     format: 'cjs',                     // 输出格式：CommonJS
     preserveModules: true,             // 保持模块结构，不合并模块
     preserveModulesRoot: 'src',        // 模块根目录
-    exports: 'auto'                    // 自动检测模块的导出类型
+    exports: 'auto',               // 自动检测模块的导出类型
+    interop: 'auto'        // 自动处理默认导出的互操作
   }),                                  // 默认为 Node.js 环境
 ]
 

@@ -2,7 +2,6 @@
  * @lm/shared webpack 配置构建器
  * 此模块提供了一个可配置的 webpack 设置，允许用户按需导入和使用特定的插件和加载器。
  */
-
 // 环境检测
 const isNode = typeof process !== 'undefined' && process.versions && process.versions.node;
 // 修改构建时检测逻辑，只在真正的构建打包时（如 Rollup）禁用功能

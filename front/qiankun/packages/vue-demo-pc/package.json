@@ -4,8 +4,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --mode dev",
-    "serve:qiankun": "vue-cli-service serve --mode dev.qiankun",
+    "serve": "cross-env NODE_ENV=dev vue-cli-service serve",
+    "serve:qiankun": "cross-env APP_ENV=dev.qiankun vue-cli-service serve",
     "build": "vue-cli-service build --mode production",
     "build:qiankun": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
     "lint": "vue-cli-service lint"

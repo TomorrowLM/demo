@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const envConfig = require("../packages/react-demo/config/env");
+const LM_ENV_CONFIG = require("../packages/react-demo/config/env");
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const NODE_ENV = process.env.NODE_ENV;
 console.log("当前环境", NODE_ENV);
@@ -58,12 +58,12 @@ module.exports = {
         static: "./src",
         setupMiddlewares: (middlewares, devServer) => {
           devServer.app.use(
-            envConfig.apiPath,
+            LM_ENV_CONFIG.apiPath,
             createProxyMiddleware({
-              target: envConfig.api,
+              target: LM_ENV_CONFIG.api,
               changeOrigin: true,
               ws: true,
-              pathRewrite: { [`^${envConfig.apiPath}`]: '' }
+              pathRewrite: { [`^${LM_ENV_CONFIG.apiPath}`]: '' }
             })
           );
           return middlewares;
@@ -94,7 +94,7 @@ module.exports = {
         minify: { removeComments: true, collapseWhitespace: true, removeAttributeQuotes: true },
         hash: true,
       }),
-      new webpack.DefinePlugin({ EnvConfig: JSON.stringify(envConfig) }),
+      new webpack.DefinePlugin({ LM_ENV_CONFIG: JSON.stringify(LM_ENV_CONFIG) }),
       new NodePolyfillPlugin()
     ];
 

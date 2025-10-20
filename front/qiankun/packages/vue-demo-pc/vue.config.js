@@ -1,14 +1,18 @@
 const path = require('path')
 const { defineConfig } = require('@vue/cli-service')
 const autoprefixer = require('autoprefixer') // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
-const webpack = require('webpack')
 const resolve = dir => path.join(__dirname, dir)
-const packageName = require('./package.json').name
-
-const { webpackBaseConfig, baseConfig } = require('@lm/shared/src/config/vue')
-const { qiankunConfigFn, configAsset } = require('@lm/shared/src/config/qiankun')
+console.log('@lm/shared-1', require('@lm/shared'))
+console.log('@lm/shared-2', require('@lm/shared/config').__require().buildConfig.qiankunConfig)
+const {
+  buildConfig,
+  LM_ENV_CONFIG
+} = require('@lm/shared/config').__require()
+// console.log('buildConfig', buildConfig.qiankunConfig)
+console.log('vue.config');
+console.log('process.env', process.env.APP_ENV)
+console.log('LM_ENV_CONFIG', LM_ENV_CONFIG)
 const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
-const config = baseConfig(process.env)
 
 module.exports = defineConfig({
   ...config,

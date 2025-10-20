@@ -24,8 +24,8 @@ export function useAppConfig() {
 // 使用原有的环境配置
 export function useEnvConfig() {
   return {
-    apiPath: EnvConfig.apiPath,
-    api: EnvConfig.api,
+    apiPath: LM_ENV_CONFIG.apiPath,
+    api: LM_ENV_CONFIG.api,
   };
 }
 
