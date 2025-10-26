@@ -1,10 +1,10 @@
 // 获取项目路径
-export function getProjectPath() {
+function getProjectPath() {
   const fs = require('fs');
   const path = require('path');
 
   let dir = process.cwd();
-  console.log('getProjectPath-cwd', dir);
+  console.log('getProjectPath: 当前运行项目路径', dir);
   const root = path.parse(dir).root;
 
   while (true) {
@@ -27,4 +27,4 @@ export function getProjectPath() {
 
   return null;
 }
-// ...existing code...
+module.exports = { getProjectPath };

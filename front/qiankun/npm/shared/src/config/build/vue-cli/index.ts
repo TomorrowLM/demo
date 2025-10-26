@@ -20,7 +20,7 @@ const commonPlugin = () => {
       // $lm: '@lm/shared/src/utils',
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      'process.env.APP_ENV': JSON.stringify(process.env.APP_ENV || 'development')
     })
   ];
 };
@@ -205,10 +205,10 @@ const publicPath = (isProd: boolean, isQiankun: boolean, qiankunPath?: string, b
   return isProd ? (isQiankun ? qiankunPath || '/' : buildPath || '/') : '/'
 }
 const baseConfig = (processVars: any) => {
-  const { NODE_ENV, VUE_APP_PORT, VUE_APP_PROXY_API, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_OUTPUTDIR, VUE_APP_API_HOST } = processVars;
-  isProd = process.env.NODE_ENV === 'production'
+  const { APP_ENV, VUE_APP_PORT, VUE_APP_PROXY_API, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path, VUE_APP_OUTPUTDIR, VUE_APP_API_HOST } = processVars;
+  isProd = process.env.APP_ENV === 'production'
   const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
-  console.log('baseConfig', VUE_APP_PROXY_API, VUE_APP_API_HOST, NODE_ENV, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path)
+  console.log('baseConfig', VUE_APP_PROXY_API, VUE_APP_API_HOST, APP_ENV, VUE_APP_Build_Qiankun_Path, VUE_APP_Build_Path)
   const publicPath = isProd ? isQiankun ? VUE_APP_Build_Qiankun_Path : VUE_APP_Build_Path : isQiankun ? `http://localhost:${VUE_APP_PORT}` : '/'
   return {
     publicPath,

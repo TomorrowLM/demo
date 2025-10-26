@@ -98,10 +98,6 @@ export default {
     async getWxSignature() {
       let code = sessionStorage.getItem("wxCode");
       let signUrl = window.location.href.split("#")[0] || "";
-      // signUrl = encodeURIComponent(signUrl)
-      // signUrl = "https://app-test.dingtax.cn/dsb/eqa/?corpId=XNZZ-11512-70&env=dd"
-      console.log('signUrl11111111111', signUrl)
-      console.log('signUrl11111111111', window.location.href)
       let params = {
         appId: this.appId,
         signUrl,

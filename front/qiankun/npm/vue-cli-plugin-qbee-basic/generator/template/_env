@@ -1,0 +1,2 @@
+VUE_APP_LOCAL_DEBUG = 'no'
+APP_PROXY_URL = 'http://localhost:<%=MOCK_PORT%>'

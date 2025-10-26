@@ -73,8 +73,8 @@ class WebpackConfigBuilder {
   }
 
   initEnvironment() {
-    this.isDev = process.env.NODE_ENV === 'development';
-    this.isProd = process.env.NODE_ENV === 'production';
+    this.isDev = process.env.APP_ENV === 'development';
+    this.isProd = process.env.APP_ENV === 'production';
     this.isAnalyze = process.env.ANALYZE === 'true';
     this.isQiankun = process.env.QIANKUN === 'true';
     this.isQiankunSlave = process.env.QIANKUN_SLAVE === 'true';
@@ -192,7 +192,7 @@ class WebpackConfigBuilder {
     this.pluginsRegistry.DefinePlugin = (options = {}) => {
       const webpack = safeRequire('webpack');
       return webpack ? new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(this.isDev ? 'development' : 'production'),
+        'process.env.APP_ENV': JSON.stringify(this.isDev ? 'development' : 'production'),
         ...options
       }) : null;
     };

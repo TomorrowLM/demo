@@ -40,7 +40,7 @@ function qiankunConfigFn({ projectName, config }) {
 
 function configAsset(config) {
   console.log('configAsset', process.env.VUE_APP_IS_QIANKUN);
-  const publicPath = process.env.NODE_ENV === 'production' ? '' : `fonts/`;
+  const publicPath = process.env.APP_ENV === 'production' ? '' : `fonts/`;
   console.log('publicPath', publicPath);
   const fontRule = config.module.rule('fonts');
   fontRule.uses.clear(); // 先清除 vue 默认的配置，不然会有问题

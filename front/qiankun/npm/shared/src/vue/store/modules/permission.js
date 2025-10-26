@@ -122,7 +122,7 @@ export function filterDynamicRoutes(routes) {
 }
 
 export const loadView = (view) => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.APP_ENV === 'development') {
     return (resolve) => require([`@/views/${view}`], resolve)
   } else {
     // 使用 import 实现生产环境的路由懒加载

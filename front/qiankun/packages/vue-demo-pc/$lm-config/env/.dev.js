@@ -1,6 +1,5 @@
+import baseConfig from './.env.js';
 export default {
-  baseUrl: {
-    dev: 'http://localhost:8080',
-    prod: 'http://localhost:8080'
-  }
+  ...baseConfig,
+  NODE_ENV: "dev"
 }
