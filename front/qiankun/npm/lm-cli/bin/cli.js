@@ -17,7 +17,7 @@ const frameworks = {
     devDependencies: {
       build: [{ name: '@vue/cli-service', version: '~5.0.0' }],
       types: [{ name: '@types/node', version: '^17.0.0' }],
-      plugins: [{ name: 'unplugin-vue-components', version: '^0.22.0' }]
+      plugins: [{ name: 'unplugin-vue-components', version: '^0.22.0' }, { name: 'cross-env', version: '^7.0.3' }]
     }
   },
   react: {
@@ -190,15 +190,15 @@ async function main() {
       }
     });
     console.log(normalDeps, devDeps, 'normalDeps');
-    
+
     // 获取frameworks配置中的版本信息
     const frameworkConfig = frameworks[framework];
     const allDeps = { ...frameworkConfig.dependencies, ...frameworkConfig.devDependencies };
-    
+
     // 构建带版本的依赖数组
     const normalDepsWithVersion = [];
     const devDepsWithVersion = [];
-    
+
     // 处理普通依赖
     normalDeps.forEach(depName => {
       Object.entries(allDeps).forEach(([category, deps]) => {
@@ -214,7 +214,7 @@ async function main() {
         });
       });
     });
-    
+
     // 处理开发依赖
     devDeps.forEach(depName => {
       Object.entries(allDeps).forEach(([category, deps]) => {
@@ -230,7 +230,7 @@ async function main() {
         });
       });
     });
-    
+
     if (normalDepsWithVersion.length > 0) {
       await installPackages(normalDepsWithVersion);
     }

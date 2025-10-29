@@ -679,6 +679,9 @@ importers:
       '@vue/cli-service':
         specifier: ~5.0.9
         version: 5.0.9(@vue/compiler-sfc@3.5.22)(encoding@0.1.13)(esbuild@0.18.20)(lodash@4.17.21)(underscore@1.12.1)(vue-template-compiler@2.7.16)(vue@2.6.14)(webpack-sources@3.3.3)
+      cross-env:
+        specifier: 7.0.3
+        version: 7.0.3
       unplugin-vue-components:
         specifier: 0.22.0
         version: 0.22.0(@babel/parser@7.28.5)(esbuild@0.18.20)(vue@2.6.14)(webpack@5.102.1(esbuild@0.18.20))

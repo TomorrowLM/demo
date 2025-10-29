@@ -1,8 +1,6 @@
-// 注意：这些依赖应该在使用时动态引入，而不是在模块级别引入
-// const path = require("path");
-// const autoprefixer = require('autoprefixer');
-// const pxtorem = require('postcss-pxtorem');
-// const webpack = require("webpack");
+
+
+
 
 const resolveFn = (dir: string) => {
   // 在实际使用时需要动态引入path模块
@@ -178,7 +176,6 @@ const webpackBaseConfig = (processVars: any, config: any, resolve: (path: string
   config.resolve.alias = {
     ...(aliasConfigFn(resolve) || {})
   }
-  // config.plugins.push(...commonPlugin())
   config.plugins = [...config.plugins || [], ...commonPlugin()]
   if (isProd) {
     // 在生产模式下使用 chunkhash 或 contenthash

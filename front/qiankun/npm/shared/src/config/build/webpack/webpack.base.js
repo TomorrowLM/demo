@@ -448,12 +448,6 @@ const webpackConfigBuilder = new WebpackConfigBuilder();
 const webpackConfig = {
   configBuilder: webpackConfigBuilder,
   createConfigBuilder: () => new WebpackConfigBuilder(),
-  createDefaultConfig: () => {
-    if (!isNode || isBuildTime) {
-      return {};
-    }
-    return webpackConfigBuilder.createDefaultConfig().getConfig();
-  },
 };
 
 // 只使用 CommonJS 导出，移除 ES 模块导出

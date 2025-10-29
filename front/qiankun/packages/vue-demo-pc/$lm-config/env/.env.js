@@ -7,4 +7,5 @@ export default {
   APP_Build_Path: '/vue2-pc/',
   APP_Build_Qiankun_Path: '/qiankun/child/vue2-pc/',
   APP_PROXY_API: '/vue2-pc/api/',
+  APP_OUTPUTDIR: '../dist/qiankun/child/vue2-pc'
 };

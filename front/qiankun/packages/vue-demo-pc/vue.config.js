@@ -5,21 +5,19 @@ const {
   buildConfig,
   LM_ENV_CONFIG
 } = require('@lm/shared/config')
-const resolve = dir => path.join(__dirname, dir)
-
 console.log('vue.config');
 console.log('LM_ENV_CONFIG', LM_ENV_CONFIG)
 const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
 
 module.exports = defineConfig({
-  ...config,
+  // ...config,
   configureWebpack: config => {
     config.plugins = config.plugins || [];
     // config.plugins.push(new webpack.DefinePlugin({
     //   'process.env.APP_ENV': JSON.stringify(process.env.APP_ENV || ''),
     //   'process.env.RUNTIME_APP_ENV': JSON.stringify(process.env.APP_ENV || '')
     // }));
-    webpackBaseConfig(process.env, config, resolve)
+    webpackBaseConfig()
     config.externals = {
       BMap: 'window.BMap', // 百度地图
       AMap: 'AMap' // 高德地图

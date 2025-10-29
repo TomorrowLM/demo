@@ -1,5 +1,5 @@
 import baseConfig from './.env.js';
 export default {
   ...baseConfig,
-  NODE_ENV: "dev"
+  NODE_ENV: "local.dev",
 }
