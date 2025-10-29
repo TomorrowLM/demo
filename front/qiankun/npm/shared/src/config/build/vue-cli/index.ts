@@ -25,15 +25,13 @@ const commonPlugin = () => {
   ];
 };
 const assetsCDN = {
-  // webpack build externals
-  // externals: {
-  //   vue: 'Vue',
-  //   'vue-router': 'VueRouter',
-  //   vuex: 'Vuex',
-  //   axios: 'axios'
-  // },
+  externals: {
+    vue: 'Vue',
+    'vue-router': 'VueRouter',
+    vuex: 'Vuex',
+    axios: 'axios'
+  },
   css: [],
-  // https://unpkg.com/browse/vue@2.6.10/
   js: [
     '//cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
     '//cdn.jsdelivr.net/npm/vue-router@3.2.0/dist/vue-router.min.js',
@@ -222,14 +220,6 @@ const baseConfig = (processVars: any) => {
     ...cssConfig()
   }
 }
-// export default {
-//   commonPlugin,
-//   aliasConfigFn,
-//   webpackBaseConfig,
-//   baseConfig,
-//   cssConfig
-// };
-
 module.exports = {
   commonPlugin,
   aliasConfigFn,

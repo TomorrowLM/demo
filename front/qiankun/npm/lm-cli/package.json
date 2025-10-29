@@ -1,0 +1,28 @@
+{
+  "name": "@lm/cli",
+  "version": "1.0.0",
+  "description": "CLI tool for installing web framework dependencies",
+  "main": "bin/cli.js",
+  "bin": {
+    "lm-cli": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "web",
+    "framework",
+    "dependencies"
+  ],
+  "author": "LM",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
