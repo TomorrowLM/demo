@@ -1,39 +1,25 @@
-const path = require('path')
+/**
+ * Vue2（Vue CLI）项目构建入口
+ * - 使用共享封装的 Vue2CliBuilder，统一多项目构建能力
+ * - 可按需配置 externals、开发阶段分包优化等
+ */
 const { defineConfig } = require('@vue/cli-service')
-const autoprefixer = require('autoprefixer') // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
-const {
-  buildConfig,
-  LM_ENV_CONFIG
-} = require('@lm/shared/config')
-console.log('vue.config');
-console.log('LM_ENV_CONFIG', LM_ENV_CONFIG)
-const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true'
+// 说明：此路径依赖 @lm/shared/config 包的解析规则，若不生效可替换为相对路径
+const Vue2CliBuilder = require('@lm/shared/config/build/vue-cli/vue2.builder.js')
 
-module.exports = defineConfig({
-  // ...config,
-  configureWebpack: config => {
-    config.plugins = config.plugins || [];
-    // config.plugins.push(new webpack.DefinePlugin({
-    //   'process.env.APP_ENV': JSON.stringify(process.env.APP_ENV || ''),
-    //   'process.env.RUNTIME_APP_ENV': JSON.stringify(process.env.APP_ENV || '')
-    // }));
-    webpackBaseConfig()
-    config.externals = {
-      BMap: 'window.BMap', // 百度地图
-      AMap: 'AMap' // 高德地图
-    }
-    isQiankun && qiankunConfigFn({ projectName: 'web2', config })
+// 构建器实例：可根据项目需要调整参数
+const builder = new Vue2CliBuilder({
+  // 自定义外部依赖（示例：地图 SDK）
+  externals: {
+    BMap: 'window.BMap',
+    AMap: 'AMap'
   },
-  chainWebpack: config => {
-    if (isQiankun) {
-      // configAsset(config)
-    }
-    if (process.env.NODE_ENV === 'development') {
-      config.optimization.minimize(true) // 开启压缩js代码
-      config.optimization.splitChunks({
-        // 开启代码分割
-        chunks: 'all'
-      })
-    }
-  }
+  // 开发环境是否开启分包优化（即使在开发也做 splitChunks）
+  enableSplitChunksInDev: true
+  // 进阶用法（可选）：
+  // chainExtenders: [config => { /* 在 chainWebpack 中追加自定义规则 */ }],
+  // configureExtenders: [config => { /* 在 configureWebpack 中修改配置 */ }]
 })
+
+// 导出 Vue CLI 配置
+module.exports = defineConfig(builder.createConfig())

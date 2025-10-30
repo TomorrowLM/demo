@@ -1,5 +1,5 @@
 {
-  "name": "@lm/eslint-plugin-lint",
+  "name": "@lm/lint",
   "version": "1.0.0",
   "main": "./lib",
   "scripts": {
