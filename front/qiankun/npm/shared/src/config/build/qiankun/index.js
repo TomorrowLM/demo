@@ -6,7 +6,7 @@
  */
 // 确保这个路径指向正确的位置
 // const { getProjectName } = require('@/scripts/config/getProjectPackageJson');
-import { getProjectName }  from '@/scripts/config/getProjectPackageJson.js';
+import { getProjectName }  from '../core/scripts/getProjectPackageJson.js';
 
 function qiankunConfigFn({ projectName, config }) {
   console.log('qiankunConfig', getProjectName());

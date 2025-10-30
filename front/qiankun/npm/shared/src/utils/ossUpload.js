@@ -1,3 +1,7 @@
+/**
+ * 核心原则：前端直接上传到 OSS，后端只负责颁发"许可证"（安全令牌）。
+ */
+
 import { getScrip } from "../api";
 
 export default class OssUpload {
