@@ -1,15 +1,17 @@
-// import * as LM_ENV_CONFIG from "./env/index.js";
-// import * as webpackConfig from "./build/webpack/webpack.base.js";
-// import * as qiankunConfig from "./build/qiankun/index.js";
-// import * as vueConfig from "./build/vue-cli/index.js";
-const webpackConfig = require('./webpack/webpack.base.js');
-const qiankunConfig = require('./qiankun/index');
-const vueConfig = require('./vue-cli/index');
+/**
+ * @lm/shared/config 入口聚合（CommonJS）
+ * - 暴露 buildConfig 与 LM_ENV_CONFIG
+ * - 增加 Vue2CliBuilder 与通用 webpackHelpers，供 React/Webpack 构建复用
+ * - 保持与历史导出兼容，并提供 default 导出
+ */
+const Vue2CliBuilder = require('./vue-cli/index.builder.js');
 
-export default {
+// CommonJS 导出
+module.exports = {
+  /**
+   * 构建相关导出
+   */
   buildConfig: {
-    webpackConfig,
-    vueConfig,
-    qiankunConfig,
+    Vue2CliBuilder,  // 新增：Vue CLI 下的 Vue2 构建类
   },
-}
+};

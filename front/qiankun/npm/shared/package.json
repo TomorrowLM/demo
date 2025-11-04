@@ -9,9 +9,9 @@
       "import": "./lib/esm/index.js",
       "require": "./lib/cjs/index.js"
     },
-    "./config": {
-      "import": "./lib/esm/config/index.js",
-      "require": "./lib/cjs/config/index.js"
+    "./build": {
+      "import": "./lib/esm/build/config/index.js",
+      "require": "./lib/cjs/config/build/index.js"
     }
   },
   "directories": {

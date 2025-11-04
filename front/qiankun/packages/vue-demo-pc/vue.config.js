@@ -4,8 +4,9 @@
  * - 可按需配置 externals、开发阶段分包优化等
  */
 const { defineConfig } = require('@vue/cli-service')
+console.log('vue.config.js', require('@lm/shared/build')['__require']())
 // 说明：此路径依赖 @lm/shared/config 包的解析规则，若不生效可替换为相对路径
-const Vue2CliBuilder = require('@lm/shared/config/build/vue-cli/vue2.builder.js')
+const Vue2CliBuilder = require('@lm/shared/build')['__require']().buildConfig.Vue2CliBuilder
 
 // 构建器实例：可根据项目需要调整参数
 const builder = new Vue2CliBuilder({

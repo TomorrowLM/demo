@@ -3,23 +3,12 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 const ora = require('ora');
 const { execSync } = require('child_process');
-
+const vue2Deps = require('./dependencies/vue2')
+const vue2ClassComponent = require('./dependencies/vue2-class-component')
+console.log(vue2ClassComponent.dependencies.core,11)
 const frameworks = {
-  vue: {
-    description: 'Vue.js - 渐进式 JavaScript 框架',
-    dependencies: {
-      core: [{ name: 'vue', version: '^2.6.14' }],
-      router: [{ name: 'vue-router', version: '^3.5.1' }],
-      state: [{ name: 'vuex', version: '^3.6.2' }],
-      ui: [{ name: 'element-ui', version: '^2.15.12' }],
-      utils: [{ name: 'axios', version: '^0.27.2' }, { name: 'dayjs', version: '^1.11.0' }]
-    },
-    devDependencies: {
-      build: [{ name: '@vue/cli-service', version: '~5.0.0' }],
-      types: [{ name: '@types/node', version: '^17.0.0' }],
-      plugins: [{ name: 'unplugin-vue-components', version: '^0.22.0' }, { name: 'cross-env', version: '^7.0.3' }]
-    }
-  },
+  vue2: vue2Deps,
+  vue2ClassComponent: vue2ClassComponent,
   react: {
     description: 'React - 用于构建用户界面的 JavaScript 库',
     dependencies: {

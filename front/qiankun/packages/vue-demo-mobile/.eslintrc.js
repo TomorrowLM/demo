@@ -5,7 +5,7 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:@lm/eslint-plugin-lint/vue'
+    'plugin:@lm/lint/vue'
   ],
   rules: {
     semi: [0, "never"]
