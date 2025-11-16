@@ -19,7 +19,7 @@ const replace = require('@rollup/plugin-replace')        // 用于替换代码�
  * 可以减小打包体积，避免重复打包常用库
  */
 const external = [
-  // 'axios', 
+  'axios',
   'js-md5', 'lodash', 'qs', 'tslib', 'vue', 'webpack', 'path', 'fs',
   'autoprefixer', 'postcss-pxtorem', 'tapable', 'webpack-sources',
   'glob-to-regexp', 'schema-utils', 'acorn', '@webassemblyjs/ast',
@@ -99,8 +99,8 @@ const createConfig = (input, output, isBrowser = false) => ({
   input,                              // 入口文件
   output,                             // 输出配置
   plugins: createPlugins(isBrowser),  // 根据环境创建插件配置
-  external: isBrowser ? ['js-md5', 'lodash', 'qs', 'tslib'] : external.filter(dep => dep !== 'axios') // 外部依赖配置，移除 axios
-  // 浏览器环境只排除基本依赖，Node.js 环境排除所有 external 数组中的依赖
+  external: isBrowser ? ['axios', 'js-md5', 'lodash', 'qs', 'tslib'] : external
+  // 浏览器环境和 Node.js 环境都将 axios 作为外部依赖
 })
 
 /**
@@ -109,13 +109,13 @@ const createConfig = (input, output, isBrowser = false) => ({
  */
 const configs = [
   // 浏览器 ESM 构建配置
-  // createConfig('src/index.ts', {       // 入口文件
-  //   dir: 'lib/esm',                    // 输出目录
-  //   format: 'esm',                     // 输出格式：ES 模块
-  //   preserveModules: true,             // 保持模块结构，不合并模块
-  //   preserveModulesRoot: 'src',        // 模块根目录，输出路径会从这里开始
-  //   exports: 'auto',                   // 自动检测模块的导出类型
-  // }, true),                 // 指定为浏览器环境
+  createConfig('src/index.ts', {       // 入口文件
+    dir: 'lib/esm',                    // 输出目录
+    format: 'esm',                     // 输出格式：ES 模块
+    preserveModules: true,             // 保持模块结构，不合并模块
+    preserveModulesRoot: 'src',        // 模块根目录，输出路径会从这里开始
+    exports: 'auto',                   // 自动检测模块的导出类型
+  }, true),                 // 指定为浏览器环境
 
   // // Node.js CommonJS 构建配置
   createConfig('src/index.ts', {       // 入口文件

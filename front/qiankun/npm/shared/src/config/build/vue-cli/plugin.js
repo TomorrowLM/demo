@@ -9,7 +9,7 @@
  */
 
 // 引入通用工具（core）
-const helpers = require('../core/webpack.helpers.js');
+const helpers = require('../core/core.helpers.js');
 
 /**
  * externals 插件（适配 Vue2 configureWebpack 阶段）
@@ -27,12 +27,13 @@ function externalsPlugin(map = {}) {
  * alias 插件（适配 Vue2 configureWebpack 阶段）
  * - 将 alias 合并进 webpack.resolve.alias
  */
-function aliasPlugin(alias = {}) {
-  return function plugin(ctx) {
-    if (ctx.stage === 'configureWebpack' && ctx.config) {
-      ctx.helpers.mergeAliases(ctx.config, alias || {});
-    }
-  };
+/**
+ * 别名插件函数，用于配置Webpack的路径别名
+ * @param {Object} config - Webpack配置对象
+ * @param {Object} [alias={}] - 路径别名配置对象，默认为空对象
+ */
+function aliasPlugin() {
+  return helpers.fetchAlias()
 }
 
 /**
@@ -96,21 +97,8 @@ function htmlCdnPlugin(cdn = {}) {
  * - 通过 helpers.createProxyEntry 合并代理
  * - 注意：此能力更适合在顶层 vue.config.js 的 devServer 字段处理，本插件仅做示例
  */
-function devServerProxyPlugin(rules = []) {
-  return function plugin(ctx) {
-    if (ctx.stage !== 'configureWebpack' || !ctx.config) return;
-    if (!Array.isArray(rules) || !rules.length) return;
-    const patch = {};
-    for (const rule of rules) {
-      if (!rule || !rule.baseUrl || !rule.target) continue;
-      Object.assign(patch, helpers.createProxyEntry(rule.baseUrl, rule.target, rule.opts));
-    }
-    ctx.config.devServer = ctx.config.devServer || {};
-    ctx.config.devServer.proxy = {
-      ...(ctx.config.devServer.proxy || {}),
-      ...patch,
-    };
-  };
+function devServerProxyPlugin(GLOBAL_CONFIG) {
+  return helpers.createProxyEntry()[GLOBAL_CONFIG.PROJECT_NAME]
 }
 
 module.exports = {

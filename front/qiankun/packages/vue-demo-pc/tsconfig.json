@@ -1,22 +1,39 @@
 {
   "extends": "../../tsconfig.base.json",
-  "references": [
-    {
-      "path": "../../tsconfig.base.json"
-    }
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true,
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "noEmit": true,
+    "noImplicitAny": false
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/**/*.js",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "tests/**/*.js"
   ],
-  // "include": [
-  //   "src/**/*.js",
-  //   "src/**/*.ts",
-  //   "src/**/*.tsx",
-  //   "src/**/*.vue",
-  //   "tests/**/*.ts",
-  //   "tests/**/*.tsx",
-  //   "src/shims-vue.d.ts",
-  //   "src/globals.d.ts"
-  // ],
-  // "exclude": [
-  //   "node_modules",
-  //   "dist"
-  // ]
+  "exclude": ["node_modules"]
 }

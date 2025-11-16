@@ -3,9 +3,9 @@
  * - 严禁出现与具体框架强耦合的逻辑（如 Vue/React 插件）
  * - 仅包含通用的 webpack 配置拼装方法与“安全”插件注入
  */
-
 const path = require('path');
-
+const baseConfig = require('./baseConfig');
+const { alias, devServer } = baseConfig
 // 安全 require（CI/打包流程等环境下不抛错）
 function safeRequire(name) {
   try {
@@ -15,7 +15,6 @@ function safeRequire(name) {
     return null;
   }
 }
-
 /**
  * 深合并（对象/数组），尽量无副作用
  * - 仅实现构建配置场景够用的能力，避免引入第三方依赖
@@ -23,6 +22,7 @@ function safeRequire(name) {
 function isPlainObject(obj) {
   return Object.prototype.toString.call(obj) === '[object Object]';
 }
+
 function deepMerge(target, source) {
   if (Array.isArray(target) && Array.isArray(source)) {
     return [...target, ...source];
@@ -44,7 +44,6 @@ function deepMerge(target, source) {
   }
   return source !== undefined ? source : target;
 }
-
 /**
  * 应用文件名 hash 策略
  * - isProd = true 使用 contenthash
@@ -64,12 +63,9 @@ function applyFilenameHashing(config, isProd) {
 /**
  * 合并别名
  */
-function mergeAliases(config, aliases = {}) {
-  config.resolve = config.resolve || {};
-  config.resolve.alias = {
-    ...(config.resolve.alias || {}),
-    ...aliases,
-  };
+function fetchAlias(mergeAlias) {
+  console.log('alias11', alias)
+  return alias
 }
 
 /**
@@ -107,33 +103,10 @@ function mergeExternals(config, externals = {}) {
  * - baseUrl: 业务侧请求前缀（如 /api）
  * - apiHost: 目标代理地址
  */
-function createProxyEntry(baseUrl, apiHost, opts = {}) {
-  const {
-    changeOrigin = true,
-    secure = false,
-    xfwd = false,
-    ws = false,
-    rewriteTo = '/',
-  } = opts || {};
-
-  return {
-    [baseUrl]: {
-      target: apiHost,
-      changeOrigin,
-      secure,
-      xfwd,
-      ws,
-      pathRewrite: { [baseUrl]: rewriteTo },
-    },
-  };
+function createProxyEntry() {
+  return devServer
 }
 
-/**
- * 合并/覆盖 devServer
- */
-function mergeDevServer(baseDevServer = {}, patch = {}) {
-  return deepMerge(baseDevServer || {}, patch || {});
-}
 
 /**
  * 从 assetsCDN 结构中拿到可注入到 HTML 的链接（纯数据，不做注入动作）
@@ -150,11 +123,10 @@ module.exports = {
   safeRequire,
   deepMerge,
   applyFilenameHashing,
-  mergeAliases,
+  fetchAlias,
   addDefinePlugin,
   addProvidePlugin,
   mergeExternals,
   createProxyEntry,
-  mergeDevServer,
   normalizeCdnAssets,
 };

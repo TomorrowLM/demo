@@ -27,4 +27,21 @@ function getProjectPath() {
 
   return null;
 }
+function paths() {
+  return {
+    appRoot: process.cwd(),
+    resolveApp: (...segs) => path.resolve(process.cwd(), ...segs),
+    resolveSrcDir: () => path.resolve(process.cwd(), 'src'),
+    getPublicPath: (v, fallback = '/') => {
+      const ensureSlash = (p, needsSlash) => {
+        const has = p.endsWith('/')
+        if (has && !needsSlash) return p.slice(0, -1)
+        if (!has && needsSlash) return p + '/'
+        return p
+      }
+      const val = v ?? process.env.PUBLIC_PATH ?? fallback
+      return ensureSlash(val, true)
+    },
+  }
+}
 module.exports = { getProjectPath };
