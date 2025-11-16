@@ -3,9 +3,9 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
-    "resolvePackageJsonExports": true,
-    "resolvePackageJsonImports": true,
+    // "moduleResolution": "node",
+    // "resolvePackageJsonExports": true,
+    // "resolvePackageJsonImports": true,
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

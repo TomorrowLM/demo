@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import $lm from '@lm/shared/lib/cjs/utils';
 import store from '@/store';
 Vue.use(VueRouter); // 安装路由功能
 const isProd = process.env.NODE_ENV === 'production';
@@ -21,7 +20,7 @@ const router: any = createRouter();
 
 // 重置router，否则下一个人登陆后访问的是上一个人的路由信息
 export function resetRouter() {
-  const newRouter = createRouter();
+  const newRouter: any = createRouter();
   router.matcher = newRouter.matcher; // reset router
 }
 
