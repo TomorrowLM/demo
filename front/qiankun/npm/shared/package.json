@@ -41,7 +41,7 @@
   "dependencies": {
     "js-md5": "^0.7.3",
     "lodash": "^4.17.21",
-    "tslib": "^2.6.2"
+    "axios": "^1.7.9"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.1",
@@ -54,20 +54,13 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.17",
     "@types/webpack-env": "^1.18.5",
-    "axios": "^1.7.9",
-    "buffer": "^6.0.3",
-    "crypto-browserify": "^3.12.1",
-    "path-browserify": "^1.0.1",
     "process": "^0.11.10",
-    "qs": "^6.14.0",
     "rimraf": "^5.0.5",
     "rollup": "^4.40.2",
     "rollup-plugin-esbuild": "^6.2.1",
-    "stream-browserify": "^3.0.0",
     "typescript": "^5.4.5",
-    "util": "^0.12.5",
-    "vm-browserify": "^1.1.2",
-    "webpack": "^5.0.0"
+    "webpack": "^5.0.0",
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
     "css-minimizer-webpack-plugin": "^3.0.0 || ^4.0.0",

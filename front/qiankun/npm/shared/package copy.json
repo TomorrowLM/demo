@@ -6,12 +6,19 @@
   "types": "./lib/esm/types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./lib/esm/types/index.d.ts",
       "import": "./lib/esm/index.js",
       "require": "./lib/cjs/index.js"
     },
-    "./config": {
-      "import": "./lib/esm/config/index.js",
-      "require": "./lib/cjs/config/index.js"
+    "./build": {
+      "types": "./lib/esm/types/config/build/index.d.ts",
+      "import": "./lib/esm/build/config/index.js",
+      "require": "./lib/cjs/config/build/index.js"
+    },
+    "./utils": {
+      "types": "./lib/esm/types/utils/index.d.ts",
+      "import": "./lib/esm/utils/index.js",
+      "require": "./lib/cjs/utils/index.js"
     }
   },
   "directories": {
@@ -37,6 +44,7 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -58,11 +66,12 @@
     "stream-browserify": "^3.0.0",
     "typescript": "^5.4.5",
     "util": "^0.12.5",
-    "vm-browserify": "^1.1.2"
+    "vm-browserify": "^1.1.2",
+    "webpack": "^5.0.0"
   },
   "peerDependencies": {
     "css-minimizer-webpack-plugin": "^3.0.0 || ^4.0.0",
-    "webpack": "^5.0.0",
+    "webpack": ">=4",
     "webpack-cli": "^4.0.0"
   },
   "peerDependenciesMeta": {}
