@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,34 +9,23 @@
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
     <link rel="stylesheet" href="./styles.css">
 </head>
+
 <body>
     <div id="app">
         <div class="app-container">
             <div class="editor-panel">
                 <h2>📝 Markdown 编辑器</h2>
-                <textarea 
-                    v-model="markdownText" 
-                    class="editor"
-                    placeholder="在这里输入 Markdown 内容..."
-                    rows="20"
-                ></textarea>
+                <textarea v-model="markdownText" class="editor" placeholder="在这里输入 Markdown 内容..." rows="20"></textarea>
             </div>
-            
+
             <div class="preview-panel">
                 <h2>👀 实时预览</h2>
                 <div class="markdown-content" v-html="compiledMarkdown"></div>
-                
-                <!-- 渲染引用组件 -->
-                <reference-component 
-                    v-for="ref in references" 
-                    :key="ref.id"
-                    :ref-id="ref.id"
-                    :title="ref.title"
-                    :content="ref.content"
-                    @click="highlightRef(ref.id)"
-                />
+
+                渲染引用组件
+                <reference-component v-for="ref in references" :key="ref.id" :ref-id="ref.id" :title="ref.title" :content="ref.content" @click="highlightRef(ref.id)" />
             </div>
-            
+
             <reference-panel :references="references" @ref-click="highlightRef" />
         </div>
     </div>
@@ -43,5 +33,30 @@
     <script src="./src/components/ReferenceComponent.js"></script>
     <script src="./src/components/ReferencePanel.js"></script>
     <script src="./src/app.js"></script>
+    <!-- <script>
+        // 在Vue实例挂载后，将handleRefClick方法暴露为全局函数
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用MutationObserver等待Vue实例挂载完成
+            const observer = new MutationObserver(function(mutations, obs) {
+                const vueApp = document.getElementById('app').__vue__;
+                if (vueApp) {
+                    // 将Vue实例中的handleRefClick方法暴露为全局函数
+                    window.handleRefClick = function(event) {
+                        console.log('Global handleRefClick called');
+                        vueApp.handleRefClick(event);
+                    };
+                    // 停止观察
+                    obs.disconnect();
+                }
+            });
+
+            // 开始观察
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
+    </script> -->
 </body>
+
 </html>
