@@ -1,17 +1,15 @@
 import Vue from 'vue';
-const App = resolved => require(['./App.vue'], resolved)
-// import App from './App.vue';
+// const App = resolved => require(['./App.vue'], resolved)
+import App from './App.vue';
 import router from './router';
 import store from './store';
-import '@/utils/index';
-import '@/utils/rem';
-import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+// import '@/utils/index';
+// import '@/utils/rem';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // import '@/styles/common.scss';
-import './public-path';
-import { themeSetup } from './loadTheme';
+// import './public-path';
+// import { themeSetup } from './loadTheme';
 // import BaiduMap from 'vue-baidu-map';
 
 // require('@/styles/themes/light.scss'); //引入
@@ -21,7 +19,7 @@ Vue.use(ElementUI);
 // Vue.use(BaiduMap, {
 //   ak: 'RALHVFnPxQdDB42THG2M3cUDzwSf1zV9',
 // });
-Vue.use(Antd);
+// Vue.use(Antd);
 
 Vue.config.productionTip = false;
 // new Vue({

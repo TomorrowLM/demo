@@ -30,7 +30,7 @@ import Sidebar from '@/views/frame/Sidebar.vue';
 import TagNav from '@/views/frame/TagNav.vue';
 
 // import ws from '@/utils/websocket';
-import { userInfo } from '@/api';
+import { userInfoApi } from '@/api';
 @Component({
   components: { Sidebar, Header, TagNav },
   computed: {
@@ -62,7 +62,7 @@ export default class Layout extends Vue {
       // ws.initWebsocket();
     });
 
-    // userInfo()
+    // userInfoApi()
     //   .then(res => {
     //     console.log(res.data);
     //     this.$store.commit('change_role', {
@@ -89,9 +89,9 @@ export default class Layout extends Vue {
     }
 
     // 动态加载主应用注册的web components
-    if (window.mainAppComponents && window.mainAppComponents.registerWebComponents) {
-      window.mainAppComponents.registerWebComponents();
-    }
+    // if (window.mainAppComponents && window.mainAppComponents.registerWebComponents) {
+    //   window.mainAppComponents.registerWebComponents();
+    // }
   }
 
   goRouter() {

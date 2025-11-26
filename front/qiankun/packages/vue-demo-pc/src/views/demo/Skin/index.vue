@@ -43,7 +43,7 @@ export default class Access extends Vue {
 <style lang="scss" scoped>
 .skin {
   // @include themify();
-  color: $text;
+  //color: $text;
   // 使用主题
   // @include themify() {
   //   color: themed(text);
@@ -53,6 +53,6 @@ export default class Access extends Vue {
   // @include themify() {
   //   color: red;
   // }
-  color: $text;
+  //color: $text;
 }
 </style>

@@ -86,7 +86,6 @@
 </template>
 <script lang="ts">
 // import Component from 'vue-class-component'
-import { ref } from 'vue'
 
 import { Component, Vue, Watch } from 'vue-property-decorator'
 // import Header from "components/Header.vue";

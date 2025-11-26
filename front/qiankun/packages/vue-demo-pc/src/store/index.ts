@@ -3,8 +3,8 @@ import Vuex from 'vuex';
 import getters from './getters';
 
 import router from './modules/router';
-import user from './modules/user';
-import permission from './modules/permission';
+import user from './modules/user.js';
+import permission from './modules/permission.js';
 
 
 Vue.use(Vuex);

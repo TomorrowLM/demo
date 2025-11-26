@@ -1,6 +1,5 @@
-import $lm from '@lm/shared/lib/cjs/utils'
-
 import { userInfoApi } from '@/api'
+import lodash from 'lodash'
 //网上说后端给的动态路由组件地址不能包含@/views/
 export const loadView = (view) => {
   return () => import(`@/views/${view}`)
@@ -186,7 +185,7 @@ const permission = {
         data: { role, name }
       })// 修改用户信息
       console.log(state.whiteRoutes, 'state.whiteRoutes')
-      state.routes = $lm.lodash.cloneDeep(state.whiteRoutes) // 初始化routes为静态路由，同时深拷贝防止影响静态路由
+      state.routes = lodash.cloneDeep(state.whiteRoutes) // 初始化routes为静态路由，同时深拷贝防止影响静态路由
       filterAsyncRoutes(whiteRoutes, asyncRoutes, state.flatAsyncRoutes, state.routes, '')
       state.asyncRoutes = asyncRoutes
       state.commonMenu = state.routes[0].children; // 配置菜单栏

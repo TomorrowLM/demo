@@ -14,8 +14,7 @@ function useRequest(requestBody, config) {
   var params = requestBody.params;
   var request = requestBody.request;
   var resData = {};
-  console.log(123123, requestBody, params, request);
-  
+
   function requestFn(data) {
     var source = axios.CancelToken.source();
     var preventRequestConfig = {
@@ -28,14 +27,14 @@ function useRequest(requestBody, config) {
       triggerTime: new Date().valueOf(),
       cancel: source.cancel
     };
-    
+
     // 检查是否存在重复请求，若存在则取消上次的请求
     if (preventRequest.checkRepeatRequest(preventRequestConfig.config)) {
       preventRequest.getRequestMapInfo(preventRequestConfig.config).cancel('重复请求');
     }
-    
+
     preventRequest.addRequest(preventRequestConfig);
-    
+
     return request({
       method: params.method,
       url: params.url,
@@ -43,15 +42,14 @@ function useRequest(requestBody, config) {
       data: params.method !== 'get' && data,
       // 将 cancelToken 属性设置为上面创建的 CancelToken 实例
       cancelToken: source.token
-    }).then(function(res) {
-      console.log(res, 'res');
+    }).then(function (res) {
       if (res.data) {
         preventRequest.getRequestMapInfo(preventRequestConfig.config).data = res;
       }
       return res;
     });
   }
-  
+
   function cacheRequest(data) {
     var preventRequestConfig = {
       config: {
@@ -62,15 +60,15 @@ function useRequest(requestBody, config) {
       },
       triggerTime: new Date().valueOf()
     };
-    
-    var triggerTime = preventRequest.getRequestMapInfo(preventRequestConfig.config) && 
-                     preventRequest.getRequestMapInfo(preventRequestConfig.config).triggerTime;
-    
-    resData = preventRequest.getRequestMapInfo(preventRequestConfig.config) && 
-             preventRequest.getRequestMapInfo(preventRequestConfig.config).data;
-    
+
+    var triggerTime = preventRequest.getRequestMapInfo(preventRequestConfig.config) &&
+      preventRequest.getRequestMapInfo(preventRequestConfig.config).triggerTime;
+
+    resData = preventRequest.getRequestMapInfo(preventRequestConfig.config) &&
+      preventRequest.getRequestMapInfo(preventRequestConfig.config).data;
+
     console.log(preventRequest.getRequestMapInfo(preventRequestConfig.config), 123123);
-    
+
     if (new Date().valueOf() - triggerTime < cacheTime && triggerTime && resData) {
       console.log('缓存请求', resData);
       return Promise.resolve(resData);
@@ -78,7 +76,7 @@ function useRequest(requestBody, config) {
       return requestFn(data);
     }
   }
-  
+
   return {
     resData: resData, //在commonjs并不能实现值的拷贝
     // loading,

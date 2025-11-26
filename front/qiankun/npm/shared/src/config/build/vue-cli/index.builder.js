@@ -20,19 +20,6 @@ class Vue2CliBuilder {
     console.log('GLOBAL_CONFIG', this.GLOBAL_CONFIG);
     this._plugins = []
   }
-  runPlugins(stage, ctx) {
-    if (!Array.isArray(this._plugins) || !this._plugins.length) return
-    for (const rec of this._plugins) {
-      const fn = rec && rec.fn
-      try {
-        fn && fn({ stage, ...ctx })
-      } catch (e) {
-        // 插件失败不应阻断构建
-        // eslint-disable-next-line no-console
-        console.warn(`[vue2.builder] plugin "${rec.name}" error:`, (e && e.message) || e)
-      }
-    }
-  }
   externalsPlugin() {
     const map = {}
     if (this.options && this.options.externals) Object.assign(map, this.options.externals)
@@ -52,36 +39,56 @@ class Vue2CliBuilder {
   devServerProxyPluginFactory() {
     return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG)
   }
+  commonPluginFactory() {
+    // 优先使用 consumer 提供的 webpack 实例（在创建 builder 时传入）
+    // 回退：在运行时动态 require（使用 Function 防止打包器静态分析到 require）
+    const webpackLocal = (this.options && this.options.webpack) || (() => {
+      try {
+        // 使用 Function 动态调用 require，避免打包器将 webpack 内联到产物中
+        // eslint-disable-next-line no-new-func
+        // return Function('return require("webpack")')();
+      } catch (e) {
+        // 没有可用的 webpack（例如在打包共享包时），降级返回空插件数组
+        console.warn('[Vue2CliBuilder] webpack not available at runtime. Consumer should provide webpack via options.webpack to enable DefinePlugin.');
+        return null;
+      }
+    })();
+
+    if (!webpackLocal) return [];
+
+    return [
+      new webpackLocal.DefinePlugin({
+        "process.env": this.GLOBAL_CONFIG.ENV_CONFIG
+      }),
+    ]
+  }
   createConfig() {
-    // 基础配置：publicPath/outputDir/sourceMap/devServer/css ...
-    const base = {}
     const self = this
     return {
       // 合并已有的基础配置
-      ...base,
       devServer: self.devServerProxyPluginFactory(this.options),
       /**
        * 直接访问 webpack 配置对象：应用公共别名、公用插件与文件命名策略等
        * 对应实现参考：vue-cli.webpackBaseConfig()
        */
       configureWebpack(config) {
-        config.plugins = config.plugins || []
         config.resolve = config.resolve || {}
         config.output = config.output || {}
-        self.externalsPlugin(config)
-        // 用户自定义 configureWebpack 扩展（优先执行）
-        if (Array.isArray(self.options.configureExtenders)) {
-          for (const extender of self.options.configureExtenders) {
-            try {
-              extender(config)
-            } catch (e) {
-              // eslint-disable-next-line no-console
-              console.warn('[vue2.builder] configureExtender error:', (e && e.message) || e)
-            }
-          }
-        }
-        // 统一执行“configureWebpack”阶段插件（helpers 通过 plugin 中转）
-        self.runPlugins('configureWebpack', { config, helpers: pluginHelpers, options: self.options })
+        config.plugins.push(...this.commonPluginFactory());
+        // self.externalsPlugin(config)
+        // // 用户自定义 configureWebpack 扩展（优先执行）
+        // if (Array.isArray(self.options.configureExtenders)) {
+        //   for (const extender of self.options.configureExtenders) {
+        //     try {
+        //       extender(config)
+        //     } catch (e) {
+        //       // eslint-disable-next-line no-console
+        //       console.warn('[vue2.builder] configureExtender error:', (e && e.message) || e)
+        //     }
+        //   }
+        // }
+        // // 统一执行“configureWebpack”阶段插件（helpers 通过 plugin 中转）
+        // self.runPlugins('configureWebpack', { config, helpers: pluginHelpers, options: self.options })
       },
       /**
        * 链式方式对 webpack 做精细化调整：
@@ -104,6 +111,5 @@ class Vue2CliBuilder {
   }
 }
 
+// 直接导出构造函数，避免懒加载问题
 module.exports = Vue2CliBuilder
-module.exports.default = Vue2CliBuilder
-module.exports.Vue2CliBuilder = Vue2CliBuilder

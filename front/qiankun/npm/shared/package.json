@@ -66,11 +66,12 @@
     "stream-browserify": "^3.0.0",
     "typescript": "^5.4.5",
     "util": "^0.12.5",
-    "vm-browserify": "^1.1.2"
+    "vm-browserify": "^1.1.2",
+    "webpack": "^5.0.0"
   },
   "peerDependencies": {
     "css-minimizer-webpack-plugin": "^3.0.0 || ^4.0.0",
-    "webpack": "^5.0.0",
+    "webpack": ">=4",
     "webpack-cli": "^4.0.0"
   },
   "peerDependenciesMeta": {}

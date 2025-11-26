@@ -3,7 +3,6 @@ import { repeatHandle } from './util'
 const preventRequest = repeatHandle
 const CancelToken = axios.CancelToken;
 let service = null;
-
 //code信息
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
@@ -73,34 +72,29 @@ const handleRequest = (config: any) => {
  */
 const handleResponse = async (response) => {
   if (response.data.code !== 200) {
+    new Error(codeMessage[response.data.code] || response.data.msg);
     return Promise.reject(response.data);
   }
   response.data && (preventRequest.getRequestMapInfo(response.config).data = response?.data)
   return Promise.resolve(response.data);
 };
-
-const serveceHandle = (baseURL: string) => {
-  console.log(baseURL, 'baseURL');
-  // 创建 axios 实例
-  service = axios.create({
-    baseURL: baseURL, // api base_url
-    timeout: 6000,// 请求超时时间
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-  console.log(service, 'service');
-  service.defaults.headers.post['Content-Type'] = 'application/json';
-  // request interceptor
-  service.interceptors.request.use(config => {
-    console.log('interceptors.request', config);
-    return handleRequest(config)
-  }, err)
-  // response interceptor
-  service.interceptors.response.use((response) => {
-    console.log('interceptors.response', response);
-    return handleResponse(response);
-  }, err)
-  return service;
+/**
+ * 创建 Axios 实例
+ */
+const axiosInstance = axios.create({
+  baseURL: process.env.APP_PROXY_API,
+  timeout: 60000,
+  withCredentials: true,
+});
+axiosInstance.interceptors.request.use(handleRequest, err);
+axiosInstance.interceptors.response.use(handleResponse, err);
+console.log(process.env, '123process.env.APP_PROXY_API');
+const request = {
+  get: (url, params, config) => {
+    return axiosInstance.get(url, { params, ...config }).then((res) => res)
+  },
+  post: (url, data, config) => {
+    return axiosInstance.post(url, data, config).then((res) => res)
+  }
 }
-export default serveceHandle
+export default request
