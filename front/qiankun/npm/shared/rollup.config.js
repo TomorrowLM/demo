@@ -100,7 +100,11 @@ const createPlugins = (isBrowser) => {
       entries: [
         { find: '@', replacement: path.resolve(__dirname, 'src') },
         { find: './utils', replacement: path.resolve(__dirname, 'src/utils') }
-      ]
+      ].concat(isBrowser ? [
+        // 在浏览器构建中排除 server/build 脚本，重定向到空 shim
+        { find: path.resolve(__dirname, 'src/config/build'), replacement: path.resolve(__dirname, 'src/shims/browser-build-shim') },
+        { find: './config/build', replacement: path.resolve(__dirname, 'src/shims/browser-build-shim') }
+      ] : [])
     }),
     // 解析模块路径和第三方依赖
     resolve({

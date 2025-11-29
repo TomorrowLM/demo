@@ -82,7 +82,7 @@ const handleResponse = async (response) => {
  * 创建 Axios 实例
  */
 const axiosInstance = axios.create({
-  baseURL: process.env.APP_PROXY_API,
+  baseURL: `${process.env.VUE_APP_PROXY_API}`,
   timeout: 60000,
   withCredentials: true,
 });

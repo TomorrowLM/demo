@@ -5,8 +5,7 @@
  */
 const { defineConfig } = require('@vue/cli-service')
 const webpack = require('webpack');
-const Vue2CliBuilder = require('@lm/shared/build').__require().buildConfig.Vue2CliBuilder;
-console.log('Vue2CliBuilder', Vue2CliBuilder);
+const Vue2CliBuilder = require('@lm/shared').config.buildConfig.Vue2CliBuilder;
 if (!Vue2CliBuilder) {
   throw new Error('[vue.config] cannot resolve Vue2CliBuilder from @lm/shared/build — please rebuild shared (npm run build:rollup) and ensure package is linked.');
 }
@@ -55,6 +54,5 @@ const builder = new Vue2CliBuilder({
   // chainExtenders: [config => { /* 在 chainWebpack 中追加自定义规则 */ }],
   // configureExtenders: [config => { /* 在 configureWebpack 中修改配置 */ }]
 })
-console.log('builder.createConfig()', builder.createConfig())
-// 导出 Vue CLI 配置
+// console.log('builder.createConfig()', builder.createConfig())
 module.exports = defineConfig(builder.createConfig())

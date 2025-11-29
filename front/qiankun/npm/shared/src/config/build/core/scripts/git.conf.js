@@ -1,10 +1,5 @@
-/*
- * @Descripttion:
- * @version:
- * @Author: wuhj
- * @Date: 2023-01-31 17:43:26
- * @LastEditors: wuhj
- * @LastEditTime: 2023-12-18 17:56:33
+/**
+ * Git 相关信息获取脚本
  */
 
 var exec = require('child_process').exec;

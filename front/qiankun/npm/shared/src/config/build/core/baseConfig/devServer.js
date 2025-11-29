@@ -1,5 +1,3 @@
-const path = require('path');
-let dir = process.cwd();
 module.exports = {
   'vue-demo-pc': {
     // contentBase: './src',//项目基本访问目录

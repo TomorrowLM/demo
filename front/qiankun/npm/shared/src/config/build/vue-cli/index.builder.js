@@ -1,7 +1,8 @@
 // 通过“中转站”plugin.ts 引入通用能力（优先 ts，其次 js），避免直接依赖 core
 let pluginHelpers = require('./plugin.js')
-let { getProjectName } = require('../core/scripts/getProjectPackageJson.js')
-console.log('pluginHelpers', pluginHelpers.devServerProxyPlugin)
+let { getDependency, getProjectName } = require('../core/scripts/app.js')
+let { getEnvConfig } = require('../core/scripts/env.js')
+
 /**
  * Vue CLI Vue2 构建类
  */
@@ -11,8 +12,10 @@ class Vue2CliBuilder {
       htmlInjectCdn: true,
       ...options,
     }
+    console.log(2222)
+    console.log(2222,getEnvConfig)
     this.GLOBAL_CONFIG = {
-      ENV_CONFIG: require('../core/env')[process.env.NODE_ENV],
+      ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
       NODE_ENV: process.env.NODE_ENV,
       IS_PROD: (process.env.APP_ENV || process.env.NODE_ENV) === 'production',
       PROJECT_NAME: getProjectName()
@@ -29,7 +32,6 @@ class Vue2CliBuilder {
   aliasPluginFactory(config) {
     // 使用helpers工具类处理所有别名，返回处理后的别名对象
     const all = pluginHelpers.aliasPlugin()
-    console.log('aliasPlugin11', all);
     // 遍历处理后的别名对象
     Object.keys(all).forEach(key => {
       // 为Webpack配置设置每个别名映射
@@ -39,28 +41,15 @@ class Vue2CliBuilder {
   devServerProxyPluginFactory() {
     return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG)
   }
+
   commonPluginFactory() {
-    // 优先使用 consumer 提供的 webpack 实例（在创建 builder 时传入）
-    // 回退：在运行时动态 require（使用 Function 防止打包器静态分析到 require）
-    const webpackLocal = (this.options && this.options.webpack) || (() => {
-      try {
-        // 使用 Function 动态调用 require，避免打包器将 webpack 内联到产物中
-        // eslint-disable-next-line no-new-func
-        // return Function('return require("webpack")')();
-      } catch (e) {
-        // 没有可用的 webpack（例如在打包共享包时），降级返回空插件数组
-        console.warn('[Vue2CliBuilder] webpack not available at runtime. Consumer should provide webpack via options.webpack to enable DefinePlugin.');
-        return null;
-      }
-    })();
-
-    if (!webpackLocal) return [];
-
+    const webpack = getDependency('webpack', this.options)
+    if (!webpack) return [];
     return [
-      new webpackLocal.DefinePlugin({
+      new webpack.DefinePlugin({
         "process.env": this.GLOBAL_CONFIG.ENV_CONFIG
       }),
-    ]
+    ];
   }
   createConfig() {
     const self = this
@@ -74,6 +63,7 @@ class Vue2CliBuilder {
       configureWebpack: (config) => {
         config.resolve = config.resolve || {}
         config.output = config.output || {}
+        console.log('configureWebpack config:', self.commonPluginFactory())
         config.plugins.push(...self.commonPluginFactory());
       },
       /**
@@ -88,7 +78,6 @@ class Vue2CliBuilder {
           config.optimization.splitChunks({ chunks: 'all' })
         }
         self.aliasPluginFactory(config)
-        console.log('createConfig', config)
       },
     }
   }

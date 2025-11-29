@@ -1,6 +1,5 @@
 /**
- * 通用路径工具（供 Vue CLI / Webpack / Vite / React / Qiankun 等构建器复用）
- * 注意：该文件只提供与构建器无关的纯工具，不要加入任何特定打包器的逻辑。
+ * 路径相关脚本
  */
 
 import * as path from 'path';
