@@ -183,8 +183,12 @@ const configs = [
   createConfig('src/index.ts', {       // 入口文件
     dir: 'lib/esm',                    // 输出目录
     format: 'esm',                     // 输出格式：ES 模块
-    preserveModules: true,             // 保持模块结构，不合并模块。会导致为了处理模块内部的依赖顺序、循环依赖或 preserveModules 输出，生成了只导出懒函数 exports.__require = requireIndex_builder 的模块。
-    preserveModulesRoot: 'src',        // 模块根目录，输出路径会从这里开始
+    // 当使用 `preserveModules: true` 时，Rollup 会输出与源代码相同的文件结构，
+    // 这会触发 CommonJS 转换插件生成“虚拟模块”（位于 `lib/.../_virtual`），
+    // 导致出现诸如 `index4.js` 之类的文件。如果不需要保留原始模块结构，
+    // 将其设为 false 可以让 Rollup 输出一个合并的 bundle，从而避免生成 `_virtual` 文件夹。
+    preserveModules: false,
+    // preserveModulesRoot: 'src',        // 如果需要保留模块结构可打开
     exports: 'auto',                   // 自动检测模块的导出类型
   }, true),                 // 指定为浏览器环境
 
@@ -192,8 +196,9 @@ const configs = [
   createConfig('src/index.ts', {       // 入口文件
     dir: 'lib/cjs',                    // 输出目录
     format: 'cjs',                     // 输出格式：CommonJS
-    preserveModules: true,             // 保持模块结构，不合并模块
-    preserveModulesRoot: 'src',        // 模块根目录
+    // 同上：关闭 preserveModules 可以避免生成 _virtual 中间文件
+    preserveModules: false,
+    // preserveModulesRoot: 'src',        // 如果需要保留模块结构可打开
     exports: 'auto',               // 自动检测模块的导出类型
     interop: 'auto'        // 自动处理默认导出的互操作
   }),                                  // 默认为 Node.js 环境

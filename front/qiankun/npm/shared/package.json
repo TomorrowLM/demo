@@ -4,6 +4,24 @@
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/types/index.d.ts",
+  "browser": {
+    "./lib/cjs/index.js": "./lib/esm/index.js",
+    "util": false,
+    "stream": false,
+    "path": false,
+    "http": false,
+    "https": false,
+    "url": false,
+    "fs": false,
+    "crypto": false,
+    "http2": false,
+    "assert": false,
+    "tty": false,
+    "os": false,
+    "zlib": false,
+    "events": false,
+    "vm": false
+  },
   "exports": {
     ".": {
       "types": "./lib/esm/types/index.d.ts",
@@ -59,7 +77,6 @@
     "rollup": "^4.40.2",
     "rollup-plugin-esbuild": "^6.2.1",
     "typescript": "^5.4.5",
-    "webpack": "^5.0.0",
     "tslib": "^2.6.2"
   },
   "peerDependencies": {

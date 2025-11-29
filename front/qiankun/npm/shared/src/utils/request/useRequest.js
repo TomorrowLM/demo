@@ -4,7 +4,7 @@
 import qs from "qs";
 import { md5 } from 'js-md5';
 import axios from 'axios';
-import { repeatHandle as preventRequest } from './util';
+import { repeatHandle as preventRequest } from './util.ts';
 
 // 缓存时间
 var cacheTime = 5000;

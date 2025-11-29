@@ -71,31 +71,17 @@ class Vue2CliBuilder {
        * 直接访问 webpack 配置对象：应用公共别名、公用插件与文件命名策略等
        * 对应实现参考：vue-cli.webpackBaseConfig()
        */
-      configureWebpack(config) {
+      configureWebpack: (config) => {
         config.resolve = config.resolve || {}
         config.output = config.output || {}
-        config.plugins.push(...this.commonPluginFactory());
-        // self.externalsPlugin(config)
-        // // 用户自定义 configureWebpack 扩展（优先执行）
-        // if (Array.isArray(self.options.configureExtenders)) {
-        //   for (const extender of self.options.configureExtenders) {
-        //     try {
-        //       extender(config)
-        //     } catch (e) {
-        //       // eslint-disable-next-line no-console
-        //       console.warn('[vue2.builder] configureExtender error:', (e && e.message) || e)
-        //     }
-        //   }
-        // }
-        // // 统一执行“configureWebpack”阶段插件（helpers 通过 plugin 中转）
-        // self.runPlugins('configureWebpack', { config, helpers: pluginHelpers, options: self.options })
+        config.plugins.push(...self.commonPluginFactory());
       },
       /**
        * 链式方式对 webpack 做精细化调整：
        * - 开发环境可开启 splitChunks
        * - 其余注入（如 CDN）通过插件体系完成
        */
-      chainWebpack(config) {
+      chainWebpack: (config) => {
         // 开发模式可选开启分包优化
         if (!self.GLOBAL_CONFIG.IS_PROD && self.options.enableSplitChunksInDev) {
           config.optimization.minimize(true)

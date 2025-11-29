@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { repeatHandle } from './util'
+import { repeatHandle } from './util.ts'
 const preventRequest = repeatHandle
 const CancelToken = axios.CancelToken;
 let service = null;
