@@ -196,16 +196,14 @@ const configs = [
     exports: 'auto',                   // 自动检测模块的导出类型
   }, true),                 // 指定为浏览器环境
 
-  // // Node.js CommonJS 构建配置
-  createConfig('src/index.ts', {       // 入口文件
+  // Node.js CommonJS 构建（仅为 build 相关脚本生成 CJS 输出）
+  createConfig('src/config/build/index.js', { // 仅打包 build 目录为 CJS
     dir: 'lib/cjs',                    // 输出目录
     format: 'cjs',                     // 输出格式：CommonJS
-    // 同上：关闭 preserveModules 可以避免生成 _virtual 中间文件
     preserveModules: false,
-    // preserveModulesRoot: 'src',        // 如果需要保留模块结构可打开
     exports: 'auto',               // 自动检测模块的导出类型
     interop: 'auto'        // 自动处理默认导出的互操作
-  }),                                  // 默认为 Node.js 环境
+  }),
 ]
 
 // 导出配置数组，Rollup 将处理每个配置项

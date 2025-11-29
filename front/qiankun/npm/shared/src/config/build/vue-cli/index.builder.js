@@ -12,8 +12,6 @@ class Vue2CliBuilder {
       htmlInjectCdn: true,
       ...options,
     }
-    console.log(2222)
-    console.log(2222,getEnvConfig)
     this.GLOBAL_CONFIG = {
       ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
       NODE_ENV: process.env.NODE_ENV,

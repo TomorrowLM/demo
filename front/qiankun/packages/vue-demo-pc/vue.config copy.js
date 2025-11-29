@@ -1,7 +1,6 @@
 const { defineConfig } = require('@vue/cli-service');
 const path = require('path');
 const webpack = require('webpack');
-// const pxtorem = require('postcss-pxtorem')
 const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
 const resolve = dir => path.join(__dirname, dir);
 const isProd = process.env.NODE_ENV === 'production';
@@ -24,8 +23,6 @@ const commonPlugin = [
     pageSize: 15,
   }),
 ];
-
-console.log(process.env.NODE_ENV, process.env.VUE_APP_API_HOST);
 module.exports = defineConfig({
   publicPath: process.env.NODE_ENV === 'production' ? '/vue-demo-pc/' : '/',
   //打包文件输出路径，即打包到哪里

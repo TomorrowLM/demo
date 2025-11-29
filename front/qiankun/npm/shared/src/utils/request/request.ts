@@ -88,7 +88,7 @@ const axiosInstance = axios.create({
 });
 axiosInstance.interceptors.request.use(handleRequest, err);
 axiosInstance.interceptors.response.use(handleResponse, err);
-console.log(process.env, '123process.env.APP_PROXY_API');
+
 const request = {
   get: (url, params, config) => {
     return axiosInstance.get(url, { params, ...config }).then((res) => res)
