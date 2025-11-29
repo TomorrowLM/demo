@@ -41,12 +41,25 @@ class Vue2CliBuilder {
   }
 
   commonPluginFactory() {
-    const webpack = getDependency('webpack', this.options)
+    const webpack = getDependency('webpack', this.options);
     if (!webpack) return [];
+    const defines = {};
+    const env = this.GLOBAL_CONFIG && this.GLOBAL_CONFIG.ENV_CONFIG ? this.GLOBAL_CONFIG.ENV_CONFIG : {};
+    // 按键注入 process.env.KEY 的形式，避免覆盖整个 process.env
+    Object.keys(env).forEach(key => {
+      defines[`process.env.${key}`] = JSON.stringify(env[key]);
+    });
+    // 确保 NODE_ENV 存在
+    if (!defines['process.env.NODE_ENV']) {
+      defines['process.env.NODE_ENV'] = JSON.stringify(this.GLOBAL_CONFIG && this.GLOBAL_CONFIG.NODE_ENV || process.env.NODE_ENV);
+    }
+    // 如果需要在全局访问简写名 aaa，也注入为字符串
+    if (env && Object.keys(env).length > 0) {
+      defines['aaa'] = JSON.stringify(env);
+    }
+
     return [
-      new webpack.DefinePlugin({
-        "process.env": this.GLOBAL_CONFIG.ENV_CONFIG
-      }),
+      new webpack.DefinePlugin(defines),
     ];
   }
   createConfig() {

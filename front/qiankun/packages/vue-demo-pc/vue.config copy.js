@@ -66,15 +66,13 @@ module.exports = defineConfig({
       config.output.filename = `js/[name].[contenthash].js`;
       config.output.chunkFilename = `js/[name].[contenthash].js`;
     }
-  },  
-
+  },
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src'))
       .set('assets', resolve('src/assets'))
       .set('components', resolve('src/components'))
       .set('public', resolve('public'));
-
     //TODO
     config.output.library = `${name}-[name]`;
     config.output.libraryTarget = "umd";// 把微应用打包成 umd 库格式

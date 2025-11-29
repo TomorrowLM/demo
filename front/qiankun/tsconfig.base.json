@@ -70,5 +70,6 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx",
+    "types/**/*.d.ts"
   ],
 }
