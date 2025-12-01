@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    "sourceMap": true,
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "types": ["webpack-env", "node", "jsdom"]
+  },
+  "include": ["packages", "typings", "packages/**/typings", "@lm/vue/config/tsconfig.json", "rubbish/craco.config.js"],
+  "exclude": ["node_modules", "**/dist", "**/__tests__/**/*", "**/*.md"]
+}

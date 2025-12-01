@@ -53,11 +53,6 @@ class Vue2CliBuilder {
     if (!defines['process.env.NODE_ENV']) {
       defines['process.env.NODE_ENV'] = JSON.stringify(this.GLOBAL_CONFIG && this.GLOBAL_CONFIG.NODE_ENV || process.env.NODE_ENV);
     }
-    // 如果需要在全局访问简写名 aaa，也注入为字符串
-    if (env && Object.keys(env).length > 0) {
-      defines['aaa'] = JSON.stringify(env);
-    }
-
     return [
       new webpack.DefinePlugin(defines),
     ];

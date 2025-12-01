@@ -4,7 +4,7 @@
   "main": "./lib",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "rm -rf lib && tsc && cpx \"src/tsLint/**\" lib/tsLint"
   },
   "author": "liming",
   "license": "MIT",
@@ -12,7 +12,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "devDependencies": {
+    "@types/node": "^22.10.3",
     "@babel/eslint-parser": "^7.13.14",
     "@typescript-eslint/eslint-plugin": "5.43.0",
     "@typescript-eslint/parser": "^5.30.0",
@@ -38,9 +39,10 @@
     "jsonc-eslint-parser": "^2.1.0",
     "prettier": "^2.7.1",
     "typescript": "^5.1.6",
-    "yaml-eslint-parser": "^1.0.1"
+    "yaml-eslint-parser": "^1.0.1",
+    "cpx": "^1.5.0"
   },
-  "devDependencies": {
-    "@types/node": "^22.10.3"
-  }
+  "files": [
+    "lib"
+  ]
 }

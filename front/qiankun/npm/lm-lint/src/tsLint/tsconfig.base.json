@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noEmit": true,
     "composite": true,
     "baseUrl": ".",
     // 编译输出目标 ES 版本
@@ -30,12 +31,10 @@
     // 给错误和消息设置样式，使用颜色和上下文。
     "pretty": true,
     // 设置引入的定义文件
-    "types": [
-      "webpack-env",
-      "mocha",
-      "chai",
-      "node" // 添加 node 类型定义
-    ],
+    // "types": [
+    //   "webpack-env",
+    //   "node" // 添加 node 类型定义
+    // ],
     // 指定特殊模块的路径
     "paths": {
       "@/*": [
@@ -46,7 +45,7 @@
       ],
       "@shared/*": [
         "npm/shared/src/*"
-      ],
+      ]
     },
     // 编译过程中需要引入的库文件的列表
     "lib": [
@@ -54,22 +53,7 @@
       "dom",
       "dom.iterable",
       "scripthost"
-    ],
+    ]
   },
-  // ts 排除的文件
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
-  // ts 管理的文件
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.js",
-    "src/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "types/**/*.d.ts"
-  ],
+  // (include/exclude intentionally omitted for shareable base)
 }

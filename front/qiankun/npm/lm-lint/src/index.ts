@@ -1,11 +1,11 @@
-const configs = {
-  js: require('./configs/javascript'),
-  ts: require('./configs/typescript'),
-  react: require('./configs/react'),
-  vue: require('./configs/vue'),
-  vue3: require('./configs/vue3')
+const esLint = {
+  js: require('./esLint/javascript'),
+  ts: require('./esLint/typescript'),
+  react: require('./esLint/react'),
+  vue: require('./esLint/vue'),
+  vue3: require('./esLint/vue3')
 }
 
 module.exports = {
-  configs
+  esLint
 }

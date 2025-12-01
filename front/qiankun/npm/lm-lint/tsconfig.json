@@ -4,7 +4,10 @@
     "target": "ESNext",
     "module": "commonjs",
     "outDir": "./lib",
-    "lib": ["dom", "es2015"],
+    "lib": [
+      "dom",
+      "es2015"
+    ],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,6 +17,11 @@
     // "declarationDir": "./lib/ts",
     // "declarationMap": true  // 生成类型声明映射文件（可选）
   },
-  "include": ["**/*"],
-  "exclude": ["lib", "./prettierrc.js"]
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "lib",
+    "./prettierrc.js"
+  ]
 }

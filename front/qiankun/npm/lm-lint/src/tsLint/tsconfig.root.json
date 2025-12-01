@@ -1,0 +1,12 @@
+{
+  "references": [
+    { "path": "./tsconfig.base.json" },
+    { "path": "./tsconfig.web.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@root": ["./"]
+    }
+  }
+}
