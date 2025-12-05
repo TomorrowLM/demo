@@ -37,6 +37,7 @@ class Vue2CliBuilder {
     })
   }
   devServerProxyPluginFactory() {
+    console.log('devServerProxyPluginFactory GLOBAL_CONFIG:', this.GLOBAL_CONFIG,pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG))
     return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG)
   }
 

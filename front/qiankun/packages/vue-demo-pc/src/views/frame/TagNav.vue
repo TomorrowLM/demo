@@ -36,7 +36,7 @@ export default class Layout extends Vue {
     return this.$store.getters.tagNav;
   }
 
-  handleClose(tag) {
+  handleClose(tag: any) {
     // console.log();
   }
 

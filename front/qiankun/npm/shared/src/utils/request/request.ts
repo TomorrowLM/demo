@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { repeatHandle } from './util.ts'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { repeatHandle } from './util'
 const preventRequest = repeatHandle
 const CancelToken = axios.CancelToken;
 let service = null;
@@ -23,7 +23,7 @@ const codeMessage = {
   504: "网关超时。",
 };
 
-const err = (error) => {
+const err = (error: any) => {
   console.log('error', error);
   if (error.response) {
     const data = error.response.data;
@@ -51,7 +51,7 @@ const err = (error) => {
  * 处理参数
  * @param {*} config
  */
-const handleRequest = (config: any) => {
+const handleRequest = (config: AxiosRequestConfig) => {
   const token = window.localStorage.getItem('token');
   config.headers.authorization = `Bearer ${token}`;
   // 检查是否存在重复请求，若存在则取消当前的请求
@@ -70,31 +70,40 @@ const handleRequest = (config: any) => {
  * 处理参数
  * @param {*} config
  */
-const handleResponse = async (response) => {
-  if (response.data.code !== 200) {
+const handleResponse = async (response: AxiosResponse<any>) => {
+  if (response.data && response.data.code !== 200) {
     new Error(codeMessage[response.data.code] || response.data.msg);
     return Promise.reject(response.data);
   }
-  response.data && (preventRequest.getRequestMapInfo(response.config).data = response?.data)
-  return Promise.resolve(response.data);
+  // 保存返回数据到 pending 请求映射
+  response.data && (preventRequest.getRequestMapInfo((response.config as any)).data = response.data)
+  // 返回完整的 AxiosResponse，后续由调用方取 .data
+  return Promise.resolve(response);
 };
 /**
  * 创建 Axios 实例
  */
 const axiosInstance = axios.create({
-  baseURL: `${process.env.VUE_APP_PROXY_API}`,
+  baseURL: `${process.env.APP_PROXY_API}`,
   timeout: 60000,
   withCredentials: true,
 });
 axiosInstance.interceptors.request.use(handleRequest, err);
 axiosInstance.interceptors.response.use(handleResponse, err);
+console.log('axiosInstance', axiosInstance, `${process.env.APP_BASE_API}`, `${process.env.APP_PROXY_API}`);
+// Base request interface with generics so consumers can specify response types
+export interface BaseRequest {
+  get<T = any>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T>;
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+}
 
-const request = {
-  get: (url, params, config) => {
-    return axiosInstance.get(url, { params, ...config }).then((res) => res)
+const request: BaseRequest = {
+  get: <T = any>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> => {
+    return axiosInstance.get(url, { params, ...config }).then((res: AxiosResponse<any>) => res.data as T);
   },
-  post: (url, data, config) => {
-    return axiosInstance.post(url, data, config).then((res) => res)
+  post: <T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
+    return axiosInstance.post(url, data, config).then((res: AxiosResponse<any>) => res.data as T);
   }
 }
+
 export default request

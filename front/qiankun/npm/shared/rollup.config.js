@@ -12,29 +12,6 @@ const path = require('path')
 const typescript = require('@rollup/plugin-typescript')
 const replace = require('@rollup/plugin-replace')
 
-// // 插件：在 CJS 输出中把 exports.__require 的懒加载导出替换为直接执行并导出真实对象
-// function cjsDirectExportPlugin(wrapperOnly = false) {
-//   return {
-//     name: 'cjs-direct-export',
-//     generateBundle(options, bundle) {
-//       Object.keys(bundle).forEach((fileName) => {
-//         const chunk = bundle[fileName];
-//         if (chunk.type !== 'chunk' || !chunk.code) return;
-//         // 只处理 CJS 输出（包含 exports.__require 的文件）
-//         if (!/exports\.__require\s*=/.test(chunk.code)) return;
-//         // 用正则找到所有 exports.__require = <id>; 并在后面追加 module.exports = <id>(); exports.default = module.exports;
-//         const newCode = chunk.code.replace(/exports\.__require\s*=\s*([^;\n]+);/g, (m, id) => {
-//           // 保留原始赋值，再追加直接执行导出逻辑
-//           return m + '\ntry { if (typeof ' + id + ' === "function") { module.exports = ' + id + '(); exports.default = module.exports; } else if (' + id + ' && ' + id + '.default) { module.exports = ' + id + '.default; exports.default = module.exports; } } catch(e) { /* ignore */ }';
-//         });
-//         chunk.code = newCode;
-//         // update bundle entry
-//         bundle[fileName] = chunk;
-//       });
-//     }
-//   }
-// }
-
 /**
  * 外部依赖配置
  * 这些依赖不会被打包到最终产物中，而是作为外部依赖引用
@@ -55,38 +32,6 @@ const external = [
   'webpack-bundle-analyzer', 'css-loader', 'style-loader', 'less-loader',
   'less', 'babel-loader', '@babel/core',
 ]
-
-// // 新增：支持 Node 内置模块及 ?commonjs-external 后缀的判断
-// const nodeBuiltins = (() => {
-//   try {
-//     return require('module').builtinModules || []
-//   } catch (e) {
-//     return []
-//   }
-// })()
-
-// const externalRegexps = [
-//   /^webpack($|[-/])/,
-//   /^html-webpack-plugin($|[-/])/,
-//   /^mini-css-extract-plugin($|[-/])/,
-//   /^webpack-bundle-analyzer($|[-/])/,
-//   /^webpackbar($|[-/])/
-// ]
-
-// const isExternalId = id => {
-//   if (!id) return false
-//   // 完全匹配字符串列表
-//   if (external.includes(id)) return true
-//   // 正则列表匹配
-//   if (externalRegexps.some(r => r.test(id))) return true
-//   // 匹配 node 内置模块或其子路径
-//   if (nodeBuiltins.some(b => id === b || id.startsWith(b + '/'))) return true
-//   // 处理 commonjs plugin 生成的虚拟 id，如 fs?commonjs-external
-//   if (/\?commonjs-external$/.test(id)) return true
-//   // node_modules 中的大模块路径也视为 external（避免把依赖打包进来）
-//   if (/\bnode_modules\b/.test(id)) return true
-//   return false
-// }
 
 /**
  * 创建插件配置函数
@@ -147,12 +92,6 @@ const createPlugins = (isBrowser) => {
       }
     })
   ];
-
-  // // 仅在 Node/CJS 输出时添加后处理插件，自动把 __require 懒加载导出替换为直接执行的 module.exports
-  // if (!isBrowser) {
-  //   plugins.push(cjsDirectExportPlugin());
-  // }
-
   return plugins;
 }
 

@@ -53,11 +53,7 @@ function definePlugin(defines = {}) {
  * - 追加 ProvidePlugin 定义
  */
 function providePlugin(provides = {}) {
-  return function plugin(ctx) {
-    if (ctx.stage === 'configureWebpack' && ctx.config) {
-      ctx.helpers.addProvidePlugin(ctx.config, provides || {});
-    }
-  };
+  
 }
 
 /**
@@ -98,6 +94,7 @@ function htmlCdnPlugin(cdn = {}) {
  * - 注意：此能力更适合在顶层 vue.config.js 的 devServer 字段处理，本插件仅做示例
  */
 function devServerProxyPlugin(GLOBAL_CONFIG) {
+  console.log('GLOBAL_CONFIG11', GLOBAL_CONFIG, helpers.createProxyEntry());
   return helpers.createProxyEntry()[GLOBAL_CONFIG.PROJECT_NAME]
 }
 
