@@ -122,26 +122,6 @@ export const whiteRoutes = [
             }
           }
         ]
-      },
-      {
-        path: 'task',
-        name: '案例',
-        meta: {
-          sidebar: true,
-          menuName: '案例'
-        },
-        component: () => import('@/views/task/index.vue'),
-        children: [
-          {
-            path: 'PickupTask',
-            name: '物流智能管控应用',
-            meta: {
-              sidebar: true,
-              menuName: '物流智能管控应用'
-            },
-            component: () => import('@/views/task/Sd/index.vue')
-          }
-        ]
       }
     ]
   },
