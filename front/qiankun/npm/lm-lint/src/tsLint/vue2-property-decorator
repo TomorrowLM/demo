@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.vue2.json",
+  "compilerOptions": {
+    "experimentalDecorators": true, // 启用装饰器
+    "allowSyntheticDefaultImports": true, // 允许从没有默认导出的模块使用默认导入
+    "moduleResolution": "node", // 使用 Node.js 风格的模块解析
+    "esModuleInterop": true // 允许导入非 ES 模块
+  }
+}
