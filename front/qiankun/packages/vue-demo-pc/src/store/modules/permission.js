@@ -111,7 +111,8 @@ export const whiteRoutes = [
               menuName: '皮肤',
               sidebar: true
             }
-          }, {
+          }, 
+          {
             path: 'repeatReq',
             name: 'repeatReq',
             component: () => import('@/views/demo/repeatReq/index.vue'),

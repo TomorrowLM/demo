@@ -28,7 +28,6 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import Header from '@/views/frame/Header.vue';
 import Sidebar from '@/views/frame/Sidebar.vue';
 import TagNav from '@/views/frame/TagNav.vue';
-
 // import ws from '@/utils/websocket';
 import { userInfoApi } from '@/api';
 @Component({

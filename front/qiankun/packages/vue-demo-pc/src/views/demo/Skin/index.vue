@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="skin">123</div>
+    <div class="skin">颜色</div>
     <el-button @click="change">
       <span>切换</span>
     </el-button>
@@ -8,12 +8,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
-import permission from '../../../directive/permission'; // 权限判断指令
-// import checkPermission from '@/utils/permission' // 权限判断函数
+import { Vue, Component } from 'vue-property-decorator';
 @Component({})
-export default class Access extends Vue {
-  theme = 'dark';
+
+export default class Skin extends Vue {
+
+  theme = 'dark'; 
   // mounted() {
   //   // //给应用的顶层元素添加一个主题标识，用于标识当前的主题
   //   // document .getElementsByTagName("body")[0].setAttribute("data-theme", "light");
@@ -39,12 +39,12 @@ export default class Access extends Vue {
   }
 }
 </script>
- 
+
 <style lang="scss" scoped>
 .skin {
-  // @include themify();
+  //@include themify();
   //color: $text;
-  // 使用主题
+  //  使用主题
   // @include themify() {
   //   color: themed(text);
   // }

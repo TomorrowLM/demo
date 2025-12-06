@@ -39,12 +39,6 @@
     "paths": {
       "@/*": [
         "src/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@shared/*": [
-        "npm/shared/src/*"
       ]
     },
     // 编译过程中需要引入的库文件的列表

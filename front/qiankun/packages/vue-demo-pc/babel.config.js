@@ -4,7 +4,7 @@ module.exports = {
   ],
   plugins: [
     // style必须使用css
-    ['import'] // `style: true` 会加载 less 文件
+    ['import'], // `style: true` 会加载 less 文件
+    ['lodash']
   ],
-  plugins: [['lodash']],
 }

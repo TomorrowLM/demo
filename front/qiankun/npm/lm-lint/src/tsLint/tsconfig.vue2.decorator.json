@@ -2,7 +2,7 @@
   "extends": "./tsconfig.vue2.json",
   "compilerOptions": {
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    // "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "esModuleInterop": true
   }

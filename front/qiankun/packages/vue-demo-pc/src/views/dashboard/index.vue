@@ -33,7 +33,7 @@ import './file/china';
 import './file/guangdong';
 
 @Component({})
-export default class Access extends Vue {
+export default class Dashboard extends Vue {
   myChart1: any = null;
   myChart2: any = null;
   myChart3: any = null;

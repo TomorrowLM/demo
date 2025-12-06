@@ -5,7 +5,7 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:@lm/lint/vue'
+    'plugin:@lm/lint/lib/esLint/vue'
   ],
   parserOptions: {
     parser: 'babel-eslint'
