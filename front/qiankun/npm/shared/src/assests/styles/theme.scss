@@ -1,0 +1,171 @@
+// @import './theme/base', './theme/mixin', './theme/variable'
+
+//
+
+
+// @import './theme/base', './theme/mixin', './theme/variable';
+
+
+
+//方案一
+:root {
+  --text: #cece59;
+}
+
+:root[theme='dark'] {
+  --text: blue;
+
+}
+
+$text: var(--text);
+
+
+//方案二
+// 浅色
+$colors-light: (text: red);
+// 深色
+$colors-dark: (text:blue);
+
+@mixin themify() {
+  [theme='light'] & {
+    $theme: 'light' !global;
+    @content;
+  }
+
+  [theme='dark'] & {
+    $theme: 'dark' !global;
+    @content;
+  }
+}
+
+@function themed($key) {
+  @if $theme=="light" {
+    @return map-get($colors-light, $key);
+  }
+
+  @else {
+    @return map-get($colors-dark, $key);
+  }
+}
+
+
+
+
+
+//方案三
+// [theme='light'] {
+//   $theme: 'light' !global;
+//   $text : light.$text !global;
+// }
+
+// [theme='dark'] {
+//   $theme: 'dark' !global;
+//   $text : dark.$text !global;
+// }
+// @use './themes/light';
+// @use './themes/dark';
+// $text: var(--theme-name)=='light' ?light.$text:'red' !global;
+
+
+// @debug var(--text-primary-color)123#{$text};
+
+// is-superselector("html", "dark")
+
+//方案一
+// html[theme='light'] {
+//   // #b2c204
+//   --header-bg: #d8d8d6;
+//   --box-bg: #fafafa;
+//   --text: #ce9c80;
+//   --primary-font-size: 16px;
+//   --shadow: #ccc;
+// }
+
+// :root[theme='dark'] {
+//   --text: blue;
+// }
+
+$header-bg: var(--header-bg);
+$box-bg: var(--box-bg);
+$text: var(--text);
+$primary-font-size: var(--primary-font-size);
+$shadow: var(--shadow);
+
+// @debug #{var(--header-bg)}"woooooooooooooo:#{var(--text)}var(--text)";
+
+//方案二
+// 浅色
+$colors-light: (text: red);
+// 深色
+$colors-dark: (text:blue);
+
+$themes:(light:(primary-bg:#ccc,
+    primary-text:#75e566,
+  ),
+  dark:(primary-bg:red,
+    primary-text:#272d45,
+  ));
+
+
+@mixin themify() {
+
+  // @each $theme-name,
+  // $theme-map in $themes {
+  //   $theme-map: $theme-map !global;
+
+  //   [theme="#{$theme-name}"] {
+  //     @content;
+  //   }
+  // }
+
+
+  [theme='light'] & {
+    $theme: 'light' !global;
+    @content;
+  }
+
+  [theme='dark'] & {
+    $theme: 'dark' !global;
+    @content;
+  }
+}
+
+// @function themed($key) {
+//   @return map-get($theme-map, $key);
+// }
+
+
+@function themed($key) {
+  @debug $theme;
+
+  @if $theme=="light" {
+    @return map-get($colors-light, $key);
+  }
+
+  @else {
+    @return map-get($colors-dark, $key);
+  }
+}
+
+
+
+
+
+//方案三
+// [theme='light'] {
+//   $theme: 'light' !global;
+//   $text : light.$text !global;
+// }
+
+// [theme='dark'] {
+//   $theme: 'dark' !global;
+//   $text : dark.$text !global;
+// }
+// @use './themes/light';
+// @use './themes/dark';
+// $text: var(--theme-name)=='light' ?light.$text:'red' !global;
+
+
+// @debug var(--text-primary-color)123#{$text};
+
+// is-superselector("html", "dark")

@@ -37,6 +37,10 @@
       "types": "./lib/esm/types/utils/index.d.ts",
       "import": "./lib/esm/utils/index.js",
       "require": "./lib/cjs/utils/index.js"
+    },
+    "./assets": {
+      "import": "./lib/assets",
+      "require": "./lib/assets"
     }
   },
   "directories": {
@@ -47,7 +51,7 @@
   ],
   "scripts": {
     "clean": "rimraf lib",
-    "build:rollup": "npm run clean && rollup -c",
+    "build:rollup": "npm run clean && rollup -c && npm run build-styles",
     "build-styles": "node ./scripts/buildStyles.cjs"
   },
   "author": "liming",
