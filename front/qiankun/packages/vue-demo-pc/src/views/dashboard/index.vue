@@ -1,21 +1,20 @@
 <template>
   <div>
-    <span>dashboard</span>
     <!-- <button @click="()=>{data = data+1}">{{data}}</button> -->
     <div>
-      <a-card title="折线图" :bordered="false" style="width: 9rem">
-        <div class="echart echart1" style="width: 9rem"></div>
+      <a-card title="折线图" :bordered="false" style="width: 100%">
+        <div class="echart echart1"></div>
       </a-card>
     </div>
     <div class="box">
-      <a-card title="省图" :bordered="false" style="width: 5rem">
+      <a-card title="省图" :bordered="false" style="width: 32%">
         <div class="echart echart2"></div>
       </a-card>
-      <a-card title="国家地图" :bordered="false" style="width: 15rem">
-        <div class="echart echart3" style="width: 15rem"></div>
+      <a-card title="国家地图" :bordered="false" style="width: 64%">
+        <div class="echart echart3"></div>
       </a-card>
-      <a-card title="国家分布图" :bordered="false" style="width: 6rem">
-        <div class="echart echart4" style="width: 6rem"></div>
+      <a-card title="国家分布图" :bordered="false" style="width: 32%">
+        <div class="echart echart4"></div>
       </a-card>
       <div id="map" style="width: 1200px; height: 500px"></div>
     </div>
@@ -40,17 +39,23 @@ export default class Dashboard extends Vue {
   myChart4: any = null;
 
   mounted() {
-    //注册地图到echarts中  这里的 "china" 要与地图数据的option中的geo中的map对应
-    this.myChart1 = echarts.init(document.getElementsByClassName('echart1')[0] as any);
-    this.myChart1.setOption(echart1());
-    this.myChart2 = echarts.init(document.getElementsByClassName('echart2')[0] as any);
-    this.myChart2.setOption(echart2());
+    // 注册地图到echarts中  这里的 "china" 要与地图数据的option中的geo中的map对应
+    this.$nextTick(() => {
+      this.myChart1 = echarts.init(document.getElementsByClassName('echart1')[0] as any);
+      this.myChart1.setOption(echart1());
+      // 确保在首次渲染后触发 resize，使图表根据容器宽度自适应
+      this.myChart1.resize();
+
+      this.myChart2 = echarts.init(document.getElementsByClassName('echart2')[0] as any);
+      this.myChart2.setOption(echart2());
+      this.myChart2.resize();
+    });
     // this.myChart3 = echarts.init(document.getElementsByClassName('echart3')[0] as any);
     // this.myChart3.setOption(echart3());
     // this.myChart4 = echarts.init(document.getElementsByClassName('echart4')[0] as any);
     // this.myChart4.setOption(echart3());
-    //自适应
-    window.addEventListener('resize', this.onresize);
+    // 自适应（绑定 this）
+    window.addEventListener('resize', this.onresize.bind(this));
     this.baidu();
     // //绑定事件
     // this.myChart1.on('legendselectchanged', (ev: any) => {
@@ -101,8 +106,9 @@ export default class Dashboard extends Vue {
   flex-wrap: wrap;
 }
 .echart {
-  width: 5rem;
-  height: 5rem;
+  width: 100%;
+  min-height: 300px;
+  height: 500px;
 }
 .ant-card-body {
   padding: 0;
