@@ -15,11 +15,6 @@ const commonPlugin = [
     resourceRegExp: /^\.\/locale$/,
     contextRegExp: /moment/,
   }),
-  // 自动加载模块，而不必到处 import 或 require ，在这里加载模块之后，组件内部就不用inport引入了
-  new webpack.ProvidePlugin({
-    $_: 'lodash',
-    moment: 'moment',
-  }),
   new webpack.DefinePlugin({
     pageSize: 15,
   }),
@@ -31,28 +26,7 @@ const builder = new Vue2CliBuilder({
     BMap: 'window.BMap',
     AMap: 'AMap'
   },
-  // 开发环境是否开启分包优化（即使在开发也做 splitChunks）
-  enableSplitChunksInDev: true,
   plugins: [...commonPlugin],
-  // 添加 chainWebpack 配置以确保正确处理 TypeScript 文件
-  chainExtenders: [
-    config => {
-      // 确保正确处理 .ts 文件
-      config.module
-        .rule('ts')
-        .test(/\.ts$/)
-        .use('ts-loader')
-        .loader('ts-loader')
-        .options({
-          transpileOnly: true,
-          appendTsSuffixTo: [/\.vue$/]
-        })
-        .end()
-    }
-  ]
-  // 进阶用法（可选）：
-  // chainExtenders: [config => { /* 在 chainWebpack 中追加自定义规则 */ }],
-  // configureExtenders: [config => { /* 在 configureWebpack 中修改配置 */ }]
 })
 // console.log('builder.createConfig()', builder.createConfig())
 module.exports = defineConfig(builder.createConfig())

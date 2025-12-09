@@ -55,6 +55,7 @@ export default class Layout extends Vue {
     //   document.querySelector('.contentContainer').appendChild(document.querySelector('.qiankun-app1'));
     // });
   }
+
   async created() {
     console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
     this.$nextTick(() => {

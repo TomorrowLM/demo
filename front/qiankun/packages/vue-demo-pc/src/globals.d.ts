@@ -7,7 +7,6 @@ declare module '*.vue' {
 }
 declare global {
   // 全局变量设置
-  // const $_: typeof lodash;
   const $lm: any;
   // const moment: typeof import('moment');
   const pageSize: number;

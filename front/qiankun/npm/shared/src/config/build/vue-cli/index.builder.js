@@ -37,10 +37,9 @@ class Vue2CliBuilder {
     })
   }
   devServerProxyPluginFactory() {
-    console.log('devServerProxyPluginFactory GLOBAL_CONFIG:', this.GLOBAL_CONFIG,pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG))
+    console.log('devServerProxyPluginFactory GLOBAL_CONFIG:', this.GLOBAL_CONFIG, pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG))
     return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG)
   }
-
   commonPluginFactory() {
     const webpack = getDependency('webpack', this.options);
     if (!webpack) return [];
@@ -58,9 +57,23 @@ class Vue2CliBuilder {
       new webpack.DefinePlugin(defines),
     ];
   }
+  getCdnAssets() {
+    return pluginHelpers.normalizeCdnAssets ? pluginHelpers.normalizeCdnAssets(this.options.cdn || {}) : { css: (this.options.cdn && this.options.cdn.css) || [], js: (this.options.cdn && this.options.cdn.js) || [], externals: (this.options.cdn && this.options.cdn.externals) || {} }
+  }
   createConfig() {
     const self = this
     return {
+      css: {
+        extract: {
+          ignoreOrder: true, //解决组件的引入必须先后顺序一致
+        }, // 是否使用css分离插件 ExtractTextPlugin
+        sourceMap: false,
+        loaderOptions: {
+          scss: {
+            additionalData: `@import "@lm/shared/assets/styles/index.scss";`, //注入全局样式
+          },
+        },
+      },
       // 合并已有的基础配置
       devServer: self.devServerProxyPluginFactory(this.options),
       /**
@@ -80,16 +93,13 @@ class Vue2CliBuilder {
        */
       chainWebpack: (config) => {
         // 开发模式可选开启分包优化
-        if (!self.GLOBAL_CONFIG.IS_PROD && self.options.enableSplitChunksInDev) {
+        if (!self.GLOBAL_CONFIG.IS_PROD) {
           config.optimization.minimize(true)
           config.optimization.splitChunks({ chunks: 'all' })
         }
         self.aliasPluginFactory(config)
       },
     }
-  }
-  getCdnAssets() {
-    return pluginHelpers.normalizeCdnAssets ? pluginHelpers.normalizeCdnAssets(this.options.cdn || {}) : { css: (this.options.cdn && this.options.cdn.css) || [], js: (this.options.cdn && this.options.cdn.js) || [], externals: (this.options.cdn && this.options.cdn.externals) || {} }
   }
 }
 
