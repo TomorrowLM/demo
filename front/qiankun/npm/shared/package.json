@@ -48,7 +48,7 @@
   ],
   "scripts": {
     "clean": "rimraf lib",
-    "build:rollup": "npm run clean && rollup -c && npm run build-styles",
+    "build": "npm run clean && rollup -c && npm run build-styles",
     "build-styles": "node ./scripts/buildStyles.cjs"
   },
   "author": "liming",

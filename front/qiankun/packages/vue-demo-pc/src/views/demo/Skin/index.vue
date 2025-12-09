@@ -10,10 +10,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 @Component({})
-
 export default class Skin extends Vue {
-
-  theme = 'dark'; 
+  theme = 'dark';
   // mounted() {
   //   // //给应用的顶层元素添加一个主题标识，用于标识当前的主题
   //   // document .getElementsByTagName("body")[0].setAttribute("data-theme", "light");
@@ -41,9 +39,11 @@ export default class Skin extends Vue {
 </script>
 
 <style lang="scss" scoped>
+
 .skin {
-  //@include themify();
-  //color: $text;
+  // @include themify();
+  // $text: red;
+  color: $text;
   //  使用主题
   // @include themify() {
   //   color: themed(text);

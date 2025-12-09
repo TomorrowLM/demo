@@ -589,12 +589,21 @@ importers:
 
   packages/vue-demo-pc:
     dependencies:
+      axios:
+        specifier: ^1.13.2
+        version: 1.13.2
+      dayjs:
+        specifier: 1.11.0
+        version: 1.11.0
       echarts:
         specifier: ^5.3.3
         version: 5.6.0
       element-ui:
         specifier: 2.15.12
         version: 2.15.12(vue@2.6.14)
+      js-md5:
+        specifier: ^0.7.3
+        version: 0.7.3
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -14584,7 +14593,7 @@ snapshots:
       source-map-loader: 3.0.1(webpack@5.76.1(esbuild@0.14.22))
       source-map-support: 0.5.21
       stylus: 0.56.0
-      stylus-loader: 6.2.0(stylus@0.56.0)(webpack@5.76.1)
+      stylus-loader: 6.2.0(stylus@0.56.0)(webpack@5.76.1(esbuild@0.14.22))
       terser: 5.14.2
       text-table: 0.2.0
       tree-kill: 1.2.2
@@ -20158,19 +20167,19 @@ snapshots:
 
   axios@0.22.0:
     dependencies:
-      follow-redirects: 1.15.11(debug@4.4.3)
+      follow-redirects: 1.15.11(debug@4.4.3(supports-color@6.1.0))
     transitivePeerDependencies:
       - debug
 
   axios@0.24.0:
     dependencies:
-      follow-redirects: 1.15.11(debug@4.4.3)
+      follow-redirects: 1.15.11(debug@4.4.3(supports-color@6.1.0))
     transitivePeerDependencies:
       - debug
 
   axios@1.13.2:
     dependencies:
-      follow-redirects: 1.15.11(debug@4.4.3)
+      follow-redirects: 1.15.11(debug@4.4.3(supports-color@6.1.0))
       form-data: 4.0.5
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -23414,6 +23423,13 @@ snapshots:
       schema-utils: 3.3.0
       webpack: 4.44.2(webpack-cli@4.10.0)
 
+  file-loader@6.1.1(webpack@5.103.0):
+    dependencies:
+      loader-utils: 2.0.4
+      schema-utils: 3.3.0
+      webpack: 5.103.0(webpack-cli@4.10.0)
+    optional: true
+
   file-uri-to-path@1.0.0:
     optional: true
 
@@ -24304,6 +24320,18 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  http-proxy-middleware@2.0.9(@types/express@4.17.25):
+    dependencies:
+      '@types/http-proxy': 1.17.17
+      http-proxy: 1.18.1(debug@4.4.3(supports-color@6.1.0))
+      is-glob: 4.0.3
+      is-plain-obj: 3.0.0
+      micromatch: 4.0.8
+    optionalDependencies:
+      '@types/express': 4.17.25
+    transitivePeerDependencies:
+      - debug
+
   http-proxy-middleware@2.0.9(@types/express@4.17.25)(debug@4.4.3):
     dependencies:
       '@types/http-proxy': 1.17.17
@@ -24339,7 +24367,7 @@ snapshots:
       corser: 2.0.1
       he: 1.2.0
       html-encoding-sniffer: 3.0.0
-      http-proxy: 1.18.1(debug@4.4.3)
+      http-proxy: 1.18.1(debug@4.4.3(supports-color@6.1.0))
       mime: 1.6.0
       minimist: 1.2.8
       opener: 1.5.2
@@ -25598,7 +25626,7 @@ snapshots:
       dom-serialize: 2.2.1
       glob: 7.2.3
       graceful-fs: 4.2.11
-      http-proxy: 1.18.1(debug@4.4.3)
+      http-proxy: 1.18.1(debug@4.4.3(supports-color@6.1.0))
       isbinaryfile: 4.0.10
       lodash: 4.17.21
       log4js: 6.9.1
@@ -30615,7 +30643,7 @@ snapshots:
 
   stylis@4.3.6: {}
 
-  stylus-loader@6.2.0(stylus@0.56.0)(webpack@5.76.1):
+  stylus-loader@6.2.0(stylus@0.56.0)(webpack@5.76.1(esbuild@0.14.22)):
     dependencies:
       fast-glob: 3.3.3
       klona: 2.0.6
@@ -30792,7 +30820,7 @@ snapshots:
       schema-utils: 4.3.3
       serialize-javascript: 6.0.2
       terser: 5.44.1
-      webpack: 5.103.0(webpack-cli@5.1.4)
+      webpack: 5.103.0(webpack-cli@4.10.0)
 
   terser@4.8.1:
     dependencies:
@@ -31367,7 +31395,7 @@ snapshots:
       schema-utils: 3.3.0
       webpack: 5.103.0(webpack-cli@4.10.0)
     optionalDependencies:
-      file-loader: 6.1.1(webpack@4.44.2(webpack-cli@4.10.0))
+      file-loader: 6.1.1(webpack@5.103.0)
 
   url-parse@1.5.10:
     dependencies:
@@ -32161,7 +32189,7 @@ snapshots:
       express: 4.22.1(supports-color@6.1.0)
       graceful-fs: 4.2.11
       html-entities: 2.6.0
-      http-proxy-middleware: 2.0.9(@types/express@4.17.25)(debug@4.4.3)
+      http-proxy-middleware: 2.0.9(@types/express@4.17.25)
       ipaddr.js: 2.3.0
       launch-editor: 2.12.0
       open: 8.4.2
@@ -32201,7 +32229,7 @@ snapshots:
       express: 4.22.1(supports-color@6.1.0)
       graceful-fs: 4.2.11
       html-entities: 2.6.0
-      http-proxy-middleware: 2.0.9(@types/express@4.17.25)(debug@4.4.3)
+      http-proxy-middleware: 2.0.9(@types/express@4.17.25)
       ipaddr.js: 2.3.0
       open: 8.4.0
       p-retry: 4.6.2
