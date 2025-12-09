@@ -38,10 +38,7 @@
       "import": "./lib/esm/utils/index.js",
       "require": "./lib/cjs/utils/index.js"
     },
-    "./assets": {
-      "import": "./lib/assets",
-      "require": "./lib/assets"
-    }
+    "./assets/*": "./lib/assets/*"
   },
   "directories": {
     "lib": "lib"

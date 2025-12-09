@@ -1,32 +1,14 @@
 import Vue from 'vue';
-// const App = resolved => require(['./App.vue'], resolved)
+import ElementUI from 'element-ui';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-// import '@/utils/index';
-// import '@/utils/rem';
-import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-// import '@/styles/common.scss';
-// import './public-path';
-// import { themeSetup } from './loadTheme';
-// import BaiduMap from 'vue-baidu-map';
+import '@lm/shared/assets/styles/index.scss'
 
-// require('@/styles/themes/light.scss'); //引入
-// import './styles/themes/light.scss';
-// themeSetup('theme_0')
 Vue.use(ElementUI);
-// Vue.use(BaiduMap, {
-//   ak: 'RALHVFnPxQdDB42THG2M3cUDzwSf1zV9',
-// });
-// Vue.use(Antd);
-
 Vue.config.productionTip = false;
-// new Vue({
-//   router,
-//   store,
-//   render: h => h(App),
-// }).$mount('#app');
+
 
 let instance: any = null;
 function render(props: any = {}) {
