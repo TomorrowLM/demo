@@ -1,11 +1,3 @@
-// const axios = require('axios');
-// const qs = require('qs');
-// const md5 = require('js-md5');
-
-import qs from "qs";
-import { md5 } from 'js-md5';
-import axios from 'axios';
-
 type RequestInfo = {
   config: any;
   triggerTime: number;
@@ -54,6 +46,7 @@ class RepeatHandle {
     this.requestMap.delete(reqKey);
   }
 }
+
 
 // 导出 repeatHandle 对象（新名称）
 export const repeatHandle = new RepeatHandle();

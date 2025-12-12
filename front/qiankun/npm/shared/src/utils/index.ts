@@ -1,6 +1,6 @@
-import baseRequest from "./request/request";
-// import useRequest from "./request/useRequest"
+import location from "./location";
+import request from "./request"
 export default {
-  baseRequest,
-  // useRequest
+  request,
+  location,
 }
