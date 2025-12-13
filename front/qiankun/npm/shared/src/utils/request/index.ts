@@ -93,7 +93,7 @@ const HTTP_STATUS_MESSAGES: Record<number, string> = {
 };
 
 // 成功的业务状态码集合
-const SUCCESS_CODES = new Set<number | string>([0, 1, '0', '1']);
+const SUCCESS_CODES = new Set<number | string>([0, 1, '0', '1', 200, '200']);
 
 // ==================== 类型定义 ====================
 export interface RequestConfig extends AxiosRequestConfig {
@@ -407,7 +407,8 @@ const requestInterceptor = (
   config: InternalAxiosRequestConfig & RequestConfig,
 ): InternalAxiosRequestConfig => {
   const requestConfig = config as RequestConfig;
-
+  const token = window.localStorage.getItem('token');
+  requestConfig.headers.authorization = `Bearer ${token}`;
   // 清理GET请求参数
   if (requestConfig.method?.toLowerCase() === 'get' && requestConfig.params) {
     requestConfig.params = cleanEmptyParams(requestConfig.params);
@@ -531,32 +532,11 @@ const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
 // ==================== Axios 实例配置 ====================
 
 /**
- * 获取基础URL
- */
-const getBaseUrl = (): string => {
-  try {
-    const currentUrl = window.location.href;
-    const apiBaseUrl = process.env.API_BASE_URL;
-    const dsbApiBaseUrl = process.env.DSB_API_BASE_URL;
-
-    // 开发环境或特定域名使用API_BASE_URL，否则使用DSB_API_BASE_URL
-    if (IS_DEV || currentUrl.includes('.17an')) {
-      return apiBaseUrl || dsbApiBaseUrl || '';
-    }
-
-    return dsbApiBaseUrl || apiBaseUrl || '';
-  } catch (error) {
-    // 如果获取失败，使用默认的API_BASE_URL
-    return process.env.API_BASE_URL || '';
-  }
-};
-
-/**
  * 创建Axios实例
  */
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
-    baseURL: getBaseUrl(),
+    baseURL: `${process.env.APP_PROXY_API}`,
     timeout: DEFAULT_TIMEOUT,
     withCredentials: true,
     xsrfCookieName: 'XSRF-TOKEN',
@@ -642,7 +622,7 @@ export interface LoadingProvider {
 /**
  * 请求工具类型
  */
-export type Request = typeof request;
+
 // export interface Request {
 //   setMessageProvider: (provider: any) => void;
 //   setLoadingProvider: (provider: any) => void;
@@ -719,7 +699,7 @@ export const request = {
     return requestState.pendingRequests.size > 0;
   },
 };
-
+export type Request = typeof request;
 
 
 // ==================== 全局错误处理 ====================

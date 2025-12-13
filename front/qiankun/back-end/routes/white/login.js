@@ -31,7 +31,7 @@ router.post("/", (req, res) => {
           return res.send({
             code: 200,
             message: '登录成功',
-            token
+            data: token
             // 前端获取token后存储在localStroage中,
             // **调用接口时 设置axios(ajax)请求头Authorization的格式为`Bearer ` +token
           });

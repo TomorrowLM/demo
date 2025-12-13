@@ -44,7 +44,7 @@ export default {
         res => {
           console.log(res, 1);
           if (res.code == 200) {
-            window.localStorage.setItem('token', res.token);
+            window.localStorage.setItem('token', res.data);
             this.$store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: true });
             const currentRouteInfo = this.$store.getters.currentRouteInfo;
             this.$router.push(currentRouteInfo.path || '/');

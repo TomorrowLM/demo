@@ -8,16 +8,12 @@ export interface LoginParams {
 }
 
 export interface LoginResponse {
-  code?: number;
-  msg?: string;
-  data?: {
-    token?: string;
-    [key: string]: any;
-  };
+  token?: string;
+  [key: string]: any;
 }
 
 export const userInfoApi = (params: Record<string, any>): Promise<any> => {
-  return request.get('/common/users', params, {});
+  return request.get('/common/users', { params });
 };
 
 export const login = (params: LoginParams): Promise<LoginResponse> => {
