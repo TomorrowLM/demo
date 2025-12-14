@@ -283,6 +283,29 @@ const removeFromPendingQueue = (config?: RequestConfig): void => {
   requestState.pendingRequests.delete(requestKey);
 };
 
+/**
+ * 手动取消请求（按 config 生成的 key 取消）
+ * 返回 true 表示找到了并已取消
+ */
+export function cancelRequest(config: Partial<RequestConfig>): boolean {
+  try {
+    const key = generateRequestKey(config as RequestConfig);
+    const controller = requestState.pendingRequests.get(key);
+    if (controller) {
+      try {
+        controller.abort();
+      } catch (e) {
+        // ignore
+      }
+      requestState.pendingRequests.delete(key);
+      return true;
+    }
+  } catch (e) {
+    // ignore
+  }
+  return false;
+}
+
 // ==================== 错误处理 ====================
 
 /**
@@ -576,6 +599,7 @@ const createDataMethod = (method: 'post' | 'put' | 'patch') => {
 export const request = {
   setMessageProvider,
   setLoadingProvider,
+  cancelRequest,
   /** GET请求 */
   get: createParamsMethod('get'),
 

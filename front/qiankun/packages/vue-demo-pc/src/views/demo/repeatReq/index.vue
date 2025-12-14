@@ -3,7 +3,8 @@
     <h1>重复请求</h1>
     <el-button @click="reqHandle1">点击</el-button>
     <h1>其他模块触发相同接口（包括参数相同），则会使用缓存的数据</h1>
-    <el-button @click="reqHandle2">点击</el-button>
+    <el-button @click="reqHandle1">点击</el-button>
+    <el-button @click="cancelHandle">取消</el-button>
     <!-- <h1>并发上传，场景：图片或文件批量下载、RSSHub高速抓取内容</h1>
     <el-button @click="reqHandle3">点击</el-button> -->
   </div>
@@ -11,6 +12,7 @@
 
 <script>
 import { setTimeOutApi } from '@/api';
+import $lm from '@lm/shared';
 
 export default {
   methods: {
@@ -20,10 +22,19 @@ export default {
         this.$message(resData.data.info);
       });
     },
-    async reqHandle2() {
-      console.log(2);
-      const data = await requestFn({ a: 1 });
-    },
+    cancelHandle() {
+      // 使用和请求相同的配置来取消（必须能生成相同的 key）
+      const cancelled = $lm.utils.request.cancelRequest({
+        method: 'get',
+        url: '/common/setTimeOut',
+        params: { a: 1 }, // 与请求时传的 params 保持一致
+      });
+      if (cancelled) {
+        this.$message.success('已取消待处理请求');
+      } else {
+        this.$message.info('没有待取消的请求');
+      }
+    }
     // /**
     //  * 教程：https://zhuanlan.zhihu.com/p/700309565
     //  * @param url 文件上传地址
