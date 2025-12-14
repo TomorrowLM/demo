@@ -20,8 +20,14 @@
       "import": "./lib/esm/utils/index.js",
       "require": "./lib/cjs/utils/index.js"
     },
+    "./utils/*": {
+      "types": "./lib/esm/types/utils/*",
+      "import": "./lib/esm/utils/*",
+      "require": "./lib/cjs/utils/*"
+    },
     "./assets/*": "./lib/assets/*"
   },
+  "sideEffects": false,
   "directories": {
     "lib": "lib"
   },

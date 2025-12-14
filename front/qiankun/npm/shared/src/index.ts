@@ -1,4 +1,6 @@
-import utils from "./utils";
+import utils, { request, location } from "./utils";
+
+export { utils, request, location };
 
 const $shared = {
   utils,

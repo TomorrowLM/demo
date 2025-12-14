@@ -12,7 +12,7 @@
 
 <script>
 import { setTimeOutApi } from '@/api';
-import $lm from '@lm/shared';
+import { request } from '@lm/shared/utils';
 
 export default {
   methods: {
@@ -24,7 +24,7 @@ export default {
     },
     cancelHandle() {
       // 使用和请求相同的配置来取消（必须能生成相同的 key）
-      const cancelled = $lm.utils.request.cancelRequest({
+      const cancelled = request.cancelRequest({
         method: 'get',
         url: '/common/setTimeOut',
         params: { a: 1 }, // 与请求时传的 params 保持一致
