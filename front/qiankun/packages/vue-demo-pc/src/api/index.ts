@@ -20,3 +20,7 @@ export const login = (params: LoginParams): Promise<LoginResponse> => {
   console.log(params);
   return request.post<LoginResponse>('/white/login', params, {});
 };
+///common/setTimeOut
+export const setTimeOutApi = (): Promise<any> => {
+  return request.get('/common/setTimeOut');
+} 

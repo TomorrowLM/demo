@@ -11,13 +11,15 @@
  * 6. 请求取消和状态管理
  */
 
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import type { ApiResponse } from './types';
-// message/loading providers will be injected by the consumer.
-// Provide default no-op implementations to avoid runtime errors if not set.
-// 支持两种形式的提供者：
-// 1. 类构造器（Consumer 传入 MessageClass/LoadingClass），shared 内部会进行实例化并调用实例方法；
-// 2. 直接的对象实现（含 error/success/loading/destroy 或 start/stop 等方法）。
-
+// ==================== 类型定义 ====================
 type MessageProviderInstance = {
   add?: (opts: any) => any;
   remove?: (opts: any) => any;
@@ -36,8 +38,52 @@ type LoadingProviderInstance = {
   stop?: (instance?: any) => void;
 };
 
+export interface RequestConfig extends AxiosRequestConfig {
+  /** 是否显示全局加载提示 */
+  showLoading?: boolean;
+  /** 是否显示错误提示 */
+  showError?: boolean;
+  /** 是否忽略重复请求检查 */
+  ignoreDuplicate?: boolean;
+  /** 自定义错误处理器 */
+  customErrorHandler?: (error: AxiosError) => void;
+}
+
+interface RequestState {
+  loadingCount: number;
+  pendingRequests: Map<string, AbortController>;
+}
+
+// ==================== 常量定义 ====================
+const IS_DEV = process.env.NODE_ENV === 'development';
+const GLOBAL_LOADING_KEY = 'global-loading';
+const DEFAULT_TIMEOUT = 60000;
 let messageProviderInstance: MessageProviderInstance | null = null;
 let loadingProviderInstance: LoadingProviderInstance | null = null;
+// HTTP 状态码对应的错误消息
+const HTTP_STATUS_MESSAGES: Record<number, string> = {
+  0: '网络连接失败，请检查网络设置',
+  400: '请求参数错误',
+  401: '未授权，请重新登录',
+  403: '拒绝访问',
+  404: '请求资源不存在',
+  405: '请求方法不允许',
+  408: '请求超时',
+  500: '服务器内部错误',
+  502: '网关错误',
+  503: '服务不可用',
+  504: '网关超时',
+};
+// 成功的业务状态码集合
+const SUCCESS_CODES = new Set<number | string>([0, 1, '0', '1', 200, '200']);
+
+// ==================== 状态管理 ====================
+const requestState: RequestState = {
+  loadingCount: 0,
+  pendingRequests: new Map<string, AbortController>(),
+};
+
+// ==================== 工具函数 ====================
 
 export function setMessageProvider(provider: any) {
   // provider can be a class (constructor) or object
@@ -64,75 +110,22 @@ export function setLoadingProvider(provider: any) {
     loadingProviderInstance = provider;
   }
 }
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
-
-// ==================== 常量定义 ====================
-const IS_DEV = process.env.NODE_ENV === 'development';
-const GLOBAL_LOADING_KEY = 'global-loading';
-const DEFAULT_TIMEOUT = 60000;
-
-// HTTP 状态码对应的错误消息
-const HTTP_STATUS_MESSAGES: Record<number, string> = {
-  0: '网络连接失败，请检查网络设置',
-  400: '请求参数错误',
-  401: '未授权，请重新登录',
-  403: '拒绝访问',
-  404: '请求资源不存在',
-  405: '请求方法不允许',
-  408: '请求超时',
-  500: '服务器内部错误',
-  502: '网关错误',
-  503: '服务不可用',
-  504: '网关超时',
-};
-
-// 成功的业务状态码集合
-const SUCCESS_CODES = new Set<number | string>([0, 1, '0', '1', 200, '200']);
-
-// ==================== 类型定义 ====================
-export interface RequestConfig extends AxiosRequestConfig {
-  /** 是否显示全局加载提示 */
-  showLoading?: boolean;
-  /** 是否显示错误提示 */
-  showError?: boolean;
-  /** 是否忽略重复请求检查 */
-  ignoreDuplicate?: boolean;
-  /** 自定义错误处理器 */
-  customErrorHandler?: (error: AxiosError) => void;
-}
-
-interface RequestState {
-  loadingCount: number;
-  pendingRequests: Map<string, AbortController>;
-}
-
-// ==================== 状态管理 ====================
-const requestState: RequestState = {
-  loadingCount: 0,
-  pendingRequests: new Map<string, AbortController>(),
-};
-
-// ==================== 工具函数 ====================
 
 /**
  * 生成请求的唯一标识键
  */
-const generateRequestKey = (config: RequestConfig): string => {
+const generateRequestKey = (config: RequestConfig) => {
   const method = (config.method || 'GET').toUpperCase();
   const url = config.url || '';
-  return `${method}|${url}`;
+  const params = method === 'get' ? JSON.stringify(config.params || {}) : JSON.stringify(config.data || {});
+  return `${method}|${url}|${params}`;
 };
 
 /**
  * 判断是否为请求取消错误
  */
 const isCancelError = (error: unknown): boolean => {
+  console.log(error, 'isCancelError');
   return (
     axios.isCancel(error) ||
     (error instanceof AxiosError && error.code === 'ERR_CANCELED') ||
@@ -156,32 +149,6 @@ const resolveErrorMessage = (status?: number, data?: ApiResponse): string => {
 
   // 默认错误消息
   return status ? `请求失败 (${status})` : '网络连接失败，请检查网络设置';
-};
-
-/**
- * 清理GET请求的空参数
- */
-const cleanEmptyParams = (params: any): any => {
-  if (!params || typeof params !== 'object') {
-    return params;
-  }
-
-  const cleanedParams: Record<string, unknown> = {};
-  let hasChanges = false;
-
-  Object.keys(params).forEach((key) => {
-    const value = params[key];
-
-    // 过滤空字符串和null/undefined值
-    if (value === '' || value === null || value === undefined) {
-      hasChanges = true;
-      return;
-    }
-
-    cleanedParams[key] = value;
-  });
-
-  return hasChanges ? cleanedParams : params;
 };
 
 /**
@@ -286,7 +253,7 @@ const addToPendingQueue = (config: RequestConfig): void => {
 
   const requestKey = generateRequestKey(config);
   const existingController = requestState.pendingRequests.get(requestKey);
-
+  console.log('addToPendingQueue', requestKey, existingController, requestState);
   // 如果存在相同的未完成请求，则取消它
   if (existingController && !existingController.signal.aborted) {
     existingController.abort();
@@ -301,6 +268,7 @@ const addToPendingQueue = (config: RequestConfig): void => {
   const controller = new AbortController();
   config.signal = controller.signal;
   requestState.pendingRequests.set(requestKey, controller);
+  console.log('after addToPendingQueue', requestState, requestState.pendingRequests.get(requestKey));
 };
 
 /**
@@ -344,6 +312,7 @@ const handleRequestError = (
   error: AxiosError,
   config: RequestConfig = {},
 ): void => {
+  console.log('handleRequestError', error, config);
   // 如果是取消错误，直接返回
   if (isCancelError(error)) {
     return;
@@ -367,19 +336,19 @@ const handleRequestError = (
   const errorMessage = resolveErrorMessage(status, data);
 
   // 显示错误提示（除非明确配置不显示）
-    if (config.showError !== false) {
-      try {
-        if (messageProviderInstance) {
-          if (typeof messageProviderInstance.error === 'function') {
-            messageProviderInstance.error(errorMessage);
-          } else if (typeof messageProviderInstance.add === 'function') {
-            messageProviderInstance.add({ text: errorMessage, type: 'error', key: GLOBAL_LOADING_KEY });
-          }
+  if (config.showError !== false) {
+    try {
+      if (messageProviderInstance) {
+        if (typeof messageProviderInstance.error === 'function') {
+          messageProviderInstance.error(errorMessage);
+        } else if (typeof messageProviderInstance.add === 'function') {
+          messageProviderInstance.add({ text: errorMessage, type: 'error', key: GLOBAL_LOADING_KEY });
         }
-      } catch {
-        // 忽略消息显示错误
       }
+    } catch {
+      // 忽略消息显示错误
     }
+  }
 
   // 处理未授权错误
   if (status === 401) {
@@ -406,13 +375,10 @@ const handleRequestError = (
 const requestInterceptor = (
   config: InternalAxiosRequestConfig & RequestConfig,
 ): InternalAxiosRequestConfig => {
+  console.log('requestInterceptor', config);
   const requestConfig = config as RequestConfig;
   const token = window.localStorage.getItem('token');
   requestConfig.headers.authorization = `Bearer ${token}`;
-  // 清理GET请求参数
-  if (requestConfig.method?.toLowerCase() === 'get' && requestConfig.params) {
-    requestConfig.params = cleanEmptyParams(requestConfig.params);
-  }
 
   // 自动设置Content-Type
   setContentTypeHeader(requestConfig);
@@ -440,6 +406,7 @@ const requestInterceptor = (
  * 请求错误拦截器
  */
 const requestErrorInterceptor = (error: AxiosError): Promise<never> => {
+  console.log('requestErrorInterceptor', error);
   const config = error.config as RequestConfig | undefined;
 
   // 停止加载提示
@@ -449,7 +416,7 @@ const requestErrorInterceptor = (error: AxiosError): Promise<never> => {
 
   // 如果是取消错误，返回一个永远不会resolve的Promise
   if (isCancelError(error)) {
-    return new Promise(() => {});
+    return new Promise(() => { });
   }
 
   return Promise.reject(error);
@@ -463,6 +430,7 @@ const requestErrorInterceptor = (error: AxiosError): Promise<never> => {
 const responseInterceptor = (
   response: AxiosResponse<ApiResponse>,
 ): AxiosResponse<ApiResponse> | Promise<never> => {
+  console.log('responseInterceptor', response);
   const config = response.config as RequestConfig;
 
   // 从待处理队列中移除
@@ -506,7 +474,13 @@ const responseInterceptor = (
  * 响应错误拦截器
  */
 const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
+  console.log('responseErrorInterceptor', error);
   const config = error.config as RequestConfig | undefined;
+  
+  // 如果是取消错误，返回一个永远不会resolve的Promise
+  if (isCancelError(error)) {
+    return new Promise(() => { });
+  }
 
   // 从待处理队列中移除
   removeFromPendingQueue(config);
@@ -521,10 +495,7 @@ const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
     handleRequestError(error, config);
   }
 
-  // 如果是取消错误，返回一个永远不会resolve的Promise
-  if (isCancelError(error)) {
-    return new Promise(() => {});
-  }
+
 
   return Promise.reject(error);
 };
@@ -598,44 +569,9 @@ const createDataMethod = (method: 'post' | 'put' | 'patch') => {
   };
 };
 
-// ==================== 导出接口 ====================
-
-export interface MessageProvider {
-  add?: (opts: any) => any;
-  remove?: (opts: any) => any;
-  clear?: () => void;
-  error?: (text: string) => void;
-  success?: (text: string) => void;
-  loading?: (opts: any) => any;
-  destroy?: (key?: string) => void;
-}
-
-export interface LoadingProvider {
-  add?: () => any;
-  remove?: (target?: any) => void;
-  clear?: () => void;
-  start?: () => any;
-  stop?: (instance?: any) => void;
-}
-// ==================== 类型导出 ====================
-
 /**
  * 请求工具类型
  */
-
-// export interface Request {
-//   setMessageProvider: (provider: any) => void;
-//   setLoadingProvider: (provider: any) => void;
-//   get: <T = any>(url: string, params?: any, config?: any) => Promise<any>;
-//   delete: <T = any>(url: string, params?: any, config?: any) => Promise<any>;
-//   post: <T = any>(url: string, data?: any, config?: any) => Promise<any>;
-//   put: <T = any>(url: string, data?: any, config?: any) => Promise<any>;
-//   patch: <T = any>(url: string, data?: any, config?: any) => Promise<any>;
-//   fullRequest: <T = any>(config: RequestConfig) => Promise<import('axios').AxiosResponse>;
-//   cancelAllRequests: () => void;
-//   getRequestState: () => { loadingCount: number; pendingCount: number };
-//   hasPendingRequests: () => boolean;
-// }
 
 export const request = {
   setMessageProvider,
@@ -700,7 +636,6 @@ export const request = {
   },
 };
 export type Request = typeof request;
-
 
 // ==================== 全局错误处理 ====================
 
