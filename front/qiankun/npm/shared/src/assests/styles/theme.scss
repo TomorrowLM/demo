@@ -1,56 +1,45 @@
-// @import './theme/base', './theme/mixin', './theme/variable'
-
-//
-
-
-// @import './theme/base', './theme/mixin', './theme/variable';
-
-
-
 //方案一
 :root {
   --text: #cece59;
+  --primary-color: #5988ce;
 }
 
-:root[theme='dark'] {
+:root[theme="dark"] {
   --text: blue;
-
 }
 
 $text: var(--text);
-
+$primary-color: var(--primary-color);
 
 //方案二
 // 浅色
-$colors-light: (text: red);
+$colors-light: (
+  text: red,
+);
 // 深色
-$colors-dark: (text:blue);
+$colors-dark: (
+  text: blue,
+);
 
 @mixin themify() {
-  [theme='light'] & {
-    $theme: 'light' !global;
+  [theme="light"] & {
+    $theme: "light" !global;
     @content;
   }
 
-  [theme='dark'] & {
-    $theme: 'dark' !global;
+  [theme="dark"] & {
+    $theme: "dark" !global;
     @content;
   }
 }
 
 @function themed($key) {
-  @if $theme=="light" {
+  @if $theme== "light" {
     @return map-get($colors-light, $key);
-  }
-
-  @else {
+  } @else {
     @return map-get($colors-dark, $key);
   }
 }
-
-
-
-
 
 //方案三
 // [theme='light'] {
@@ -65,7 +54,6 @@ $colors-dark: (text:blue);
 // @use './themes/light';
 // @use './themes/dark';
 // $text: var(--theme-name)=='light' ?light.$text:'red' !global;
-
 
 // @debug var(--text-primary-color)123#{$text};
 
@@ -95,20 +83,26 @@ $shadow: var(--shadow);
 
 //方案二
 // 浅色
-$colors-light: (text: red);
+$colors-light: (
+  text: red,
+);
 // 深色
-$colors-dark: (text:blue);
+$colors-dark: (
+  text: blue,
+);
 
-$themes:(light:(primary-bg:#ccc,
-    primary-text:#75e566,
+$themes: (
+  light: (
+    primary-bg: #ccc,
+    primary-text: #75e566,
   ),
-  dark:(primary-bg:red,
-    primary-text:#272d45,
-  ));
-
+  dark: (
+    primary-bg: red,
+    primary-text: #272d45,
+  ),
+);
 
 @mixin themify() {
-
   // @each $theme-name,
   // $theme-map in $themes {
   //   $theme-map: $theme-map !global;
@@ -118,14 +112,13 @@ $themes:(light:(primary-bg:#ccc,
   //   }
   // }
 
-
-  [theme='light'] & {
-    $theme: 'light' !global;
+  [theme="light"] & {
+    $theme: "light" !global;
     @content;
   }
 
-  [theme='dark'] & {
-    $theme: 'dark' !global;
+  [theme="dark"] & {
+    $theme: "dark" !global;
     @content;
   }
 }
@@ -134,22 +127,15 @@ $themes:(light:(primary-bg:#ccc,
 //   @return map-get($theme-map, $key);
 // }
 
-
 @function themed($key) {
   @debug $theme;
 
-  @if $theme=="light" {
+  @if $theme== "light" {
     @return map-get($colors-light, $key);
-  }
-
-  @else {
+  } @else {
     @return map-get($colors-dark, $key);
   }
 }
-
-
-
-
 
 //方案三
 // [theme='light'] {
@@ -164,7 +150,6 @@ $themes:(light:(primary-bg:#ccc,
 // @use './themes/light';
 // @use './themes/dark';
 // $text: var(--theme-name)=='light' ?light.$text:'red' !global;
-
 
 // @debug var(--text-primary-color)123#{$text};
 

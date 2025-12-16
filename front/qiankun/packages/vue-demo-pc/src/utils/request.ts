@@ -1,9 +1,7 @@
 import $lm from '@lm/shared';
 import { Message, Loading } from 'element-ui'
-// import type { Request } from '@lm/shared/lib/esm/types/utils/request/index';
-// const request = $lm.utils.request as Request;
+
 const request = $lm.utils.request;
-console.log(request, 212);
 
 class MessageClass {
   messageInstances: any;

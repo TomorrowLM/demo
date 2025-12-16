@@ -28,8 +28,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import Header from '@/views/frame/Header.vue';
 import Sidebar from '@/views/frame/Sidebar.vue';
 import TagNav from '@/views/frame/TagNav.vue';
-// import ws from '@/utils/websocket';
-import { userInfoApi } from '@/api';
+
 @Component({
   components: { Sidebar, Header, TagNav },
   computed: {
@@ -44,9 +43,6 @@ import { userInfoApi } from '@/api';
   },
 })
 export default class Layout extends Vue {
-  private name = 'Layout';
-  private isCollapse = false;
-  private ws: any = null;
   padding = '20px';
   @Watch('$route', { immediate: true, deep: true })
   onRouteChange() {
@@ -58,21 +54,6 @@ export default class Layout extends Vue {
 
   async created() {
     console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
-    this.$nextTick(() => {
-      // ws.initWebsocket();
-    });
-
-    // userInfoApi()
-    //   .then(res => {
-    //     console.log(res.data);
-    //     this.$store.commit('change_role', {
-    //       role: res.data.role,
-    //     });
-    //     this.$store.commit('SET_ROUTES', res.data.routes);
-    //   })
-    //   .catch(res => {
-    //     // this.$router.push('/login');
-    //   });
   }
 
   mounted() {
@@ -95,7 +76,6 @@ export default class Layout extends Vue {
   }
 
   goRouter() {
-    console.log('this.$route', this.$route);
     if (this.$route.name === 'page1') {
       this.$router.push('/page2');
     } else if (this.$route.name === 'page2') {
@@ -110,9 +90,6 @@ export default class Layout extends Vue {
 </script>
 
 <style lang="scss">
-:root {
-  // --theme-text: blue;
-}
 #vue2-pc {
   height: 100%;
 }

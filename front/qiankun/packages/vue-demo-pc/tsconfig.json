@@ -2,6 +2,12 @@
   "extends": "@lm/lint/lib/tsLint/tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    // 指定特殊模块的路径
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
   },
   // ts 排除的文件
   "exclude": [

@@ -17,7 +17,6 @@ export const userInfoApi = (params: Record<string, any>): Promise<any> => {
 };
 
 export const login = (params: LoginParams): Promise<LoginResponse> => {
-  console.log(params);
   return request.post<LoginResponse>('/white/login', params, {});
 };
 ///common/setTimeOut
