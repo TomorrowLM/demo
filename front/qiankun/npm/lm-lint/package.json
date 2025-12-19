@@ -4,8 +4,19 @@
   "main": "./lib",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf lib && tsc && cpx \"src/tsLint/**\" lib/tsLint"
+    "build": "rm -rf lib && tsc && cpx \"src/tsLint/**\" lib/tsLint",
+    "lint": "cd packages/vue-demo-pc && pnpm exec tsc --noEmit"
   },
+  "exports": {
+    ".": {
+      "import": "./src",
+      "require": "./src"
+    },
+    "./tsLint/*": "./tsLint/*",
+    "./declare/*": "./tsLint/declare/*",
+    "./declare/vue2": "./tsLint/declare/vue2.d.ts"
+  },
+  "types": "./tsLint/declare/index.d.ts",
   "author": "liming",
   "license": "MIT",
   "description": "",

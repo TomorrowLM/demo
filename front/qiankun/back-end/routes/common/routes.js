@@ -6,45 +6,41 @@ router.get('/', (req, res, next) => {
   console.log(req.cookies);
   const data = req.cookies.USER === 'admin'
     ? {
-        name: 'admin',
-        role: 'admin',
-        routes: [{
-          path: '/',
-          children: [
-            {
-              path: 'demo',
-              name: 'demo',
+      routes: [{
+        path: '/',
+        children: [
+          {
+            path: 'demo',
+            name: 'demo',
 
-              meta: {
-                sidebar: true,
-                menuName: 'demo'
-              },
-              component: 'demo/index.vue',
-              children: [
-                {
-                  path: 'access',
-                  name: 'access',
+            meta: {
+              sidebar: true,
+              menuName: 'demo'
+            },
+            component: 'demo/index.vue',
+            children: [
+              {
+                path: 'access',
+                name: 'access',
 
-                  component: 'demo/Access/index.vue',
-                  meta: {
-                    sidebar: true,
-                    menuName: '权限',
-                    button: {
-                      'btn:createUser': 2, // 显示
-                      'btn:editUser': 2, // 显示
-                      'module:module1': 2// 显示
-                    },
-                    roles: ['admin', 'liming']
-                  }
+                component: 'demo/Access/index.vue',
+                meta: {
+                  sidebar: true,
+                  menuName: '权限',
+                  button: {
+                    'btn:createUser': 2, // 显示
+                    'btn:editUser': 2, // 显示
+                    'module:module1': 2// 显示
+                  },
+                  roles: ['admin', 'liming']
                 }
-              ]
-            }
-          ]
-        }]
-      }
+              }
+            ]
+          }
+        ]
+      }]
+    }
     : req.cookies.USER === 'liming' ? {
-      name: 'liming',
-      role: 'second',
       routes: [{
         path: '/',
         children: [
@@ -80,10 +76,8 @@ router.get('/', (req, res, next) => {
       }]
     }
       : {
-          name: 'third',
-          role: 'third',
-          routes: []
-        }
+        routes: []
+      }
   res.send({
     code: 200,
     message: 'success',
