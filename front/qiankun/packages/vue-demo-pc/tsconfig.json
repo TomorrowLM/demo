@@ -1,12 +1,14 @@
 {
-  "extends": "@lm/lint/lib/tsLint/tsconfig.base.json",
+  "extends": "@lm/lint/tsLint/tsconfig.vue2.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     // 指定特殊模块的路径
     "paths": {
       "@/*": [
-        "src/*"
-      ]
+        "src/*",
+      ],
     },
   },
   // ts 排除的文件

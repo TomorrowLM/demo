@@ -1,0 +1,2 @@
+// Ignore TypeScript declaration files (they're for TypeScript compiler)
+**/*.d.ts

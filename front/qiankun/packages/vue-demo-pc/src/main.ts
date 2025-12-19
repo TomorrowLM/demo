@@ -16,7 +16,7 @@ function render(props: any = {}) {
   instance = new Vue({
     router,
     store,
-    render: h => h(App),
+    render: (h: any) => h(App),
   }).$mount(container ? container.querySelector('#vue2-pc') : '#vue2-pc');
 }
 // 独立运行时

@@ -1,2 +1,9 @@
 import './common.d.ts';
-export {};
+export { };
+
+declare global {
+  declare module '@/*' {
+    const content: any;
+    export default content;
+  }
+}

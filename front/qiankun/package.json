@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "@lm/lint": "workspace:*",
+    "@types/lodash": "^4.17.21",
+    "@types/vue": "^2.0.0",
     "nodemon": "^3.1.7",
     "npm-run-all": "^4.1.5",
     "typescript": "5.4.5"
