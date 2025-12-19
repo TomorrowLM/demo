@@ -12,10 +12,12 @@ export interface LoginResponse {
   [key: string]: any;
 }
 
-export const userInfoApi = (params: Record<string, any>): Promise<any> => {
-  return request.get('/common/users', { params });
+export const userInfoApi = (): Promise<any> => {
+  return request.get('/common/userInfo');
 };
-
+export const menuApi = (): Promise<any> => {
+  return request.get('/common/menuList', {});
+};
 export const login = (params: LoginParams): Promise<LoginResponse> => {
   return request.post<LoginResponse>('/white/login', params, {});
 };

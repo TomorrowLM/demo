@@ -58,7 +58,8 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   } else if (store.getters.registerRouteFresh && to.path !== '/login') {
     // 如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
     store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: false });
-    // 获取路由
+    store.dispatch('generateUserInfo');
+    // 获取路由配置
     const routes = await store.dispatch('generateRoutes');
     console.log('routes', routes);
     resetRouter(); // 重置路由信息
@@ -66,7 +67,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
       router.addRoute(item);
     });
     // 获取路由配置
-    console.log('getRoutes', router.getRoutes());
+    console.log('getRoutes123', router.getRoutes());
     // 解决登录或者刷新后路由找不到的问题：
     // 虽然to找不到对应的路由那么他会再执行一次beforeEach，但是登录或者刷新前路由表没有动态路由信息，那么to.name还是找不到对应的路由，最后会跳转到404页面
     // next({ ...to, replace: true });

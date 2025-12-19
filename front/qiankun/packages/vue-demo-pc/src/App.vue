@@ -24,7 +24,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
+import { PropSync } from './decorators';
 import Header from '@/views/frame/Header.vue';
 import Sidebar from '@/views/frame/Sidebar.vue';
 import TagNav from '@/views/frame/TagNav.vue';
@@ -36,16 +37,26 @@ import TagNav from '@/views/frame/TagNav.vue';
       return JSON.stringify(window.localStorage.getItem('token'));
     },
   },
-  Watch: {
-    $route() {
-      console.log(document.querySelector('.qiankun-app1'), 'qiankun-app1');
+  watch: {
+    $route: {
+      handler: 'onRouteChange',
+      immediate: true,
+      deep: true,
     },
   },
 })
+
+// 如果你在 App.vue 里还看到 “一个模块不能具有多个默认导出” 这一个 TS 提示，那已经和 PropSync、Sidebar.vue 无关了，
+// 只是 VS Code 里的 TS 插件对这个 SFC 的虚拟代码有点挑剔。要是你想把这一个提示也干掉，我可以再帮你在 App.vue 里加 // @ts-nocheck 或改成非 class 写法
 export default class Layout extends Vue {
   padding = '20px';
-  @Watch('$route', { immediate: true, deep: true })
+  isCollapse = false;
+
+  @PropSync('name', { type: String }) syncedName!: string;
+
   onRouteChange() {
+    console.log(document.querySelector('.qiankun-app1'), 'qiankun-app1');
+
     // this.$nextTick(() => {
     //   console.log(document.querySelector('.qiankun-app1'),document.querySelector('.contentContainer'), 'qiankun-app1');
     //   document.querySelector('.contentContainer').appendChild(document.querySelector('.qiankun-app1'));
@@ -54,6 +65,7 @@ export default class Layout extends Vue {
 
   async created() {
     console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
+    await this.$store.dispatch('GetUserCoreInfo');
   }
 
   mounted() {

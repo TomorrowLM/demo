@@ -37,29 +37,48 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, PropSync, Watch } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
-  watch: {
-    $route(to: any, from: any) {
-      console.log(to,'to')
-      window.sessionStorage.setItem('currentRouteInfo', JSON.stringify({ path: to.path, meta: to.meta }));
-      this.$store.commit('setRouteInfo');
-      this.$store.commit('setTagNav', { path: to.path, meta: to.meta });
-    },
-  },
-  computed: {
-    routeList() {
-      return this.$store.getters.commonMenu;
+  props: {
+    collapse: {
+      type: Boolean,
+      default: false,
     },
   },
 })
 export default class Sidebar extends Vue {
-  @PropSync('collapse') isCollapse!: boolean;
   private readonly name = 'Sidebar';
 
+  get isCollapse(): boolean {
+    return this.$props.collapse as boolean;
+  }
+
+  set isCollapse(value: boolean) {
+    this.$emit('update:collapse', value);
+  }
+
   get currentRouteInfo() {
+    console.log(22222,this.$store.getters);
     return this.$store.getters.currentRouteInfo;
+  }
+
+  get routeList() {
+    return this.$store.getters.commonMenu;
+  }
+
+  mounted() {
+    this.updateRouteInfo(this.$route);
+  }
+
+  beforeRouteUpdate(to: any) {
+    this.updateRouteInfo(to);
+  }
+
+  updateRouteInfo(route: any) {
+    window.sessionStorage.setItem('currentRouteInfo', JSON.stringify({ path: route.path, meta: route.meta }));
+    this.$store.commit('setCurrentRoute');
+    this.$store.commit('setTagNav', { path: route.path, meta: route.meta });
   }
 
   selectSiderBar() {

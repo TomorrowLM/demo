@@ -2,18 +2,20 @@
   <div>
     <el-tag
       v-for="(tag, index) in tabNav"
-      :class="[currentRouteInfo.meta.menuName === tag.meta.menuName ? 'active_tag' : 'tag']"
+      :class="[currentRouteInfo.meta && currentRouteInfo.meta.menuName === tag.meta.menuName ? 'active_tag' : 'tag']"
       :key="tag.path"
       type=""
       :disable-transitions="false"
       @close="handleClose(tag)"
     >
       <router-link :to="tag.path">
-        <span :style="{ color: currentRouteInfo.meta.menuName !== tag.meta.menuName ? '#222' : '#697dff' }">{{
-          tag.meta.menuName
-        }}</span>
+        <span
+          :style="{
+            color: currentRouteInfo.meta && currentRouteInfo.meta.menuName !== tag.meta.menuName ? '#222' : '#697dff',
+          }"
+          >{{ tag.meta.menuName }}</span
+        >
       </router-link>
-      <!-- v-if="currentRouteInfo.name === tag.name" -->
       <i key="tag.name" class="el-icon-close" @click="deleteTag(index)"></i>
     </el-tag>
   </div>

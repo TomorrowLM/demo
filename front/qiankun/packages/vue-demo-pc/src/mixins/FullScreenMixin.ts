@@ -1,9 +1,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+@Component({})
 export default class FullScreenMixin extends Vue {
   get fullStatus() {
-    return this.$store.state.common.fullscreenStatus;
+    // return this.$store.state.common.fullscreenStatus;
+    return false;
   }
 
   activated() {

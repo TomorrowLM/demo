@@ -2,18 +2,17 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import getters from './getters';
 
-import router from './modules/router';
-import user from './modules/user.js';
-import permission from './modules/permission.js';
-
+import breadcrumbStore from './modules/breadcrumbStore';
+import globalStore from './modules/globalStore';
+import routeStore from './modules/routeStore';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    router,
-    user,
-    permission,
+    globalStore,
+    routeStore,
+    breadcrumbStore,
   },
   state: {},
   mutations: {},

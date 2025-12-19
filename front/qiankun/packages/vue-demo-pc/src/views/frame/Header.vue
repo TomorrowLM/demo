@@ -18,26 +18,32 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, PropSync, Watch } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
-@Component({})
-export default class Sidebar extends Vue {
-  @PropSync('collapse') isCollapse!: boolean;
-  private state: any = {};
-  userInfo: any = {};
-  count = 1;
-  // get userInfo() {
-  //   return this.state.userInfo;
-  // }
+@Component({
+  props: {
+    collapse: {
+      type: Boolean,
+      default: false,
+    },
+  },
+})
+export default class Header extends Vue {
   //TODO: 嵌套太深，只能watch
-  @Watch('state', { immediate: true, deep: true })
-  public onMsgChanged(newValue: string, oldValue: string) {
-    this.$set(this.userInfo, 'name', this.$store.state.user.userInfo.name);
+
+  get isCollapse(): boolean {
+    return this.$props.collapse as boolean;
   }
-  mounted() {
-    this.state = this.$store.state;
-    this.$set(this.userInfo, 'name', this.$store.state.user.userInfo.name);
+
+  set isCollapse(value: boolean) {
+    this.$emit('update:collapse', value);
   }
+
+  get userInfo() {
+    console.log(this.$store.state, 993);
+    return this.$store.state.globalStore.userInfo;
+  }
+  mounted() {}
   out() {
     localStorage.removeItem('token');
     this.$router.push('/login');
@@ -53,7 +59,7 @@ export default class Sidebar extends Vue {
   align-items: center;
   width: 100%;
 }
-.el-button{
-  padding:0;
+.el-button {
+  padding: 0;
 }
 </style>

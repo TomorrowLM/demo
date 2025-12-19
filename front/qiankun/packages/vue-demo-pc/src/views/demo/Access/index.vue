@@ -18,11 +18,6 @@ import permission from '@/directive/permission'; // 权限判断指令
   directives: {
     permission,
   },
-  computed: {
-    role() {
-      return this.$store.getters.role;
-    },
-  },
 })
 export default class Access extends Vue {
   data = 0;
