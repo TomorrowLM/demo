@@ -62,7 +62,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     // 获取路由配置
     const routes = await store.dispatch('generateRoutes');
     console.log('routes', routes);
-    resetRouter(); // 重置路由信息
+
     routes.forEach((item: RouteConfig) => {
       router.addRoute(item);
     });
@@ -73,9 +73,10 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     // next({ ...to, replace: true });
     next(to.path); // 解决刷新后路由失效的问题
   } else {
-    store.commit('setTagNav', { path: to.path, meta: to.meta });
-    if (to.path !== '/login')
+    if (to.path !== '/login') {
+      store.commit('setTagNav', { path: to.path, meta: to.meta });
       store.commit('setCurrentRouteInfo', { path: to.path, meta: to.meta });
+    }
     next();
   }
 });

@@ -22,6 +22,7 @@ const breadcrumbStore = {
       if (!state.tagNav.some((val: TagNavProps) => val?.path === nav.path)) {
         state.tagNav.push(nav);
       }
+      console.log('tagNav', state.tagNav);
     },
     deleteTag(state: any, tagIndex: any) {
       let currentRoute = {};

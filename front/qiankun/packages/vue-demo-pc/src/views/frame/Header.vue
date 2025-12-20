@@ -19,6 +19,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { resetRouter } from '@/router/index';
 
 @Component({
   props: {
@@ -45,6 +46,7 @@ export default class Header extends Vue {
   mounted() {}
   out() {
     localStorage.removeItem('token');
+    resetRouter();
     this.$router.push('/login');
   }
 }
