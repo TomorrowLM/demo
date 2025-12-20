@@ -40,7 +40,6 @@ export default class Header extends Vue {
   }
 
   get userInfo() {
-    console.log(this.$store.state, 993);
     return this.$store.state.globalStore.userInfo;
   }
   mounted() {}

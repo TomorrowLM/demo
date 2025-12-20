@@ -14,7 +14,6 @@ interface TagNavProps {
 const breadcrumbStore = {
   state: {
     tagNav: [{ meta: { menuName: '主页' }, path: '/' }],
-    currentRouteInfo: {},
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
@@ -24,9 +23,6 @@ const breadcrumbStore = {
         state.tagNav.push(nav);
       }
     },
-    setRouteInfo(state: any) {
-      state.currentRouteInfo = JSON.parse(window.sessionStorage.getItem('currentRouteInfo') as any);
-    },
     deleteTag(state: any, tagIndex: any) {
       let currentRoute = {};
       if (tagIndex - 1 >= 0) {
@@ -35,8 +31,8 @@ const breadcrumbStore = {
         currentRoute = state.tagNav[tagIndex + 1];
       }
       state.tagNav.splice(tagIndex, 1);
-      window.sessionStorage.setItem('currentRouteInfo', JSON.stringify(currentRoute));
-      state.currentRouteInfo = JSON.parse(window.sessionStorage.getItem('currentRouteInfo') as any);
+      // window.sessionStorage.setItem('currentRouteInfo', JSON.stringify(currentRoute));
+      // state.currentRouteInfo = JSON.parse(window.sessionStorage.getItem('currentRouteInfo') as any);
     },
   },
   actions: {},

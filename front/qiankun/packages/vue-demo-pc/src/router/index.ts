@@ -24,25 +24,25 @@ export function resetRouter() {
   router.matcher = newRouter.matcher; // reset router
 }
 
-// 解决编程式路由往同一地址跳转时会报错的情况
-const originalPush = VueRouter.prototype.push;
-const originalReplace = VueRouter.prototype.replace;
+// // 解决编程式路由往同一地址跳转时会报错的情况
+// const originalPush = VueRouter.prototype.push;
+// const originalReplace = VueRouter.prototype.replace;
 
-// push
-// @ts-ignore
-VueRouter.prototype.push = function push(location: any, onResolve: any, onReject: any) {
-  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
-  // @ts-ignore
-  return originalPush.call(this, location).catch((err: any) => console.log(err));
-};
+// // push
+// // @ts-ignore
+// VueRouter.prototype.push = function push(location: any, onResolve: any, onReject: any) {
+//   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
+//   // @ts-ignore
+//   return originalPush.call(this, location).catch((err: any) => console.log(err));
+// };
 
-// replace
-// @ts-ignore
-VueRouter.prototype.replace = function push(location: any, onResolve: any, onReject: any) {
-  if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject);
-  // @ts-ignore
-  return originalReplace.call(this, location).catch((err: any) => err);
-};
+// // replace
+// // @ts-ignore
+// VueRouter.prototype.replace = function push(location: any, onResolve: any, onReject: any) {
+//   if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject);
+//   // @ts-ignore
+//   return originalReplace.call(this, location).catch((err: any) => err);
+// };
 /**
  * 全局前置守卫
  * to : 将要进入的目标路由对象
@@ -73,6 +73,8 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     // next({ ...to, replace: true });
     next(to.path); // 解决刷新后路由失效的问题
   } else {
+    store.commit('setTagNav', { path: to.path, meta: to.meta });
+    store.commit('setRouteInfo', { path: to.path, meta: to.meta });
     next();
   }
 });

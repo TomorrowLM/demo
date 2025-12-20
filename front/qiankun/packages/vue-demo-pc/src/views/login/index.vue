@@ -19,8 +19,7 @@
 
 <script>
 import { login } from '@/api/index';
-import Vue from 'vue';
-import { resetRouter } from '@/router';
+
 export default {
   props: {
     msg: String,

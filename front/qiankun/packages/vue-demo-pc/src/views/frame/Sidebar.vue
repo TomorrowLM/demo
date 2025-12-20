@@ -1,12 +1,12 @@
 <template>
   <el-menu
-    @select="selectSiderBar"
     router
     :default-active="currentRouteInfo.path"
     class="app-menu"
     background-color="#292C45"
     text-color="#fff"
     active-text-color="#ffd04b"
+    @select="selectSiderBar"
   >
     <template v-for="item in routeList">
       <el-menu-item
@@ -59,7 +59,6 @@ export default class Sidebar extends Vue {
   }
 
   get currentRouteInfo() {
-    console.log(22222,this.$store.getters);
     return this.$store.getters.currentRouteInfo;
   }
 
@@ -67,22 +66,7 @@ export default class Sidebar extends Vue {
     return this.$store.getters.commonMenu;
   }
 
-  mounted() {
-    this.updateRouteInfo(this.$route);
-  }
-
-  beforeRouteUpdate(to: any) {
-    this.updateRouteInfo(to);
-  }
-
-  updateRouteInfo(route: any) {
-    window.sessionStorage.setItem('currentRouteInfo', JSON.stringify({ path: route.path, meta: route.meta }));
-    this.$store.commit('setCurrentRoute');
-    this.$store.commit('setTagNav', { path: route.path, meta: route.meta });
-  }
-
   selectSiderBar() {
-    console.log();
   }
 }
 </script>

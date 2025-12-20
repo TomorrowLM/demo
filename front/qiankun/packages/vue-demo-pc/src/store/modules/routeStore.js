@@ -34,6 +34,7 @@ export function filterAsyncRoutes(whiteRoutes, asyncRoutes, flatAsyncRoutes, rou
   })
   return routes
 }
+// 白名单
 export const whiteRoutes = [
   {
     path: '/',
@@ -146,7 +147,8 @@ const routeStore = {
     asyncRoutes: [], // 动态路由
     flatAsyncRoutes: [], // 扁平化动态路由
     routes: whiteRoutes, // 静态路由+动态路由
-    registerRouteFresh: true // 动态路由注册状态，账号切换，路由需要更新
+    registerRouteFresh: true, // 动态路由注册状态，账号切换，路由需要更新
+    currentRouteInfo: {},
   },
   mutations: {
     SET_ROUTES: (state, routes) => {
@@ -156,12 +158,14 @@ const routeStore = {
     // SET_PERMISSION会在登录成功的时候触发，更新路由表
     SET_PERMISSION: (state, data) => {
       state[data.type] = data.data
-    }
+    },
+    setRouteInfo(state, data) {
+      state.currentRouteInfo = data;
+    },
   },
   actions: {
     async generateRoutes({ commit, state }) {
       const { data: { routes: asyncRoutes } } = await menuApi()
-      console.log(state.whiteRoutes, 'state.whiteRoutes')
       state.routes = lodash.cloneDeep(state.whiteRoutes) // 初始化routes为静态路由，同时深拷贝防止影响静态路由
       filterAsyncRoutes(whiteRoutes, asyncRoutes, state.flatAsyncRoutes, state.routes, '')
       state.asyncRoutes = asyncRoutes
