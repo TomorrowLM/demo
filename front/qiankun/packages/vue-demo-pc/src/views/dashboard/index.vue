@@ -2,20 +2,20 @@
   <div>
     <!-- <button @click="()=>{data = data+1}">{{data}}</button> -->
     <div>
-      <a-card title="折线图" :bordered="false" style="width: 100%">
+      <el-card title="折线图" :bordered="false" style="width: 100%">
         <div class="echart echart1"></div>
-      </a-card>
+      </el-card>
     </div>
     <div class="box">
-      <a-card title="省图" :bordered="false" style="width: 32%">
+      <el-card title="省图" :bordered="false" style="width: 32%">
         <div class="echart echart2"></div>
-      </a-card>
-      <a-card title="国家地图" :bordered="false" style="width: 64%">
+      </el-card>
+      <el-card title="国家地图" :bordered="false" style="width: 64%">
         <div class="echart echart3"></div>
-      </a-card>
-      <a-card title="国家分布图" :bordered="false" style="width: 32%">
+      </el-card>
+      <el-card title="国家分布图" :bordered="false" style="width: 32%">
         <div class="echart echart4"></div>
-      </a-card>
+      </el-card>
       <div id="map" style="width: 1200px; height: 500px"></div>
     </div>
   </div>

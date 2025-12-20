@@ -49,4 +49,11 @@ export default class Layout extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+::v-deep .tag {
+  background: #fff;
+}
+::v-deep .el-tag {
+  border-radius: 0;
+}
+</style>

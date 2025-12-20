@@ -13,7 +13,7 @@ interface TagNavProps {
 
 const breadcrumbStore = {
   state: {
-    tagNav: [{ meta: { menuName: '主页' }, path: '/' }],
+    tagNav: [],
   },
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
