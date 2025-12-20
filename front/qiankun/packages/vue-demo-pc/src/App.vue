@@ -65,7 +65,6 @@ export default class Layout extends Vue {
 
   async created() {
     console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
-    await this.$store.dispatch('GetUserCoreInfo');
   }
 
   mounted() {

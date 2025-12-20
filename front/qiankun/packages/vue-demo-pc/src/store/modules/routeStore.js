@@ -159,7 +159,7 @@ const routeStore = {
     SET_PERMISSION: (state, data) => {
       state[data.type] = data.data
     },
-    setRouteInfo(state, data) {
+    setCurrentRouteInfo(state, data) {
       state.currentRouteInfo = data;
     },
   },

@@ -18,8 +18,8 @@ const breadcrumbStore = {
   // 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation
   mutations: {
     setTagNav(state: any, nav: any) {
-      console.log('nav', nav);
-      if (!state.tagNav.some((val: TagNavProps) => val?.meta.menuName.includes(nav.meta.menuName))) {
+      console.log('nav', nav, state.tagNav);
+      if (!state.tagNav.some((val: TagNavProps) => val?.path === nav.path)) {
         state.tagNav.push(nav);
       }
     },

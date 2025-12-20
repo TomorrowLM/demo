@@ -24,25 +24,25 @@ export function resetRouter() {
   router.matcher = newRouter.matcher; // reset router
 }
 
-// // 解决编程式路由往同一地址跳转时会报错的情况
-// const originalPush = VueRouter.prototype.push;
-// const originalReplace = VueRouter.prototype.replace;
+// 解决编程式路由往同一地址跳转时会报错的情况
+const originalPush = VueRouter.prototype.push;
+const originalReplace = VueRouter.prototype.replace;
 
-// // push
-// // @ts-ignore
-// VueRouter.prototype.push = function push(location: any, onResolve: any, onReject: any) {
-//   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
-//   // @ts-ignore
-//   return originalPush.call(this, location).catch((err: any) => console.log(err));
-// };
+// push
+// @ts-ignore
+VueRouter.prototype.push = function push(location: any, onResolve: any, onReject: any) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
+  // @ts-ignore
+  return originalPush.call(this, location).catch((err: any) => console.log(err));
+};
 
-// // replace
-// // @ts-ignore
-// VueRouter.prototype.replace = function push(location: any, onResolve: any, onReject: any) {
-//   if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject);
-//   // @ts-ignore
-//   return originalReplace.call(this, location).catch((err: any) => err);
-// };
+// replace
+// @ts-ignore
+VueRouter.prototype.replace = function push(location: any, onResolve: any, onReject: any) {
+  if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject);
+  // @ts-ignore
+  return originalReplace.call(this, location).catch((err: any) => err);
+};
 /**
  * 全局前置守卫
  * to : 将要进入的目标路由对象
@@ -67,14 +67,15 @@ router.beforeEach(async (to: any, from: any, next: any) => {
       router.addRoute(item);
     });
     // 获取路由配置
-    console.log('getRoutes123', router.getRoutes());
+    console.log('getRoutes123', to, router.getRoutes());
     // 解决登录或者刷新后路由找不到的问题：
     // 虽然to找不到对应的路由那么他会再执行一次beforeEach，但是登录或者刷新前路由表没有动态路由信息，那么to.name还是找不到对应的路由，最后会跳转到404页面
     // next({ ...to, replace: true });
     next(to.path); // 解决刷新后路由失效的问题
   } else {
     store.commit('setTagNav', { path: to.path, meta: to.meta });
-    store.commit('setRouteInfo', { path: to.path, meta: to.meta });
+    if (to.path !== '/login')
+      store.commit('setCurrentRouteInfo', { path: to.path, meta: to.meta });
     next();
   }
 });

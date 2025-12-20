@@ -1,7 +1,7 @@
 //可以认为是 store 的计算属性
 const breadcrumbStore = {
   tagNav: (state: any) => state.breadcrumbStore.tagNav,
-  currentRouteInfo: (state: any) => state.breadcrumbStore.currentRouteInfo,
+
 };
 
 const globalStaore = {
@@ -15,6 +15,7 @@ const routeStore = {
   commonMenu: (state: any) => state.routeStore.commonMenu,
   routes: (state: any) => state.routeStore.routes,
   registerRouteFresh: (state: any) => state.routeStore.registerRouteFresh,
+  currentRouteInfo: (state: any) => state.routeStore.currentRouteInfo,
 };
 
 const getters = {

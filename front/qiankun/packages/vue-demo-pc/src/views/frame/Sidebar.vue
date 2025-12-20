@@ -1,7 +1,7 @@
 <template>
   <el-menu
     router
-    :default-active="currentRouteInfo.path"
+    :default-active="currentRouteInfo.path || '/dashboard'"
     class="app-menu"
     background-color="#292C45"
     text-color="#fff"
