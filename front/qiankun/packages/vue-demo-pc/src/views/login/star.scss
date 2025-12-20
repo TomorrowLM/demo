@@ -1,0 +1,362 @@
+/* 星空容器 */
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* 基础星星 */
+.star {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+/* 不同大小的星星 */
+.star.small {
+  width: 1px;
+  height: 1px;
+  opacity: 0.8;
+}
+
+.star.medium {
+  width: 2px;
+  height: 2px;
+  opacity: 0.9;
+}
+
+.star.large {
+  width: 3px;
+  height: 3px;
+  opacity: 1;
+  box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.4);
+}
+
+/* 闪烁星星动画 */
+.star.twinkle {
+  animation: twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* 彩色星星 */
+.star.colorful {
+  background-color: #ff5e7d;
+  box-shadow: 0 0 6px 2px rgba(255, 94, 125, 0.7);
+}
+
+.star.blue {
+  background-color: #4dabf7;
+  box-shadow: 0 0 6px 2px rgba(77, 171, 247, 0.7);
+}
+
+.star.yellow {
+  background-color: #ffd43b;
+  box-shadow: 0 0 6px 2px rgba(255, 212, 59, 0.7);
+}
+
+/* 流星 */
+.shooting-star {
+  position: absolute;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  transform: rotate(-45deg);
+  animation: shooting 5s linear infinite;
+  opacity: 0;
+}
+
+@keyframes shooting {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(500px) translateY(500px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+/* 星座连线 */
+.constellation {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.constellation-line {
+  position: absolute;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  transform-origin: left center;
+}
+
+/* 星系/星云 */
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.05;
+  filter: blur(60px);
+}
+
+.nebula.purple {
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.8), transparent);
+  width: 300px;
+  height: 300px;
+  top: 20%;
+  left: 15%;
+  animation: nebulaFloat 30s infinite alternate ease-in-out;
+}
+
+.nebula.blue {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.7), transparent);
+  width: 400px;
+  height: 400px;
+  bottom: 10%;
+  right: 10%;
+  animation: nebulaFloat 40s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes nebulaFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(50px, -30px) scale(1.1);
+  }
+  50% {
+    transform: translate(-30px, 40px) scale(0.9);
+  }
+  75% {
+    transform: translate(40px, 30px) scale(1.05);
+  }
+}
+
+/* 行星 */
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.5), inset 10px 10px 20px rgba(255, 255, 255, 0.1);
+  animation: planetFloat 20s infinite alternate ease-in-out;
+}
+
+.planet:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s;
+}
+
+@keyframes planetFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.planet-1 {
+  width: 80px;
+  height: 80px;
+  top: 15%;
+  left: 10%;
+  background: linear-gradient(135deg, #ff6b6b, #ffa8a8);
+}
+
+.planet-2 {
+  width: 60px;
+  height: 60px;
+  top: 70%;
+  right: 15%;
+  background: linear-gradient(135deg, #4d96ff, #6bc5ff);
+}
+
+.planet-3 {
+  width: 100px;
+  height: 100px;
+  bottom: 20%;
+  left: 20%;
+  background: linear-gradient(135deg, #38b000, #9ef01a);
+}
+
+/* 行星光环 */
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.5);
+  animation: ringRotate 10s linear infinite;
+}
+
+.ring-1 {
+  width: 120px;
+  height: 120px;
+  top: calc(15% - 20px);
+  left: calc(10% - 20px);
+}
+
+.ring-2 {
+  width: 90px;
+  height: 90px;
+  top: calc(70% - 15px);
+  right: calc(15% - 15px);
+}
+
+@keyframes ringRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 内容区域 */
+.content {
+  max-width: 800px;
+  padding: 40px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 20px;
+  z-index: 10;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #ff6b6b, #4d96ff, #9ef01a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% auto;
+  animation: textShine 5s ease-in-out infinite alternate;
+}
+
+@keyframes textShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  margin-bottom: 30px;
+}
+
+/* 控制面板 */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+button {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s;
+  backdrop-filter: blur(5px);
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+button.active {
+  background: rgba(59, 130, 246, 0.5);
+  border-color: rgba(59, 130, 246, 0.8);
+}
+
+/* 星空密度指示器 */
+.density-info {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.slider-container {
+  width: 200px;
+}
+
+input[type='range'] {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4d96ff;
+  cursor: pointer;
+}
+
+/* 星座切换效果 */
+.constellation-toggle {
+  margin-top: 20px;
+}
+
+/* 流星雨模式 */
+.meteor-shower .shooting-star {
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .content {
+    padding: 30px 20px;
+  }
+
+  .planet-1,
+  .planet-3 {
+    display: none;
+  }
+}
