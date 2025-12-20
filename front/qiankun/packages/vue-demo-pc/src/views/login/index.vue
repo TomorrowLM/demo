@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <div class="form_login">
+      <!-- <img :src="bg" alt="" /> -->
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="账号" prop="username">
           <el-input type="password" v-model="ruleForm.username" autocomplete="off"></el-input>
@@ -13,12 +14,22 @@
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
       </el-form>
+      <div>
+        <el-collapse>
+          <el-collapse-item title="各个权限控制对应账号/密码" name="1">
+            <div>admin/1</div>
+            <div>liming/1</div>
+            <div>third/1</div>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { login } from '@/api/index';
+// import bg from '@lm/shared/assets/images/bg.jpg';
 
 export default {
   props: {
@@ -68,5 +79,8 @@ export default {
   align-items: center;
   width: 100%;
   height: 100%;
+  background: url('@lm/shared/assets/images/bg.png') no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 </style>

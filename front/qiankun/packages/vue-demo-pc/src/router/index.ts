@@ -58,11 +58,10 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   } else if (store.getters.registerRouteFresh && to.path !== '/login') {
     // 如果to找不到对应的路由那么他会再执行一次beforeEach((to, from, next))直到找到对应的路由，
     store.commit('SET_PERMISSION', { type: 'registerRouteFresh', data: false });
-    store.dispatch('generateUserInfo');
+    store.dispatch('GetUserInfo');
     // 获取路由配置
     const routes = await store.dispatch('generateRoutes');
     console.log('routes', routes);
-
     routes.forEach((item: RouteConfig) => {
       router.addRoute(item);
     });

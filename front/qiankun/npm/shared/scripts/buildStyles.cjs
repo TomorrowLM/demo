@@ -3,8 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const srcDir = path.resolve(__dirname, '../src/assests/styles');
-const destDir = path.resolve(__dirname, '../lib/assets/styles');
+const srcDir = path.resolve(__dirname, '../src/assests');
+const destDir = path.resolve(__dirname, '../lib/assets');
 
 function copyRecursive(src, dest) {
   if (!fs.existsSync(src)) return;

@@ -20,9 +20,7 @@ router.get('/', (req, res, next) => {
   res.send({
     code: 200,
     message: 'success',
-    data: {
-      ...data
-    }
+    data
   });
 });
 
