@@ -11,8 +11,6 @@
       "require": "./lib/cjs/index.js"
     },
     "./build": {
-      "types": "./lib/esm/types/config/build/index.d.ts",
-      "import": "./lib/esm/build/config/index.js",
       "require": "./lib/cjs/config/build/index.js"
     },
     "./utils": {

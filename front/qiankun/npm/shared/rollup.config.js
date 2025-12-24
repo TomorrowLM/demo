@@ -17,22 +17,7 @@ const replace = require('@rollup/plugin-replace')
  * 这些依赖不会被打包到最终产物中，而是作为外部依赖引用
  * 可以减小打包体积，避免重复打包常用库
  */
-// 明确 external 列表，避免把 webpack 及其插件打包进来
-const external = [
-  'axios',
-  'js-md5', 'lodash', 'qs', 'tslib', 'vue', 'webpack', 'path', 'fs',
-  'autoprefixer', 'postcss-pxtorem', 'tapable', 'webpack-sources',
-  'glob-to-regexp', 'schema-utils', 'acorn', '@webassemblyjs/ast',
-  '@webassemblyjs/wasm-parser', '@webassemblyjs/wasm-edit',
-  'querystring-es3', 'punycode/', 'css-minimizer-webpack-plugin', '@parcel/css',
-  'url', '@swc/core',
-  // 添加所有 webpack 相关的依赖
-  'webpackbar', 'html-webpack-plugin', 'mini-css-extract-plugin',
-  'css-minimizer-webpack-plugin', 'node-polyfill-webpack-plugin',
-  'webpack-bundle-analyzer', 'css-loader', 'style-loader', 'less-loader',
-  'less', 'babel-loader', '@babel/core',
-]
-
+const external = ['axios', 'js-md5', 'lodash', 'qs', 'tslib']
 /**
  * 创建插件配置函数
  * @param {boolean} isBrowser - 是否为浏览器环境构建
@@ -41,16 +26,16 @@ const external = [
 const createPlugins = (isBrowser) => {
   const plugins = [
     // 先处理路径别名
-    alias({
-      entries: [
-        { find: '@', replacement: path.resolve(__dirname, 'src') },
-        { find: './utils', replacement: path.resolve(__dirname, 'src/utils') }
-      ].concat(isBrowser ? [
-        // 在浏览器构建中排除 server/build 脚本，重定向到空 shim
-        { find: path.resolve(__dirname, 'src/config/build'), replacement: path.resolve(__dirname, 'src/shims/browser-build-shim') },
-        { find: './config/build', replacement: path.resolve(__dirname, 'src/shims/browser-build-shim') }
-      ] : [])
-    }),
+    // alias({
+    //   entries: [
+    //     { find: '@', replacement: path.resolve(__dirname, 'src') },
+    //     { find: './utils', replacement: path.resolve(__dirname, 'src/utils') }
+    //   ].concat(isBrowser ? [
+    //     // 在浏览器构建中排除 server/build 脚本，重定向到空 shim
+    //     { find: path.resolve(__dirname, 'src/build'), replacement: path.resolve(__dirname, 'src/shims/browser-build-shim') },
+    //     { find: './build', replacement: path.resolve(__dirname, 'src/shims/browser-build-shim') }
+    //   ] : [])
+    // }),
     // 解析模块路径和第三方依赖
     resolve({
       browser: isBrowser,
@@ -106,8 +91,7 @@ const createConfig = (input, output, isBrowser = false) => ({
   input,                              // 入口文件
   output,                             // 输出配置
   plugins: createPlugins(isBrowser),  // 根据环境创建插件配置
-  // // external 使用函数，统一判断各种情况（builtins / regex / commonjs-external / node_modules）
-  external: ['axios', 'js-md5', 'lodash', 'qs', 'tslib']
+  external
 })
 
 /**
@@ -126,15 +110,16 @@ const configs = [
     preserveModulesRoot: 'src',
     entryFileNames: '[name].js',
     chunkFileNames: '_chunks/[name]-[hash].js',
-    exports: 'auto',                   // 自动检测模块的导出类型
+    exports: 'named',                   // 具名导出形式输出，消除 Rollup 警告
   }, true),                 // 指定为浏览器环境
 
   // Node.js CommonJS 构建（仅为 build 相关脚本生成 CJS 输出）
-  createConfig('src/config/build/index.js', { // 仅打包 build 目录为 CJS
+  createConfig('src/build/index.js', { // 仅打包 build 目录为 CJS
     dir: 'lib/cjs',                    // 输出目录
     format: 'cjs',                     // 输出格式：CommonJS
     preserveModules: false,
-    exports: 'auto',               // 自动检测模块的导出类型
+    // 使用 named 导出，避免消费方通过 chunk.default 访问默认导出
+    exports: 'auto',               // 以具名导出形式输出，消除 Rollup 警告
     interop: 'auto'        // 自动处理默认导出的互操作
   }),
 ]
