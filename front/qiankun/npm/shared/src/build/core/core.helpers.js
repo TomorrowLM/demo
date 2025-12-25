@@ -64,7 +64,6 @@ function applyFilenameHashing(config, isProd) {
  * 合并别名
  */
 function fetchAlias(mergeAlias) {
-  console.log('alias11', alias)
   return alias
 }
 
