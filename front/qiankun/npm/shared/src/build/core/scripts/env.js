@@ -155,13 +155,6 @@ function getConfigByEnvironment() {
   };
 }
 
-// 打印已加载的 env 配置（调试用）
-try {
-  console.log('getEnvConfig:', getEnvConfig());
-} catch (e) {
-  // ignore if getEnvConfig is undefined during build time
-}
-
 module.exports = {
   getEnvConfig,
   useAppConfig,

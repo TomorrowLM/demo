@@ -8,25 +8,26 @@ let { getEnvConfig } = require('../core/scripts/env.js')
  */
 class Vue2CliBuilder {
   constructor(options = {}) {
-    this.options = {
+    this.options = Object.assign({}, options, {
       htmlInjectCdn: true,
-      ...options,
-    }
+    });
     this.GLOBAL_CONFIG = {
       ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
       NODE_ENV: process.env.NODE_ENV,
-      IS_PROD: (process.env.APP_ENV || process.env.NODE_ENV) === 'production',
       PROJECT_NAME: getProjectName()
     }
     console.log('GLOBAL_CONFIG', this.GLOBAL_CONFIG);
     this._plugins = []
   }
+  // 
   externalsPlugin() {
     const map = {}
     if (this.options && this.options.externals) Object.assign(map, this.options.externals)
     if (this.options && this.options.cdn && this.options.cdn.externals) Object.assign(map, this.options.cdn.externals)
     if (Object.keys(map).length === 0) return this
   }
+  // 注入别名插件工厂方法
+
   aliasPluginFactory(config) {
     // 使用helpers工具类处理所有别名，返回处理后的别名对象
     const all = pluginHelpers.aliasPlugin()
@@ -36,10 +37,12 @@ class Vue2CliBuilder {
       config.resolve.alias.set(key, all[key]);
     })
   }
+  // 代理插件工厂方法
   devServerProxyPluginFactory() {
     console.log('devServerProxyPluginFactory GLOBAL_CONFIG:', this.GLOBAL_CONFIG, pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG))
     return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG)
   }
+  // 通用插件工厂方法
   commonPluginFactory() {
     const webpack = getDependency('webpack', this.options);
     if (!webpack) return [];
@@ -57,12 +60,23 @@ class Vue2CliBuilder {
       new webpack.DefinePlugin(defines),
     ];
   }
-  getCdnAssets() {
-    return pluginHelpers.normalizeCdnAssets ? pluginHelpers.normalizeCdnAssets(this.options.cdn || {}) : { css: (this.options.cdn && this.options.cdn.css) || [], js: (this.options.cdn && this.options.cdn.js) || [], externals: (this.options.cdn && this.options.cdn.externals) || {} }
+  getTools() {
+    return {
+      // 注入CDN资源
+      getCdnAssets: () => {
+        return pluginHelpers.normalizeCdnAssets ? pluginHelpers.normalizeCdnAssets(this.options.cdn || {}) : { css: (this.options.cdn && this.options.cdn.css) || [], js: (this.options.cdn && this.options.cdn.js) || [], externals: (this.options.cdn && this.options.cdn.externals) || {} }
+      },
+      getPublicPath: () => {
+        const { IS_PROD, IS_QIANKUN, Build_Path, Build_Qiankun_Path } = this.GLOBAL_CONFIG.ENV_CONFIG;
+        console.log('getPublicPath:', IS_PROD && !IS_QIANKUN ? Build_Path : Build_Qiankun_Path)
+        return IS_PROD && !IS_QIANKUN ? Build_Path : Build_Qiankun_Path
+      }
+    }
   }
   createConfig() {
     const self = this
     return {
+      publicPath: self.getTools().getPublicPath(),
       css: {
         extract: {
           ignoreOrder: true, //解决组件的引入必须先后顺序一致
@@ -93,7 +107,7 @@ class Vue2CliBuilder {
        */
       chainWebpack: (config) => {
         // 开发模式可选开启分包优化
-        if (!self.GLOBAL_CONFIG.IS_PROD) {
+        if (!self.GLOBAL_CONFIG.ENV_CONFIG.IS_PROD) {
           config.optimization.minimize(true)
           config.optimization.splitChunks({ chunks: 'all' })
         }
