@@ -93,9 +93,8 @@ function htmlCdnPlugin(cdn = {}) {
  * - 通过 helpers.createProxyEntry 合并代理
  * - 注意：此能力更适合在顶层 vue.config.js 的 devServer 字段处理，本插件仅做示例
  */
-function devServerProxyPlugin(GLOBAL_CONFIG) {
-  console.log('GLOBAL_CONFIG11', GLOBAL_CONFIG, helpers.createProxyEntry());
-  return helpers.createProxyEntry()[GLOBAL_CONFIG.PROJECT_NAME]
+function devServerProxyPlugin(name) {
+  return helpers.createProxyEntry()[name]
 }
 
 module.exports = {

@@ -3,7 +3,7 @@
  */
 const { appRoot } = require("./paths")
 
-// Runtime-safe loader for Node builtins to avoid bundlers resolving them
+// 中文解释：尝试通过间接调用 require 来加载模块，避免被打包工具静态分析
 function tryRequire(name) {
   try {
     // Use an indirect require via Function to avoid static analysis by bundlers
@@ -13,15 +13,13 @@ function tryRequire(name) {
   }
 }
 
+// 获取 createRequire 方法，用于动态加载模块
 function getCreateRequire() {
   const mod = tryRequire('module');
   return mod && (mod.createRequire || mod.createRequireFromPath) ? (mod.createRequire || mod.createRequireFromPath) : null;
 }
-/**
- * Try to resolve a dependency from the consumer project first (via appRoot),
- * then fall back to requiring from this package's node_modules.
- * If `options` contains an explicit instance (e.g. options.webpack), prefer that.
- */
+
+// 获取依赖项，优先从项目根目录加载，如果失败则尝试本地 require
 function getDependency(type, options = {}) {
   if (options && options[type]) return options[type];
 
@@ -80,9 +78,12 @@ function getProjectPackageJson() {
  * 获取项目名称
  * @returns {string} 项目名称，如果无法获取则返回默认值
  */
-function getProjectName(defaultName = 'unknown-project') {
+function getProjectInfo(defaultName = 'unknown-project') {
   const packageJson = getProjectPackageJson();
-  return packageJson?.name || defaultName;
+  return {
+    name: (packageJson && packageJson.name) || defaultName,
+    version: (packageJson && packageJson.version) || 'unknown-version'
+  };
 }
 
 // 获取项目路径
@@ -91,7 +92,6 @@ function getProjectPath() {
   const path = tryRequire('path') || require('path');
 
   let dir = process.cwd();
-  console.log('getProjectPath: 当前运行项目路径', dir);
   const root = path.parse(dir).root;
 
   while (true) {
@@ -111,13 +111,12 @@ function getProjectPath() {
     if (dir === root) break;
     dir = path.dirname(dir);
   }
-
   return null;
 }
 
 module.exports = {
   getDependency,
   getProjectPackageJson,
-  getProjectName,
+  getProjectInfo,
   getProjectPath
 };

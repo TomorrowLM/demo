@@ -1,6 +1,6 @@
 // 通过“中转站”plugin.ts 引入通用能力（优先 ts，其次 js），避免直接依赖 core
 let pluginHelpers = require('./plugin.js')
-let { getDependency, getProjectName } = require('../core/scripts/app.js')
+let { getDependency, getProjectInfo } = require('../core/scripts/app.js')
 let { getEnvConfig } = require('../core/scripts/env.js')
 
 /**
@@ -13,10 +13,9 @@ class Vue2CliBuilder {
     });
     this.GLOBAL_CONFIG = {
       ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
+      APP_INFO: getProjectInfo(),
       NODE_ENV: process.env.NODE_ENV,
-      PROJECT_NAME: getProjectName()
     }
-    console.log('GLOBAL_CONFIG', this.GLOBAL_CONFIG);
     this._plugins = []
   }
   // 
@@ -39,8 +38,7 @@ class Vue2CliBuilder {
   }
   // 代理插件工厂方法
   devServerProxyPluginFactory() {
-    console.log('devServerProxyPluginFactory GLOBAL_CONFIG:', this.GLOBAL_CONFIG, pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG))
-    return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG)
+    return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG.APP_INFO.name)
   }
   // 通用插件工厂方法
   commonPluginFactory() {
@@ -68,7 +66,7 @@ class Vue2CliBuilder {
       },
       getPublicPath: () => {
         const { IS_PROD, IS_QIANKUN, Build_Path, Build_Qiankun_Path } = this.GLOBAL_CONFIG.ENV_CONFIG;
-        console.log('getPublicPath:', IS_PROD && !IS_QIANKUN ? Build_Path : Build_Qiankun_Path)
+        if(!IS_PROD) return '/';
         return IS_PROD && !IS_QIANKUN ? Build_Path : Build_Qiankun_Path
       }
     }
@@ -97,7 +95,6 @@ class Vue2CliBuilder {
       configureWebpack: (config) => {
         config.resolve = config.resolve || {}
         config.output = config.output || {}
-        console.log('configureWebpack config:', self.commonPluginFactory())
         config.plugins.push(...self.commonPluginFactory());
       },
       /**
