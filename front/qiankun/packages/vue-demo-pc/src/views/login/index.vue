@@ -2,7 +2,7 @@
   <div class="login gradient-bg">
     <!-- 动态渐变背景 -->
     <div class="animated-bg"></div>
-
+    <img :src="bg" alt="" style="width: 0;">
     <!-- 浮动形状 -->
     <div class="floating-shapes">
       <div class="shape shape-1"></div>
@@ -41,7 +41,7 @@
 
 <script>
 import { login } from '@/api/index';
-// import bg from '@lm/shared/assets/images/bg.jpg';
+import bg from '@lm/shared/assets/images/bg.jpg';
 
 export default {
   props: {
@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      bg,
       ruleForm: {
         password: '1',
         username: 'admin',

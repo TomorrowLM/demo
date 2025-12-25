@@ -1,7 +1,7 @@
-import $lm from '@lm/shared';
+import { request } from '@lm/shared';
 import { Message, Loading } from 'element-ui'
 
-const request = $lm.utils.request;
+// const request = $lm.utils.request;
 
 class MessageClass {
   messageInstances: any;
