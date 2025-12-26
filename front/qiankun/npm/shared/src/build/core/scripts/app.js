@@ -75,48 +75,48 @@ function getProjectPackageJson() {
 }
 
 /**
- * 获取项目名称
+ * 获取项目信息，包括名称、版本和路径
  * @returns {string} 项目名称，如果无法获取则返回默认值
  */
 function getProjectInfo(defaultName = 'unknown-project') {
   const packageJson = getProjectPackageJson();
   return {
-    name: (packageJson && packageJson.name) || defaultName,
-    version: (packageJson && packageJson.version) || 'unknown-version'
+    APP_NAME: (packageJson && packageJson.name) || defaultName,
+    APP_VERSION: (packageJson && packageJson.version) || 'unknown-version',
+    APP_PATH: process.cwd()
   };
 }
 
 // 获取项目路径
-function getProjectPath() {
-  const fs = tryRequire('fs') || require('fs');
-  const path = tryRequire('path') || require('path');
+// function getPackage() {
+//   const fs = tryRequire('fs') || require('fs');
+//   const path = tryRequire('path') || require('path');
 
-  let dir = process.cwd();
-  const root = path.parse(dir).root;
+//   let dir = process.cwd();
+//   const root = path.parse(dir).root;
 
-  while (true) {
-    const pkgPath = path.join(dir, 'package.json');
-    if (fs.existsSync(pkgPath)) {
-      try {
-        const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-        // 如果是 shared 包自己，继续向上查找；否则返回项目 info
-        if (pkg.name !== '@lm/shared') {
-          return { root: dir, name: pkg.name || '', packageJson: pkg };
-        }
-      } catch (e) {
-        // 忽略 package.json 解析错误，继续向上查找
-      }
-    }
+//   while (true) {
+//     const pkgPath = path.join(dir, 'package.json');
+//     if (fs.existsSync(pkgPath)) {
+//       try {
+//         const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+//         // 如果是 shared 包自己，继续向上查找；否则返回项目 info
+//         if (pkg.name !== '@lm/shared') {
+//           return { root: dir, name: pkg.name || '', packageJson: pkg };
+//         }
+//       } catch (e) {
+//         // 忽略 package.json 解析错误，继续向上查找
+//       }
+//     }
 
-    if (dir === root) break;
-    dir = path.dirname(dir);
-  }
-  return null;
-}
+//     if (dir === root) break;
+//     dir = path.dirname(dir);
+//   }
+//   return null;
+// }
 
 module.exports = {
   getDependency,
   getProjectPackageJson,
   getProjectInfo,
-  getProjectPath
 };

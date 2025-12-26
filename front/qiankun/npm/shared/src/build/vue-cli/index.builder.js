@@ -38,7 +38,7 @@ class Vue2CliBuilder {
   }
   // 代理插件工厂方法
   devServerProxyPluginFactory() {
-    return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG.APP_INFO.name)
+    return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG.APP_INFO.APP_NAME)
   }
   // 通用插件工厂方法
   commonPluginFactory() {

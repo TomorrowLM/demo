@@ -1,7 +1,7 @@
 /**
  * 环境配置相关脚本
  */
-const { getProjectPath } = require('./app');
+const { getProjectInfo } = require('./app');
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -56,10 +56,10 @@ const normalizeKey = (filename) => filename.replace(/^\./, '').replace(/\.[^.]+$
 
 // 获取项目环境配置
 const getEnvConfig = (env) => {
-  const projectPath = getProjectPath();
-  if (!projectPath) return {};
+  const packageJson = getProjectInfo();
+  if (!packageJson) return {};
   let envDir;
-  envDir = path.join(projectPath.root, '$lm-config', 'env');
+  envDir = path.join(packageJson.APP_PATH, '$lm-config', 'env');
   if (!fs.existsSync(envDir) || !fs.statSync(envDir).isDirectory()) {
     return {};
   }

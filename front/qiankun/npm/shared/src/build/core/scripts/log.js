@@ -1,18 +1,17 @@
 const { getEnvConfig } = require('./env');
-const { getProjectPath, getProjectInfo, getProjectPackageJson, getDependency } = require('./app');
+const { getProjectInfo, getProjectPackageJson, getDependency } = require('./app');
 
 /**
  * 打印环境信息（用于调试）
  */
 function logInfo() {
-  const envConfig = getEnvConfig();
-  const projectPath = getProjectPath();
+  const envConfig = getEnvConfig()[process.env.NODE_ENV];
   const projectInfo = getProjectInfo();
   const projectPackageJson = getProjectPackageJson();
   const dependency = getDependency();
   console.log('=== 应用环境信息 ===');
-  console.log('项目路径:', envConfig, process.env.NODE_ENV);
-  // console.log('项目路径:', projectPath);
+  console.log('项目环境信息:', envConfig, process.env.NODE_ENV);
+  console.log('项目信息:', projectInfo);
   // console.log('项目信息:', projectInfo);
   // console.log('项目信息:', projectPackageJson);
   // console.log('项目依赖:', dependency);
