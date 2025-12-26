@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
-
+console.log(GLOBAL_INFO, 'process.env.NODE_ENV');
 let instance: any = null;
 function render(props: any = {}) {
   const { container } = props;

@@ -5,7 +5,7 @@ Vue.use(VueRouter); // 安装路由功能
 const isProd = process.env.NODE_ENV === 'production';
 // 基础路由
 const whiteRoutes: Array<RouteConfig> = store.getters.whiteRoutes;
-console.log(whiteRoutes, 'router:whiteRoutes');
+// console.log(whiteRoutes, 'router:whiteRoutes');
 const createRouter = () =>
   new VueRouter({
     mode: 'history',

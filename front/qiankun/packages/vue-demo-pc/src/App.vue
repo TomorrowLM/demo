@@ -55,17 +55,13 @@ export default class Layout extends Vue {
   @PropSync('name', { type: String }) syncedName!: string;
 
   onRouteChange() {
-    console.log(document.querySelector('.qiankun-app1'), 'qiankun-app1');
-
     // this.$nextTick(() => {
     //   console.log(document.querySelector('.qiankun-app1'),document.querySelector('.contentContainer'), 'qiankun-app1');
     //   document.querySelector('.contentContainer').appendChild(document.querySelector('.qiankun-app1'));
     // });
   }
 
-  async created() {
-    console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
-  }
+  async created() {}
 
   mounted() {
     // //给应用的顶层元素添加一个主题标识，用于标识当前的主题
