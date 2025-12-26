@@ -4,10 +4,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "serve": "cross-env NODE_ENV=local.dev vue-cli-service serve",
-    "serve:qiankun": "cross-env NODE_ENV=local.qiankun vue-cli-service serve",
-    "build": "cross-env NODE_ENV=production &&vue-cli-service build --mode production",
-    "build:qiankun": "cross-env NODE_ENV=production.qiankun && set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
+    "nvm": "nvm use v14.18.0",
+    "serve": "npm run nvm && cross-env NODE_ENV=local.dev vue-cli-service serve",
+    "serve:qiankun": "npm run nvm && cross-env NODE_ENV=local.qiankun vue-cli-service serve",
+    "build": "npm run nvm && cross-env NODE_ENV=production &&vue-cli-service build --mode production",
+    "build:qiankun": "npm run nvm && cross-env NODE_ENV=production.qiankun && set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

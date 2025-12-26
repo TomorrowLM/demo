@@ -33,8 +33,9 @@
     "lib"
   ],
   "scripts": {
+    "nvm": "nvm use v18.17.0",
     "clean": "rimraf lib",
-    "build": "npm run clean && rollup -c && npm run build-styles",
+    "build": "npm run nvm && npm run clean && rollup -c && npm run build-styles",
     "build-styles": "node ./scripts/buildStyles.cjs"
   },
   "author": "liming",
