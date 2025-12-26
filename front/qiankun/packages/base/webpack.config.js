@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === 'development';
 module.exports = () => {
   const builder = new WebpackBaseBuilder({
     // 入口 / 输出 / publicPath 与原配置保持一致
-    entry: path.resolve(__dirname, './src/main.js'),
+    // entry: path.resolve(__dirname, './src/main.tsx'),
     outputPath: path.resolve(__dirname, '../dist/qiankun'),
     publicPath: isDev ? '/' : '/qiankun',
     // 开发服务器配置保持不变

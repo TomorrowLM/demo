@@ -3,6 +3,7 @@ export { }
 declare global {
   const pageSize: number;
   const window: any;
+  const GLOBAL_INFO: object;
   interface Window {
     __POWERED_BY_QIANKUN__: any;
   }

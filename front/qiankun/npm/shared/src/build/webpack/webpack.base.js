@@ -13,7 +13,7 @@ class WebpackBaseBuilder {
     this.options = Object.assign(
       {
         // 业务入口、输出、publicPath 由项目层传入
-        entry: path.resolve(process.cwd(), "./src/main.js"),
+        entry: path.resolve(process.cwd(), "./src/main.tsx"),
         outputPath: path.resolve(process.cwd(), "./dist"),
         publicPath: "/",
         htmlOptions: {},
