@@ -1,3 +1,3 @@
 export default {
-  VUE_APP_IS_QIANKUN: true,
+  APP_BASE_API: "http://0.0.0.0:3600/",
 };

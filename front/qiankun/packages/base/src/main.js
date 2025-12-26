@@ -7,7 +7,7 @@ import { RouterProvider } from "react-router-dom";
 import { registerMicroApps, start } from "qiankun";
 import './public-path'
 const isDev = process.env.NODE_ENV === 'development';
-// console.log(process.env.NODE_ENV, API,);
+console.log(GLOBAL_INFO, 123);
 // import 'antd/dist/antd.css';
 const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
 registerMicroApps(

@@ -1,7 +1,8 @@
-import baseConfig from './.env.js';
+import baseConfig from "./.env.js";
 
 export default {
   ...baseConfig,
-  NODE_ENV: 'development',
-  VUE_APP_API_HOST: 'http://127.0.0.1:3600',
+  NODE_ENV: "development",
+  IS_PROD: false,
+  IS_QIANKUN: false,
 };
