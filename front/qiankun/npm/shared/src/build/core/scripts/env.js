@@ -54,28 +54,27 @@ const tryLoad = (filePath) => {
 // 规范化文件名，去掉扩展名和前缀点号
 const normalizeKey = (filename) => filename.replace(/^\./, '').replace(/\.[^.]+$/, '');
 
-// 获取项目环境配置
+// 获取项目环境配置（仅从 $lm-config/env 读取，与 vue-demo-pc 逻辑保持一致）
 const getEnvConfig = (env) => {
   const packageJson = getProjectInfo();
   if (!packageJson) return {};
-  let envDir;
-  envDir = path.join(packageJson.APP_PATH, '$lm-config', 'env');
+
+  const envDir = path.join(packageJson.APP_PATH, '$lm-config', 'env');
   if (!fs.existsSync(envDir) || !fs.statSync(envDir).isDirectory()) {
     return {};
   }
+
   const result = {};
   const files = fs.readdirSync(envDir);
-  // 使用同步方式处理文件，确保结果在返回前已完成
   for (const file of files) {
     if (!/\.js$/i.test(file)) continue;
     const key = normalizeKey(file);
     const filePath = path.join(envDir, file);
-    const value = tryLoad(filePath); // 同步获取值
+    const value = tryLoad(filePath);
     if (value !== undefined) result[key] = value;
   }
-  if (env) {
-    return result[env];
-  }
+
+  if (env) return result[env] || {};
   return result;
 };
 

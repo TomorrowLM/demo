@@ -7,9 +7,11 @@
 // 兼容不同打包输出形态：有些构建器在打包后会导出一个懒加载的 __require 函数
 // 我们在这里优先尝试执行 __require()（如果存在），否则使用模块的 default 或直接导出值
 const builderMod = require('./vue-cli/index.builder.js');
+const webpackBuilderMod = require('./webpack/webpack.base.js');
 const { logInfo } = require('./core/scripts/log.js');
 logInfo();
 let Vue2CliBuilder = builderMod;
+let WebpackBaseBuilder = webpackBuilderMod;
 // if (builderMod) {
 //   if (typeof builderMod.__require === 'function') {
 //     try {
@@ -28,6 +30,9 @@ module.exports = {
    * 构建相关导出
    */
   buildConfig: {
-    Vue2CliBuilder: Vue2CliBuilder,  // Vue CLI 下的 Vue2 构建类（兼容懒加载产物）
+    // Vue CLI 下的 Vue2 构建类（兼容懒加载产物）
+    Vue2CliBuilder: Vue2CliBuilder,
+    // 通用 Webpack 构建类（供 React / 基础应用等复用）
+    WebpackBaseBuilder: WebpackBaseBuilder,
   },
 };

@@ -1,40 +1,23 @@
-const path = require("path");
-const webpack = require("webpack");
-const packageName = require("./package.json").name;
-//生成创建Html入口文件
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const isDev = process.env.NODE_ENV === "development" ? true : false;
-require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.NODE_ENV) })
-console.log('process.env.NODE_ENV:', process.env.NODE_ENV, process.env.VUE_APP_API_HOST)
-const lessRegex = /\.less$/;
-const lessModuleRegex = /\.module\.less$/;
+const path = require('path');
+const { buildConfig } = require('@lm/shared');
+const WebpackBaseBuilder = buildConfig.WebpackBaseBuilder;
+
+// 加载 .env.* 环境变量（用于代理地址等）
+require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.NODE_ENV) });
+const isDev = process.env.NODE_ENV === 'development';
+
 module.exports = () => {
-  const config = {
-    mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
-    devtool: isDev ? "eval-cheap-module-source-map" : 'cheap-source-map',
-    entry: {
-      app: path.resolve(__dirname, "./src/main.js"),
-    },
-    output: {
-      path: path.resolve(__dirname, "../dist/qiankun"),
-      filename: "js/[name].[hash].js", //输出文件名
-      publicPath: isDev ? '/' : '/qiankun', //资源访问根路径
-      // library: `${packageName}-[name]`,
-      // libraryTarget: "umd",
-      // chunkLoadingGlobal: `webpackJsonp_${packageName}`,
-    },
+  const builder = new WebpackBaseBuilder({
+    // 入口 / 输出 / publicPath 与原配置保持一致
+    entry: path.resolve(__dirname, './src/main.js'),
+    outputPath: path.resolve(__dirname, '../dist/qiankun'),
+    publicPath: isDev ? '/' : '/qiankun',
+    // 开发服务器配置保持不变
     devServer: {
-      /**
-       * 解决使用history模式，SPA页面在路由跳转之后，访问不到后端资源，返回404错误
-       */
       historyApiFallback: true,
-      /**
-       *  配置dev-server命令参数的第二种形式: "dev": "webpack-dev-server --open --port 3000 --contentBase src --hot"
-       */
-      open: true, //自动打开浏览器
+      open: true,
       port: 3500,
-      static: "./public", //指定静态资源目录
+      static: './public',
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
@@ -45,140 +28,14 @@ module.exports = () => {
           changeOrigin: true,
           secure: false,
           xfwd: false,
-          pathRewrite: { '/vue2-pc/api': '/', '/vue2-mobile/api': '/', '/vue3/api': '/' }  //重点：重写资源访问路径，避免转发请求 404问题
-        },
-      ]
-    },
-    resolve: {
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-    },
-    optimization: {
-      // moduleIds: isDev ? 'named' : 'deterministic',
-      // chunkIds: isDev ? 'named' : 'deter
-      splitChunks: {
-        // 代码分割
-        chunks: "all",
-        maxInitialRequests: Infinity, // 最大并行请求数，为了以防万一，设置无穷大即可
-        minSize: 20000, // 引入的模块大于20kb才做代码分割，官方默认20000，这里不用修改了
-        maxSize: 60000, // 若引入的模块大于60kb，则告诉webpack尝试再进行拆分
-        cacheGroups: {
-          vendors: {
-            //node_modules里的代码
-            test: /[\\/]node_modules[\\/]/,
-            chunks: "all",
-            name: "vendors", //chunks name
-            priority: 10, //优先级
-            enforce: true,
-          },
-        },
-      },
-    },
-    plugins: [
-      //开发中，创建一个在内存中生成Html页面的插件。打包中，用来生成HTML文件并自动引用打包好的JS文件
-      new HtmlWebpackPlugin({
-        //模板文件路径
-        template: path.join(__dirname, "public/index.html"),
-        //模板文件名
-        filename: "index.html",
-        title: "react app",
-        minify: {
-          //压缩html文件
-          removeComments: true, //移出html中的注释
-          collapseWhitespace: false, //删除空白符与换行符
-          removeAttributeQuotes: true, //删除双引号,
-          collapseWhitespace: true, //压缩成一行，
-        },
-      }),
-      new MiniCssExtractPlugin({
-        filename: "css/[name].[hash].css", // 定义抽离的入口文件的文件名
-        chunkFilename: "css/[name].[hash].css", // 定义非入口块文件的名称，如动态导入的文件
-      }),
-      new webpack.DefinePlugin({
-        // API: JSON.stringify(globalConstants)
-      })
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [
-            // "style-loader",
-            MiniCssExtractPlugin.loader,
-            "css-loader",
-            // 如果想要启用 CSS 模块化，可以为 css-loader 添加 modules 参数即可
-          ],
-        },
-        {
-          test: lessRegex,
-          exclude: lessModuleRegex,
-          use: [
-            // {
-            //   loader: 'style-loader', // 从 JS 中创建样式节点
-            // },
-            { loader: MiniCssExtractPlugin.loader }, // 提取到单独的CSS文件
-            {
-              loader: 'css-loader', // 转化 CSS 为 CommonJS
-              options: {
-                sourceMap: true,
-              }
-            },
-            {
-              loader: 'less-loader', // 编译 Less 为 CSS
-              options: {
-                lessOptions: {
-                  javascriptEnabled: true,
-                },
-              },
-            },
-          ],
-        },
-        {
-          test: lessModuleRegex,
-          use: [
-            // {
-            //   loader: 'style-loader', // 从 JS 中创建样式节点
-            // },
-            { loader: MiniCssExtractPlugin.loader }, // 提取到单独的CSS文件
-            {
-              loader: 'css-loader', // 转化 CSS 为 CommonJS
-              options: {
-                sourceMap: true,
-                modules: {
-                  localIdentName: "[local]___[hash:base64:5]",
-                },
-                // exclude: [
-                //   path.resolve(__dirname, "node_modules")
-                // ],
-              }
-            },
-            {
-              loader: 'less-loader', // 编译 Less 为 CSS
-              options: {
-                lessOptions: {
-                  javascriptEnabled: true,
-                },
-              },
-            },
-          ],
-        },
-        {
-          test: /\.(jsx|js|ts|tsx)$/,
-          exclude: /node_modules/,
-          loader: "babel-loader",
-          options: {
-            cacheDirectory: true, //缓存，第二次打包速度会提高
-            cacheCompression: false, //缓存不做压缩，打包速度也会快一点
-            // plugins: ["react-refresh/babel"], //使能JS的HMR
-            presets: [
-              "@babel/preset-env",
-              ["@babel/preset-react", { runtime: "automatic" }],
-              "@babel/preset-typescript" // 添加这一行
-            ],
-          },
+          pathRewrite: { '/vue2-pc/api': '/', '/vue2-mobile/api': '/', '/vue3/api': '/' },
         },
       ],
     },
-  };
+    // 如后续需要额外 Define 或插件，可通过这些参数传入
+    define: {},
+    plugins: [],
+  });
 
-  return config;
+  return builder.createConfig();
 };

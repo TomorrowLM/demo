@@ -1,5 +1,5 @@
 {
-  "extends": "../../config/tsconfig.json",
+  "extends": "@lm/lint/tsLint/tsconfig.react.json",
   "include": [
     "src"
   ]

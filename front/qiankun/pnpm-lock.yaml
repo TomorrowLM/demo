@@ -265,6 +265,12 @@ importers:
 
   packages/base:
     dependencies:
+      '@lm/lint':
+        specifier: workspace:*
+        version: link:../../npm/lm-lint
+      '@lm/shared':
+        specifier: workspace:*
+        version: link:../../npm/shared
       '@r2wc/react-to-web-component':
         specifier: ^2.0.4
         version: 2.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -14536,7 +14542,7 @@ snapshots:
       source-map-loader: 3.0.1(webpack@5.76.1(esbuild@0.14.22))
       source-map-support: 0.5.21
       stylus: 0.56.0
-      stylus-loader: 6.2.0(stylus@0.56.0)(webpack@5.76.1)
+      stylus-loader: 6.2.0(stylus@0.56.0)(webpack@5.76.1(esbuild@0.14.22))
       terser: 5.14.2
       text-table: 0.2.0
       tree-kill: 1.2.2
@@ -30536,7 +30542,7 @@ snapshots:
 
   stylis@4.3.6: {}
 
-  stylus-loader@6.2.0(stylus@0.56.0)(webpack@5.76.1):
+  stylus-loader@6.2.0(stylus@0.56.0)(webpack@5.76.1(esbuild@0.14.22)):
     dependencies:
       fast-glob: 3.3.3
       klona: 2.0.6
