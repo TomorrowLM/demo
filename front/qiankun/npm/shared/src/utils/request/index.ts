@@ -530,7 +530,7 @@ const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
  */
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
-    baseURL: `${process.env.APP_PROXY_API}`,
+    baseURL: `${GLOBAL_INFO.APP_PROXY_API}`,
     timeout: DEFAULT_TIMEOUT,
     withCredentials: true,
     xsrfCookieName: 'XSRF-TOKEN',
