@@ -1,7 +1,7 @@
 /**
  * 项目相关的辅助方法
  */
-const { appRoot } = require("./paths")
+const APP_PATH = process.cwd()
 
 // 中文解释：尝试通过间接调用 require 来加载模块，避免被打包工具静态分析
 function tryRequire(name) {
@@ -28,7 +28,7 @@ function getDependency(type, options = {}) {
   if (createReq) {
     try {
       const path = tryRequire('path');
-      const requireFromProject = createReq(path.resolve(appRoot, 'noop'));
+      const requireFromProject = createReq(path.resolve(APP_PATH, 'noop'));
       return requireFromProject(type);
     } catch (e) {
       // fallthrough to local require
@@ -52,10 +52,10 @@ function getDependency(type, options = {}) {
  */
 function getProjectPackageJson() {
   try {
-    // 使用 appRoot 获取当前工作目录，即引入 shared 包的项目根目录
+    // 使用 APP_PATH 获取当前工作目录，即引入 shared 包的项目根目录
     const path = tryRequire('path') || require('path');
     const fs = tryRequire('fs') || require('fs');
-    const packageJsonPath = path.resolve(appRoot, 'package.json');
+    const packageJsonPath = path.resolve(APP_PATH, 'package.json');
 
     // 检查文件是否存在
     if (!fs.existsSync(packageJsonPath)) {
@@ -83,7 +83,7 @@ function getProjectInfo(defaultName = 'unknown-project') {
   return {
     APP_NAME: (packageJson && packageJson.name) || defaultName,
     APP_VERSION: (packageJson && packageJson.version) || 'unknown-version',
-    APP_PATH: process.cwd()
+    APP_PATH
   };
 }
 
