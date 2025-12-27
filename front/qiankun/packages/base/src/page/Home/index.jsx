@@ -11,7 +11,7 @@ function Home() {
           <NavLink className="ml-8" to="/qiankun/vue2-mobile">
             vue2-mobile
           </NavLink>
-          <NavLink className="ml-8" to="/qiankun/vue2-pc">
+          <NavLink className="ml-8" to="/vue2-pc">
             vue2-pc
           </NavLink>
           <NavLink className="ml-8" to="/qiankun/vue3">

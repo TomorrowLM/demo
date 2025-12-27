@@ -12,7 +12,7 @@ import ComponentPage from "../page/componentPage/index.jsx";
 
 export const router = createBrowserRouter([
   {
-    path: "/qiankun",
+    path: "/",
     element: <Home></Home>,
     // loader: async () => {
     //   return redirect('/qiankun/base');
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/qiankun/base"></Navigate>,
+        element: <Navigate to="/base"></Navigate>,
       },
       {
         path: "base",

@@ -10,7 +10,7 @@ const createRouter = () =>
   new VueRouter({
     mode: 'history',
     base: window.__POWERED_BY_QIANKUN__
-      ? '/qiankun/vue2-pc/' // 配置子应用的路由根路径
+      ? '/vue2-pc/' // 配置子应用的路由根路径
       : isProd
         ? '/vue2-pc/' // 单一项目下的访问路径
         : '/',

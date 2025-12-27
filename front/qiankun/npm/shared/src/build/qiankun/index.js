@@ -1,82 +1,58 @@
-/**
- * 为qiankun微前端应用配置webpack输出选项
- * @param {Object} param0 配置参数
- * @param {string} param0.projectName 项目名称
- * @param {Object} param0.config webpack配置对象
- */
-// 确保这个路径指向正确的位置
-// const { getProjectName } = require('@/scripts/config/getProjectPackageJson');
-import { getProjectName }  from '../core/scripts/getProjectPackageJson.js';
-
-function qiankunConfigFn({ projectName, config }) {
-  console.log('qiankunConfig', getProjectName());
-  console.log(config.output);
-
-  // 如果没有提供项目名称，尝试从 package.json 获取
-  const actualProjectName = projectName || getProjectName();
-
-  // 根据项目名称配置输出选项
-  if (actualProjectName === 'web1') {
-    Object.assign(config.output,
-      {
-        library: `${actualProjectName}-[name]`, // 把子应用打包成 umd 库格式
-        libraryTarget: 'umd', // 把微应用打包成 umd 库格式
-        jsonpFunction: `webpackJsonp_${actualProjectName}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-      }
-    );
-  }
-  if (actualProjectName === 'web2') {
-    Object.assign(config.output,
-      {
-        library: `${actualProjectName}-[name]`, // 把子应用打包成 umd 库格式
-        libraryTarget: 'umd', // 把微应用打包成 umd 库格式
-        chunkLoadingGlobal: `webpackJsonp_${actualProjectName}` // webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
-      }
-    );
-  }
-
-
-}
-
-function configAsset(config) {
-  console.log('configAsset', process.env.VUE_APP_IS_QIANKUN);
-  const publicPath = process.env.APP_ENV === 'production' ? '' : `fonts/`;
-  console.log('publicPath', publicPath);
-  const fontRule = config.module.rule('fonts');
-  fontRule.uses.clear(); // 先清除 vue 默认的配置，不然会有问题
-  fontRule
-    .use('file-loader')
-    .loader('file-loader')
-    .options({
-      name: '[name].[hash:7].[ext]',
-      publicPath
-    })
-    .end();
-}
+const { getProjectInfo } = require('../core/scripts/app.js');
+const { getEnvConfig } = require('../core/scripts/env.js');
 
 /**
- * 获取qiankun微前端应用的webpack输出配置
- * @param {string} name 应用名称
- * @returns {Object} webpack输出配置对象
+ * QiankunClass 统一封装微应用输出与资源配置
  */
-function getQiankunConfig(name) {
-  // 如果没有提供名称，尝试从 package.json 获取
-  const actualName = name || getProjectName();
+class QiankunClass {
+  constructor(options = {}) {
+    this.projectName = getProjectInfo().name;
+    this.envConfig = getEnvConfig();
+  }
 
-  return {
-    library: `${actualName}-[name]`,
-    libraryTarget: 'umd',
-    chunkLoadingGlobal: `webpackJsonp_${actualName}`
-  };
+  /**
+   * 应用 webpack output 配置（供 CLI configureWebpack 使用）
+   */
+  applyOutputConfig(config, overrideName) {
+    if (!config || !config.output) return;
+    const name = overrideName || this.projectName;
+    const outputOptions = this.getOutputConfig(name);
+    Object.assign(config.output, outputOptions);
+  }
+
+  /**
+   * 配置字体等静态资源的 publicPath
+   */
+  configureAssets(config) {
+    if (!config || !config.module) return;
+    const publicPath = process.env.APP_ENV === 'production' ? '' : 'fonts/';
+    const fontRule = config.module.rule && config.module.rule('fonts');
+    if (!fontRule) return;
+    fontRule.uses.clear();
+    fontRule
+      .use('file-loader')
+      .loader('file-loader')
+      .options({
+        name: '[name].[hash:7].[ext]',
+        publicPath,
+      });
+  }
+
+  /**
+   * 获取 qiankun 兼容的输出配置
+   */
+  setOutputConfig(config) {
+    const name = this.projectName;
+    config.output.library = `${name}-[name]`;
+    config.output.libraryTarget = "umd"; // 把微应用打包成 umd 库格式
+    config.output.chunkLoadingGlobal = `webpackJsonp_${name}`;// webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
+    if (this.envConfig.IS_PROD) {
+      config.output.filename = `js/[name].[contenthash].js`;
+      config.output.chunkFilename = `js/[name].[contenthash].js`;
+    }
+    return config;
+  }
 }
 
-module.exports = {
-  qiankunConfigFn,
-  configAsset,
-  getQiankunConfig
-};
-// export default {
-//   qiankunConfigFn,
-//   configAsset,
-//   getQiankunConfig
-// }
+module.exports = QiankunClass;
+module.exports.QiankunClass = QiankunClass;

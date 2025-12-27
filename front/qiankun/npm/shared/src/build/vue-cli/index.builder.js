@@ -1,7 +1,8 @@
 // 通过“中转站”plugin.ts 引入通用能力（优先 ts，其次 js），避免直接依赖 core
 let pluginHelpers = require('./plugin.js')
-let { getDependency, getProjectInfo } = require('../core/scripts/app.js')
+let { getProjectInfo } = require('../core/scripts/app.js')
 let { getEnvConfig } = require('../core/scripts/env.js')
+let QiankunClass = require('../qiankun/index.js')
 
 /**
  * Vue CLI Vue2 构建类
@@ -16,7 +17,8 @@ class Vue2CliBuilder {
       APP_INFO: getProjectInfo(),
       NODE_ENV: process.env.NODE_ENV,
     }
-    this._plugins = []
+    this._plugins = [];
+    this.QiankunInstance = new QiankunClass(this.options); // 初始化 qiankun 实例
   }
   // 
   externalsPlugin() {
@@ -61,7 +63,10 @@ class Vue2CliBuilder {
       },
       getPublicPath: () => {
         const { IS_PROD, IS_QIANKUN, Build_Path, Build_Qiankun_Path } = this.GLOBAL_CONFIG.ENV_CONFIG;
-        if (!IS_PROD) return '/';
+        if (!IS_PROD || !IS_QIANKUN) return '/';
+        // 正式环境且非微应用模式，则使用打包路径作为资源访问路径
+        if (!IS_PROD || IS_QIANKUN) return Build_Path;
+
         return IS_PROD && !IS_QIANKUN ? Build_Path : Build_Qiankun_Path
       },
       setDefinePlugin: () => {
@@ -75,7 +80,7 @@ class Vue2CliBuilder {
         // Object.keys(env).forEach(key => {
         //   defines[`APP_${key}`] = JSON.stringify(env[key]);
         // });
-        console.log('webpack loaded:',defines, !!webpack);
+        console.log('webpack loaded:', defines, !!webpack);
         // console.log('webpack loaded:', webpack);
         return [new webpack.DefinePlugin(defines)]
       }
@@ -106,6 +111,9 @@ class Vue2CliBuilder {
         config.resolve = config.resolve || {}
         config.output = config.output || {}
         config.plugins.push(...self.commonPluginFactory());
+        if (self.GLOBAL_CONFIG.ENV_CONFIG.IS_QIANKUN) {
+          self.QiankunInstance.setOutputConfig(config);
+        }
       },
       /**
        * 链式方式对 webpack 做精细化调整：
