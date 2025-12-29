@@ -23,6 +23,16 @@
       "import": "./lib/esm/utils/*",
       "require": "./lib/cjs/utils/*"
     },
+    "./config": {
+      "types": "./lib/esm/types/config/index.d.ts",
+      "import": "./lib/esm/config/index.js",
+      "require": "./lib/cjs/config/index.js"
+    },
+    "./config/*": {
+      "types": "./lib/esm/types/config/*",
+      "import": "./lib/esm/config/*",
+      "require": "./lib/cjs/config/*"
+    },
     "./assets/*": "./lib/assets/*"
   },
   "sideEffects": false,

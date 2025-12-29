@@ -1,8 +1,6 @@
 import utils, { request, location } from "./utils";
-import { elementConfig } from "./config/element";
-
+export * from "./config/init"
 export { request, location };
-export { elementConfig };
 
 const $shared = {
   utils,
