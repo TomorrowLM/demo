@@ -7,8 +7,10 @@ import Empty from "../page/404.jsx";
 import Home from "../page/Home/index.jsx";
 import Qiankun from "../page/communication/qiankun.jsx";
 import ComPage from "../page/comPage/index.tsx";
-import React, { lazy } from "react";
-import ComponentPage from "../page/componentPage/index.jsx";
+import React, { lazy, Suspense } from "react";
+import ComponentPage from "../page/componentPage/index.jsx";  
+
+const TipTapMarkdown = lazy(() => import("../page/markdown/tiptap/index.tsx"));
 
 export const router = createBrowserRouter([
   {
@@ -137,6 +139,14 @@ export const router = createBrowserRouter([
         //     path: "editor",
         //   },
         // ],
+      },
+      {
+        path: "tiptap-markdown",
+        element: (
+          <Suspense fallback={<div>Loading markdown editor...</div>}>
+            <TipTapMarkdown />
+          </Suspense>
+        )
       },
       {
         path: '*',
