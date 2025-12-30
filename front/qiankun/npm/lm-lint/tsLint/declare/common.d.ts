@@ -6,6 +6,10 @@ declare global {
   const GLOBAL_INFO: {
     IS_PROD: boolean;
     IS_QIANKUN: boolean;
+    APP_NAME: string;
+    APP_VERSION: string;
+    API_BASE_URL: string;
+    [key: string]: any;
   };
   interface Window {
     __POWERED_BY_QIANKUN__: any;

@@ -10,8 +10,9 @@ function logInfo() {
   const projectPackageJson = getProjectPackageJson();
   const dependency = getDependency();
   console.log('=== 应用环境信息 ===');
-  console.log('项目环境信息:', envConfig, process.env.NODE_ENV);
-  console.log('项目信息:', projectInfo);
+  console.log(envConfig, process.env.NODE_ENV);
+  console.log('=== APP项目信息 ===');
+  console.log(projectInfo);
   // console.log('项目信息:', projectInfo);
   // console.log('项目信息:', projectPackageJson);
   // console.log('项目依赖:', dependency);

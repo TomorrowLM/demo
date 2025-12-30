@@ -44,16 +44,7 @@ class Vue2CliBuilder {
   }
   // 通用插件工厂方法
   commonPluginFactory() {
-    // const webpack = getDependency('webpack', this.options);
-    // if (!webpack) return [];
-    // // 确保 NODE_ENV 存在
-    // if (!defines['process.env.NODE_ENV']) {
-    //   defines['process.env.NODE_ENV'] = JSON.stringify(this.GLOBAL_CONFIG && this.GLOBAL_CONFIG.NODE_ENV || process.env.NODE_ENV);
-    // }
-    return [
-      // new webpack.DefinePlugin(defines),
-      ...this.getTools().setDefinePlugin()
-    ];
+    return [pluginHelpers.definePlugin()];
   }
   getTools() {
     return {
@@ -69,21 +60,6 @@ class Vue2CliBuilder {
 
         return IS_PROD && !IS_QIANKUN ? Build_Path : Build_Qiankun_Path
       },
-      setDefinePlugin: () => {
-        console.log('setDefinePlugin called');
-        const webpack = require('webpack');
-        const env = this.GLOBAL_CONFIG && this.GLOBAL_CONFIG.ENV_CONFIG ? this.GLOBAL_CONFIG.ENV_CONFIG : {};
-        const defines = {
-          GLOBAL_INFO: JSON.stringify(env),
-        };
-        // 按键注入 process.env.KEY 的形式，避免覆盖整个 process.env
-        // Object.keys(env).forEach(key => {
-        //   defines[`APP_${key}`] = JSON.stringify(env[key]);
-        // });
-        console.log('webpack loaded:', defines, !!webpack);
-        // console.log('webpack loaded:', webpack);
-        return [new webpack.DefinePlugin(defines)]
-      }
     }
   }
   createConfig() {

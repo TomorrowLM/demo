@@ -6,12 +6,8 @@ import store from './store';
 import 'element-ui/lib/theme-chalk/index.css';
 import { AppInit } from '@lm/shared';
 AppInit()
-console.log("applyQiankunPublicPath====>>>",);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
-
-console.log("环境信息====>>>", GLOBAL_INFO);
-console.log("环境信息====>>>__POWERED_BY_QIANKUN__", window.__POWERED_BY_QIANKUN__);
 let instance: any = null;
 function render(props: any = {}) {
   const { container } = props;

@@ -7,6 +7,7 @@ const path = require("path");
 const baseConfig = require("./baseConfig");
 const { getEnvConfig } = require("./scripts/env.js");
 const { alias, devServer } = baseConfig;
+const { getProjectInfo } = require("./scripts/app.js");
 // 安全 require（CI/打包流程等环境下不抛错）
 function safeRequire(name) {
   try {
@@ -77,7 +78,8 @@ function fetchAlias(mergeAlias) {
  */
 function fetchDefinePlugin(config, defineObj = {}) {
   const env = getEnvConfig(process.env.NODE_ENV);
-  return env;
+  const appInfo = getProjectInfo();
+  return { ...env, ...appInfo };
 }
 
 /**
