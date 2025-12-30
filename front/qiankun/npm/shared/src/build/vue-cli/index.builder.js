@@ -10,13 +10,17 @@ let QiankunClass = require('../qiankun/index.js')
  */
 class Vue2CliBuilder {
   constructor(options = {}) {
+    const env = getEnvConfig(process.env.NODE_ENV);
     this.options = Object.assign({}, options, {
       htmlInjectCdn: true,
     });
+
     this.GLOBAL_CONFIG = {
-      ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
+      ENV_CONFIG: env,
       APP_INFO: getProjectInfo(),
       NODE_ENV: process.env.NODE_ENV,
+      IS_PROD: env.IS_PROD,
+      IS_QIANKUN: env.IS_QIANKUN,
     }
     this._plugins = [];
     this.QiankunInstance = new QiankunClass(this.options); // 初始化 qiankun 实例
@@ -99,6 +103,12 @@ class Vue2CliBuilder {
           config.optimization.splitChunks({ chunks: 'all' })
         }
         self.aliasPluginFactory(config)
+
+        // 在 qiankun 场景下，为字体等静态资源配置带前缀的 publicPath
+        // 例如：/vue2-pc/fonts/ 或 /qiankun/child/vue2-pc/fonts/
+        if (this.GLOBAL_CONFIG.IS_QIANKUN) {
+          self.QiankunInstance.configureAssets(config)
+        }
       },
     }
   }

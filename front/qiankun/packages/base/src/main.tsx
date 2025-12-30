@@ -21,7 +21,7 @@ registerMicroApps(
     // },
     {
       name: "vue2-pc",
-      entry: !GLOBAL_INFO.IS_PROD ? "//localhost:8003" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+      entry: !GLOBAL_INFO.IS_PROD ? "//localhost:8002" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
       container: "#vue2-pc",
       activeRule: "/vue2-pc",
       // loader: (loading) => setLoading(loading)
