@@ -40,7 +40,7 @@ class QiankunClass {
     fontRule.uses.clear();
     // 覆盖掉 vue-cli 默认的 type: 'asset' 配置，恢复为使用 loader 的模式
     // fontRule.use('url-loader').loader('url-loader').options({}).end();
-    fontRule.type('asset/inline').set('generator', {});
+    fontRule.type('asset/inline').set('generator', {}); //匹配到的字体文件不会再走 file-loader，而是被 内联成 base64 的 data URL 写进打包后的 CSS/JS 里
     // fontRule.type('javascript/auto');
     // fontRule
     //   .use('file-loader')

@@ -102,6 +102,7 @@ const defaultArticle = `
   <p>尝试：输入 “高亮” 或 “组件” 并点击“高亮指定文本”，然后在列表中点击“定位”按钮。</p>
 `;
 
+// React 侧用于展示高亮摘要信息的小组件
 const ReactHighlightWidget: React.FC<{ highlights: HighlightRecord[] }> = ({
   highlights,
 }) => (
@@ -129,6 +130,12 @@ const ReactHighlightWidget: React.FC<{ highlights: HighlightRecord[] }> = ({
 );
 
 let highlightBridgeRegistered = false;
+
+/**
+ * 注册 Web Component：highlight-bridge
+ * - 只在浏览器环境且未注册时执行一次
+ * - 让 Vue / 其他框架通过自定义元素消费 React 组件
+ */
 const registerHighlightBridge = () => {
   if (highlightBridgeRegistered || typeof window === "undefined") {
     return;
@@ -146,6 +153,9 @@ const registerHighlightBridge = () => {
 
 const TextArea = Input.TextArea;
 
+/**
+ * 在文档中查找首次匹配指定关键字的文本范围
+ */
 const findRangeByText = (doc: any, keyword: string) => {
   if (!keyword) return null;
   const target = keyword.toLowerCase();
@@ -162,6 +172,9 @@ const findRangeByText = (doc: any, keyword: string) => {
   return match;
 };
 
+/**
+ * 根据高亮标记的 id 在编辑器中反查对应文本范围
+ */
 const findRangeByHighlightId = (editor: Editor, highlightId: string) => {
   const highlightType = editor.schema.marks.highlight;
   if (!highlightType) return null;
@@ -184,12 +197,22 @@ const findRangeByHighlightId = (editor: Editor, highlightId: string) => {
   return range;
 };
 
+/**
+ * 按索引从预设调色板中取颜色，实现循环取色
+ */
 const pickColor = (index: number) =>
   highlightPalette[index % highlightPalette.length];
 
+/**
+ * 判断编辑器实例是否可用
+ * - 已创建、未销毁且 view 存在时认为就绪
+ */
 const isEditorReady = (instance: Editor | null | undefined): instance is Editor =>
   Boolean(instance && !instance.isDestroyed && instance.view);
 
+/**
+ * TipTap 富文本编辑与高亮演示主组件
+ */
 const Tiptap: React.FC = () => {
   const [manualText, setManualText] = useState("");
   const [label, setLabel] = useState("");
@@ -207,6 +230,9 @@ const Tiptap: React.FC = () => {
     content: defaultArticle,
   });
 
+  /**
+   * 创建一条高亮记录并应用到编辑器与本地状态
+   */
   const createHighlight = useCallback(
     (
       range: { from: number; to: number },
@@ -298,6 +324,9 @@ const Tiptap: React.FC = () => {
     return () => window.clearTimeout(timer);
   }, [activeHighlightId]);
 
+  /**
+   * 高亮当前光标选中的文本片段
+   */
   const handleHighlightSelection = () => {
     if (!isEditorReady(editor)) return;
     const { from, to } = editor.state.selection;
@@ -308,6 +337,9 @@ const Tiptap: React.FC = () => {
     createHighlight({ from, to });
   };
 
+  /**
+   * 通过输入的关键字在文档中检索并高亮首次匹配
+   */
   const handleHighlightByText = () => {
     if (!isEditorReady(editor)) return;
     const keyword = manualText.trim();
@@ -323,6 +355,9 @@ const Tiptap: React.FC = () => {
     createHighlight(range, keyword);
   };
 
+  /**
+   * 跳转到某一条高亮所在的位置，并滚动到可视区域
+   */
   const handleJumpToHighlight = (item: HighlightRecord) => {
     if (!isEditorReady(editor)) return;
     const range =
@@ -336,6 +371,9 @@ const Tiptap: React.FC = () => {
     setActiveHighlightId(item.id);
   };
 
+  /**
+   * 删除指定 id 的高亮标记
+   */
   const handleRemoveHighlight = (id: string) => {
     if (!isEditorReady(editor)) return;
     const target = highlights.find((item) => item.id === id);
@@ -354,6 +392,9 @@ const Tiptap: React.FC = () => {
     setHighlights((prev) => prev.filter((item) => item.id !== id));
   };
 
+  /**
+   * 清空文档中所有高亮标记
+   */
   const handleClearHighlights = () => {
     if (!isEditorReady(editor)) return;
     if (!highlights.length) {
