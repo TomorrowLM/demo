@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./assets/styles/index.css";
-// import reportWebVitals from "./reportWebVitals.js";
 import { router } from "./router/index.js";
 import { RouterProvider } from "react-router-dom";
 import { registerMicroApps, start } from "qiankun";
-import "./public-path";
-console.log("环境变量====>>>>>", GLOBAL_INFO);
+import { AppInit } from '@lm/shared';
+import "./assets/styles/index.css";
+AppInit()
+// import reportWebVitals from "./reportWebVitals.js";
 // const isDev = process.env.NODE_ENV === 'development';
 // import 'antd/dist/antd.css';
-const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
+// const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
 registerMicroApps(
   [
     // {
