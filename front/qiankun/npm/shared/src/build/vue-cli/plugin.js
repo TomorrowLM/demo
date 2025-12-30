@@ -89,14 +89,6 @@ function htmlCdnPlugin(cdn = {}) {
   };
 }
 
-/**
- * devServer 代理插件（可选）
- * - 通过 helpers.createProxyEntry 合并代理
- * - 注意：此能力更适合在顶层 vue.config.js 的 devServer 字段处理，本插件仅做示例
- */
-function devServerProxyPlugin(name) {
-  return helpers.createProxyEntry()[name]
-}
 
 module.exports = {
   externalsPlugin,
@@ -104,7 +96,5 @@ module.exports = {
   definePlugin,
   providePlugin,
   htmlCdnPlugin,
-  devServerProxyPlugin,
-  // 同时暴露 helpers，方便在构建器内部透传
   helpers,
 };

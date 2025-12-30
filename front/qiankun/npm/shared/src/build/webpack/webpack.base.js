@@ -1,8 +1,8 @@
 const path = require("path");
-const helpers = require("../core/core.helpers.js");
 const { getProjectInfo } = require("../core/scripts/app.js");
 const { getEnvConfig } = require("../core/scripts/env.js");
 let pluginHelpers = require("./plugin.js");
+let helpers = pluginHelpers.helpers;
 /**
  * 通用 Webpack 构建器（非 Vue CLI 场景）
  * - 参考 vue-demo-pc 的 Vue2CliBuilder 写法，提供 createConfig 方法
@@ -49,7 +49,7 @@ class WebpackBaseBuilder {
     const env = this.GLOBAL_CONFIG.ENV_CONFIG || {};
     const HtmlWebpackPlugin = helpers.safeRequire("html-webpack-plugin");
     const MiniCssExtractPlugin = helpers.safeRequire("mini-css-extract-plugin");
-
+    const APP_NAME = this.GLOBAL_CONFIG.APP_INFO.APP_NAME || "app";
     const lessRegex = /\.less$/;
     const lessModuleRegex = /\.module\.less$/;
 
@@ -63,7 +63,7 @@ class WebpackBaseBuilder {
         path: this.options.outputPath,
         publicPath: this.options.publicPath,
       },
-      devServer: this.options.devServer,
+      devServer: helpers.fetchProxyEntry(this.GLOBAL_CONFIG),
       resolve: {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
         alias: helpers.fetchAlias(),

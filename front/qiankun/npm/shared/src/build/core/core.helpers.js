@@ -5,8 +5,8 @@
  */
 const path = require("path");
 const baseConfig = require("./baseConfig");
-const { getEnvConfig } = require("./scripts/env.js");
 const { alias, devServer } = baseConfig;
+const { getEnvConfig } = require("./scripts/env.js");
 const { getProjectInfo } = require("./scripts/app.js");
 // 安全 require（CI/打包流程等环境下不抛错）
 function safeRequire(name) {
@@ -17,35 +17,7 @@ function safeRequire(name) {
     return null;
   }
 }
-/**
- * 深合并（对象/数组），尽量无副作用
- * - 仅实现构建配置场景够用的能力，避免引入第三方依赖
- */
-function isPlainObject(obj) {
-  return Object.prototype.toString.call(obj) === "[object Object]";
-}
 
-function deepMerge(target, source) {
-  if (Array.isArray(target) && Array.isArray(source)) {
-    return [...target, ...source];
-  }
-  if (isPlainObject(target) && isPlainObject(source)) {
-    const out = { ...target };
-    Object.keys(source).forEach((k) => {
-      const tv = out[k];
-      const sv = source[k];
-      if (Array.isArray(tv) && Array.isArray(sv)) {
-        out[k] = [...tv, ...sv];
-      } else if (isPlainObject(tv) && isPlainObject(sv)) {
-        out[k] = deepMerge(tv, sv);
-      } else {
-        out[k] = sv;
-      }
-    });
-    return out;
-  }
-  return source !== undefined ? source : target;
-}
 /**
  * 应用文件名 hash 策略
  * - isProd = true 使用 contenthash
@@ -107,8 +79,9 @@ function mergeExternals(config, externals = {}) {
  * - baseUrl: 业务侧请求前缀（如 /api）
  * - apiHost: 目标代理地址
  */
-function createProxyEntry() {
-  return devServer;
+function fetchProxyEntry(GLOBAL_INFO) {
+  console.log('devServer', devServer(GLOBAL_INFO));
+  return devServer(GLOBAL_INFO) || {};
 }
 
 /**
@@ -126,12 +99,11 @@ function normalizeCdnAssets(assetsCDN = {}) {
 
 module.exports = {
   safeRequire,
-  deepMerge,
   applyFilenameHashing,
   fetchAlias,
   fetchDefinePlugin,
   addProvidePlugin,
   mergeExternals,
-  createProxyEntry,
+  fetchProxyEntry,
   normalizeCdnAssets,
 };

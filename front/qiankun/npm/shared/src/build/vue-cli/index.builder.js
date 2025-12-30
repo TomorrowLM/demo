@@ -1,5 +1,6 @@
 // 通过“中转站”plugin.ts 引入通用能力（优先 ts，其次 js），避免直接依赖 core
 let pluginHelpers = require('./plugin.js')
+let helpers = pluginHelpers.helpers;
 let { getProjectInfo } = require('../core/scripts/app.js')
 let { getEnvConfig } = require('../core/scripts/env.js')
 let QiankunClass = require('../qiankun/index.js')
@@ -28,7 +29,6 @@ class Vue2CliBuilder {
     if (Object.keys(map).length === 0) return this
   }
   // 注入别名插件工厂方法
-
   aliasPluginFactory(config) {
     // 使用helpers工具类处理所有别名，返回处理后的别名对象
     const all = pluginHelpers.aliasPlugin()
@@ -37,10 +37,6 @@ class Vue2CliBuilder {
       // 为Webpack配置设置每个别名映射
       config.resolve.alias.set(key, all[key]);
     })
-  }
-  // 代理插件工厂方法
-  devServerProxyPluginFactory() {
-    return pluginHelpers.devServerProxyPlugin(this.GLOBAL_CONFIG.APP_INFO.APP_NAME)
   }
   // 通用插件工厂方法
   commonPluginFactory() {
@@ -78,7 +74,7 @@ class Vue2CliBuilder {
         },
       },
       // 合并已有的基础配置
-      devServer: self.devServerProxyPluginFactory(this.options),
+      devServer: helpers.fetchProxyEntry(this.GLOBAL_CONFIG),
       /**
        * 直接访问 webpack 配置对象：应用公共别名、公用插件与文件命名策略等
        * 对应实现参考：vue-cli.webpackBaseConfig()

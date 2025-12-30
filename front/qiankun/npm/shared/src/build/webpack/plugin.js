@@ -15,4 +15,5 @@ function definePlugin() {
 
 module.exports = {
   definePlugin,
+  helpers
 };
