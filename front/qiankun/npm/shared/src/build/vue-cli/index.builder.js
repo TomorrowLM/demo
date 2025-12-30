@@ -40,7 +40,7 @@ class Vue2CliBuilder {
   }
   // 通用插件工厂方法
   commonPluginFactory() {
-    return [pluginHelpers.definePlugin()];
+    return [helpers.fetchDefinePlugin()];
   }
   getTools() {
     return {

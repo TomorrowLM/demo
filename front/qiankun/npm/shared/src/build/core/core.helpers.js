@@ -5,9 +5,8 @@
  */
 const path = require("path");
 const baseConfig = require("./baseConfig");
-const { alias, devServer } = baseConfig;
-const { getEnvConfig } = require("./scripts/env.js");
-const { getProjectInfo } = require("./scripts/app.js");
+const { alias, devServer, provideDefines } = baseConfig;
+
 // 安全 require（CI/打包流程等环境下不抛错）
 function safeRequire(name) {
   try {
@@ -49,9 +48,9 @@ function fetchAlias(mergeAlias) {
  * - 业务侧可通过 defineObj 追加/覆盖字段
  */
 function fetchDefinePlugin(config, defineObj = {}) {
-  const env = getEnvConfig(process.env.NODE_ENV);
-  const appInfo = getProjectInfo();
-  return { ...env, ...appInfo };
+  const webpack = safeRequire("webpack");
+  console.log('provideDefines', provideDefines());
+  return new webpack.DefinePlugin(provideDefines());
 }
 
 /**
@@ -67,11 +66,8 @@ function addProvidePlugin(config, provideObj = {}) {
 /**
  * 合并 externals
  */
-function mergeExternals(config, externals = {}) {
-  config.externals = {
-    ...(config.externals || {}),
-    ...(externals || {}),
-  };
+function addExternals(config, externals = {}) {
+  config.externals = Object.assign({}, config.externals || {}, externals || {});
 }
 
 /**
@@ -102,8 +98,8 @@ module.exports = {
   applyFilenameHashing,
   fetchAlias,
   fetchDefinePlugin,
-  addProvidePlugin,
-  mergeExternals,
   fetchProxyEntry,
+  addProvidePlugin,
+  addExternals,
   normalizeCdnAssets,
 };

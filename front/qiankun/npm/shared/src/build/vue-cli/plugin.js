@@ -18,7 +18,7 @@ const helpers = require('../core/core.helpers.js');
 function externalsPlugin(map = {}) {
   return function plugin(ctx) {
     if (ctx.stage === 'configureWebpack' && ctx.config) {
-      ctx.helpers.mergeExternals(ctx.config, map || {});
+      ctx.helpers.addExternals(ctx.config, map || {});
     }
   };
 }
@@ -36,26 +36,7 @@ function aliasPlugin() {
   return helpers.fetchAlias()
 }
 
-/**
- * TODO: 代码相同
- * define 插件（适配 Vue2 configureWebpack 阶段）
- * - 追加 DefinePlugin 定义
- */
-function definePlugin() {
-  const defines = helpers.fetchDefinePlugin();
-  const webpack = require("webpack");
-  return new webpack.DefinePlugin({
-    GLOBAL_INFO: JSON.stringify(defines),
-  });;
-}
 
-/**
- * provide 插件（适配 Vue2 configureWebpack 阶段）
- * - 追加 ProvidePlugin 定义
- */
-function providePlugin(provides = {}) {
-
-}
 
 /**
  * html CDN 注入插件（适配 Vue2 chainWebpack 阶段）
@@ -93,8 +74,6 @@ function htmlCdnPlugin(cdn = {}) {
 module.exports = {
   externalsPlugin,
   aliasPlugin,
-  definePlugin,
-  providePlugin,
   htmlCdnPlugin,
   helpers,
 };
