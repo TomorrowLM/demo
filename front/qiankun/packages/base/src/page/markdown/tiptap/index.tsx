@@ -49,10 +49,35 @@ const Tiptap: React.FC = () => {
     handleClearHighlights,
   } = useTiptapHighlight(editor as any);
 
+  // 根据当前选区，找到其中所有带 highlight id 的 mark，对应删除高亮记录
+  const handleClearSelectionHighlight = () => {
+    if (!isEditorReady(editor)) return;
+    const highlightType = (editor as any).schema.marks.highlight;
+    if (!highlightType) return;
+    const { from, to } = (editor as any).state.selection;
+    if (from === to) return;
+
+    const ids = new Set<string>();
+    (editor as any).state.doc.nodesBetween(from, to, (node: any) => {
+      if (!node.isText || !node.marks?.length) return;
+      node.marks.forEach((mark: any) => {
+        if (mark.type === highlightType && mark.attrs?.id) {
+          ids.add(mark.attrs.id as string);
+        }
+      });
+    });
+
+    ids.forEach((id) => handleRemoveHighlight(id));
+
+    // 取消高亮后将选区收起到末尾，避免整行一直处于选中态
+    (editor as any).chain().focus().setTextSelection({ from: to, to }).run();
+  };
+
   // 选中文本时显示的气泡高亮菜单
   const highlightBubbleMenu = useHighlightBubbleMenu({
     editor: editor as any,
     onHighlightSelection: handleHighlightSelection,
+    onClearSelectionHighlight: handleClearSelectionHighlight,
   });
 
   useEffect(() => {

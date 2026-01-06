@@ -7,6 +7,7 @@ import { isEditorReady } from "./useTiptapHighlight";
 export type UseHighlightBubbleMenuOptions = {
   editor: Editor | null | undefined;
   onHighlightSelection: () => void;
+  onClearSelectionHighlight?: () => void; // 取消当前选区内的高亮，并同步右侧列表
 };
 
 /**
@@ -17,6 +18,7 @@ export type UseHighlightBubbleMenuOptions = {
 export const useHighlightBubbleMenu = ({
   editor,
   onHighlightSelection,
+  onClearSelectionHighlight,
 }: UseHighlightBubbleMenuOptions) => {
   if (!isEditorReady(editor as any)) return null;
 
@@ -41,6 +43,10 @@ export const useHighlightBubbleMenu = ({
         <Button
           size="small"
           onClick={() => {
+            if (onClearSelectionHighlight) {
+              onClearSelectionHighlight();
+              return;
+            }
             if (!isEditorReady(editor as any)) return;
             (editor as Editor).chain().focus().unsetHighlight().run();
           }}
