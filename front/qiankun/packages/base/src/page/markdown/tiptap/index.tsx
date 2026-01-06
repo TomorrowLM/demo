@@ -4,6 +4,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { useTiptapHighlight, HighlightMark, findRangeByText, isEditorReady } from "./hooks/useTiptapHighlight";
+import { useHighlightBubbleMenu } from "./hooks/useHighlightBubbleMenu";
 import ReactHighlightWidget, { registerHighlightBridge } from "./components/ReactHighlightWidget";
 import "./styles.less";
 
@@ -47,6 +48,12 @@ const Tiptap: React.FC = () => {
     handleRemoveHighlight,
     handleClearHighlights,
   } = useTiptapHighlight(editor as any);
+
+  // 选中文本时显示的气泡高亮菜单
+  const highlightBubbleMenu = useHighlightBubbleMenu({
+    editor: editor as any,
+    onHighlightSelection: handleHighlightSelection,
+  });
 
   useEffect(() => {
     registerHighlightBridge();
@@ -132,6 +139,7 @@ const Tiptap: React.FC = () => {
         </header>
 
         <div className="tiptap-demo__editor">
+          {highlightBubbleMenu}
           <EditorContent editor={editor} />
         </div>
 

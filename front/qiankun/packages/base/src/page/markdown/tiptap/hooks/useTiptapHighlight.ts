@@ -33,6 +33,7 @@ const highlightPalette = [
 export const HighlightMark = Highlight.configure({ multicolor: true }).extend({
   addAttributes() {
     return {
+      // 自定义属性，用于存储高亮颜色
       color: {
         default: highlightPalette[0],
         // 作用于解析 HTML 时提取自定义属性
@@ -47,12 +48,14 @@ export const HighlightMark = Highlight.configure({ multicolor: true }).extend({
           };
         },
       },
+      // 自定义属性，用于存储高亮标记的唯一 ID
       id: {
         default: null,
         parseHTML: (element: HTMLElement) => element.getAttribute("data-highlight-id"),
         renderHTML: (attributes: { id?: string | null }) =>
           attributes.id ? { "data-highlight-id": attributes.id } : {},
       },
+      // 自定义属性，用于存储高亮标记的标签文本
       label: {
         default: "",
         parseHTML: (element: HTMLElement) => element.getAttribute("data-highlight-label") || "",
