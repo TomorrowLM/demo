@@ -136,12 +136,12 @@ const Tiptap: React.FC = () => {
         </div>
 
         <div className="tiptap-demo__form">
-          <Input
+          {/* <Input
             placeholder="标注标签（可选）"
             value={label}
             onChange={(event) => setLabel(event.target.value)}
             maxLength={20}
-          />
+          /> */}
           <TextArea
             rows={3}
             placeholder="输入要自动定位并高亮的关键字，例如：高亮 / 组件"

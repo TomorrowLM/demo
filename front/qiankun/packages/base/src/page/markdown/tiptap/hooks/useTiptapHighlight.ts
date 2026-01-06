@@ -5,13 +5,13 @@ import { mergeAttributes } from "@tiptap/core";
 import { nanoid } from "nanoid";
 
 export type HighlightRecord = {
-  id: string;
-  text: string;
-  color: string;
-  label: string;
-  from: number;
-  to: number;
-  createdAt: string;
+  id: string; // 唯一标识
+  text: string; // 高亮文本
+  color: string; // 高亮颜色
+  label: string;  // 高亮标签
+  from: number;  // 高亮文本的起始位置
+  to: number;  // 高亮文本的结束位置
+  createdAt: string;  // 高亮创建时间
 };
 
 declare global {
@@ -29,13 +29,16 @@ const highlightPalette = [
   "#fecdd3",
 ];
 
+// HighlightMark 扩展，支持多色高亮和自定义属性
 export const HighlightMark = Highlight.configure({ multicolor: true }).extend({
   addAttributes() {
     return {
       color: {
         default: highlightPalette[0],
+        // 作用于解析 HTML 时提取自定义属性
         parseHTML: (element: HTMLElement) =>
           element.getAttribute("data-highlight-color") || (element as HTMLElement).style.backgroundColor,
+        // 作用于渲染 HTML 时添加自定义属性
         renderHTML: (attributes: { color?: string }) => {
           const color = attributes.color || highlightPalette[0];
           return {
@@ -83,7 +86,9 @@ export const findRangeByText = (doc: any, keyword: string) => {
     if (match || !node.isText || !node.text) return;
     const idx = node.text.toLowerCase().indexOf(target);
     if (idx !== -1) {
-      const from = pos + idx + 1;
+      // ProseMirror 文档位置是 1 基的，这里的 pos 已经是该 text 节点第一个字符的位置
+      // 因此只需要加上匹配到的下标 idx 即可，不能再额外 +1，否则会整体后移一位
+      const from = pos + idx;
       const to = from + keyword.length;
       match = { from, to };
     }
@@ -106,7 +111,8 @@ const findRangeByHighlightId = (editor: Editor, highlightId: string) => {
       (mark) => mark.type === highlightType && (mark.attrs as any)?.id === highlightId
     );
     if (hasTarget) {
-      const from = pos + 1;
+      // 对于携带目标 id 的 text 节点，pos 即为该节点内容的起始位置
+      const from = pos;
       const to = from + node.nodeSize;
       range = { from, to };
       return false;
@@ -166,7 +172,7 @@ export const useTiptapHighlight = (editor: Editor) => {
   const createHighlight = useCallback(
     (
       range: { from: number; to: number },
-      text?: string,
+      text?: string, // 高亮文本，默认为选中文本
       options?: { label?: string; color?: string }
     ) => {
       console.log('createHighlight called with range:', isEditorReady(editor), editor, !editor.isDestroyed, editor.view);
@@ -234,9 +240,9 @@ export const useTiptapHighlight = (editor: Editor) => {
         from: item.from,
         to: item.to,
       } as { from: number; to: number });
-    editor.chain().focus().setTextSelection(range).run();
-    editor.commands.scrollIntoView();
-    setActiveHighlightId(item.id);
+    editor.chain().focus().setTextSelection(range).run(); // 跳转到高亮位置
+    editor.commands.scrollIntoView(); // 滚动到可视区域
+    setActiveHighlightId(item.id); // 设置当前高亮 id
   };
 
   /**
