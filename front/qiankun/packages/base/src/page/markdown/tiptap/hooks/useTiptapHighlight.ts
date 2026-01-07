@@ -168,6 +168,24 @@ export const isEditorReady = (instance: Editor | null | undefined): instance is 
 export const useTiptapHighlight = (editor: Editor) => {
   const [highlights, setHighlights] = useState<HighlightRecord[]>([]); // 本地高亮记录状态
   const [activeHighlightId, setActiveHighlightId] = useState<string | null>(null); // 当前高亮 id
+  const lastSelectionRef = useRef<{ from: number; to: number } | null>(null); // 记录最近一次非空选区，兼容移动端点击按钮导致选区丢失
+
+  // 监听编辑器选区变化，缓存最近一次有效选区
+  useEffect(() => {
+    if (!isEditorReady(editor)) return;
+
+    const handleSelectionUpdate = ({ editor: ed }: any) => {
+      const { from, to } = ed.state.selection;
+      if (from !== to) {
+        lastSelectionRef.current = { from, to };
+      }
+    };
+
+    (editor as any).on("selectionUpdate", handleSelectionUpdate);
+    return () => {
+      (editor as any).off("selectionUpdate", handleSelectionUpdate);
+    };
+  }, [editor]);
 
   /**
    * 创建一条高亮记录并应用到编辑器与本地状态
@@ -225,11 +243,10 @@ export const useTiptapHighlight = (editor: Editor) => {
   const handleHighlightSelection = () => {
     if (!isEditorReady(editor)) return;
     const { from, to } = editor.state.selection;
-    if (from === to) {
-      // 交由调用方决定如何提示
-      return;
-    }
-    createHighlight({ from, to });
+    // 优先使用当前选区；如果因为点击按钮导致选区被清空，则退回到最近一次有效选区
+    const range = from !== to ? { from, to } : lastSelectionRef.current;
+    if (!range) return;
+    createHighlight(range);
   };
 
   /**

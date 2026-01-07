@@ -1,5 +1,33 @@
 ## TipTap 文档高亮方案说明
 
+## 目录
+
+- [0. tiptap 目录结构](#0-tiptap-目录结构)
+- [1. 需求概述](#1-需求概述)
+- [2. 功能点与技术实现](#2-功能点与技术实现)
+	- [2.1 编辑不暴露源码](#21-编辑不暴露源码)
+	- [2.2 自定义指定高亮文本](#22-自定义指定高亮文本)
+	- [2.3 React--vue-同时使用同一份高亮数据](#23-react--vue-同时使用同一份高亮数据)
+	- [2.4 从列表定位到对应高亮文本](#24-从列表定位到对应高亮文本)
+	- [2.5 适配手机与-pc](#25-适配手机与-pc)
+- [3. 后端需要提供的文档数据结构](#3-后端需要提供的文档数据结构)
+- [4. 典型交互流程](#4-典型交互流程)
+- [5. 小结](#5-小结)
+
+### 0. tiptap 目录结构
+
+```text
+packages/base/src/page/markdown/tiptap/
+├── index.tsx                 # 页面入口组件，集成 TipTap 编辑器与高亮侧边栏
+├── README.md                 # 本说明文档
+├── styles.less               # 页面样式（布局、自适应、highlight 样式等）
+├── components/
+│   └── ReactHighlightWidget.tsx # React 侧高亮摘要组件，同时被封装为 Web Component
+└── hooks/
+		├── useTiptapHighlight.ts   # 高亮核心逻辑：mark 扩展、增删查跳转等 Hook
+		└── useHighlightBubbleMenu.tsx # 基于 BubbleMenu 的选区高亮气泡菜单 Hook
+```
+
 ### 1. 需求概述
 
 本方案基于 TipTap 富文本编辑器，实现一套“文档内容 + 高亮元数据”的高亮能力，满足以下需求：
