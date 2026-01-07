@@ -6,10 +6,41 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { useTiptapHighlight, HighlightMark, findRangeByText, isEditorReady } from "./hooks/useTiptapHighlight";
 import { useHighlightBubbleMenu } from "./hooks/useHighlightBubbleMenu";
 import ReactHighlightWidget, { registerHighlightBridge } from "./components/ReactHighlightWidget";
+import { MyBlock } from "./extensions/MyBlock";
 import "./styles.less";
 import { Markdown } from "@tiptap/markdown";
 
 const TextArea = Input.TextArea;
+
+// 模拟：后端返回的富文本（HTML）内容，包含 <my-block>
+const backendHtmlContent = `
+  <p>这里是后端返回的 <strong>富文本 HTML</strong> 示例：</p>
+  <my-block data-type="warning" data-title="HTML 模式的 my-block">
+    <p>这是通过 <code>&lt;my-block&gt;</code> 标签包裹的一段内容（HTML）。</p>
+  </my-block>
+  <p>后面仍然可以是普通的段落和列表：</p>
+  <ul>
+    <li>支持加粗 / 斜体 / 列表等富文本格式</li>
+    <li>也可以混用多个 <code>&lt;my-block&gt;</code></li>
+  </ul>
+`;
+
+// 模拟：后端返回的 Markdown 内容，其中直接内嵌 <my-block>
+const backendMarkdownContent = `
+这里是后端返回的 **Markdown** 示例：
+
+> 普通 markdown 语法照常写，比如引用、列表、标题等。
+
+<my-block data-type="info" data-title="Markdown 模式的 my-block">
+  在 Markdown 文本中直接写一段 &lt;my-block&gt; HTML，
+  交给 TipTap 解析并由自定义节点渲染。
+</my-block>
+
+后面依然可以继续写普通 markdown：
+
+- 任务一
+- 任务二
+`;
 
 // 默认演示用文章内容，放在页面层而不是 Hook 内
 const defaultArticle = `
@@ -67,6 +98,7 @@ const Tiptap: React.FC = () => {
       StarterKit,
       Placeholder.configure({ placeholder: "开始输入内容，或粘贴一段文本..." }),
       HighlightMark,
+      MyBlock,
       Markdown.configure({
         markedOptions: {
           breaks: true,
@@ -84,6 +116,22 @@ const Tiptap: React.FC = () => {
     handleRemoveHighlight,
     handleClearHighlights,
   } = useTiptapHighlight(editor as any);
+
+  // 模拟：从“后端”加载富文本 HTML
+  const loadHtmlFromBackend = () => {
+    if (!isEditorReady(editor)) return;
+    (editor as any).commands.setContent(backendHtmlContent, {
+      parseOptions: { preserveWhitespace: "full" },
+    });
+  };
+
+  // 模拟：从“后端”加载 Markdown
+  const loadMarkdownFromBackend = () => {
+    if (!isEditorReady(editor)) return;
+    (editor as any).commands.setContent(backendMarkdownContent, {
+      parseOptions: { preserveWhitespace: "full" },
+    });
+  };
 
   // 根据当前选区，找到其中所有带 highlight id 的 mark，对应删除高亮记录
   const handleClearSelectionHighlight = () => {
@@ -184,6 +232,12 @@ const Tiptap: React.FC = () => {
             <p>所见即所得，可在 PC / Mobile 自适应布局下使用。</p>
           </div>
           <Space wrap>
+            <Button onClick={loadMarkdownFromBackend}>
+              加载 Markdown（含 my-block）
+            </Button>
+            <Button onClick={loadHtmlFromBackend}>
+              加载 HTML 富文本（含 my-block）
+            </Button>
             <Button
               type="primary"
               onClick={handleHighlightSelection}

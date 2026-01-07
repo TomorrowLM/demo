@@ -198,6 +198,41 @@
   color: #94a3b8;
 }
 
+/* 自定义 <my-block> 展示样式（按 class 选择，兼容 div / 自定义标签） */
+.my-block {
+  display: block;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f9fafb;
+  padding: 12px 14px;
+  margin: 12px 0;
+}
+
+.my-block__header {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.my-block__body {
+  font-size: 14px;
+  color: #334155;
+}
+
+.my-block--info {
+  border-color: #38bdf8;
+  background: #e0f2fe;
+}
+
+.my-block--warning {
+  border-color: #f97316;
+  background: #ffedd5;
+}
+
+.my-block--selected {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.6);
+}
+
 @media (max-width: 960px) {
   .tiptap-demo {
     display: flex;
