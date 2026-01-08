@@ -5,6 +5,6 @@ export default {
   NODE_ENV: "production",
   IS_PROD: true,
   IS_QIANKUN: false,
-  APP_OUTPUTDIR: './',
-  Build_Path: '/vue2-pc/',
+  APP_OUTPUTDIR: '../dist/qiankun/child/vue2-pc',
+  Build_Path: '/qiankun/child/vue2-pc/',
 }

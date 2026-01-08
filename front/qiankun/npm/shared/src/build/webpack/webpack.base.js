@@ -10,12 +10,19 @@ let helpers = pluginHelpers.helpers;
  */
 class WebpackBaseBuilder {
   constructor(options = {}) {
+    this.GLOBAL_CONFIG = {
+      ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
+      APP_INFO: getProjectInfo(),
+      NODE_ENV: process.env.NODE_ENV || "development",
+      IS_DEV: process.env.NODE_ENV === "development",
+    };
+    const { APP_OUTPUTDIR, Build_Path, IS_PROD } = this.GLOBAL_CONFIG.ENV_CONFIG;
     this.options = Object.assign(
       {
         // 业务入口、输出、publicPath 由项目层传入
         entry: path.resolve(process.cwd(), "./src/main.tsx"),
-        outputPath: path.resolve(process.cwd(), "./dist"),
-        publicPath: "/",
+        outputPath: APP_OUTPUTDIR,
+        publicPath: IS_PROD ? Build_Path : "/",
         htmlOptions: {},
         define: {},
         plugins: [],
@@ -24,12 +31,10 @@ class WebpackBaseBuilder {
       options
     );
 
-    this.GLOBAL_CONFIG = {
-      ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
-      APP_INFO: getProjectInfo(),
-      NODE_ENV: process.env.NODE_ENV || "development",
-      IS_DEV: process.env.NODE_ENV === "development",
-    };
+    // 确保 outputPath 为绝对路径（Webpack 要求）
+    if (this.options.outputPath && !path.isAbsolute(this.options.outputPath)) {
+      this.options.outputPath = path.resolve(process.cwd(), this.options.outputPath);
+    }
   }
   // 通用插件工厂方法
   commonPluginFactory() {
@@ -92,9 +97,7 @@ class WebpackBaseBuilder {
         rules: [],
       },
     };
-
-
-
+    console.log('[shared]WebpackBaseBuilder config.output:', config.output);
     // 统一文件名 hash 策略
     helpers.applyFilenameHashing(config, !isDev);
 

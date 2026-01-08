@@ -30,6 +30,7 @@ function logInfo() {
   console.log('[shared]=== 应用环境信息 ===');
   console.log(envConfig, process.env.NODE_ENV);
   console.log('[shared]=== APP项目信息 ===');
+  console.log('process.env.APP_ENV:', process.env.APP_ENV)
   console.log(projectInfo);
   // console.log('项目信息:', projectInfo);
   // console.log('项目信息:', projectPackageJson);

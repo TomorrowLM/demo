@@ -7,8 +7,8 @@
     "nvm": "nvm use v14.18.0",
     "serve": "npm run nvm && cross-env NODE_ENV=local.dev vue-cli-service serve",
     "serve:qiankun": "npm run nvm && cross-env NODE_ENV=local.qiankun vue-cli-service serve",
-    "build": "npm run nvm && cross-env NODE_ENV=production &&vue-cli-service build --mode production",
-    "build:qiankun": "npm run nvm && cross-env NODE_ENV=production.qiankun && set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production.qiankun",
+    "build": "npm run nvm && cross-env NODE_ENV=production && vue-cli-service build --mode production",
+    "build:qiankun": "npm run nvm && cross-env NODE_ENV=production APP_ENV=production.qiankun vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

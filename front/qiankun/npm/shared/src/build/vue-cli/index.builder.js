@@ -10,7 +10,9 @@ let QiankunClass = require('../qiankun/index.js')
  */
 class Vue2CliBuilder {
   constructor(options = {}) {
-    const env = getEnvConfig(process.env.NODE_ENV);
+    // 优先使用自定义 APP_ENV（避免被 vue-cli 重置 NODE_ENV）
+    const envKey = process.env.APP_ENV || process.env.NODE_ENV;
+    const env = getEnvConfig(envKey);
     this.options = Object.assign({}, options, {
       htmlInjectCdn: true,
     });
@@ -53,12 +55,12 @@ class Vue2CliBuilder {
         return pluginHelpers.normalizeCdnAssets ? pluginHelpers.normalizeCdnAssets(this.options.cdn || {}) : { css: (this.options.cdn && this.options.cdn.css) || [], js: (this.options.cdn && this.options.cdn.js) || [], externals: (this.options.cdn && this.options.cdn.externals) || {} }
       },
       getPublicPath: () => {
-        const { IS_PROD, IS_QIANKUN, Build_Path, Build_Qiankun_Path } = this.GLOBAL_CONFIG.ENV_CONFIG;
+        const { IS_PROD, IS_QIANKUN, Build_Path } = this.GLOBAL_CONFIG.ENV_CONFIG;
         if (!IS_PROD || !IS_QIANKUN) return '/';
         // 正式环境且非微应用模式，则使用打包路径作为资源访问路径
         if (!IS_PROD || IS_QIANKUN) return Build_Path;
 
-        return IS_PROD && !IS_QIANKUN ? Build_Path : Build_Qiankun_Path
+        return IS_PROD && !IS_QIANKUN ? Build_Path : Build_Path
       },
     }
   }

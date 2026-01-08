@@ -25,12 +25,12 @@ class QiankunClass {
    */
   configureAssets(config) {
     if (!config || !config.module) return;
-    const { IS_PROD, Build_Qiankun_Path, Build_Path_Qiankun_Assets } = this.envConfig || {};
+    const { IS_PROD, Build_Path, Build_Path_Qiankun_Assets } = this.envConfig || {};
     console.log('[shared]configureAssets IS_QIANKUN:', this.envConfig, Build_Path_Qiankun_Assets);
     // 基础前缀：
-    // - 微应用生产环境：使用 Build_Qiankun_Path（如 /qiankun/child/vue2-pc/）
+    // - 微应用生产环境：使用 Build_Path（如 /qiankun/child/vue2-pc/）
     // - 其他场景：使用 Build_Path（如 /vue2-pc/），没有则退回根路径
-    const base = (IS_PROD ? Build_Qiankun_Path : Build_Path_Qiankun_Assets) || '/';
+    const base = (IS_PROD ? Build_Path : Build_Path_Qiankun_Assets) || '/';
     const normalizedBase = base.endsWith('/') ? base : `${base}/`;
     const publicPath = `${normalizedBase}fonts/`;
     const fontRule = config.module.rule && config.module.rule('fonts');
