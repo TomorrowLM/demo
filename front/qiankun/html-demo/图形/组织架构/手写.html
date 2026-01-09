@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结构图</title>
+    <style>
+        .container {
+            width: 900px;
+            height: 400px;
+            padding: 10px 0;
+            margin: 50px auto 50px;
+            overflow-x: auto;
+            border: solid 1px #aaa;
+        }
+
+        .wrap {
+            display: flex;
+            padding: 10px 20px 10px 10px;
+        }
+
+        .child {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+        }
+
+        .item-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .item {
+            position: relative;
+            display: inline-flex;
+            width: 110px;
+            height: 74px;
+            margin: 20px;
+            background: #eee;
+            border-top: 2px solid dodgerblue;
+            border-radius: 1px 1px 0 0;
+            justify-content: center;
+            flex: none;
+        }
+
+        .item-top-node {
+            width: 200px;
+            height: 74px;
+            background-image: linear-gradient(135deg, #57A5FF 0%, #3B7BFF 100%);
+            border-top: none;
+            border-radius: 2px;
+            box-shadow: 0 2px 10px 0 #ddd;
+        }
+
+
+        .item-line-top:before {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            display: block;
+            width: 1px;
+            height: 20px;
+            background: #d8d8d8;
+            content: " ";
+        }
+
+        .item-line-bottom:after {
+            position: absolute;
+            top: 74px;
+            left: 50%;
+            display: block;
+            width: 1px;
+            height: 20px;
+            background: #d8d8d8;
+            content: " ";
+        }
+
+        .item-line-l:before {
+            position: absolute;
+            left: 50%;
+            display: block;
+            width: 50%;
+            height: 1px;
+            background: #d8d8d8;
+            content: " ";
+        }
+
+        .item-line-m:before {
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: #d8d8d8;
+            content: " ";
+        }
+
+        .item-line-r:before {
+            position: absolute;
+            right: 50%;
+            display: block;
+            width: 50%;
+            height: 1px;
+            background: #d8d8d8;
+            content: " ";
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="wrap">
+        <div class="child">
+            <div class="main">
+                <div class="item-container">
+                    <div class="item item-line-bottom item-top-node"></div>
+                    <div class="inline">
+                        <div class="child">
+                            <div class="main">
+                                <div class="item-container item-line-l">
+                                    <div class="item item-line-top"></div>
+                                    <div class="inline">
+                                    </div>
+                                </div>
+                                <div class="item-container item-line-m">
+                                    <div class="item item-line-top item-line-bottom"></div>
+                                    <div class="inline">
+                                        <div class="child">
+                                            <div class="main">
+                                                <div class="item-container item-line-l">
+                                                    <div class="item item-line-top"></div>
+                                                    <div class="inline">
+                                                    </div>
+                                                </div>
+                                                <div class="item-container item-line-m">
+                                                    <div class="item item-line-top"></div>
+                                                    <div class="inline">
+                                                    </div>
+                                                </div>
+                                                <div class="item-container item-line-r">
+                                                    <div class="item item-line-top"></div>
+                                                    <div class="inline">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-container item-line-r">
+                                    <div class="item item-line-top item-line-bottom"></div>
+                                    <div class="inline">
+                                        <div class="child">
+                                            <div class="main">
+                                                <div class="item-container item-line-l">
+                                                    <div class="item item-line-top"></div>
+                                                    <div class="inline">
+                                                    </div>
+                                                </div>
+                                                <div class="item-container item-line-m">
+                                                    <div class="item item-line-top"></div>
+                                                    <div class="inline">
+                                                    </div>
+                                                </div>
+                                                <div class="item-container item-line-r">
+                                                    <div class="item item-line-top"></div>
+                                                    <div class="inline">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

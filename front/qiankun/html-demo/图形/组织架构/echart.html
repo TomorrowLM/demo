@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>组织架构 - ECharts 树形（方形节点）</title>
+	<style>
+		html, body { height: 100%; margin: 0; }
+		#toolbar { position: absolute; right: 12px; top: 12px; z-index: 10; }
+		#toolbar button { margin-left: 8px; padding: 6px 10px; font-size: 13px; }
+		#chart { width: 100%; height: 100vh; }
+	</style>
+</head>
+<body>
+	<div id="toolbar">
+		<button id="restore">重置视图</button>
+		<button id="expandAll">全部展开</button>
+		<button id="collapseAll">全部折叠</button>
+	</div>
+	<div id="chart"></div>
+
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+	<script>
+		const treeData = {
+			name: '公司',
+			symbolSize: [260, 90],
+			bg: '#3949f7',
+			color: '#fff',
+			children: [
+				{ name: '产品', symbolSize: [160, 48], bg: '#eef2ff', color: '#2b2f8f', children: [
+					{ name: '产品规划', symbolSize: [120,40] },
+					{ name: '需求分析', symbolSize: [120,40] },
+					{ name: '产品运营', symbolSize: [120,40] }
+				]},
+				{ name: '研发', symbolSize: [160, 48], children: [
+					{ name: '前端', symbolSize: [120,40], children: [ {name:'Vue', symbolSize:[100,36]}, {name:'React', symbolSize:[100,36]} ] },
+					{ name: '后端', symbolSize: [120,40], children: [ {name:'Java', symbolSize:[100,36]}, {name:'Node.js', symbolSize:[100,36]} ] },
+					{ name: '测试', symbolSize: [120,40] }
+				]},
+				{ name: '设计', symbolSize: [160,48], children: [ {name:'视觉', symbolSize:[120,40]}, {name:'交互', symbolSize:[120,40]} ]},
+				{ name: '运营', symbolSize: [160,48], children: [ {name:'市场', symbolSize:[120,40]}, {name:'内容', symbolSize:[120,40]} ]}
+			]
+		};
+
+		const chartDom = document.getElementById('chart');
+		const chart = echarts.init(chartDom, null, { renderer: 'canvas' });
+
+		const option = {
+			tooltip: { trigger: 'item', triggerOn: 'mousemove', formatter: (info) => info.data.name },
+			series: [{
+				type: 'tree',
+				data: [treeData],
+				top: '5%', left: '5%', bottom: '5%', right: '5%',
+				// 使用 rect symbol 作为矩形容器，symbolSize 优先使用节点数据中的尺寸
+				symbol: 'rect',
+				symbolKeepAspect: false,
+				symbol: 'rect',
+				symbolSize: (node) => {
+					if (node && node.data && node.data.symbolSize) return node.data.symbolSize;
+					return [140, 40];
+				},
+				label: {
+					position: 'inside',
+					verticalAlign: 'middle',
+					align: 'center',
+					// 文本颜色
+					color: (node) => (node.data && node.data.color) ? node.data.color : '#2b2f8f',
+					fontSize: 14,
+					formatter: '{b}',
+					padding: 0
+				},
+				itemStyle: {
+					// 使用节点数据的 bg 作为填充色，并绘制边框形成容器效果
+					color: (node) => (node.data && node.data.bg) ? node.data.bg : '#eef2ff',
+					borderColor: '#2f6ae6',
+					borderWidth: 2,
+					borderRadius: 0
+				},
+				lineStyle: { width: 2, color: '#cfdffb' },
+				expandAndCollapse: true,
+				initialTreeDepth: 2,
+				orient: 'TB',
+				roam: true
+			}]
+		};
+
+		chart.setOption(option);
+
+		document.getElementById('restore').addEventListener('click', () => { chart.dispatchAction({ type: 'restore' }); chart.resize(); });
+		document.getElementById('expandAll').addEventListener('click', () => { chart.dispatchAction({ type: 'treeExpandAll' }); });
+		document.getElementById('collapseAll').addEventListener('click', () => { chart.dispatchAction({ type: 'treeCollapseAll' }); });
+		window.addEventListener('resize', () => { chart.resize(); });
+		chart.on('click', (params) => { if (params && params.data) alert('节点：' + params.data.name); });
+	</script>
+</body>
+</html>
