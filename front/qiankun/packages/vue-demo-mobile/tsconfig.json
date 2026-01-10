@@ -1,18 +1,18 @@
 {
-    "extends": "../../npm/lm-lint/src/ts/tsconfig.base.json",
-    "references": [
-        {
-            "path": "../../npm/lm-lint/src/ts/tsconfig.base.json"
-        }
-    ],
-    "compilerOptions": {
-        "paths": {
-            "@/*": [
-                "src/*"
-            ],
-            "components/*": [
-                "src/components/*"
-            ]
-        }
+  "extends": "../../npm/lm-lint/src/ts/tsconfig.base.json",
+  "references": [
+    {
+      "path": "../../npm/lm-lint/src/ts/tsconfig.base.json"
     }
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "components/*": [
+        "src/components/*"
+      ]
+    }
+  }
 }
