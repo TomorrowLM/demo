@@ -7,7 +7,7 @@ const { getEnvConfig } = require('../core/scripts/env.js');
 class QiankunClass {
   constructor(options = {}) {
     this.projectName = getProjectInfo().name;
-    this.envConfig = getEnvConfig(process.env.NODE_ENV);
+    this.envConfig = getEnvConfig(process.env.APP_ENV);
   }
 
   /**

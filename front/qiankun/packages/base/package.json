@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "nvm": "nvm use 18.17.0",
-    "serve": "npm run nvm  && cross-env NODE_ENV=development webpack serve --config webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
-    "build:qiankun": "cross-env NODE_ENV=production webpack --config webpack.config.js"
+    "serve": "npm run nvm  && cross-env APP_ENV=development webpack serve --config webpack.config.js",
+    "build": "cross-env APP_ENV=production webpack --config webpack.config.js"
   },
   "dependencies": {
     "@lm/lint": "workspace:*",

@@ -69,8 +69,8 @@ const createPlugins = (isBrowser) => {
     replace({
       preventAssignment: true,
       values: {
-        'process.env.APP_ENV': JSON.stringify(process.env.APP_ENV || 'development'),
-        'process.env.VUE_APP_IS_QIANKUN': JSON.stringify(process.env.VUE_APP_IS_QIANKUN || 'false'),
+        // 'process.env.APP_ENV': JSON.stringify(process.env.APP_ENV || 'development'),
+        // 'process.env.VUE_APP_IS_QIANKUN': JSON.stringify(process.env.VUE_APP_IS_QIANKUN || 'false'),
         // 添加环境检测
         'typeof window': isBrowser ? '"object"' : '"undefined"',
         'typeof process': isBrowser ? '"undefined"' : '"object"'

@@ -11,7 +11,7 @@ let QiankunClass = require('../qiankun/index.js')
 class Vue2CliBuilder {
   constructor(options = {}) {
     // 优先使用自定义 APP_ENV（避免被 vue-cli 重置 NODE_ENV）
-    const envKey = process.env.APP_ENV || process.env.NODE_ENV;
+    const envKey = process.env.APP_ENV || process.env.APP_ENV;
     const env = getEnvConfig(envKey);
     this.options = Object.assign({}, options, {
       htmlInjectCdn: true,
@@ -20,7 +20,7 @@ class Vue2CliBuilder {
     this.GLOBAL_CONFIG = {
       ENV_CONFIG: env,
       APP_INFO: getProjectInfo(),
-      NODE_ENV: process.env.NODE_ENV,
+      APP_ENV: process.env.APP_ENV,
       IS_PROD: env.IS_PROD,
       IS_QIANKUN: env.IS_QIANKUN,
     }
@@ -66,7 +66,11 @@ class Vue2CliBuilder {
   }
   createConfig() {
     const self = this
+    const env = self.GLOBAL_CONFIG.ENV_CONFIG || {}
     return {
+      // 使用环境配置中的 APP_OUTPUTDIR 作为打包输出目录
+      // 例如 .production.qiankun.js 里的 "../dist/qiankun/child/vue2-pc"
+      outputDir: env.APP_OUTPUTDIR || 'dist',
       publicPath: self.getTools().getPublicPath(),
       css: {
         extract: {

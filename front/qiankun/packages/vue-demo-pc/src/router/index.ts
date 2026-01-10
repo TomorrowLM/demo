@@ -2,18 +2,20 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import store from '@/store';
 Vue.use(VueRouter); // 安装路由功能
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.APP_ENV === 'production';
+const { APP_ROUTER_BASE } = GLOBAL_INFO;
 // 基础路由
 const whiteRoutes: Array<RouteConfig> = store.getters.whiteRoutes;
 // console.log(whiteRoutes, 'router:whiteRoutes');
 const createRouter = () =>
   new VueRouter({
     mode: 'history',
-    base: window.__POWERED_BY_QIANKUN__
-      ? '/vue2-pc/' // 配置子应用的路由根路径
-      : isProd
-        ? '/vue2-pc/' // 单一项目下的访问路径
-        : '/',
+    base: APP_ROUTER_BASE,
+    // base: window.__POWERED_BY_QIANKUN__
+    //   ? '/qiankun/vue2-pc/' // 配置子应用的路由根路径
+    //   : isProd
+    //     ? '/vue2-pc/' // 单一项目下的访问路径
+    //     : '/',
     routes: whiteRoutes,
   });
 const router: any = createRouter();

@@ -9,6 +9,7 @@ declare global {
     APP_NAME: string;
     APP_VERSION: string;
     API_BASE_URL: string;
+    APP_ROUTER_BASE: string; // 路由基础路径
     [key: string]: any;
   };
   interface Window {

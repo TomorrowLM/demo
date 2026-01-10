@@ -3,11 +3,19 @@ const { buildConfig } = require('@lm/shared');
 const WebpackBaseBuilder = buildConfig.WebpackBaseBuilder;
 
 // 加载 .env.* 环境变量（用于代理地址等）
-// require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.NODE_ENV) });
-// const isDev = process.env.NODE_ENV === 'development';
+// require('dotenv').config({ path: path.resolve(__dirname, './env/.env.' + process.env.APP_ENV) });
+const isDev = process.env.APP_ENV === 'development';
 
 module.exports = () => {
   const builder = new WebpackBaseBuilder({
+    // output: {
+    //   path: path.resolve(__dirname, "../dist/qiankun"),
+    //   filename: "js/[name].[hash].js", //输出文件名
+    //   publicPath: isDev ? '/' : '/qiankun', //资源访问根路径
+    //   // library: `${packageName}-[name]`,
+    //   // libraryTarget: "umd",
+    //   // chunkLoadingGlobal: `webpackJsonp_${packageName}`,
+    // },
     // 入口 / 输出 / publicPath 与原配置保持一致
     // entry: path.resolve(__dirname, './src/main.tsx'),
     // outputPath: path.resolve(__dirname, '../dist/qiankun'),

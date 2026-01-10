@@ -8,11 +8,11 @@ function Home() {
         <NavLink to="/"> qiankun 主应用</NavLink>
         <div className="float-right">
           <NavLink to="/qiankun/vue3/qiankun-vue3-page">qiankun-use</NavLink>
+          <NavLink className="ml-8" to="/qiankun/vue2-pc">
+            vue2-pc
+          </NavLink>
           <NavLink className="ml-8" to="/qiankun/vue2-mobile">
             vue2-mobile
-          </NavLink>
-          <NavLink className="ml-8" to="/vue2-pc">
-            vue2-pc
           </NavLink>
           <NavLink className="ml-8" to="/qiankun/vue3">
             vue3

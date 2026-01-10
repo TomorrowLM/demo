@@ -55,7 +55,7 @@ interface RequestState {
 }
 
 // ==================== 常量定义 ====================
-const IS_DEV = process.env.NODE_ENV === 'development';
+const IS_DEV = !GLOBAL_INFO.IS_PROD;
 const GLOBAL_LOADING_KEY = 'global-loading';
 const DEFAULT_TIMEOUT = 60000;
 let messageProviderInstance: MessageProviderInstance | null = null;

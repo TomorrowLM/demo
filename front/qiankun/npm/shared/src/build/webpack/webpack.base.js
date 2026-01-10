@@ -11,10 +11,10 @@ let helpers = pluginHelpers.helpers;
 class WebpackBaseBuilder {
   constructor(options = {}) {
     this.GLOBAL_CONFIG = {
-      ENV_CONFIG: getEnvConfig(process.env.NODE_ENV),
+      ENV_CONFIG: getEnvConfig(process.env.APP_ENV),
       APP_INFO: getProjectInfo(),
-      NODE_ENV: process.env.NODE_ENV || "development",
-      IS_DEV: process.env.NODE_ENV === "development",
+      APP_ENV: process.env.APP_ENV || "development",
+      IS_DEV: process.env.APP_ENV === "development",
     };
     const { APP_OUTPUTDIR, Build_Path, IS_PROD } = this.GLOBAL_CONFIG.ENV_CONFIG;
     this.options = Object.assign(

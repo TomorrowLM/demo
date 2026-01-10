@@ -7,7 +7,7 @@ import { AppInit } from '@lm/shared';
 import "./assets/styles/index.css";
 AppInit()
 // import reportWebVitals from "./reportWebVitals.js";
-// const isDev = process.env.NODE_ENV === 'development';
+const isDev = !GLOBAL_INFO.IS_PROD;
 // import 'antd/dist/antd.css';
 // const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
 registerMicroApps(
@@ -21,9 +21,9 @@ registerMicroApps(
     // },
     {
       name: "vue2-pc",
-      entry: !GLOBAL_INFO.IS_PROD ? "//localhost:8002" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+      entry: isDev ? "//localhost:8002" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
       container: "#vue2-pc",
-      activeRule: "/vue2-pc",
+      activeRule: "/qiankun/vue2-pc",
       // loader: (loading) => setLoading(loading)
     },
     // {

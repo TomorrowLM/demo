@@ -8,13 +8,14 @@ import Home from "../page/Home/index.jsx";
 import Qiankun from "../page/communication/qiankun.jsx";
 import ComPage from "../page/comPage/index.tsx";
 import React, { lazy, Suspense } from "react";
-import ComponentPage from "../page/componentPage/index.jsx";  
-
+import ComponentPage from "../page/componentPage/index.jsx";
+const { APP_ROUTER_BASE } = GLOBAL_INFO;
 const TipTapMarkdown = lazy(() => import("../page/markdown/tiptap/index.tsx"));
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    // path: "/",
+    path: APP_ROUTER_BASE,
     element: <Home></Home>,
     // loader: async () => {
     //   return redirect('/qiankun/base');
@@ -22,11 +23,28 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/base"></Navigate>,
+        element: <Navigate to="/qiankun/base"></Navigate>,
       },
       {
         path: "base",
         element: <ComPage></ComPage>,
+      },
+      {
+        path: "vue2-pc/*",
+        element: <Web2></Web2>,
+        children: [
+          {
+            path: 'dashboard', // 子应用中可以访问主应用页面
+          },
+          {
+            path: 'page1', // 子应用中可以访问主应用页面
+            element: <ComponentPage></ComponentPage>
+          },
+          {
+            path: 'page2', // 子应用中可以访问主应用页面
+            element: <ComponentPage></ComponentPage>
+          },
+        ]
       },
       {
         path: "react/*",
@@ -50,93 +68,6 @@ export const router = createBrowserRouter([
         //   },
         //   {
         //     path: "menu",
-        //   },
-        // ],
-      },
-      {
-        path: "vue2-pc/*",
-        element: <Web2></Web2>,
-        children: [
-          {
-            path: 'dashboard', // 子应用中可以访问主应用页面
-          },
-          {
-            path: 'page1', // 子应用中可以访问主应用页面
-            element: <ComponentPage></ComponentPage>
-          },
-          {
-            path: 'page2', // 子应用中可以访问主应用页面
-            element: <ComponentPage></ComponentPage>
-          },
-        ]
-        // children: [
-        //   {
-        //     path: "login",
-        //   },
-        //   {
-        //     path: "dashboard",
-        //   },
-        //   {
-        //     path: "user",
-        //   },
-        //   {
-        //     path: "demo",
-        //     children: [{
-        //       path: 'access'
-        //     }, {
-        //       path: 'skin'
-        //     }]
-        //   }, {
-        //     path: "task",
-        //     children: [{
-        //       path: 'PickupTask'
-        //     }, {
-        //       path: 'skin'
-        //     }]
-        //   },
-        // ],
-      },
-      {
-        path: "vue3/*",
-        element: <Web3></Web3>,
-        children: [
-          {
-            path: "qiankun-vue3-page",
-            element: <Qiankun></Qiankun>,
-            // children: [
-            //   {
-            //     path: "qiankun-vue3-page",
-            //     element: <Web3></Web3>,
-            //   },
-            // ],
-          },
-        ]
-        // children: [
-        //   {
-        //     path: '3D',
-        //     children: [
-        //       {
-        //         path: "canvas/moon",
-        //       },
-        //       {
-        //         path: "webgl/basic",
-        //       },
-        //       {
-        //         path: "webgl/attribute",
-        //       },
-        //       {
-        //         path: "webgl/uniform",
-        //       },
-        //       {
-        //         path: "three/axis",
-        //       },
-        //       {
-        //         path: "three/cube",
-        //       },
-        //     ]
-        //   },
-        //   {
-        //     path: "editor",
         //   },
         // ],
       },
