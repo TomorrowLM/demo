@@ -1,18 +1,30 @@
 {
-  "extends": "../../npm/lm-lint/src/ts/tsconfig.base.json",
-  "references": [
-    {
-      "path": "../../npm/lm-lint/src/ts/tsconfig.base.json"
-    }
-  ],
+  "extends": "@lm/lint/tsLint/tsconfig.vue2.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    // 指定特殊模块的路径
     "paths": {
       "@/*": [
-        "src/*"
+        "src/*",
       ],
-      "components/*": [
-        "src/components/*"
-      ]
-    }
-  }
+    },
+  },
+  // ts 排除的文件
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  // ts 管理的文件
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "types/**/*.d.ts"
+  ]
 }

@@ -5,9 +5,9 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:@lm/lint/vue'
+    'plugin:@lm/lint/lib/esLint/vue'
   ],
-  rules: {
-    semi: [0, "never"]
+  parserOptions: {
+    parser: 'babel-eslint'
   }
 }

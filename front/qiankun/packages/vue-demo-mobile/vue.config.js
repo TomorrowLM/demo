@@ -1,52 +1,33 @@
-const path = require('path');
-
-const { webpackBaseConfig, baseConfig, cssConfig } = require('@lm/shared/src/config/vue')
-const autoprefixer = require('autoprefixer'); // 自动在样式中添加浏览器厂商前缀，避免手动处理样式兼容问题
-const pxtorem = require('postcss-pxtorem');
-const packageName = require('./package.json').name;
-const resolve = (dir) => path.join(__dirname, dir);
-console.log(process.env.NODE_ENV, process.env.VUE_APP_IS_QIANKUN, process.env.VUE_APP_API_HOST, 1);
-const config = baseConfig(process.env)
-const { qiankunConfigFn, configAsset } = require('@lm/shared/src/config/qiankun')
-const isQiankun = process.env.VUE_APP_IS_QIANKUN === 'true';
-module.exports = {
-  ...config,
-  configureWebpack: (config) => {
-    webpackBaseConfig(process.env, config, resolve);
-    isQiankun && qiankunConfigFn({ projectName: 'web1', config })
-  },
-  chainWebpack: (config) => {
-    configAsset(config)
-  },
-  ...cssConfig(true)
-
-  // css: {
-  //   extract: !!isProd,
-  //   sourceMap: false,
-  //   loaderOptions: {
-  //     postcss: {
-  //       plugins: [
-  //         autoprefixer({
-  //           overrideBrowserslist: [
-  //             'Android 4.1',
-  //             'iOS 7.1',
-  //             'Chrome > 31',
-  //             'ff > 31',
-  //             'ie >= 8',
-  //             'last 10 versions' // 所有主流浏览器最近10版本用
-  //           ],
-  //           grid: true
-  //         }),
-  //         pxtorem({
-  //           rootValue: 100, // 以375的设计稿尺寸，通过设置根元素fontsize=100px=1rem作为标准。将rootValue设置为100，这样16px就会转化成0.16rem。方便计算
-  //           propList: ['*'], // 表示转换所有属性中的px单位
-  //           selectorBlackList: ['van-'] // 过滤掉.van-开头的class，不进行rem转换. Vant 组件内部已经处理好了尺寸。
-  //         })
-  //       ]
-  //     },
-  //     sass: {
-  //       additionalData: '@use "@/styles/global.scss";'
-  //     }
-  //   }
-  // }
-};
+/**
+ * Vue2（Vue CLI）项目构建入口
+ * - 使用共享封装的 Vue2CliBuilder，统一多项目构建能力
+ * - 可按需配置 externals、开发阶段分包优化等
+ */
+const webpack = require('webpack');
+const Vue2CliBuilder = require('@lm/shared').buildConfig.Vue2CliBuilder;
+if (!Vue2CliBuilder) {
+  throw new Error('[vue.config] cannot resolve Vue2CliBuilder from @lm/shared/build — please rebuild shared (npm run build:rollup) and ensure package is linked.');
+}
+const commonPlugin = [
+  // 扩展环境变量
+  new webpack.IgnorePlugin({
+    resourceRegExp: /^\.\/locale$/,
+    contextRegExp: /moment/,
+  }),
+  new webpack.DefinePlugin({
+    pageSize: 15,
+  }),
+];
+const builder = new Vue2CliBuilder({
+  // externals: {
+  //   BMap: 'window.BMap',
+  //   AMap: 'AMap'
+  // },
+  // plugins: [...commonPlugin],
+  // pxtorem: {
+  //   rootValue: 37.5,
+  //   propList: ['*'],
+  //   selectorBlackList: ['van-'],
+  // },
+});
+module.exports = builder.createConfig();
