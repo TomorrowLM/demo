@@ -1,14 +1,18 @@
-import $lm from '@lm/shared/lib/src/utils';
-const request = $lm.service(process.env.VUE_APP_PROXY_API)
+import request from '@/utils/request';
 
 export const userInfo = (params) => {
-  return request({ url: '/common/users', method: 'get', params })
-}
+  return request.get('/common/users', { params });
+};
 
 export const login = (params) => {
-  return request({ url: '/white/login', method: 'post', data: params })
-}
+  return request.post('/white/login', params, {});
+};
 
 export const getList = (data) => {
-  return request({ url: data.api, method: data.method ? data.method : 'post', data: data.data })
-}
+  const method = (data.method || 'post').toLowerCase();
+  if (typeof request[method] === 'function') {
+    return request[method](data.api, data.data || {}, {});
+  }
+  return request({ url: data.api, method, data: data.data });
+};
+
