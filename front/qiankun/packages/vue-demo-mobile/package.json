@@ -1,5 +1,5 @@
 {
-  "name": "vue2-mobile",
+  "name": "vue2-mobile-app",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -7,7 +7,7 @@
     "pnpm": ">=7"
   },
   "scripts": {
-    "nvm": "nvm use v18.17.0",
+    "nvm": "nvm use v14.18.0",
     "serve": "npm run nvm && cross-env APP_ENV=local.dev vue-cli-service serve",
     "serve:qiankun": "npm run nvm && cross-env APP_ENV=local.qiankun vue-cli-service serve",
     "build": "npm run nvm && cross-env APP_ENV=production && vue-cli-service build --mode production",

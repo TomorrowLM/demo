@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export const userInfo = (params) => {
-  return request.get('/common/users', { params });
+  return request.get('/common/userInfo', { params });
 };
 
 export const login = (params) => {

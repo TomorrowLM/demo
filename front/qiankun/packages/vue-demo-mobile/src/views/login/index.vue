@@ -75,7 +75,7 @@ export default {
       login(this.ruleForm).then((res) => {
         console.log(res, 'res')
         // Vue.ls.set('token', res.token)
-        window.localStorage.setItem('token', res.token)
+        window.localStorage.setItem('token', res.data)
         if (res.code == 200) {
           this.$router.push('/home')
         } else {

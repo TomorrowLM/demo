@@ -1,1 +1,0 @@
-import '@lm/shared/lib/src/vue/components/index' // eslint-disable-line 

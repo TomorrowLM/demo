@@ -13,13 +13,7 @@ export default {
     }
   },
   async created() {
-    userInfo()
-      .then((res) => {
-        // console.log(res);
-      })
-      .catch((res) => {
-        this.$router.push('/login')
-      })
+
   },
   mounted() {
   }

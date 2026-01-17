@@ -12,7 +12,8 @@ import router from './router';
 import store from './store';
 import './public-path';
 // import '@shared/src/element/config'
-
+import { AppInit } from '@lm/shared';
+AppInit()
 // console.log(9999, $)
 // //全部引用
 // //import ElementUI from 'element-ui';
