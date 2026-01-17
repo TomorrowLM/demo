@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>组织架构图 - G6 实现</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 2.2em;
+    }
+
+    .header p {
+      color: #7f8c8d;
+      font-size: 1.1em;
+    }
+
+    .chart-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    #org-chart {
+      width: 100%;
+      height: 800px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn i {
+      font-size: 16px;
+    }
+
+    .btn-export {
+      background: #2ecc71;
+    }
+
+    .btn-export:hover {
+      background: #27ae60;
+      box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+    }
+
+    .btn-reset {
+      background: #e74c3c;
+    }
+
+    .btn-reset:hover {
+      background: #c0392b;
+      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+    }
+
+    .btn-expand {
+      background: #9b59b6;
+    }
+
+    .btn-expand:hover {
+      background: #8e44ad;
+      box-shadow: 0 5px 15px rgba(155, 89, 182, 0.3);
+    }
+
+    .toolbar {
+      background: #f8f9fa;
+      padding: 15px;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-input {
+      padding: 8px 15px;
+      border: 2px solid #dfe6e9;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 250px;
+      transition: border-color 0.3s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      color: #636e72;
+      font-size: 14px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 1000;
+      max-width: 300px;
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      color: #7f8c8d;
+      margin-top: 30px;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-box {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .search-input {
+        width: 100%;
+      }
+
+      .stats {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      #org-chart {
+        height: 600px;
+      }
+    }
+  </style>
+  <!-- 引入 G6 库：使用更稳定的 unpkg CDN，避免旧链接失效导致 G6 未定义 -->
+  <script src="https://unpkg.com/@antv/g6@4.8.22/dist/g6.min.js"></script>
+  <!-- 引入字体图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>公司组织架构图</h1>
+      <p>基于 AntV G6 构建 - 支持拖拽、缩放、搜索等功能</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" id="search-input" class="search-input" placeholder="搜索部门或人员...">
+        <button id="search-btn" class="btn">
+          <i class="fas fa-search"></i> 搜索
+        </button>
+      </div>
+      <div class="stats">
+        <div class="stat-item">
+          <i class="fas fa-sitemap"></i>
+          <span id="node-count">节点: 0</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-project-diagram"></i>
+          <span id="edge-count">连接: 0</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-layer-group"></i>
+          <span id="level-count">层级: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div id="org-chart"></div>
+    </div>
+
+    <div class="controls">
+      <button id="zoom-in" class="btn">
+        <i class="fas fa-search-plus"></i> 放大
+      </button>
+      <button id="zoom-out" class="btn">
+        <i class="fas fa-search-minus"></i> 缩小
+      </button>
+      <button id="fit-view" class="btn">
+        <i class="fas fa-expand-alt"></i> 适应屏幕
+      </button>
+      <button id="export-btn" class="btn btn-export">
+        <i class="fas fa-download"></i> 导出图片
+      </button>
+      <button id="expand-all" class="btn btn-expand">
+        <i class="fas fa-expand"></i> 展开全部
+      </button>
+      <button id="collapse-all" class="btn">
+        <i class="fas fa-compress"></i> 折叠全部
+      </button>
+      <button id="reset-view" class="btn btn-reset">
+        <i class="fas fa-redo"></i> 重置视图
+      </button>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="background: #3949f7;"></div>
+        <span>公司总部</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #2b2f8f;"></div>
+        <span>一级部门</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #1a1d5a;"></div>
+        <span>二级部门</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #FC6221;"></div>
+        <span>特殊标签</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2024 公司组织架构图 | 使用 AntV G6 构建 | 数据实时更新</p>
+    </div>
+  </div>
+
+  <!-- 自定义 tooltip -->
+  <div id="custom-tooltip" class="tooltip"></div>
+
+  <script>
+    // 组织架构数据
+    const treeData = {
+      name: '公司',
+      symbolSize: [260, 90],
+      bg: '#3949f7',
+      color: '#fff',
+      fontSize: 33,
+      children: [
+        {
+          name: [
+            { name: 'name1', tip: 'tips', },
+            { name: 'name2', tip: 'tips', tag: [{ name: '产品2', borderColor: '#FC6221', color: '#FC6221' }] },
+            { name: 'name1', tip: 'tips', },
+          ],
+
+          color: '#2b2f8f',
+          children: [
+            { name: '产品规划', tip: 'tips', symbolSize: [120, 40], color: '#2b2f8f' },
+            { name: '需求分析', tip: 'tips', symbolSize: [120, 40], color: '#2b2f8f' },
+            { name: '产品运营', tip: 'tips', symbolSize: [120, 40], color: '#2b2f8f' },
+          ],
+        },
+        {
+          name: '研发',
+          symbolSize: [160, 48],
+          color: '#2b2f8f',
+          children: [
+            {
+              name: '前端',
+              symbolSize: [120, 40],
+              color: '#2b2f8f',
+              children: [
+                { name: 'Vue', symbolSize: [100, 36], color: '#2b2f8f' },
+                { name: 'React', symbolSize: [100, 36], color: '#2b2f8f' },
+              ],
+            },
+            {
+              name: '后端',
+              symbolSize: [120, 40],
+              color: '#2b2f8f',
+              children: [
+                { name: 'Java', symbolSize: [100, 36], color: '#2b2f8f' },
+                { name: 'Node.js', symbolSize: [100, 36], color: '#2b2f8f' },
+              ],
+            },
+            { name: '测试', symbolSize: [120, 40], color: '#2b2f8f' },
+          ],
+        },
+        {
+          name: '设计1111111111111111111111111111111111',
+          symbolSize: [160, 48],
+          color: '#2b2f8f',
+          children: [
+            { name: '视觉', symbolSize: [120, 40], color: '#2b2f8f' },
+            { name: '交互', symbolSize: [120, 40], color: '#2b2f8f' },
+          ],
+        },
+        {
+          name: '运营',
+          symbolSize: [160, 48],
+          color: '#2b2f8f',
+          children: [
+            { name: '市场', symbolSize: [120, 40], color: '#2b2f8f' },
+            { name: '内容', symbolSize: [120, 40], color: '#2b2f8f' },
+          ],
+        },
+      ],
+    };
+
+    // 注册自定义节点
+    G6.registerNode('org-node', {
+      draw(cfg, group) {
+        const { symbolSize = [120, 40], color, bg, fontSize = 14, textColor } = cfg;
+        const [width, height] = Array.isArray(symbolSize) ? symbolSize : [symbolSize, symbolSize];
+
+        // 默认背景始终使用浅色，除非显式指定 bg
+        const fillColor = bg || '#F5FAFF';
+        const accentColor = color || '#2b2f8f';
+        const resolvedTextColor = textColor || (fillColor === '#F5FAFF' ? '#1f2d3d' : '#fff');
+
+        // 添加阴影效果
+        const shadow = group.addShape('rect', {
+          attrs: {
+            x: -width / 2 + 2,
+            y: -height / 2 + 2,
+            width,
+            height,
+            fill: '#000',
+            opacity: 0.1,
+            radius: 6,
+          },
+          name: 'shadow-shape',
+        });
+
+        // 主矩形背景
+        const rect = group.addShape('rect', {
+          attrs: {
+            x: -width / 2,
+            y: -height / 2,
+            width,
+            height,
+            fill: fillColor,
+            stroke: '#fff',
+            lineWidth: 2,
+            radius: 6,
+            cursor: 'pointer',
+          },
+          name: 'rect-shape',
+        });
+
+        // 添加渐变效果
+        if (cfg.level === 0) {
+          rect.attr('fill', 'l(0) 0:#3949f7 1:#2b2f8f');
+        }
+
+        // 处理 name 数据
+        let nameArray = [];
+        if (Array.isArray(cfg.name)) {
+          nameArray = cfg.name;
+        } else {
+          nameArray = [{ name: cfg.name, tip: cfg.tip }];
+        }
+
+        // 绘制多行文本
+        let currentY = -height / 2 + 25;
+        const lineHeight = 22;
+
+        nameArray.forEach((item, index) => {
+          const textContent = item.name || '';
+
+          // 处理长文本 - 自动换行
+          let displayText = textContent;
+          let lines = [];
+
+          if (textContent.length > 12) {
+            // 如果是超长文本，进行截断
+            if (textContent.length > 20) {
+              displayText = textContent.substring(0, 18) + '...';
+            }
+            // 简单换行逻辑
+            for (let i = 0; i < displayText.length; i += 12) {
+              lines.push(displayText.substring(i, i + 12));
+            }
+          } else {
+            lines = [displayText];
+          }
+
+          // 绘制文本行
+          lines.forEach((line, lineIndex) => {
+            group.addShape('text', {
+              attrs: {
+                x: 0,
+                y: currentY + (lineIndex * lineHeight),
+                text: line,
+                fontSize: fontSize - (index > 0 ? 4 : 0),
+                fill: resolvedTextColor,
+                textAlign: 'center',
+                textBaseline: 'middle',
+                fontWeight: index === 0 ? 'bold' : 'normal',
+                cursor: 'pointer',
+              },
+              name: `text-${index}-${lineIndex}`,
+            });
+          });
+
+          // 行内 tip 展示在名称下方
+          if (item.tip) {
+            const tipY = currentY + (lines.length * lineHeight) + 10;
+            group.addShape('text', {
+              attrs: {
+                x: 0,
+                y: tipY,
+                text: item.tip,
+                fontSize: 11,
+                fill: '#191f2599',
+                textAlign: 'center',
+                textBaseline: 'middle',
+              },
+              name: `tip-text-${index}`,
+            });
+          }
+
+          // 如果有标签
+          if (item.tag && item.tag.length > 0) {
+            item.tag.forEach((tag, tagIndex) => {
+              const tagText = tag.name || '';
+              const tagWidth = Math.max(tagText.length * 9 + 20, 60);
+              const tagX = width / 2 - tagWidth - 10;
+              // 垂直居中到当前文本行
+              const tagY = currentY - 11;
+
+              // 标签背景
+              const tagRect = group.addShape('rect', {
+                attrs: {
+                  x: tagX,
+                  y: tagY,
+                  width: tagWidth,
+                  height: 22,
+                  fill: '#fff',
+                  stroke: tag.borderColor || '#FC6221',
+                  lineWidth: 1.5,
+                  radius: 4,
+                },
+                name: `tag-rect-${tagIndex}`,
+              });
+
+              // 标签文字
+              group.addShape('text', {
+                attrs: {
+                  x: tagX + tagWidth / 2,
+                  y: tagY + 11,
+                  text: tagText,
+                  fontSize: 10,
+                  fill: tag.color || '#FC6221',
+                  textAlign: 'center',
+                  textBaseline: 'middle',
+                  fontWeight: 'bold',
+                },
+                name: `tag-text-${tagIndex}`,
+              });
+            });
+          }
+
+          const tipExtra = item.tip ? 18 : 0; // 11px 字号附带间距
+          currentY += lines.length * lineHeight + tipExtra + (item.tag ? 14 : 0) + 6;
+        });
+
+        // 添加小图标（根据层级）
+        if (cfg.children && cfg.children.length > 0) {
+          group.addShape('circle', {
+            attrs: {
+              x: width / 2 - 10,
+              y: 0,
+              r: 6,
+              fill: '#fff',
+              stroke: accentColor,
+              lineWidth: 2,
+            },
+            name: 'expand-icon',
+          });
+
+          group.addShape('text', {
+            attrs: {
+              x: width / 2 - 10,
+              y: 0,
+              text: '+',
+              fontSize: 10,
+              fill: accentColor,
+              textAlign: 'center',
+              textBaseline: 'middle',
+              fontWeight: 'bold',
+            },
+            name: 'expand-text',
+          });
+        }
+
+        return rect;
+      },
+
+      // 更新节点状态
+      update(cfg, node) {
+        const group = node.getContainer();
+        const rect = group.find(ele => ele.get('name') === 'rect-shape');
+
+        // 更新样式
+        if (cfg.style) {
+          rect.attr(cfg.style);
+        }
+      }
+    });
+
+    // 根据节点内容动态计算尺寸，避免高度不足导致文本被截断
+    function calculateNodeSize(data) {
+      const defaultWidth = Array.isArray(data.symbolSize)
+        ? data.symbolSize[0]
+        : (typeof data.symbolSize === 'number' ? data.symbolSize : 200);
+
+      const baseHeight = Array.isArray(data.symbolSize)
+        ? data.symbolSize[1]
+        : (typeof data.symbolSize === 'number' ? data.symbolSize : 60);
+
+      const nameArray = Array.isArray(data.name) ? data.name : [{ name: data.name || '', tag: data.tag }];
+
+      let lines = 0;
+      nameArray.forEach(item => {
+        const text = item.name || '';
+        const displayText = text.length > 20 ? `${text.substring(0, 18)}...` : text;
+        const lineCount = Math.max(1, Math.ceil(displayText.length / 12));
+        lines += lineCount;
+
+        if (item.tip) {
+          // tip 占一行
+          lines += 1;
+        }
+
+        if (item.tag && item.tag.length > 0) {
+          // 给标签留一行高度
+          lines += 1;
+        }
+      });
+
+      const lineHeight = 22;
+      const padding = 35; // 顶部、底部留白
+      const computedHeight = padding + lines * lineHeight;
+
+      return [defaultWidth, Math.max(baseHeight, computedHeight)];
+    }
+
+    // 初始化图表
+    let graph = null;
+
+    function initGraph() {
+      const container = document.getElementById('org-chart');
+
+      if (!container) return;
+
+      // 清除旧实例
+      if (graph) {
+        graph.destroy();
+      }
+
+      graph = new G6.TreeGraph({
+        container: 'org-chart',
+        width: container.clientWidth,
+        height: container.clientHeight,
+        modes: {
+          default: ['drag-canvas', 'zoom-canvas', 'drag-node']
+        },
+        defaultNode: {
+          type: 'org-node',
+        },
+        defaultEdge: {
+          type: 'cubic-vertical',
+          style: {
+            stroke: '#aab7c4',
+            lineWidth: 2,
+            endArrow: {
+              path: G6.Arrow.triangle(8, 8, 0),
+              fill: '#aab7c4',
+            },
+          },
+        },
+        layout: {
+          type: 'compactBox',
+          direction: 'TB',
+          getId: function getId(d) {
+            return d.id;
+          },
+          getHeight: function getHeight(d) {
+            return Array.isArray(d.symbolSize) ? d.symbolSize[1] : 60;
+          },
+          getWidth: function getWidth(d) {
+            return Array.isArray(d.symbolSize) ? d.symbolSize[0] : 200;
+          },
+          getVGap: function getVGap() {
+            return 50;
+          },
+          getHGap: function getHGap() {
+            return 80;
+          },
+        },
+        animate: true,
+        animateCfg: {
+          duration: 500,
+          easing: 'easeLinear',
+        },
+      });
+
+      // 数据处理函数
+      function processData(data, level = 0, parentId = null) {
+        const id = parentId ? `${parentId}-${Math.random().toString(36).substr(2, 9)}` : 'root';
+
+        const node = {
+          id: id,
+          label: typeof data.name === 'string' ? data.name : '多行文本',
+          level: level,
+          ...data,
+          symbolSize: calculateNodeSize(data),
+        };
+
+        if (data.children && data.children.length > 0) {
+          node.children = data.children.map(child =>
+            processData(child, level + 1, id)
+          );
+          // 默认展开前3层
+          node.collapsed = level >= 2;
+        }
+
+        return node;
+      }
+
+      // 处理数据并渲染
+      const processedData = processData(treeData);
+      graph.data(processedData);
+      graph.render();
+
+      // 更新统计信息
+      updateStats();
+
+      // 绑定事件
+      bindEvents();
+    }
+
+    // 更新统计信息
+    function updateStats() {
+      if (!graph) return;
+
+      const nodes = graph.getNodes();
+      const edges = graph.getEdges();
+
+      // 计算最大层级
+      let maxLevel = 0;
+      nodes.forEach(node => {
+        const level = node.getModel().level || 0;
+        if (level > maxLevel) maxLevel = level;
+      });
+
+      document.getElementById('node-count').textContent = `节点: ${nodes.length}`;
+      document.getElementById('edge-count').textContent = `连接: ${edges.length}`;
+      document.getElementById('level-count').textContent = `层级: ${maxLevel + 1}`;
+    }
+
+    // 绑定事件
+    function bindEvents() {
+      if (!graph) return;
+
+      const tooltip = document.getElementById('custom-tooltip');
+
+      // 节点鼠标移入
+      graph.on('node:mouseenter', (evt) => {
+        const node = evt.item;
+        const model = node.getModel();
+
+        // 高亮节点
+        graph.setItemState(node, 'hover', true);
+
+        // 显示 tooltip
+        const tip = model.tip || (Array.isArray(model.name)
+          ? (model.name.find(n => n && n.tip)?.tip || '')
+          : '');
+        if (tip) {
+          const point = graph.getClientByPoint(evt.x, evt.y);
+          tooltip.innerHTML = `
+                        <div style="font-weight: bold; margin-bottom: 5px;">${model.label || '节点信息'}</div>
+                        <div>${tip}</div>
+                        ${model.level !== undefined ? `<div style="margin-top: 5px; color: #95a5a6;">层级: ${model.level + 1}</div>` : ''}
+                    `;
+          tooltip.style.left = point.x + 15 + 'px';
+          tooltip.style.top = point.y + 15 + 'px';
+          tooltip.style.display = 'block';
+        }
+      });
+
+      // 节点鼠标移出
+      graph.on('node:mouseleave', (evt) => {
+        const node = evt.item;
+        graph.setItemState(node, 'hover', false);
+        tooltip.style.display = 'none';
+      });
+
+      // 节点点击（展开/折叠）
+      graph.on('node:click', (evt) => {
+        const node = evt.item;
+        const model = node.getModel();
+
+        if (model.children && model.children.length > 0) {
+          const collapsed = !model.collapsed;
+          graph.updateItem(node, { collapsed });
+
+          // 添加动画效果
+          const icon = node.getContainer().find(ele => ele.get('name') === 'expand-text');
+          if (icon) {
+            icon.attr('text', collapsed ? '+' : '-');
+          }
+
+          // 更新布局
+          setTimeout(() => {
+            graph.layout();
+            updateStats();
+          }, 50);
+        }
+      });
+
+      // 画布点击
+      graph.on('canvas:click', () => {
+        tooltip.style.display = 'none';
+      });
+    }
+
+    // 绑定控制按钮事件
+    function bindControls() {
+      // 缩放控制
+      document.getElementById('zoom-in').addEventListener('click', () => {
+        if (graph) {
+          const currentZoom = graph.getZoom();
+          graph.zoomTo(currentZoom * 1.2);
+        }
+      });
+
+      document.getElementById('zoom-out').addEventListener('click', () => {
+        if (graph) {
+          const currentZoom = graph.getZoom();
+          graph.zoomTo(currentZoom * 0.8);
+        }
+      });
+
+      document.getElementById('fit-view').addEventListener('click', () => {
+        if (graph) {
+          graph.fitView();
+        }
+      });
+
+      // 导出图片
+      document.getElementById('export-btn').addEventListener('click', () => {
+        if (graph) {
+          graph.downloadFullImage('组织架构图', 'image/png', {
+            backgroundColor: '#fff',
+            padding: [20, 20, 20, 20],
+          });
+        }
+      });
+
+      // 展开/折叠全部
+      document.getElementById('expand-all').addEventListener('click', () => {
+        if (graph) {
+          const nodes = graph.getNodes();
+          nodes.forEach(node => {
+            const model = node.getModel();
+            if (model.children && model.children.length > 0) {
+              graph.updateItem(node, { collapsed: false });
+            }
+          });
+          setTimeout(() => {
+            graph.layout();
+            updateStats();
+          }, 100);
+        }
+      });
+
+      document.getElementById('collapse-all').addEventListener('click', () => {
+        if (graph) {
+          const nodes = graph.getNodes();
+          nodes.forEach(node => {
+            const model = node.getModel();
+            if (model.children && model.children.length > 0 && model.level >= 1) {
+              graph.updateItem(node, { collapsed: true });
+            }
+          });
+          setTimeout(() => {
+            graph.layout();
+            updateStats();
+          }, 100);
+        }
+      });
+
+      // 重置视图
+      document.getElementById('reset-view').addEventListener('click', () => {
+        if (graph) {
+          graph.fitView();
+          graph.zoomTo(1);
+        }
+      });
+
+      // 搜索功能
+      document.getElementById('search-btn').addEventListener('click', searchNodes);
+      document.getElementById('search-input').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+          searchNodes();
+        }
+      });
+
+      function searchNodes() {
+        const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+        if (!graph || !keyword) return;
+
+        const nodes = graph.getNodes();
+
+        // 先清除所有高亮
+        nodes.forEach(node => {
+          graph.clearItemStates(node, ['highlight', 'found']);
+        });
+
+        // 搜索匹配的节点
+        const matchedNodes = nodes.filter(node => {
+          const model = node.getModel();
+          const nameStr = Array.isArray(model.name)
+            ? model.name.map(n => n.name).join(' ')
+            : (model.name || '');
+
+          return nameStr.toLowerCase().includes(keyword);
+        });
+
+        // 高亮匹配的节点
+        matchedNodes.forEach(node => {
+          graph.setItemState(node, 'highlight', true);
+          graph.setItemState(node, 'found', true);
+
+          // 展开父节点以便显示
+          let parent = node;
+          while (parent) {
+            graph.updateItem(parent, { collapsed: false });
+            parent = parent.get('parent');
+          }
+        });
+
+        // 重新布局
+        setTimeout(() => {
+          graph.layout();
+
+          // 如果找到匹配节点，居中显示第一个
+          if (matchedNodes.length > 0) {
+            graph.focusItem(matchedNodes[0], true, {
+              easing: 'easeCubic',
+              duration: 1000,
+            });
+          }
+        }, 300);
+      }
+    }
+
+    // 窗口大小变化时重绘
+    window.addEventListener('resize', () => {
+      if (graph) {
+        const container = document.getElementById('org-chart');
+        graph.changeSize(container.clientWidth, container.clientHeight);
+        graph.fitView();
+      }
+    });
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      initGraph();
+      bindControls();
+
+      // 初始适应视图
+      setTimeout(() => {
+        if (graph) {
+          graph.fitView();
+        }
+      }, 100);
+    });
+  </script>
+</body>
+
+</html>
