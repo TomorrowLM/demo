@@ -48,7 +48,7 @@ router.post("/", (req, res) => {
       )
     } else {
       res.status(200).send({
-        code: -1,
+        code: 200,
         message: '账户或密码不正确'
       });
     }

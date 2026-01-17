@@ -60,6 +60,7 @@ const GLOBAL_LOADING_KEY = 'global-loading';
 const DEFAULT_TIMEOUT = 60000;
 let messageProviderInstance: MessageProviderInstance | null = null;
 let loadingProviderInstance: LoadingProviderInstance | null = null;
+const { APP_PROXY_API, APP_ROUTER_BASE } = GLOBAL_INFO
 // HTTP 状态码对应的错误消息
 const HTTP_STATUS_MESSAGES: Record<number, string> = {
   0: '网络连接失败，请检查网络设置',
@@ -324,7 +325,8 @@ const handleUnauthorizedError = (): void => {
 
     // 重定向到登录页
     const currentUrl = encodeURIComponent(window.location.href || '/');
-    window.location.href = `/login?redirect=${currentUrl}`;
+    //TODO: 乾坤环境下的跳转处理会把/qiankun默认资源路径移除
+    window.location.href = `${APP_ROUTER_BASE}login?redirect=${currentUrl}`;
   }, 300);
 };
 
@@ -499,7 +501,7 @@ const responseInterceptor = (
 const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
   console.log('responseErrorInterceptor', error);
   const config = error.config as RequestConfig | undefined;
-  
+
   // 如果是取消错误，返回一个永远不会resolve的Promise
   if (isCancelError(error)) {
     return new Promise(() => { });
@@ -530,7 +532,7 @@ const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
  */
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
-    baseURL: `${GLOBAL_INFO.APP_PROXY_API}`,
+    baseURL: APP_PROXY_API,
     timeout: DEFAULT_TIMEOUT,
     withCredentials: true,
     xsrfCookieName: 'XSRF-TOKEN',
