@@ -327,7 +327,7 @@ const handleUnauthorizedError = (): void => {
     const currentUrl = encodeURIComponent(window.location.href || '/');
     //TODO: 乾坤环境下的跳转处理会把/qiankun默认资源路径移除
     console.log('window.__POWERED_BY_QIANKUN__', window.__POWERED_BY_QIANKUN__);
-    const href = window.__POWERED_BY_QIANKUN__ ? `${APP_ROUTER_BASE}login` : '/';
+    const href = window.__POWERED_BY_QIANKUN__ ? `${APP_ROUTER_BASE}` : '/';
     console.log('handleUnauthorizedError', href);
     window.location.href = `${href}login?redirect=${currentUrl}`;
   }, 300);

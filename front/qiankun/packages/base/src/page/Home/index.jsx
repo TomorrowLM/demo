@@ -1,9 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
-import "./Home.css";
 //TODO:这里容器必须设置在父路径上
 function Home() {
   return (
-    <div className="qiankun">
+    <div className="qiankun-app">
       <div className="d-flex qiankun-header">
         <NavLink to="/"> qiankun 主应用</NavLink>
         <div className="float-right">
@@ -22,7 +21,7 @@ function Home() {
           </NavLink>
         </div>
       </div>
-      <div className="qiankun-app">
+      <div className="sub_app">
         <Outlet></Outlet>
       </div>
     </div>

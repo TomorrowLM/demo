@@ -1,5 +1,5 @@
 function Web1() {
-  return <div id="vue2-mobile" style={{ width: "100%", height: "100%" }}></div>;
+  return <div id="vue2-mobile" className="sub_app_container"></div>;
 }
 
 export default Web1;

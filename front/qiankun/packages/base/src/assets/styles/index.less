@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.qiankun-app {
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+
+  .qiankun-header {
+    height: 48px;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .sub_app {
+    height: calc(100% - 48px);
+    .sub_app_container {
+      height: 100%;
+      width: 100%;
+      > div {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}

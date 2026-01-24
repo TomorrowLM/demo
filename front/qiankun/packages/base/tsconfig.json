@@ -1,5 +1,13 @@
 {
   "extends": "@lm/lint/tsLint/tsconfig.react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
   "include": [
     "src"
   ]
