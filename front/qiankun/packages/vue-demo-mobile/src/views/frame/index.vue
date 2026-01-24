@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="container"
-    :style="{ height: '100%' }"
-  >
+  <div class="container" :style="{ height: '100%' }">
     <el-container>
       <el-header>
         <header-com />
@@ -15,16 +12,12 @@
       <el-footer :style="{ height: '0.5rem' }">
         <van-tabbar>
           <van-tabbar-item icon="home-o">
-            <router-link to="/home">
-              首页
-            </router-link>
+            <router-link to="/home"> 首页 </router-link>
           </van-tabbar-item>
           <!-- <van-tabbar-item icon="search">个人中心</van-tabbar-item>
             <van-tabbar-item icon="friends-o">标签</van-tabbar-item> -->
           <van-tabbar-item icon="setting-o">
-            <router-link to="/user">
-              个人中心
-            </router-link>
+            <router-link to="/user"> 个人中心 </router-link>
           </van-tabbar-item>
         </van-tabbar>
       </el-footer>
@@ -32,13 +25,17 @@
   </div>
 </template>
 <script>
-import headerCom from './header.vue'
+import headerCom from './header.vue';
+
 export default {
   name: 'Home',
   components: { headerCom },
-  data () {
+  data() {
     return {};
-  }
+  },
+  mounted() {
+    console.log('mounted');
+  },
 };
 </script>
 <style lang="scss">

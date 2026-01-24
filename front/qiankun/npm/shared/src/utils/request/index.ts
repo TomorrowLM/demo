@@ -326,7 +326,10 @@ const handleUnauthorizedError = (): void => {
     // 重定向到登录页
     const currentUrl = encodeURIComponent(window.location.href || '/');
     //TODO: 乾坤环境下的跳转处理会把/qiankun默认资源路径移除
-    window.location.href = `${APP_ROUTER_BASE}login?redirect=${currentUrl}`;
+    console.log('window.__POWERED_BY_QIANKUN__', window.__POWERED_BY_QIANKUN__);
+    const href = window.__POWERED_BY_QIANKUN__ ? `${APP_ROUTER_BASE}login` : '/';
+    console.log('handleUnauthorizedError', href);
+    window.location.href = `${href}login?redirect=${currentUrl}`;
   }, 300);
 };
 
@@ -519,8 +522,6 @@ const responseErrorInterceptor = (error: AxiosError): Promise<never> => {
   if (!isCancelError(error)) {
     handleRequestError(error, config);
   }
-
-
 
   return Promise.reject(error);
 };

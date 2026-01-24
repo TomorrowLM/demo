@@ -19,8 +19,13 @@ const user = {
   //Action 提交的是 mutation，而不是直接变更状态。Action 可以包含任意异步操作。
   actions: {
     async GetUserCoreInfo({ commit, rootState }) {
-      const result = await userInfo()
-      commit('SET_CORE_INFO', result)
+      try {
+        const result = await userInfo()
+        console.log(11111, result)
+        commit('SET_CORE_INFO', result)
+      } catch (err) {
+        console.log(22222, err)
+      }
     },
   }
 }
