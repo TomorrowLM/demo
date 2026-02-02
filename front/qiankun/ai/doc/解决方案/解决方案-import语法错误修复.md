@@ -103,7 +103,7 @@ module.exports = {
 
 ```json
 {
-  "name": "app-react",
+  "name": "react-app",
   "version": "1.0.0",
   "type": "module",
   // ... 其他配置保持不变

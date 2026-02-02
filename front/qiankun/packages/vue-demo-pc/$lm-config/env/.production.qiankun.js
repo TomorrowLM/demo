@@ -6,6 +6,6 @@ export default {
   IS_PROD: true,
   IS_QIANKUN: true,
   APP_OUTPUTDIR: '../dist/qiankun/child/vue2-pc',
-  APP_ROUTER_BASE: "/qiankun/vue2-pc/", // 微应用路由根路径
+  APP_ROUTER_BASE: "/qiankun/vue2-pc", // 微应用路由根路径
   Build_Path: '/qiankun/child/vue2-pc/',
 }

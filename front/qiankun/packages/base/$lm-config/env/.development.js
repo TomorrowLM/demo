@@ -6,5 +6,5 @@ export default {
   IS_PROD: false,
   IS_QIANKUN: false,
   Build_Path: "/",
-  APP_ROUTER_BASE: "/qiankun/",
+  APP_ROUTER_BASE: "/qiankun",
 };

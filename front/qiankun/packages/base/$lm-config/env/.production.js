@@ -6,6 +6,6 @@ export default {
   IS_QIANKUN: false,
   APP_ENV: "production",
   APP_OUTPUTDIR: "../dist/qiankun",
-  APP_ROUTER_BASE: "/qiankun/",
+  APP_ROUTER_BASE: "/qiankun",
   Build_Path: "/qiankun/",
 };
