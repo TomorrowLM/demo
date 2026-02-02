@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import request from "@/utils/request";
 import { Row, Col } from "antd";
-
-import styles from "../index.module.less";
+import styles from "@/assets/styles/index.module.less";
 
 const Login = (props) => {
   const history = useHistory();
@@ -12,9 +11,10 @@ const Login = (props) => {
     let { username, password } = values;
     console.log("Success:", values);
     request.post("/white/login", { username, password }).then((res) => {
-      const { token } = res.data;
-      window.localStorage.setItem("token", token);
-      history.push("/dashboard");
+      const { data } = res;
+      console.log("login", res);
+      window.localStorage.setItem("token", data);
+      history.push(`${GLOBAL_INFO.APP_ROUTER_BASE}/dashboard`);
     });
   };
   const onFinishFailed = (errorInfo) => {

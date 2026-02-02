@@ -1,12 +1,11 @@
-import React from "react";
-import { Chart } from "@antv/g2";
-import styles from "./index.module.less";
+import React, { Suspense } from "react";
+import styles from "@/assets/styles/index.module.less";
 import { Card, Col, Row } from "antd";
-import { useEffect } from "react";
-import Zhexiang from "./AntV-G2/zhexiang";
-import Zhuzhuang from "./AntV-G2/zhuzhuang";
-import Donghua from "./AntV-L7/donghua";
-import AntVL7 from "./AntV-L7";
+
+const Zhexiang = React.lazy(() => import("./AntV-G2/zhexiang"));
+const Zhuzhuang = React.lazy(() => import("./AntV-G2/zhuzhuang"));
+const Donghua = React.lazy(() => import("./AntV-L7/donghua"));
+const AntVL7 = React.lazy(() => import("./AntV-L7"));
 
 export default function Dashboard() {
   return (
@@ -14,41 +13,33 @@ export default function Dashboard() {
       <p>hello</p>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col span={12}>
-          <Card
-            title="G2-折线图"
-            // extra={<a href="#">More</a>}
-            style={{ width: 500 }}
-          >
-            <Zhexiang />
+          <Card title="G2-折线图" style={{ width: 500 }}>
+            <Suspense fallback={<div>加载中...</div>}>
+              <Zhexiang />
+            </Suspense>
           </Card>
         </Col>
         <Col span={12}>
-          <Card
-            title="G2-柱状图"
-            // extra={<a href="#">More</a>}
-            style={{ width: 500 }}
-          >
-            <Zhuzhuang />
+          <Card title="G2-柱状图" style={{ width: 500 }}>
+            <Suspense fallback={<div>加载中...</div>}>
+              <Zhuzhuang />
+            </Suspense>
           </Card>
         </Col>
       </Row>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col span={12}>
-          <Card
-            title="地图"
-            // extra={<a href="#">More</a>}
-            style={{ width: 500 }}
-          >
-            <AntVL7 />
+          <Card title="地图" style={{ width: 500 }}>
+            <Suspense fallback={<div>加载中...</div>}>
+              <AntVL7 />
+            </Suspense>
           </Card>
         </Col>
         <Col span={12}>
-          <Card
-            title="动画"
-            // extra={<a href="#">More</a>}
-            style={{ width: 500 }}
-          >
-            <Donghua />
+          <Card title="动画" style={{ width: 500 }}>
+            <Suspense fallback={<div>加载中...</div>}>
+              <Donghua />
+            </Suspense>
           </Card>
         </Col>
       </Row>

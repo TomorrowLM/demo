@@ -1,4 +1,3 @@
-import $lm from '@lm/shared';
-console.log($lm, 112323)
-const request = {};
+import { request } from '@lm/shared';
+
 export default request;

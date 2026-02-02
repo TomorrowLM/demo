@@ -1,37 +1,14 @@
 {
+  "extends": "@lm/lint/tsLint/tsconfig.react.json",
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "experimentalDecorators": true,
-    //有的项目webpack会设置一些module的别名alias，ts也得配一下防止找不到
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@@/*": ["./*"],
-      "@/*": ["src/*"],
-      "@api/*": ["src/api/*"],
-      "@assets/*": ["src/assets/*"],
-      "@common/*": ["src/common/*"],
-      "@enum/*": ["src/enum/*"],
-      "@context/*": ["src/context/*"],
-      "@components/*": ["src/components/*"],
-      "@models/*": ["src/models/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@pages/*": ["src/pages/*"],
-      "@store/*": ["src/store/*"],
-      "@utils/*": ["src/utils/*"]
-    },
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noEmit": true,
-    "jsx": "react",
-    "isolatedModules": false,
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

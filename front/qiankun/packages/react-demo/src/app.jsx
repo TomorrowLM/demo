@@ -1,9 +1,10 @@
 import React from "react";
-import { HashRouter as Router, Switch } from "react-router-dom";
+import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 import AuthRoute from "@/route/AuthRoute";
-import { whiteRoute, routes } from "@/route";
-import { Route, Link } from "react-router";
+import { whiteRoute } from "@/route";
+
 export default function App() {
+  console.log(whiteRoute, GLOBAL_INFO, "Second1");
   return (
     <Router>
       {whiteRoute.map((val) => {
@@ -13,8 +14,6 @@ export default function App() {
       })}
       <Switch>
         <AuthRoute />
-        {/* <Route key="index" path="/" component={val.component}>
-        </Route> */}
       </Switch>
     </Router>
   );

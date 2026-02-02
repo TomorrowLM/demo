@@ -20,12 +20,12 @@ const Store = function (props) {
     // onincrement();
     // dispatch(increment())
     // store.dispatch(increment())
-    request.get("/users").then((res) => {
-      const action = userInfo(res.data.data);
-      console.log(res.data.data);
-      // getuserInfo(action);
-      // store.dispatch(action);
-    });
+    // request.get("/users").then((res) => {
+    //   const action = userInfo(res.data.data);
+    //   console.log(res.data.data);
+    //   // getuserInfo(action);
+    //   // store.dispatch(action);
+    // });
   }, []);
   return (
     <div>

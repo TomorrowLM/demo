@@ -1,13 +1,15 @@
 {
-  "name": "app-react",
+  "name": "react-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "cross-env NODE_ENV=development webpack-dev-server --config webpack.dev.js --profile",
-    "serve:qiankun": "cross-env NODE_ENV=development PORT=8004 webpack-dev-server --config webpack.dev.js --profile",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
-    "build:qiankun": "cross-env NODE_ENV=production webpack --config webpack.prod.js"
+    "nvm": "nvm use v18.17.0",
+    "serve": "npm run nvm && cross-env APP_ENV=local.dev webpack serve --config webpack.config.js",
+    "serve:qiankun": "npm run nvm && cross-env APP_ENV=local.qiankun webpack serve --config webpack.config.js",
+    "build": "npm run nvm && cross-env APP_ENV=production webpack serve --config webpack.config.js",
+    "build:qiankun": "npm run nvm && cross-env APP_ENV=production.qiankun webpack serve --config webpack.config.js",
+    "lint": "vue-cli-service lint"
   },
   "author": "tom",
   "license": "ISC",
@@ -55,10 +57,11 @@
     "@antv/data-set": "^0.11.8",
     "@antv/g2": "^4.1.35",
     "@antv/l7": "^2.6.22",
+    "@lm/lint": "workspace:*",
     "@lm/shared": "workspace:*",
     "@tuyeye/cron": "^1.0.0",
     "ahooks": "^3.9.5",
-    "antd": "^4.16.13",
+    "antd": "^5.29.3",
     "axios": "^0.22.0",
     "hox": "^1.1.5",
     "react": "^17.0.2",

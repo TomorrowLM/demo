@@ -6,8 +6,6 @@ import store from "@/store";
 // import VConsole from 'vconsole';
 import { IsPC } from "@/utils";
 import App from './app'
-import "@/global.less";
-import "antd/dist/antd.css";
 import './public-path';
 
 // if (IsPC) {

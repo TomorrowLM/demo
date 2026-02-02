@@ -4,7 +4,7 @@ import Index from '@/view/index'
 // import Dashboard from "@/src/view/DashBoard/index.jsx";
 import Second from "@/view/Router/components/Second"
 import Login from "@/view/User/Login";
-
+console.log(GLOBAL_INFO.APP_ROUTER_BASE, "Second");
 export const menuRoutes = [
   // {
   //   path: "/dashboard",
@@ -18,6 +18,7 @@ export const menuRoutes = [
     name: "react学习",
     icon: <DesktopOutlined />,
     isMenu: 1,
+    path: "/learn",
     children: [
       {
         name: "useState",
@@ -93,6 +94,7 @@ export const menuRoutes = [
     name: '状态管理器',
     icon: <LaptopOutlined />,
     isMenu: 1,
+    path: "/store",
     children: [
       {
         name: "store",
@@ -114,6 +116,7 @@ export const menuRoutes = [
     name: '特效',
     icon: <LaptopOutlined />,
     isMenu: 1,
+    path: "/specialEffects",
     children: [
       {
         name: "reactSortable",
@@ -139,6 +142,7 @@ export const menuRoutes = [
     name: '路由',
     icon: <LaptopOutlined />,
     isMenu: 1,
+    path: "/router",
     children: [
       {
         name: "路由",
@@ -160,6 +164,7 @@ export const menuRoutes = [
     name: '权限',
     icon: <LaptopOutlined />,
     isMenu: 1,
+    path: "/access",
     children: [
       {
         name: "权限",
@@ -173,6 +178,7 @@ export const menuRoutes = [
     name: 'antd',
     icon: <LaptopOutlined />,
     isMenu: 1,
+    path: "/antd",
     children: [
       {
         name: "表单",
@@ -186,20 +192,18 @@ export const menuRoutes = [
 
 export const whiteRoute = [
   {
-    path: "/user/login",
+    path: `${GLOBAL_INFO.APP_ROUTER_BASE}/login`,
     component: Login,
     isMenu: 0,
     exact: true,
   },
 ]
 
-export const routes = [
-  {
-    path: "/react",
-    component: Index,
-    children: [
-      ...whiteRoute,
-      ...menuRoutes
-    ]
-  }
-];
+export const routes = {
+  path: GLOBAL_INFO.APP_ROUTER_BASE,
+  component: Index,
+  children: [
+    ...whiteRoute,
+    ...menuRoutes
+  ]
+};

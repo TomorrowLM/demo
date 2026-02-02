@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { userInfo } from "../store/actions/userInfo";
 import usePermissionModel from "../hox/access";
 import { routes } from "@/route/index.js";
-import styles from "@/view/index.module.less";
+import styles from "@/assets/styles/index.module.less";
 
 const AuthRoute = (props) => {
   const { getuserInfo } = props;
@@ -15,55 +15,59 @@ const AuthRoute = (props) => {
   const { set } = usePermissionModel();
   //保存用户信息
   const getUserInfo = () => {
-    request.get("/common/users").then((res) => {
-      if (res.status === 401) {
-        history.push("/user/login");
+    request
+      .get("/common/userInfo")
+      .then((res) => {
+        console.log("getUserInfo", res);
+        if (res.status === 401) {
+          setIsCheckingTokenStatus(false);
+          return;
+        }
         setIsCheckingTokenStatus(false);
-        return;
-      }
-      setTimeout(() => {
+        const action = userInfo(res.data.data);
+        getuserInfo(action);
+      })
+      .catch((err) => {
+        console.log("getUserInfo", err);
         setIsCheckingTokenStatus(false);
-      }, 10);
-      const action = userInfo(res.data.data);
-      getuserInfo(action);
-    });
+      });
   };
   //保存路由权限
   const getAccess = () => {
-    request.get("/common/access").then((res) => {
-      localStorage.setItem(
-        "access",
-        JSON.stringify({
-          menus: res.data.data.menus,
-          buttons: res.data.data.buttons,
-        })
-      );
-      set(res.data.data);
-    });
+    // request.get("/common/access").then((res) => {
+    //   localStorage.setItem(
+    //     "access",
+    //     JSON.stringify({
+    //       menus: res.data.data.menus,
+    //       buttons: res.data.data.buttons,
+    //     })
+    //   );
+    //   set(res.data.data);
+    // });
   };
   //生成路由dom
   const mapRouteMethod = (data) => {
+    console.log("mapRouteMethod", data);
     return data.map(({ path, exact, component, children }, index) => {
       if (!path && children) {
         return mapRouteMethod(children);
       }
-      const Component =
-        typeof component !== "string"
-          ? component
-          : lazy(() => import(`@/view/${component}`));
-      if (!path && children) {
-        return mapRouteMethod(children);
-      }
-      if (path && children) {
+      const Component = !component ? (
+        <>
+          <Route
+            path={path}
+            exact={exact ? exact : false}
+            component={() => <div>404</div>}
+          ></Route>
+        </>
+      ) : typeof component !== "string" ? (
+        component
+      ) : (
+        lazy(() => import(`@/view/${component}`))
+      );
+      if (children) {
         return (
-          <Suspense
-            key={path}
-            fallback={
-              <div className={styles.loading_container}>
-                <Spin></Spin>
-              </div>
-            }
-          >
+          <Suspense key={path} fallback={<div>{/* <Spin></Spin> */}</div>}>
             <Route
               key={path}
               exact={exact ? exact : false}
@@ -96,7 +100,7 @@ const AuthRoute = (props) => {
   };
 
   useEffect(() => {
-    getUserInfo();
+    if (!location.href.includes("login")) getUserInfo();
     getAccess();
   }, []);
   return (
@@ -107,8 +111,7 @@ const AuthRoute = (props) => {
         tip="loading"
         spinning={isCheckingTokenStatus}
       >
-        {mapRouteMethod([routes[0]])}
-        {/* <Redirect from="/*" to="/"></Redirect> */}
+        {mapRouteMethod([routes])}
       </Spin>
     </div>
   );
