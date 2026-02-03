@@ -38,13 +38,13 @@ registerMicroApps(
     //   }
     //   // loader: (loading) => setLoading(loading)
     // },
-    // {
-    //   name: "react",
-    //   entry: isDev ? "//localhost:8004" : '/qiankun/child/react',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
-    //   container: "#react-container", // 微应用的容器节点的选择器
-    //   activeRule: "/qiankun/react",// 微应用的激活规则
-    //   // activeWhen: location => location.pathname.startsWith('/qiankun/react'),
-    // },
+    {
+      name: "react-app",
+      entry: isDev ? "//localhost:8004" : '/qiankun/child/react-app',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+      container: "#react-container", // 微应用的容器节点的选择器
+      activeRule: "/qiankun/react-app",// 微应用的激活规则
+      // activeWhen: location => location.pathname.startsWith('/qiankun/react'),
+    },
   ],
   {
     beforeLoad: (app) => {
