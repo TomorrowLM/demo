@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
         ]
       },
       {
-        path: "react/*",
+        path: "react-app/*",
         element: <Web4></Web4>
       },
       {

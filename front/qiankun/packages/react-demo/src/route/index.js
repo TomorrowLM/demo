@@ -185,7 +185,8 @@ export const menuRoutes = [
 
 export const whiteRoute = [
   {
-    path: `${GLOBAL_INFO.APP_ROUTER_BASE}/login`,
+    // path: `${GLOBAL_INFO.APP_ROUTER_BASE}/login`,
+    path: `/login`,
     component: Login,
     isMenu: 0,
     exact: true,
@@ -196,7 +197,6 @@ export const routes = {
   path: GLOBAL_INFO.APP_ROUTER_BASE,
   component: Layout,
   children: [
-    ...whiteRoute,
     ...menuRoutes
   ]
 };

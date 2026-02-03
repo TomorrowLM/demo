@@ -4,9 +4,16 @@ function Home() {
   return (
     <div className="qiankun-app">
       <div className="d-flex qiankun-header">
-        <NavLink to="/"> qiankun 主应用</NavLink>
+        <NavLink to="/qiankun"> qiankun 主应用</NavLink>
         <div className="float-right">
           <NavLink to="/qiankun/vue3/qiankun-vue3-page">qiankun-use</NavLink>
+          {/* 方案2：pathname 命中微应用，hash 交给子应用内部路由 */}
+          <NavLink
+            className="ml-8"
+            to={{ pathname: "/qiankun/react-app", hash: "#/learn/useState" }}
+          >
+            react
+          </NavLink>
           <NavLink className="ml-8" to="/qiankun/vue2-pc">
             vue2-pc
           </NavLink>
@@ -15,9 +22,6 @@ function Home() {
           </NavLink>
           <NavLink className="ml-8" to="/qiankun/vue3">
             vue3
-          </NavLink>
-          <NavLink className="ml-8" to="/qiankun/react">
-            react
           </NavLink>
         </div>
       </div>
