@@ -1,19 +1,19 @@
 import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
 import React from "react";
-import Index from '@/view/index'
-// import Dashboard from "@/src/view/DashBoard/index.jsx";
-import Second from "@/view/Router/components/Second"
+import Layout from '@/view/layout/index'
+import Dashboard from "@/view/dashBoard";
+import Second from "@/view/learn/router/components/Second"
 import Login from "@/view/User/Login";
 console.log(GLOBAL_INFO.APP_ROUTER_BASE, "Second");
 export const menuRoutes = [
-  // {
-  //   path: "/dashboard",
-  //   name: "面板",
-  //   // exact: true,
-  //   component: Dashboard,
-  //   icon: <DesktopOutlined />,
-  //   isMenu: 1,
-  // },
+  {
+    path: "/dashboard",
+    name: "面板",
+    // exact: true,
+    component: Dashboard,
+    icon: <DesktopOutlined />,
+    isMenu: 1,
+  },
   {
     name: "react学习",
     icon: <DesktopOutlined />,
@@ -21,10 +21,21 @@ export const menuRoutes = [
     path: "/learn",
     children: [
       {
-        name: "useState",
-        path: "/useState",
-        component: 'learn/useState',
-        icon: <DesktopOutlined />,
+        name: 'hooks',
+        children: [
+          {
+            name: "useState",
+            path: "/useState",
+            component: 'learn/hooks/useState',
+            icon: <DesktopOutlined />,
+          },
+          {
+            name: "ahooks",
+            path: "/ahooks",
+            component: 'learn/hooks/aHooks',
+            icon: <DesktopOutlined />
+          }
+        ],
       },
       {
         name: 'ref',
@@ -34,23 +45,46 @@ export const menuRoutes = [
           {
             name: "ref",
             path: "/dom/ref",
-            component: 'Dom/Ref',
+            component: 'learn/dom/Ref',
             icon: <DesktopOutlined />
           },
           {
             name: "onRef",
             path: "/dom/onRef",
-            component: 'Dom/OnRef',
+            component: 'learn/dom/OnRef',
             icon: <DesktopOutlined />
           },
           {
             name: "findDomDode",
             path: "/dom/findDomDode",
-            component: 'Dom/FindDomDode',
+            component: 'learn/dom/FindDomDode',
             icon: <DesktopOutlined />
           },
         ]
-      }, {
+      },
+      {
+        name: '路由',
+        icon: <LaptopOutlined />,
+        isMenu: 1,
+        path: "/router",
+        children: [
+          {
+            name: "路由",
+            path: "learn/router",
+            component: 'Router',
+            icon: <DesktopOutlined />,
+            children: [
+              {
+                name: "路由通配符",
+                path: "learn/router/:id",
+                component: Second,
+                icon: <DesktopOutlined />
+              }
+            ]
+          },
+        ]
+      },
+      {
         name: '组件',
         icon: <LaptopOutlined />,
         isMenu: 2,
@@ -58,35 +92,16 @@ export const menuRoutes = [
           {
             name: "渲染机制",
             path: "/render",
-            component: 'Component/Render',
+            component: 'learn/component/Render',
             icon: <DesktopOutlined />
           },
           {
             name: "通信",
             path: "/communicate",
-            component: 'Component/Communicate',
+            component: 'learn/component/Communicate',
             icon: <DesktopOutlined />
           },
         ]
-      }, {
-        name: 'hooks',
-        icon: <LaptopOutlined />,
-        path: "/hooks/functionHooks",
-        component: 'Grammer/Hooks/AHooks',
-        // children: [
-        //   {
-        //     name: "函数组件",
-        //     path: "/hooks/functionHooks",
-        //     component: 'Grammer/Hooks/FunctionHooks',
-        //     icon: <DesktopOutlined />,
-        //   },
-        //   {
-        //     name: "ahooks",
-        //     path: "/hooks/ahooks",
-        //     component: 'Grammer/Hooks/AHooks',
-        //     icon: <DesktopOutlined />
-        //   }
-        // ]
       },
     ]
   },
@@ -139,28 +154,6 @@ export const menuRoutes = [
     ]
   },
   {
-    name: '路由',
-    icon: <LaptopOutlined />,
-    isMenu: 1,
-    path: "/router",
-    children: [
-      {
-        name: "路由",
-        path: "/router",
-        component: 'Router',
-        icon: <DesktopOutlined />,
-        children: [
-          {
-            name: "路由通配符",
-            path: "/router/:id",
-            component: Second,
-            icon: <DesktopOutlined />
-          }
-        ]
-      },
-    ]
-  },
-  {
     name: '权限',
     icon: <LaptopOutlined />,
     isMenu: 1,
@@ -201,7 +194,7 @@ export const whiteRoute = [
 
 export const routes = {
   path: GLOBAL_INFO.APP_ROUTER_BASE,
-  component: Index,
+  component: Layout,
   children: [
     ...whiteRoute,
     ...menuRoutes
