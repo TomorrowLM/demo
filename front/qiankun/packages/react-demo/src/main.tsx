@@ -7,7 +7,8 @@ import store from "@/store";
 import { IsPC } from "@/utils";
 import App from './app'
 import './public-path';
-
+import { AppInit } from '@lm/shared';
+AppInit();
 // if (IsPC) {
 //   const vConsole = new VConsole();
 //   // 调用 console 方法输出日志

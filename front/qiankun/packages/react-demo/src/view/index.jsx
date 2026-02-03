@@ -18,13 +18,14 @@ export default function App(props) {
     }
     setCollapsed(!collapsed);
   };
-  const routerDomCreate = (router) => {
+  const routerDomCreate = (router, parentPath = "") => {
     return router.map((routerVal, index) => {
       // subIndex = subIndex + 1;
       // console.log(routerVal, 11);
+      const fullPath = `${parentPath}${routerVal.path || ""}`;
       return !routerVal?.children?.length ? (
-        <Menu.Item key={`${routerVal.path}`} icon={routerVal.icon}>
-          <Link to={routerVal.path}>{routerVal.name}</Link>
+        <Menu.Item key={`${fullPath}`} icon={routerVal.icon}>
+          <Link to={fullPath}>{routerVal.name}</Link>
         </Menu.Item>
       ) : (
         <SubMenu
@@ -32,12 +33,12 @@ export default function App(props) {
           icon={<LaptopOutlined />}
           title={routerVal.name}
         >
-          {routerDomCreate(routerVal.children)}
+          {routerDomCreate(routerVal.children, fullPath)}
         </SubMenu>
       );
     });
   };
-  const routerDom = routerDomCreate(menuRoutes);
+  const routerDom = routerDomCreate(menuRoutes, GLOBAL_INFO.APP_ROUTER_BASE);
   const branch = window.location.hash.replace(/#\//, "").split("/");
   console.log(props, "props.children");
   return (

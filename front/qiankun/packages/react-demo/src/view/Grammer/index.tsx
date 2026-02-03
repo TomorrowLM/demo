@@ -1,6 +1,6 @@
 // src/view/grammer/index.tsx
 import React, { useState, useEffect, lazy, Suspense } from "react";
-import UseState from './UseState.jsx';
+// import UseState from './index.jsx';
 
 interface ClassHooksState {
   count: number;
@@ -22,7 +22,7 @@ class ClassCom extends React.Component<{}, ClassHooksState> {
 
   render() {
     return <>
-      <UseState></UseState>
+      {/* <UseState></UseState> */}
     </>;
   }
 }

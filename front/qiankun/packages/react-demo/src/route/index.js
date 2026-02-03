@@ -22,8 +22,8 @@ export const menuRoutes = [
     children: [
       {
         name: "useState",
-        path: "/grammer/useState",
-        component: 'Grammer/UseState',
+        path: "/useState",
+        component: 'learn/useState',
         icon: <DesktopOutlined />,
       },
       {

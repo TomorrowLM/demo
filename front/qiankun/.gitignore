@@ -1,6 +1,7 @@
 .DS_Store
 rubbish
 node_modules
+**/bundle-report.html
 */dist
 */**/lib
 */**/dist
