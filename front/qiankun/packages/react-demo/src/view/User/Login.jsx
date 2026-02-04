@@ -4,18 +4,26 @@ import { useHistory } from "react-router-dom";
 import request from "@/utils/request";
 import { Row, Col } from "antd";
 import styles from "@/assets/styles/index.module.less";
+import useAuthModel from "@/hox/auth";
 
 const Login = (props) => {
   const history = useHistory();
+  const { setToken } = useAuthModel();
   const onFinish = (values) => {
     let { username, password } = values;
     console.log("Success:", values);
-    request.post("/white/login", { username, password }).then((res) => {
-      const { data } = res;
-      console.log("login", res);
-      window.localStorage.setItem("token", data);
-      history.push(`${GLOBAL_INFO.APP_ROUTER_BASE}/dashboard`);
-    });
+    request
+      .post("/white/login", { username, password })
+      .then((res) => {
+        const { data } = res;
+        console.log("login", res);
+        // 通过 hox 统一设置 token（内部会同步到 localStorage）
+        setToken(data);
+        history.push(`${GLOBAL_INFO.APP_ROUTER_BASE}dashboard`);
+      })
+      .catch((err) => {
+        console.log("login error", err);
+      });
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
