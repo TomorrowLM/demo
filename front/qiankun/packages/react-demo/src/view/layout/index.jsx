@@ -42,8 +42,8 @@ export default function App(props) {
   const branch = window.location.hash.replace(/#\//, "").split("/");
   console.log(props, "props.children");
   return (
-    <div style={{ width: "100%,", height: "100vh", overflow: "hidden" }}>
-      <Layout>
+    <div className="bbb">
+      <Layout style={{ height: "100%", overflow: "hidden" }}>
         <Header>
           <HomeNav />
         </Header>

@@ -8,7 +8,7 @@ const HomeNav = (props) => {
   const { info } = props;
   const signOut = () => {
     window.localStorage.setItem("token", "");
-    window.location.hash = "user/login";
+    window.location.href = `${GLOBAL_INFO.APP_ROUTER_BASE_QIANKUN}login`;
   };
   const menu = (
     <Menu>
@@ -22,18 +22,13 @@ const HomeNav = (props) => {
   );
   return (
     <Header className="header">
-      <Row
-        gutter={[
-          { xs: 8, sm: 16, md: 24, lg: 32 },
-          { xs: 8, sm: 16, md: 24, lg: 32 },
-        ]}
-      >
+      <Row>
         <Col span={22} style={{ color: "#fff" }}>
           react-app
         </Col>
         <Col span={2}>
           <Dropdown overlay={menu}>
-            <p style={{ color: "#fff", fontSize: "20px" }}>
+            <p style={{ color: "#fff", fontSize: "20px", margin: 0 }}>
               {info ? info.name : "个人中心 👤"}
             </p>
           </Dropdown>

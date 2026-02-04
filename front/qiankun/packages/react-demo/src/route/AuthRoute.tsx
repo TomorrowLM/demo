@@ -33,8 +33,8 @@ const AuthRoute = () => {
           ? ({ children: inner }) => <>{inner}</>
           : () => <div>404</div>
         : typeof component !== "string"
-        ? component
-        : lazy(() => import(`@/view/${component}`));
+          ? component
+          : lazy(() => import(`@/view/${component}`));
       if (children) {
         return (
           <Suspense key={fullPath || index} fallback={<div>{/* <Spin></Spin> */}</div>}>
@@ -73,9 +73,7 @@ const AuthRoute = () => {
     getAccess();
   }, []);
   return (
-    <div>
-      {mapRouteMethod([routes])}
-    </div>
+    <>{mapRouteMethod([routes])}</>
   );
 };
 export default AuthRoute;

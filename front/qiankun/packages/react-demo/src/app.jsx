@@ -12,7 +12,6 @@ export default function App() {
   console.log(whiteRoute, GLOBAL_INFO, "Second1");
   const dispatch = useDispatch();
   const { token } = useAuthModel();
-  const [isCheckingTokenStatus, setIsCheckingTokenStatus] = useState(!!token);
 
   const getUserInfo = useCallback(async () => {
     try {
@@ -22,19 +21,11 @@ export default function App() {
     } catch (err) {
       // 401 会在 shared request 里做跳转，这里只兜底避免红屏
       console.log("getUserInfo", err);
-    } finally {
-      setIsCheckingTokenStatus(false);
     }
   }, [token]);
 
   useEffect(() => {
     getUserInfo();
-    // token 变化时，如果存在 token，则重新拉取用户信息
-    if (!token) {
-      setIsCheckingTokenStatus(false);
-      return;
-    }
-    setIsCheckingTokenStatus(true);
   }, [token, getUserInfo]);
   return (
     <Router>
@@ -43,23 +34,7 @@ export default function App() {
           <Route key={val.path} path={val.path} component={val.component} />
         );
       })}
-      <Switch>
-        {token && (
-          <Spin
-            style={{
-              margin: "auto",
-              position: "absolute",
-              inset: 0,
-              zIndex: 999,
-            }}
-            size="large"
-            tip="loading"
-            spinning={isCheckingTokenStatus}
-          >
-            <AuthRoute />
-          </Spin>
-        )}
-      </Switch>
+      <Switch>{token && <AuthRoute />}</Switch>
     </Router>
   );
 }
