@@ -2,8 +2,7 @@ module.exports = function devServer(GLOBAL_INFO) {
   const devServerTarget = GLOBAL_INFO.ENV_CONFIG.APP_BASE_API;
   const APP_NAME = GLOBAL_INFO.APP_INFO.APP_NAME;
   const { APP_PORT, APP_PROXY_API } = GLOBAL_INFO.ENV_CONFIG;
-
-  console.log('devServerTarget', APP_NAME, APP_PORT, devServerTarget);
+  console.log('devServer', APP_NAME, APP_PORT, devServerTarget);
   return {
     'base-react-app': {
       /**
@@ -21,12 +20,12 @@ module.exports = function devServer(GLOBAL_INFO) {
       },
       proxy: [
         {
-          context: ['/vue2-mobile/api', '/vue2-pc/api', '/vue3/api'],
+          context: ['/vue2-mobile/api', '/vue2-pc/api', '/vue3/api', '/react-app/api'],
           target: devServerTarget,
           changeOrigin: true,
           secure: false,
           xfwd: false,
-          pathRewrite: { '/vue2-pc/api': '/', '/vue2-mobile/api': '/', '/vue3/api': '/' }  //重点：重写资源访问路径，避免转发请求 404问题
+          pathRewrite: { '/vue2-pc/api': '/', '/vue2-mobile/api': '/', '/vue3/api': '/', '/react-app/api': '/' }  //重点：重写资源访问路径，避免转发请求 404问题
         },
       ]
     },
@@ -72,5 +71,26 @@ module.exports = function devServer(GLOBAL_INFO) {
         },
       },
     },
+    'react-app': {
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
+      //在开发单页应用时非常有用，它依赖于HTML5 history API，如果设置为true，所有的跳转将指向index.html
+      historyApiFallback: true,
+      //配置dev-server命令参数的第二种形式
+      // "dev": "webpack-dev-server --open --port 3000 --contentBase src --hot"
+      open: true, //自动打开浏览器
+      port: 8004,
+      hot: true,
+      proxy: {
+        [APP_PROXY_API]: {
+          target: devServerTarget,
+          changeOrigin: true,
+          secure: false,
+          xfwd: false,
+          pathRewrite: { [APP_PROXY_API]: '' }
+        }
+      },
+    }
   }[APP_NAME]
 }

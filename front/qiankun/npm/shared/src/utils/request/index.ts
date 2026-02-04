@@ -38,6 +38,21 @@ type LoadingProviderInstance = {
   stop?: (instance?: any) => void;
 };
 
+class BizError extends Error {
+  public readonly isBizError = true;
+  public readonly status?: number;
+  public readonly data?: ApiResponse;
+  public readonly response?: AxiosResponse<ApiResponse>;
+
+  constructor(message: string, response?: AxiosResponse<ApiResponse>) {
+    super(message);
+    this.name = 'BizError';
+    this.response = response;
+    this.status = response?.status;
+    this.data = response?.data;
+  }
+}
+
 export interface RequestConfig extends AxiosRequestConfig {
   /** 是否显示全局加载提示 */
   showLoading?: boolean;
@@ -60,7 +75,7 @@ const GLOBAL_LOADING_KEY = 'global-loading';
 const DEFAULT_TIMEOUT = 60000;
 let messageProviderInstance: MessageProviderInstance | null = null;
 let loadingProviderInstance: LoadingProviderInstance | null = null;
-const { APP_PROXY_API, APP_ROUTER_BASE } = GLOBAL_INFO
+const { APP_PROXY_API, APP_ROUTER_BASE, IS_QIANKUN, APP_ROUTER_BASE_QIANKUN } = GLOBAL_INFO
 // HTTP 状态码对应的错误消息
 const HTTP_STATUS_MESSAGES: Record<number, string> = {
   0: '网络连接失败，请检查网络设置',
@@ -77,6 +92,8 @@ const HTTP_STATUS_MESSAGES: Record<number, string> = {
 };
 // 成功的业务状态码集合
 const SUCCESS_CODES = new Set<number | string>([0, 1, '0', '1', 200, '200']);
+// 业务失败码：后端有时会返回 string，需要同时兼容
+const ERROR_CODES = new Set<number | string>([-1, '-1']);
 
 // ==================== 状态管理 ====================
 const requestState: RequestState = {
@@ -126,7 +143,6 @@ const generateRequestKey = (config: RequestConfig) => {
  * 判断是否为请求取消错误
  */
 const isCancelError = (error: unknown): boolean => {
-  console.log(error, 'isCancelError');
   return (
     axios.isCancel(error) ||
     (error instanceof AxiosError && error.code === 'ERR_CANCELED') ||
@@ -325,11 +341,12 @@ const handleUnauthorizedError = (): void => {
 
     // 重定向到登录页
     const currentUrl = encodeURIComponent(window.location.href || '/');
-    //TODO: 乾坤环境下的跳转处理会把/qiankun默认资源路径移除
-    console.log('window.__POWERED_BY_QIANKUN__', window.__POWERED_BY_QIANKUN__);
-    const href = window.__POWERED_BY_QIANKUN__ ? `${APP_ROUTER_BASE}` : '/';
-    console.log('handleUnauthorizedError', href);
-    window.location.href = `${href}login?redirect=${currentUrl}`;
+    const basePath = APP_ROUTER_BASE_QIANKUN ? APP_ROUTER_BASE_QIANKUN : APP_ROUTER_BASE;
+    const normalizedBase = basePath && basePath !== '/' ? basePath.replace(/\/+$/, '') : '';
+    const loginPath = `${normalizedBase}/login`;
+    console.log('handleUnauthorizedError', loginPath);
+    // 使用绝对地址，避免相对跳转在不同子路径下行为不一致
+    window.location.href = `${window.location.origin}${loginPath}?redirect=${currentUrl}`;
   }, 300);
 };
 
@@ -469,7 +486,7 @@ const responseInterceptor = (
     !SUCCESS_CODES.has(response.data.code as any) &&
     response.data.code !== undefined
   ) {
-    const errorMessage = response.data.msg || '业务处理失败';
+    const errorMessage = response.data.msg || response.data.message || '业务处理失败';
 
     // 停止加载提示
     if (config.showLoading) {
@@ -486,8 +503,12 @@ const responseInterceptor = (
         }
       }
     }
-
-    return Promise.reject(new Error(errorMessage));
+    console.log('responseInterceptor biz error', response.data.code, ERROR_CODES.has(response.data.code as any));
+    if (ERROR_CODES.has(response.data.code as any)) {
+      return Promise.reject(new BizError(errorMessage, response));
+    } else {
+      return Promise.reject(new Error(errorMessage));
+    }
   }
 
   // 停止加载提示
@@ -670,8 +691,12 @@ export type Request = typeof request;
  * 防止取消请求的错误被作为未处理的Promise拒绝
  */
 if (typeof window !== 'undefined') {
+  //unhandledrejection 是浏览器的一个全局事件：
+  //当某个 Promise 被 reject 了，但代码里没有任何地方去处理它（没有 .catch()、也没有 try/catch await），浏览器就会触发这个事件。
+  // 在开发环境里（webpack-dev-server / Vite / CRA 等），为了让你及时发现问题，会把很多错误（包含 unhandledrejection）直接用红色遮罩盖在页面上，提醒你去修复它们。
+  // 用捕获阶段尽量“抢先”于 dev overlay 的监听器执行
   window.addEventListener('unhandledrejection', (event) => {
-    if (isCancelError(event.reason)) {
+    if (isCancelError(event.reason)  || (event.reason as any)?.isBizError) {
       event.preventDefault();
     }
   });

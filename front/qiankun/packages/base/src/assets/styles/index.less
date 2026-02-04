@@ -27,15 +27,26 @@ body {
       }
     }
   }
-  .sub_app {
-    height: calc(100% - 48px);
-    .sub_app_container {
+  :global {
+  }
+}
+.sub_app {
+  height: calc(100% - 48px);
+  overflow: auto;
+}
+.sub_app_container {
+  height: 100%;
+  width: 100%;
+  > div {
+    height: 100%;
+    width: 100%;
+    > div {
       height: 100%;
       width: 100%;
-      > div {
-        height: 100%;
-        width: 100%;
-      }
+       > div {
+      height: 100%;
+      width: 100%;
+    }
     }
   }
 }
