@@ -4,6 +4,7 @@
  * - 默认执行一次，保证副作用与旧实现一致
  */
 export function applyQiankunPublicPath(customPublicPath) {
+  console.log('[qiankun] applyQiankunPublicPath', customPublicPath, window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__);
   const injectedPath =
     customPublicPath ||
     (typeof window !== 'undefined' ? window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ : undefined);
