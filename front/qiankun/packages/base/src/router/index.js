@@ -4,7 +4,7 @@ import Web2 from "../page/subApp/web2.jsx";
 import Web3 from "../page/subApp/web3.jsx";
 import Web4 from "../page/subApp/web4.jsx";
 import Empty from "../page/404.jsx";
-import Home from "../page/Home/index.jsx";
+import Home from "../page/layout/index.jsx";
 import Qiankun from "../page/communication/qiankun.jsx";
 import ComPage from "../page/comPage/index.tsx";
 import React, { lazy, Suspense } from "react";
