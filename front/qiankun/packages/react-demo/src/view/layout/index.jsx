@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState } from "react";
 import { menuRoutes } from "@/route/index";
 import { Link, Outlet } from "react-router-dom";
 import { Layout, Menu, Breadcrumb, Spin } from "antd";
@@ -6,7 +6,6 @@ import { LaptopOutlined } from "@ant-design/icons";
 import HomeNav from "@/view/layout/Nav";
 
 export default function App(props) {
-  const { SubMenu } = Menu;
   const [collapsed, setCollapsed] = useState(false);
   const [menuWidth, setMenuWidth] = useState(256);
   const { Header, Content, Sider } = Layout;
@@ -18,29 +17,39 @@ export default function App(props) {
     }
     setCollapsed(!collapsed);
   };
-  const routerDomCreate = (router, parentPath = "") => {
-    return router.map((routerVal, index) => {
-      // subIndex = subIndex + 1;
-      // console.log(routerVal, 11);
+  const buildMenuItems = (router, parentPath = "") => {
+    return router.map((routerVal) => {
       const fullPath = `${parentPath}${routerVal.path || ""}`;
-      return !routerVal?.children?.length ? (
-        <Menu.Item key={`${fullPath}`} icon={routerVal.icon}>
-          <Link to={fullPath}>{routerVal.name}</Link>
-        </Menu.Item>
-      ) : (
-        <SubMenu
-          key={"sub" + `${routerVal.name}`}
-          icon={<LaptopOutlined />}
-          title={routerVal.name}
-        >
-          {routerDomCreate(routerVal.children, fullPath)}
-        </SubMenu>
-      );
+      console.log(fullPath, GLOBAL_INFO.APP_ROUTER_BASE, "fullPath");
+
+      if (!routerVal?.children?.length) {
+        return {
+          key: fullPath,
+          icon: routerVal.icon,
+          label: <Link to={fullPath}>{routerVal.name}</Link>,
+        };
+      }
+
+      const groupKey = routerVal.path
+        ? fullPath
+        : `group-${parentPath}-${routerVal.name}`;
+
+      return {
+        key: groupKey,
+        icon: <LaptopOutlined />,
+        label: routerVal.name,
+        children: buildMenuItems(routerVal.children, fullPath),
+      };
     });
   };
-  const routerDom = routerDomCreate(menuRoutes, GLOBAL_INFO.APP_ROUTER_BASE);
-  const branch = window.location.hash.replace(/#\//, "").split("/");
-  console.log(props, "props.children");
+
+  const menuItems = buildMenuItems(menuRoutes, GLOBAL_INFO.APP_ROUTER_BASE);
+  // const branch = window.location.hash.replace(/#\//, "").split("/");
+  const branch = window.location.pathname
+    .replace(/\//, "")
+    .split("/")
+    .splice(1);
+  console.log(props, branch, "props.children");
   return (
     <div className="bbb">
       <Layout style={{ height: "100%", overflow: "hidden" }}>
@@ -55,20 +64,16 @@ export default function App(props) {
             onCollapse={toggleCollapsed}
             theme={"light"}
           >
-            <Menu
-              mode="inline"
-              defaultSelectedKeys={["1"]}
-              defaultOpenKeys={["sub1"]}
-            >
-              {routerDom}
-            </Menu>
+            <Menu mode="inline" items={menuItems} />
           </Sider>
           <Layout style={{ padding: "0 24px 24px" }}>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              {branch.map((value, index) => {
-                return <Breadcrumb.Item key={index}>{value}</Breadcrumb.Item>;
-              })}
-            </Breadcrumb>
+            <Breadcrumb
+              style={{ margin: "16px 0" }}
+              items={branch.map((value, index) => ({
+                title: value,
+                key: `${index}-${value}`,
+              }))}
+            />
             <Content
               className="site-layout-background"
               style={{

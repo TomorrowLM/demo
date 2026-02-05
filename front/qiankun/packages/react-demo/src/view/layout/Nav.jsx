@@ -1,25 +1,36 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { Layout, Menu, Row, Col, Dropdown } from "antd";
+import { Layout, Row, Col, Dropdown } from "antd";
 import { connect } from "react-redux";
 
 const HomeNav = (props) => {
+  const history = useHistory();
   const { Header } = Layout;
   const { info } = props;
   const signOut = () => {
     window.localStorage.setItem("token", "");
-    window.location.href = `${GLOBAL_INFO.APP_ROUTER_BASE_QIANKUN}login`;
+    // HashRouter 场景下，内部路由只处理 hash 部分
+    history.push("/login");
   };
-  const menu = (
-    <Menu>
-      <Menu.Item key={1}>
-        <p>个人中心</p>
-      </Menu.Item>
-      <Menu.Item key={2}>
-        <p onClick={signOut}>退出登录</p>
-      </Menu.Item>
-    </Menu>
-  );
+  const menuItems = [
+    {
+      key: "center",
+      label: <p>个人中心</p>,
+    },
+    {
+      key: "logout",
+      label: <p>退出登录</p>,
+    },
+  ];
+
+  const dropdownMenu = {
+    items: menuItems,
+    onClick: ({ key }) => {
+      if (key === "logout") {
+        signOut();
+      }
+    },
+  };
   return (
     <Header className="header">
       <Row>
@@ -27,7 +38,7 @@ const HomeNav = (props) => {
           react-app
         </Col>
         <Col span={2}>
-          <Dropdown overlay={menu}>
+          <Dropdown menu={dropdownMenu}>
             <p style={{ color: "#fff", fontSize: "20px", margin: 0 }}>
               {info ? info.name : "个人中心 👤"}
             </p>
