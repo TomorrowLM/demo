@@ -2,6 +2,8 @@
 rubbish
 node_modules
 **/bundle-report.html
+**/stats.html
+*/**/stats.html
 */dist
 */**/lib
 */**/dist

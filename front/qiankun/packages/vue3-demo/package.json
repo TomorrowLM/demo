@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "nvm": "nvm use 20.18.0",
     "serve": "vite",
-    "serve:qiankun": "vite --mode dev.qiankun",
+    "serve:qiankun": "npm run nvm && vite --mode dev.qiankun",
     "build": "vite build",
-    "build:qiankun": "vite build --mode production.qiankun",
+    "build:qiankun": "npm run nvm && vite build --mode production.qiankun",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
@@ -18,9 +19,11 @@
   "dependencies": {
     "@lm/shared": "workspace:^",
     "@rollup/plugin-inject": "^5.0.5",
+    "dayjs": "1.11.0",
     "jquery": "^3.7.1",
     "pinia": "^2.1.7",
     "three": "^0.163.0",
+    "vite-plugin-qiankun": "^1.0.15",
     "vue": "^3.2.47",
     "vue-router": "^4.3.0"
   },
@@ -43,7 +46,6 @@
     "antlr4": "^4.13.1-patch-1",
     "antlr4ts": "^0.5.0-alpha.4",
     "axios": "^1.8.4",
-    "dayjs": "^1.11.11",
     "dt-sql-parser": "^4.0.0-beta.4.12",
     "element-plus": "^2.9.2",
     "eslint": "^8.49.0",
