@@ -26,18 +26,18 @@ registerMicroApps(
       activeRule: "/qiankun/vue2-pc",
       // loader: (loading) => setLoading(loading)
     },
-    // {
-    //   name: "vue3",
-    //   entry: isDev ? "//localhost:8003" : '/qiankun/child/vue3',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
-    //   container: "#vue3-container", // 微应用的容器节点的选择器
-    //   activeRule: "/qiankun/vue3",// 微应用的激活规则
-    //   activeWhen: location => location.pathname.startsWith('/qiankun/vue3'),
-    //   publicLibraryProviders: ['vue', 'element-plus'], // 共享库列表
-    //   props: {
-    //     appCommuicate: { mes: '我是主应用传递的值' }
-    //   }
-    //   // loader: (loading) => setLoading(loading)
-    // },
+    {
+      name: "vue3",
+      entry: isDev ? "//localhost:8003" : '/qiankun/child/vue3',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+      container: "#vue3-container", // 微应用的容器节点的选择器
+      activeRule: "/qiankun/vue3",// 微应用的激活规则
+      activeWhen: location => location.pathname.startsWith('/qiankun/vue3'),
+      publicLibraryProviders: ['vue', 'element-plus'], // 共享库列表
+      props: {
+        appCommuicate: { mes: '我是主应用传递的值' }
+      }
+      // loader: (loading) => setLoading(loading)
+    },
     {
       name: "react-app",
       // 注意：生产环境 entry 末尾必须保留 '/'，否则 qiankun 解析 publicPath 时会把最后一段当成文件名截掉

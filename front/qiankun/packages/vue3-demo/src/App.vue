@@ -13,9 +13,7 @@
   </div>
 </template>
 <script setup lang="ts">
-// import './style.scss';
-import { RouterLink, RouterView } from 'vue-router'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 const router = useRouter()
 const jump = () => {
   router.push('/3D')
@@ -30,7 +28,7 @@ let theme = window.localStorage.getItem('skin') || 'light'
 // }
 onBeforeMount(() => {
   // console.log(jquery('#vue3-page'))
-  console.log($('#vue3-page'))
+  // console.log($('#vue3-page'))
   // document.documentElement.setAttribute('theme', window.localStorage.getItem('skin') || 'light')
 })
 const goHome = () => {

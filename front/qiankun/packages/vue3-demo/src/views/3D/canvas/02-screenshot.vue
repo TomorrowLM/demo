@@ -59,8 +59,8 @@
   </div>
 </template>
 <script setup>
-import '@lm/shared/src/dependencies/canvas/html2canvas.min.js'
-import Canvas2Image from '@lm/shared/src/dependencies/canvas/canvas2image.js'
+import '@lm/shared/assets/dependencies/canvas/html2canvas.min.js'
+import Canvas2Image from '@lm/shared/assets/dependencies/canvas/canvas2image.js'
 // console.log('BASE_URL', 123, import.meta.url, import.meta.env.BASE_URL)
 // const demoImagePath = computed(() => `${import.meta.env.BASE_URL}src/assets/demo.png`)
 // const imgSrc = computed(() => new URL('@/assets/demo.png', import.meta.url).href)

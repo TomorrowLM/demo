@@ -53,23 +53,10 @@ export const router = createBrowserRouter([
       {
         path: "vue2-mobile/*",
         element: <Web1></Web1>,
-        // children: [
-        //   {
-        //     path: "home",
-        //   },
-        //   {
-        //     path: "learn",
-        //   },
-        //   {
-        //     path: "user",
-        //   },
-        //   {
-        //     path: "login",
-        //   },
-        //   {
-        //     path: "menu",
-        //   },
-        // ],
+      },
+      {
+        path: "vue3/*",
+        element: <Web3></Web3>,
       },
       {
         path: "tiptap-markdown",

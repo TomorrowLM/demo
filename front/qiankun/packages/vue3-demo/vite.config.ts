@@ -7,7 +7,6 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import dayjs from 'dayjs'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import { nodePolyfills } from 'vite-plugin-node-polyfills' //允许你在浏览器环境中直接require或import Node.js的内置模块。通过这个插件，您可以轻松地在Web应用中使用诸如process、events、http和stream等常用的Node.js模块
 import qiankun from 'vite-plugin-qiankun'
@@ -81,7 +80,6 @@ export default defineConfig(({ mode }) => {
             moment: 'moment',
             uuid: 'uuid',
             lodash: 'lodash',
-
           },
           // 分包
           manualChunks(id) {
@@ -107,6 +105,9 @@ export default defineConfig(({ mode }) => {
       alias: {
         // '@': srcPath,
         '@': resolve(__dirname, 'src/'),
+        // 使用 dayjs 的 ESM 目录，既能让 "import dayjs from 'dayjs'" 命中 esm/index.js，
+        // 也能让 "dayjs/plugin/..." 正确映射到 esm 下的插件实现
+        // dayjs: 'dayjs/esm',
       }
     },
     // optimizeDeps: {
@@ -116,7 +117,7 @@ export default defineConfig(({ mode }) => {
     //   ]
     // },
     plugins: [
-      commonjs(), // 支持 CommonJS 模块
+      // commonjs(), // 支持 CommonJS 模块
       Vue(),
       vueJsx(),
       nodePolyfills(),
@@ -195,62 +196,62 @@ export default defineConfig(({ mode }) => {
         gzipSize: true, // 收集 gzip 大小并将其显示
         brotliSize: true // 收集 brotli 大小并将其显示
       }),
-      inject({
-        $: 'jquery', // 这里会自动载入 node_modules 中的 jquery
-      }),
-      importToCDN({
-        // prodUrl：可选，默认指向 https://cdn.jsdelivr.net/npm/{name}@{version}/{path}
-        modules: [
-          // {
-          //   name: 'jquery',
-          //   var: 'jQuery',
-          //   version: '3.6.4',
-          //   path: 'dist/jquery.min.js'
-          // }
-          // {
-          //   name: 'element-plus',
-          //   // ElementPlus 为什么不是同下面第二种配置的elementPlus是因为这个配置同CDN资源一致，而下面的配置同需同main.ts的引入名称一致
-          //   var: 'ElementPlus', // 外部化的依赖提供一个全局变量 同rollupOptions配置中的globals的值
-          //   // https://unpkg.com/element-plus@2.2.32/dist/index.full.js 或者 dist/index.full.js
-          //   path: 'dist/index.full.js',
-          //   // 可选
-          //   css: 'dist/index.css'
-          // },
-          // {
-          //   name: 'vue-i18n',
-          //   var: 'VueI18n',
-          //   path: 'dist/vue-i18n.global.prod.js',
-          // },
-          // {
-          //   name: 'vue-router',
-          //   var: 'VueRouter',
-          //   path: 'dist/vue-router.global.js'
-          // },
-          // // VueDemi这个是pinia用来判断是vue2还是vue3所需要的，要额外引入一下
-          // {
-          //   name: 'vue-demi',
-          //   var: 'VueDemi',
-          //   path: 'https://unpkg.com/vue-demi@0.13.1/lib/index.iife.js'
-          // },
-          // {
-          //   name: 'pinia',
-          //   var: 'Pinia',
-          //   path: 'dist/pinia.iife.js'
-          // },
-          // // echarts，只有配置全局的时候有效，不然构建的时候还是会打包执行。也可以把echarts处理成按需引入
-          // {
-          //   name: 'echarts',
-          //   var: 'echarts',
-          //   path: 'dist/echarts.js'
-          // },
-          // // echarts 内使用了
-          // {
-          //   name: 'zrender',
-          //   var: 'zrender ',
-          //   path: 'dist/zrender.js'
-          // },
-        ]
-      }),
+      // inject({
+      //   $: 'jquery', // 这里会自动载入 node_modules 中的 jquery
+      // }),
+      // importToCDN({
+      //   // prodUrl：可选，默认指向 https://cdn.jsdelivr.net/npm/{name}@{version}/{path}
+      //   modules: [
+      //     // {
+      //     //   name: 'jquery',
+      //     //   var: 'jQuery',
+      //     //   version: '3.6.4',
+      //     //   path: 'dist/jquery.min.js'
+      //     // }
+      //     // {
+      //     //   name: 'element-plus',
+      //     //   // ElementPlus 为什么不是同下面第二种配置的elementPlus是因为这个配置同CDN资源一致，而下面的配置同需同main.ts的引入名称一致
+      //     //   var: 'ElementPlus', // 外部化的依赖提供一个全局变量 同rollupOptions配置中的globals的值
+      //     //   // https://unpkg.com/element-plus@2.2.32/dist/index.full.js 或者 dist/index.full.js
+      //     //   path: 'dist/index.full.js',
+      //     //   // 可选
+      //     //   css: 'dist/index.css'
+      //     // },
+      //     // {
+      //     //   name: 'vue-i18n',
+      //     //   var: 'VueI18n',
+      //     //   path: 'dist/vue-i18n.global.prod.js',
+      //     // },
+      //     // {
+      //     //   name: 'vue-router',
+      //     //   var: 'VueRouter',
+      //     //   path: 'dist/vue-router.global.js'
+      //     // },
+      //     // // VueDemi这个是pinia用来判断是vue2还是vue3所需要的，要额外引入一下
+      //     // {
+      //     //   name: 'vue-demi',
+      //     //   var: 'VueDemi',
+      //     //   path: 'https://unpkg.com/vue-demi@0.13.1/lib/index.iife.js'
+      //     // },
+      //     // {
+      //     //   name: 'pinia',
+      //     //   var: 'Pinia',
+      //     //   path: 'dist/pinia.iife.js'
+      //     // },
+      //     // // echarts，只有配置全局的时候有效，不然构建的时候还是会打包执行。也可以把echarts处理成按需引入
+      //     // {
+      //     //   name: 'echarts',
+      //     //   var: 'echarts',
+      //     //   path: 'dist/echarts.js'
+      //     // },
+      //     // // echarts 内使用了
+      //     // {
+      //     //   name: 'zrender',
+      //     //   var: 'zrender ',
+      //     //   path: 'dist/zrender.js'
+      //     // },
+      //   ]
+      // }),
       // (monacoEditorPlugin as any).default({
       //   languageWorkers: ['json', 'AviatorScript', 'editorWorkerService'],
       //   customWorkers: [
@@ -280,7 +281,7 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@lm/shared/src/styles/index.scss" as *;`
+          additionalData: `@use "@lm/shared/assets/styles/index.scss" as *;`
         }
       },
       modules: {
