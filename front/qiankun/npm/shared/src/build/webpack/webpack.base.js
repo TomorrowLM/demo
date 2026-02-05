@@ -92,14 +92,14 @@ class WebpackBaseBuilder {
           minSize: 20000,
           maxSize: 300000,
           cacheGroups: {
-            antv: {
-              test: /[\\/]node_modules[\\/](?:@antv)[\\/]/,
-              chunks: "all",
-              name: "antv-vendors",
-              priority: 20,
-              enforce: true,
-              reuseExistingChunk: true // 允许复用已经存在的代码块
-            },
+            // antv: {
+            //   test: /[\\/]node_modules[\\/](?:@antv)[\\/]/,
+            //   chunks: "all",
+            //   name: "antv-vendors",
+            //   priority: 20,
+            //   enforce: true,
+            //   reuseExistingChunk: true // 允许复用已经存在的代码块
+            // },
             vendors: {
               test: /[\\/]node_modules[\\/]/,
               chunks: "all",

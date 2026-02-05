@@ -15,11 +15,12 @@
     "build:npm": "pnpm --filter \"{npm/**}\" build",
     "build": "npm-run-all --serial build:*",
     "build:shared": "cd npm/shared && npm run build:rollup",
-    "build:qiankun": "cd packages && rm -rf dist && npm run build:base && npm run build:web1 && npm run build:web2 && npm run build:web3",
-    "build:base": "cd packages/base && npm run build:qiankun",
+    "build:qiankun": "cd packages && npm run build:base && npm run build:web4 && npm run build:web1 && npm run build:web2 && npm run build:web3",
+    "build:base": "cd packages/base && npm run build",
     "build:web1": "cd packages/vue-demo-mobile && npm run build:qiankun",
     "build:web2": "cd packages/vue-demo-pc && npm run build:qiankun",
     "build:web3": "cd packages/vue3-demo && npm run build:qiankun",
+    "build:web4": "cd packages/react-demo && npm run build:qiankun",
     "build:tsc": "tsc --build"
   },
   "devDependencies": {

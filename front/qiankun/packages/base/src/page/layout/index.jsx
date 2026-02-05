@@ -10,7 +10,7 @@ function Home() {
           {/* 方案2：pathname 命中微应用，hash 交给子应用内部路由 */}
           <NavLink
             className="ml-8"
-            to={{ pathname: "/qiankun/react-app/learn/useState", }}
+            to={{ pathname: "/qiankun/react-app/dashboard", }}
           >
             react
           </NavLink>

@@ -6,7 +6,7 @@ const { getEnvConfig } = require('../core/scripts/env.js');
  */
 class QiankunClass {
   constructor(options = {}) {
-    this.projectName = getProjectInfo().name;
+    this.APP_NAME = getProjectInfo().APP_NAME;
     this.envConfig = getEnvConfig(process.env.APP_ENV);
   }
 
@@ -15,7 +15,7 @@ class QiankunClass {
    */
   applyOutputConfig(config, overrideName) {
     if (!config || !config.output) return;
-    const name = overrideName || this.projectName;
+    const name = overrideName || this.APP_NAME;
     const outputOptions = this.getOutputConfig(name);
     Object.assign(config.output, outputOptions);
   }
@@ -55,7 +55,8 @@ class QiankunClass {
    * 获取 qiankun 兼容的输出配置
    */
   setOutputConfig(config) {
-    const name = this.projectName;
+    const name = this.APP_NAME;
+    console.log('[shared]setOutputConfig name:', name);
     config.output.library = `${name}-[name]`;
     config.output.libraryTarget = "umd"; // 把微应用打包成 umd 库格式
     config.output.chunkLoadingGlobal = `webpackJsonp_${name}`;// webpack 5 需要把 jsonpFunction 替换成 chunkLoadingGlobal
