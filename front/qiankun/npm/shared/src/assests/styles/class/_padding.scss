@@ -8,54 +8,55 @@ p{d}-{size} d: (t:top) (r: right) (b: bottom) (l: left) (x: left & right) (y: to
 
 *********/
 
-$types: (m: margin,
+// 使用带前缀的变量名，避免与第三方样式库（如 element-plus）的全局变量冲突
+$lm-spacing-types: (m: margin,
     p: padding,
 );
-$direction: (t: top,
+$lm-spacing-direction: (t: top,
     r: right,
     b: bottom,
     l: left,
 );
-$sizes: (0: 0,
+$lm-spacing-sizes: (0: 0,
     4: 4,
     8: 8,
     12: 12,
     16: 16,
     24: 24,
 );
-$base-size: 1px;
+$lm-spacing-base-size: 1px;
 
 @each $typeKey,
-$type in $types {
+$type in $lm-spacing-types {
 
     @each $sizeKey,
-    $size in $sizes {
+    $size in $lm-spacing-sizes {
 
         // m-0 p-0
         .#{$typeKey}-#{$sizeKey} {
-            #{$type}: $size * $base-size !important;
+            #{$type}: $size * $lm-spacing-base-size !important;
         }
 
         // mx-xs px-xs
         .#{$typeKey}x-#{$sizeKey} {
-            #{$type}-left: $size * $base-size !important;
-            #{$type}-right: $size * $base-size !important;
+            #{$type}-left: $size * $lm-spacing-base-size !important;
+            #{$type}-right: $size * $lm-spacing-base-size !important;
         }
 
         // my-sm my-lg
         .#{$typeKey}y-#{$sizeKey} {
-            #{$type}-top: $size * $base-size !important;
-            #{$type}-bottom: $size * $base-size !important;
+            #{$type}-top: $size * $lm-spacing-base-size !important;
+            #{$type}-bottom: $size * $lm-spacing-base-size !important;
         }
     }
 
     @each $dirKey,
-    $dir in $direction {
+    $dir in $lm-spacing-direction {
 
         @each $sizeKey,
-        $size in $sizes {
+        $size in $lm-spacing-sizes {
             .#{$typeKey}#{$dirKey}-#{$sizeKey} {
-                #{$type}-#{$dir}: $size * $base-size !important;
+                #{$type}-#{$dir}: $size * $lm-spacing-base-size !important;
             }
         }
     }
