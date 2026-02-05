@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { isArray } from 'lodash';
+import { isArray } from 'lodash-es';
 import {
   PropType,
   reactive,

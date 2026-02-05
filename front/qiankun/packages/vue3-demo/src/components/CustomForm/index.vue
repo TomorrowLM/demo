@@ -123,7 +123,6 @@
 
 <script lang="ts" setup name="CustomForm">
 import { onMounted, toRefs, watch, toRef } from 'vue';
-import { cloneDeep, isEmpty } from 'lodash';
 import { TemplateProps, RuleListProps, Info } from './index.d.ts';
 import customFormItem from './custom-form-item.vue';
 import { ref, nextTick } from 'vue';

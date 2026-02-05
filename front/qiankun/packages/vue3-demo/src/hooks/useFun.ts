@@ -1,7 +1,5 @@
 import type { ElMessage, MessageParams } from 'element-plus';
 import _ from 'lodash-es';
-
-// import _ from 'lodash';
 // 定义 config 的类型
 type MessageConfig = MessageParams;
 export default function useFun() {
