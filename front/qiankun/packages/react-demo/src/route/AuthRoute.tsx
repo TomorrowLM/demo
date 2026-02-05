@@ -1,12 +1,25 @@
 // @ts-nocheck
-import React, { useEffect, lazy, Suspense } from "react";
+import React, { useEffect, lazy, Suspense, useCallback } from "react";
 import { useHistory, Route } from "react-router-dom";
 import { Spin } from "antd";
 import { routes } from "@/route/index.js";
 import styles from "@/assets/styles/index.module.less";
-
+import { useDispatch } from "react-redux";
+import request from "@/utils/request";
+import { userInfo } from "@/store/actions/userInfo";
 const AuthRoute = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const getUserInfo = useCallback(async () => {
+    try {
+      const res = await request.get("/common/userInfo");
+      const info = res.data;
+      dispatch(userInfo(info));
+    } catch (err) {
+      // 401 会在 shared request 里做跳转，这里只兜底避免红屏
+      console.log("getUserInfo", err);
+    }
+  }, []);
   //保存路由权限
   const getAccess = () => {
     // request.get("/common/access").then((res) => {
@@ -25,7 +38,8 @@ const AuthRoute = () => {
     console.log("mapRouteMethod", data, parentPath);
     return data.map(({ path, exact, component, children }, index) => {
       const fullPath = path ? `${parentPath}${path}` : parentPath;
-      if (!fullPath && children) {
+      // 对于仅作为分组的节点（没有 path，但有 children），直接下钻，不生成额外 Route，避免重复 key/path
+      if (!path && children) {
         return mapRouteMethod(children, parentPath);
       }
       const Component = !component
@@ -71,6 +85,7 @@ const AuthRoute = () => {
 
   useEffect(() => {
     getAccess();
+    getUserInfo();
   }, []);
   return (
     <>{mapRouteMethod([routes])}</>

@@ -19,7 +19,7 @@ const Login = (props) => {
         console.log("login", res);
         // 通过 hox 统一设置 token（内部会同步到 localStorage）
         setToken(data);
-        history.push(`${GLOBAL_INFO.APP_ROUTER_BASE}dashboard`);
+        history.push(`${GLOBAL_INFO.APP_ROUTER_BASE}/dashboard`);
       })
       .catch((err) => {
         console.log("login error", err);

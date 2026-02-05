@@ -8,7 +8,7 @@ const usePermissionModel = () => {
   try {
     access = localStorage.getItem('access') || ''
   } catch {
-    window.location.href = '/#/user/login'
+
   }
   // console.log(typeof access, access);
   const { menus, buttons } = access ? JSON.parse(access) : { menus: [], buttons: {} }

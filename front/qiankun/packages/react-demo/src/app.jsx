@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AuthRoute from "@/route/AuthRoute";
 import { whiteRoute } from "@/route";
 import request from "@/utils/request";
@@ -9,7 +9,12 @@ import { Spin } from "antd";
 import useAuthModel from "@/hox/auth";
 
 export default function App() {
-  console.log(whiteRoute, GLOBAL_INFO, "Second1");
+  console.log(
+    whiteRoute,
+    GLOBAL_INFO,
+    `${GLOBAL_INFO.APP_ROUTER_BASE}/login`,
+    "Second1",
+  );
   const dispatch = useDispatch();
   const { token } = useAuthModel();
 
@@ -25,16 +30,19 @@ export default function App() {
   }, [token]);
 
   useEffect(() => {
+    if (window.location.pathname.includes("login")) return;
     getUserInfo();
   }, [token, getUserInfo]);
   return (
-    <Router>
-      {whiteRoute.map((val) => {
-        return (
-          <Route key={val.path} path={val.path} component={val.component} />
-        );
-      })}
-      <Switch>{token && <AuthRoute />}</Switch>
-    </Router>
+    <>
+      <Router>
+        {whiteRoute.map((val) => {
+          return (
+            <Route key={val.path} path={val.path} component={val.component} />
+          );
+        })}
+        <Switch>{token && <AuthRoute />}</Switch>
+      </Router>
+    </>
   );
 }

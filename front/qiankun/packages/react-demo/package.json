@@ -7,8 +7,8 @@
     "nvm": "nvm use v18.17.0",
     "serve": "npm run nvm && cross-env APP_ENV=local.dev webpack serve --config webpack.config.js",
     "serve:qiankun": "npm run nvm && cross-env APP_ENV=local.qiankun webpack serve --config webpack.config.js",
-    "build": "npm run nvm && cross-env APP_ENV=production webpack serve --config webpack.config.js",
-    "build:qiankun": "npm run nvm && cross-env APP_ENV=production.qiankun webpack serve --config webpack.config.js",
+    "build": "npm run nvm && cross-env APP_ENV=production webpack --config webpack.config.js",
+    "build:qiankun": "npm run nvm && cross-env APP_ENV=production.qiankun webpack --config webpack.config.js",
     "lint": "vue-cli-service lint"
   },
   "author": "tom",

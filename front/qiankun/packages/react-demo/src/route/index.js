@@ -185,8 +185,8 @@ export const menuRoutes = [
 
 export const whiteRoute = [
   {
-    // path: `${GLOBAL_INFO.APP_ROUTER_BASE}/login`,
-    path: `/login`,
+    path: `${GLOBAL_INFO.APP_ROUTER_BASE}/login`,
+    // path: `/login`,
     component: Login,
     isMenu: 0,
     exact: true,

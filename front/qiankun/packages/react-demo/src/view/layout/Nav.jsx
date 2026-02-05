@@ -1,4 +1,3 @@
-import React from "react";
 import { useHistory } from "react-router-dom";
 import { Layout, Row, Col, Dropdown } from "antd";
 import { connect } from "react-redux";
@@ -10,7 +9,7 @@ const HomeNav = (props) => {
   const signOut = () => {
     window.localStorage.setItem("token", "");
     // HashRouter 场景下，内部路由只处理 hash 部分
-    history.push("/login");
+    history.push(`${GLOBAL_INFO.APP_ROUTER_BASE}/login`);
   };
   const menuItems = [
     {
