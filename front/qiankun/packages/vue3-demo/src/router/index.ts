@@ -1,14 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 
 const isProd = process.env.NODE_ENV === 'production'
 // 运行在 qiankun 中时使用微应用的基座路径，否则按单体应用/开发环境配置
+const isQiankun = !!(qiankunWindow as any)?.__POWERED_BY_QIANKUN__
+console.log(isQiankun, 'isQiankun');
+// 运行在 qiankun 中时使用微应用的基座路径，否则按单体应用/开发环境配置
 const base =
-  (window as any).__POWERED_BY_QIANKUN__
+  isQiankun
     ? '/qiankun/vue3/'
     : isProd
       ? '/vue3/'
       : import.meta.env.BASE_URL
 
+// const base = isQiankun ? '/qiankun/vue3' : isProd ? '/vue3/' : import.meta.env.BASE_URL
 export const history = createWebHistory(base)
 
 export const routes = [

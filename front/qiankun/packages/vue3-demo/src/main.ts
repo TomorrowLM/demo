@@ -25,13 +25,13 @@ function render(props: any = {}) {
   instance.use(createPinia())
   instance.use(ElementPlus)
   instance.use(router)
-  instance.use(router)
   // 将 appCommuicate 注入到全局属性中
   if (appCommuicate) {
     instance.config.globalProperties.$appCommuicate = appCommuicate;
     console.log('appCommuicate', instance.config.globalProperties.$appCommuicate);
   }
-  instance.mount(container ? container.querySelector('#vue3-page') : '#vue3-page');
+  // qiankun 环境下直接挂载到传入的 container；独立运行时挂载到 index.html 的 #vue3-page
+  instance.mount(container || '#vue3-page');
   document.documentElement.setAttribute('theme', window.localStorage.getItem('skin') || 'light')
 
 }
