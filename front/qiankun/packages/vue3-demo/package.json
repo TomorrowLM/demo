@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "nvm": "nvm use 20.18.0",
-    "serve": "vite",
-    "serve:qiankun": "npm run nvm && vite --mode dev.qiankun",
+    "serve": "cross-env APP_ENV=local.dev vite",
+    "serve:qiankun": "cross-env APP_ENV=local.qiankun vite",
     "build": "vite build",
-    "build:qiankun": "npm run nvm && vite build --mode production.qiankun",
+    "build:qiankun": "cross-env APP_ENV=production.qiankun && npm run nvm && vite build --mode production.qiankun",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",

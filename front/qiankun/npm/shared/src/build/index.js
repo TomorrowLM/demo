@@ -12,17 +12,6 @@ const { logInfo } = require('./core/scripts/log.js');
 logInfo();
 let Vue2CliBuilder = builderMod;
 let WebpackBaseBuilder = webpackBuilderMod;
-// if (builderMod) {
-//   if (typeof builderMod.__require === 'function') {
-//     try {
-//       Vue2CliBuilder = builderMod.__require();
-//     } catch (e) {
-//       // 如果 __require 调用失败，继续后续回退
-//       Vue2CliBuilder = null;
-//     }
-//   }
-//   if (!Vue2CliBuilder) Vue2CliBuilder = builderMod.default || builderMod;
-// }
 
 // CommonJS 导出
 module.exports = {

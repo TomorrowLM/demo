@@ -49,8 +49,15 @@ function fetchAlias(mergeAlias) {
  */
 function fetchDefinePlugin(config, defineObj = {}) {
   const webpack = safeRequire("webpack");
-  console.log('provideDefines', provideDefines());
-  return new webpack.DefinePlugin(provideDefines());
+  const defines = provideDefines();
+  console.log('provideDefines', defines);
+  // If webpack is available (webpack build), return a DefinePlugin instance
+  if (webpack && webpack.DefinePlugin) {
+    return new webpack.DefinePlugin(defines);
+  }
+  // If webpack is not available (e.g. Vite), return the raw defines object
+  // so callers can map it into Vite's `define` option.
+  return defines;
 }
 
 /**

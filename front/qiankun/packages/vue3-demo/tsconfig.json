@@ -1,21 +1,27 @@
+// {
+//   "files": [],
+//   "references": [
+
+//   ],
+//   "compilerOptions": {
+//     "jsx": "preserve", // 或 "vue"
+//     "jsxFactory": "h",
+//     "jsxFragmentFactory": "Fragment",
+//     "verbatimModuleSyntax": false,
+//     "importHelpers": true
+//   }
+// }
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
-    }
-  ],
+  "extends": "@lm/lint/tsLint/tsconfig.react.json",
   "compilerOptions": {
-    "jsx": "preserve", // 或 "vue"
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment",
-    "verbatimModuleSyntax": false,
-    "importHelpers": true
-  }
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
 }

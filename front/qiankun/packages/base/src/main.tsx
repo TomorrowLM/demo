@@ -12,20 +12,20 @@ const isDev = !GLOBAL_INFO.IS_PROD;
 // const getActiveRule = (hash) => (location) => location.hash.startsWith(hash);
 registerMicroApps(
   [
-    {
-      name: "vue2-mobile",
-      entry: isDev ? "//localhost:8002" : '/qiankun/child/vue2-mobile/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
-      container: "#vue2-mobile",
-      activeRule: "/qiankun/vue2-mobile",
-      // activeRule: getActiveRule('#/vue2-mobile'),
-    },
-    {
-      name: "vue2-pc",
-      entry: isDev ? "//localhost:8002" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
-      container: "#vue2-pc",
-      activeRule: "/qiankun/vue2-pc",
-      // loader: (loading) => setLoading(loading)
-    },
+    // {
+    //   name: "vue2-mobile",
+    //   entry: isDev ? "//localhost:8002" : '/qiankun/child/vue2-mobile/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+    //   container: "#vue2-mobile",
+    //   activeRule: "/qiankun/vue2-mobile",
+    //   // activeRule: getActiveRule('#/vue2-mobile'),
+    // },
+    // {
+    //   name: "vue2-pc",
+    //   entry: isDev ? "//localhost:8002" : '/qiankun/child/vue2-pc/',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
+    //   container: "#vue2-pc",
+    //   activeRule: "/qiankun/vue2-pc",
+    //   // loader: (loading) => setLoading(loading)
+    // },
     {
       name: "vue3",
       entry: isDev ? "//localhost:8003" : '/qiankun/child/vue3',//配置微应用访问入口,注意微应用的 entry 路径最后面的 / 不可省略，否则 publicPath 会设置错误
@@ -38,15 +38,15 @@ registerMicroApps(
       }
       // loader: (loading) => setLoading(loading)
     },
-    {
-      name: "react-app",
-      // 注意：生产环境 entry 末尾必须保留 '/'，否则 qiankun 解析 publicPath 时会把最后一段当成文件名截掉
-      // 从而导致资源前缀变成 '/qiankun/child/'，而不是预期的 '/qiankun/child/react-app/'
-      entry: isDev ? "//localhost:8004" : "/qiankun/child/react-app/", // 配置微应用访问入口
-      container: "#react-container", // 微应用的容器节点的选择器
-      activeRule: "/qiankun/react-app",// 微应用的激活规则
-      // activeWhen: location => location.pathname.startsWith('/qiankun/react'),
-    },
+    // {
+    //   name: "react-app",
+    //   // 注意：生产环境 entry 末尾必须保留 '/'，否则 qiankun 解析 publicPath 时会把最后一段当成文件名截掉
+    //   // 从而导致资源前缀变成 '/qiankun/child/'，而不是预期的 '/qiankun/child/react-app/'
+    //   entry: isDev ? "//localhost:8004" : "/qiankun/child/react-app/", // 配置微应用访问入口
+    //   container: "#react-container", // 微应用的容器节点的选择器
+    //   activeRule: "/qiankun/react-app",// 微应用的激活规则
+    //   // activeWhen: location => location.pathname.startsWith('/qiankun/react'),
+    // },
   ],
   {
     beforeLoad: (app) => {

@@ -13,6 +13,9 @@ import ElementPlus from 'element-plus';
 // import 'element-plus/theme-chalk/index.css';
 import './utils/element-default-config';
 import './style.scss';
+// import { AppInit } from '@lm/shared'
+// AppInit()
+console.log(GLOBAL_INFO,123)
 
 let instance: any = null
 function render(props: any = {}) {

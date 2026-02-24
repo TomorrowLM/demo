@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === 'production'
 // 运行在 qiankun 中时使用微应用的基座路径，否则按单体应用/开发环境配置
 const base =
   (window as any).__POWERED_BY_QIANKUN__
-    ? '/qiankun/vue3'
+    ? '/qiankun/vue3/'
     : isProd
       ? '/vue3/'
       : import.meta.env.BASE_URL
@@ -15,6 +15,7 @@ export const routes = [
   {
     path: '/',
     name: 'home',
+    //重定向
     component: () => import('../views/home/index.vue')
   },
   {
@@ -131,7 +132,12 @@ export const routes = [
     path: '/media',
     name: 'media',
     component: () => import('../views/media/index.vue')
-  }
+  },
+  // // qiankun 下如果基座/子应用路径有轻微差异，兜底到首页避免 RouterView 空白
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   redirect: '/'
+  // }
 ]
 
 const router = createRouter({

@@ -1,11 +1,5 @@
 <template>
   <div class="app h100">
-    <!-- <el-config-provider namespace="custom">
-      <header class="d-l-center d-r-end">
-        <span @click="goHome" class="float-right point">回到首页</span>
-      </header>
-      <RouterView />
-    </el-config-provider> -->
     <header class="d-l-center d-r-end">
       <span @click="goHome" class="float-right point">回到首页</span>
     </header>
@@ -15,9 +9,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 const router = useRouter()
-const jump = () => {
-  router.push('/3D')
-}
 let theme = window.localStorage.getItem('skin') || 'light'
 // if (theme === 'light') {
 //   theme = 'dark'
@@ -34,7 +25,7 @@ onBeforeMount(() => {
 const goHome = () => {
   console.log(router)
   router.push({
-    name: 'home'
+    path: '/qiankun/vue3'
   })
 }
 console.log(56)

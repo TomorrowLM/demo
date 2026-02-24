@@ -1,5 +1,5 @@
 <template>
-  <div class="content d-center">
+  <div class="content d-center">312
     <div class="box d-center m-12" @click="jump(0)" date-hover="vue-grammar">vue-grammar</div>
     <div class="box d-center m-12" @click="jump(1)" date-hover="3D">3D</div>
     <div class="box d-center m-12" @click="jump(2)" date-hover="editor">editor</div>
