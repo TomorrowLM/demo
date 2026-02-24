@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const srcDir = path.resolve(__dirname, '../src/assests');
+const dependenciesDir = path.resolve(__dirname, '../lib/assets');
 const destDir = path.resolve(__dirname, '../lib/assets');
 
 function copyRecursive(src, dest) {
@@ -20,5 +21,6 @@ function copyRecursive(src, dest) {
 }
 
 copyRecursive(srcDir, destDir);
+copyRecursive(dependenciesDir, destDir);
 console.log(`Styles copied from ${srcDir} to ${destDir}`);
 
