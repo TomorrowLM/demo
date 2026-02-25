@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "noEmit": true,
     "composite": true,
-    "baseUrl": ".",
+    "checkJs": true,
     // 编译输出目标 ES 版本
     "target": "esnext",
     /* 启用导入.json文件 */
