@@ -9,9 +9,7 @@ console.log(isQiankun, 'isQiankun');
 const base =
   isQiankun
     ? '/qiankun/vue3/'
-    : isProd
-      ? '/vue3/'
-      : import.meta.env.BASE_URL
+    : '/'
 
 // const base = isQiankun ? '/qiankun/vue3' : isProd ? '/vue3/' : import.meta.env.BASE_URL
 export const history = createWebHistory(base)
@@ -20,7 +18,6 @@ export const routes = [
   {
     path: '/',
     name: 'home',
-    //重定向
     component: () => import('../views/home/index.vue')
   },
   {

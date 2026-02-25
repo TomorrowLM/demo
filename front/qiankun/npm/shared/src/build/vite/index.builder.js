@@ -14,10 +14,8 @@ import qiankun from 'vite-plugin-qiankun'
 import { visualizer } from 'rollup-plugin-visualizer'
 // import importToCDN from 'vite-plugin-cdn-import'
 // import inject from '@rollup/plugin-inject'
-// import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import commonjs from '@rollup/plugin-commonjs'
-const require = createRequire(import.meta.url);
+const require = createRequire(import.meta.url); // createRequire 以支持在 ESM 模块中使用 CommonJS 的 require
 const QiankunClass = require('../qiankun/index.js')
 const { getProjectInfo } = require("../core/scripts/app.js");
 const { getEnvConfig } = require("../core/scripts/env.js");
@@ -31,12 +29,12 @@ export default class ViteBuilder {
       ENV_CONFIG: getEnvConfig(process.env.APP_ENV),
       APP_INFO: getProjectInfo(),
       APP_ENV: process.env.APP_ENV || "development",
-      IS_DEV: process.env.APP_ENV === "development",
+      IS_DEV: process.env.APP_ENV.includes("development"),
     };
   }
 
   createConfig({ mode } = {}) {
-    const { ENV_CONFIG: { IS_PROD, IS_QIANKUN, Build_Path },APP_INFO: {APP_NAME} } = this.GLOBAL_CONFIG
+    const { ENV_CONFIG: { IS_PROD, IS_QIANKUN, Build_Path, APP_OUTPUTDIR }, APP_INFO: { APP_NAME } } = this.GLOBAL_CONFIG
     const env = loadEnv(mode || '', process.cwd(), 'VUE_APP')
     const srcPath = fileURLToPath(new URL('./src', import.meta.url))
     const typingsPath = resolve(srcPath, 'typings')
@@ -56,7 +54,8 @@ export default class ViteBuilder {
       transpileDependencies: true,
       inlineDynamicImports: true,
       build: {
-        outDir: IS_QIANKUN ? env.APP_OUTPUTDIR : 'dist',
+        // 如果是 qiankun 模式，优先使用 $lm-config 环境配置里的 APP_OUTPUTDIR（相对路径相对于项目根），否则使用默认 dist
+        outDir: IS_QIANKUN && APP_OUTPUTDIR ? resolve(process.cwd(), APP_OUTPUTDIR) : 'dist',
         rollupOptions: {
           chunkFileNames: 'static/js/[name]-[hash].js',
           output: {
@@ -87,7 +86,6 @@ export default class ViteBuilder {
         }
       },
       plugins: [
-        // commonjs(), // optional
         Vue(),
         vueJsx(),
         nodePolyfills(),

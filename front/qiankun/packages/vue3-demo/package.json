@@ -8,7 +8,7 @@
     "serve": "cross-env APP_ENV=local.dev vite",
     "serve:qiankun": "cross-env APP_ENV=local.qiankun vite",
     "build": "vite build",
-    "build:qiankun": "cross-env APP_ENV=production.qiankun && npm run nvm && vite build --mode production.qiankun",
+    "build:qiankun": "npm run nvm && cross-env APP_ENV=production.qiankun vite build --mode production.qiankun",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
