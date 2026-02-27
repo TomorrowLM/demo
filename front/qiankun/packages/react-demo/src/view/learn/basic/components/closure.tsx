@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { Card } from 'antd'
-
+import request from "@/utils/request";
 function TheoryExplanation() {
   return (
     <div style={{
@@ -129,17 +129,21 @@ function AsyncCallbackBug() {
   const [count, setCount] = useState(0);
 
   const handleClick = () => {
-    setCount(count + 1); // 依赖于当前渲染的 count
+    setCount(count + 1); // React 只是记录一条“把 count 从 X 改成 X+1”的更新，暂时不立刻重渲染组件
+    console.log('Click count:', count); // 🚨 问题：此处显示的 count 是闭包捕获的旧值，是批处理
   };
 
   const handleAsync = () => {
     // 模拟一个 3 秒后才返回结果的异步请求
-    new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 3000);
-    }).then(() => {
-      // 🚨 问题：then 回调闭包里捕获的是调用 handleAsync 时的 count
-      alert('Async callback count (BUG): ' + count);
-    });
+    request
+      .get("/common/setTimeOut",)
+      .then((res) => {
+        // 🚨 问题：then 回调闭包里捕获的是调用 handleAsync 时的 count
+        alert('Async callback count (BUG): ' + count);
+      })
+      .catch((err) => {
+        console.log("login error", err);
+      });
   };
 
   return (
