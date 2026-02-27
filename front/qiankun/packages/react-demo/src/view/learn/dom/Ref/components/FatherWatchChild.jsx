@@ -3,8 +3,14 @@ import { Button, Input } from "antd";
 export default function FatherWatchChild(props) {
   return (
     <div>
-      <Input name="iptRef" type="text" ref={ props.iptRef }/>
+      <Input
+        onChange={() => {
+          console.log("father change", props.iptRef);
+        }}
+        name="iptRef"
+        type="text"
+        ref={props.iptRef}
+      />
     </div>
   );
 }
-

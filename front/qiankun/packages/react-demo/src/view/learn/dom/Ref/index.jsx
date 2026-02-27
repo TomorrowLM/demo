@@ -40,11 +40,16 @@ class Ref extends React.Component {
   render() {
     return (
       <div>
-        <Title level={2}>1-回调：将ref注入到子组件中的某个元素上</Title>
-        <Title level={5}>原生DOM回调</Title>
+        <Title level={2}>1：将ref注入到子组件中的某个元素上</Title>
+        <Title level={5}>获取原生DOM</Title>
         <Input onChange={this.change1} ref={(el) => (this.ref2 = el)} />
         <Title level={5}>函数回调</Title>
-        <FatherWatchChild iptRef={(el) => (this.ref3 = el)} />
+        <FatherWatchChild
+          iptRef={(el) => {
+            this.ref3 = el;
+            // console.log("FatherWatchChild", el, this.ref3.input.value);
+          }}
+        />
         <Title level={5}>类回调</Title>
         <CallbackRefs iptRef={(el) => (this.ref4 = el)}></CallbackRefs>
         <hr />
