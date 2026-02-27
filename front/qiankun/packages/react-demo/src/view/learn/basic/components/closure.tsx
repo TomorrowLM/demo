@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react'
-import { Card } from 'antd'
+import LmCard from '@/components/Lm-card'
 import request from "@/utils/request";
 function TheoryExplanation() {
   return (
@@ -189,54 +189,41 @@ function AsyncCallbackFix() {
 }
 
 export default function ClosureDemo(): JSX.Element {
-  const [showTheory, setShowTheory] = useState(true)
-  const [showDemo, setShowDemo] = useState(true)
-
   return (
     <div style={{ padding: 16 }}>
-      <Card
-        title="📘 闭包说明"
+      <LmCard
+        type="theory"
+        title="闭包说明"
         bordered={false}
         style={{ marginBottom: 16 }}
-        extra={
-          <a onClick={() => setShowTheory(v => !v)}>
-            {showTheory ? '收起' : '展开'}
-          </a>
-        }
+        collapsible
       >
-        {showTheory && <TheoryExplanation />}
-      </Card>
+        <TheoryExplanation />
+      </LmCard>
 
-      <Card
-        title="🧪 示例 Demo"
+      <LmCard
+        type="demo"
+        title="示例 Demo"
         bordered={false}
-        extra={
-          <a onClick={() => setShowDemo(v => !v)}>
-            {showDemo ? '收起' : '展开'}
-          </a>
-        }
+        collapsible
       >
-        {showDemo && (
-          <>
-            <h3 style={{ marginBottom: 8 }}>
-              计时器（useEffect）
-            </h3>
-            <TimerBug />
-            <TimerFix />
+        <h3 style={{ marginBottom: 8 }}>
+          计时器（useEffect）
+        </h3>
+        <TimerBug />
+        <TimerFix />
 
-            <h4 style={{ marginBottom: 8 }}>
-              useMemo
-            </h4>
-            <UseMemoBug />
-            <UseMemoFix />
-            <h4 style={{ marginBottom: 8 }}>
-              异步回调（Promise + setTimeout）
-            </h4>
-            <AsyncCallbackBug></AsyncCallbackBug>
-            <AsyncCallbackFix></AsyncCallbackFix>
-          </>
-        )}
-      </Card>
+        <h4 style={{ marginBottom: 8 }}>
+          useMemo
+        </h4>
+        <UseMemoBug />
+        <UseMemoFix />
+        <h4 style={{ marginBottom: 8 }}>
+          异步回调（Promise + setTimeout）
+        </h4>
+        <AsyncCallbackBug></AsyncCallbackBug>
+        <AsyncCallbackFix></AsyncCallbackFix>
+      </LmCard>
     </div>
   )
 }
