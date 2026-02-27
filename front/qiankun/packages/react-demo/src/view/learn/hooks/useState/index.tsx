@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "antd";
 import { unstable_batchedUpdates, flushSync } from "react-dom";
 export default class UseState extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       count: 0,

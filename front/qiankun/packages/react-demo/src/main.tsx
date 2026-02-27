@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 import store from "@/store";
 // import VConsole from 'vconsole';
 import App from './app'
-import './public-path';
 import { AppInit } from '@lm/shared';
 AppInit();
 
@@ -45,4 +44,3 @@ export const unmount = async (props: any) => {
   const { container } = props;
   ReactDom.unmountComponentAtNode(container ? container.querySelector('#react-app') : document.querySelector('#react-app'));
 };
-  

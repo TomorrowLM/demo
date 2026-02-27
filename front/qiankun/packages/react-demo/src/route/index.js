@@ -21,6 +21,11 @@ export const menuRoutes = [
     path: "/learn",
     children: [
       {
+        name: "react基础",
+        path: "/basic",
+        component: 'learn/basic',
+      },
+      {
         name: 'hooks',
         children: [
           {

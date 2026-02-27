@@ -12,7 +12,6 @@ router.get('/', (req, res, next) => {
           {
             path: 'demo',
             name: 'demo',
-
             meta: {
               sidebar: true,
               menuName: 'demo'
@@ -22,7 +21,6 @@ router.get('/', (req, res, next) => {
               {
                 path: 'access',
                 name: 'access',
-
                 component: 'demo/Access/index.vue',
                 meta: {
                   sidebar: true,
@@ -47,7 +45,6 @@ router.get('/', (req, res, next) => {
           {
             path: 'demo',
             name: 'demo',
-
             meta: {
               sidebar: true,
               menuName: 'demo'
@@ -57,7 +54,6 @@ router.get('/', (req, res, next) => {
               {
                 path: 'access',
                 name: 'access',
-
                 component: 'demo/Access/index.vue',
                 meta: {
                   sidebar: true,

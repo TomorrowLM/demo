@@ -23,6 +23,7 @@ const AuthRoute = () => {
   //保存路由权限
   const getAccess = () => {
     // request.get("/common/access").then((res) => {
+    //   console.log("getAccess", res);
     //   localStorage.setItem(
     //     "access",
     //     JSON.stringify({

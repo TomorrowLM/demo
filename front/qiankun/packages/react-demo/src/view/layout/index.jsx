@@ -20,7 +20,7 @@ export default function App(props) {
   const buildMenuItems = (router, parentPath = "") => {
     return router.map((routerVal) => {
       const fullPath = `${parentPath}${routerVal.path || ""}`;
-      console.log(fullPath, GLOBAL_INFO.APP_ROUTER_BASE, "fullPath");
+      // console.log(fullPath, GLOBAL_INFO.APP_ROUTER_BASE, "fullPath");
 
       if (!routerVal?.children?.length) {
         return {
