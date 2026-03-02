@@ -35,7 +35,12 @@
     },
     "./assets/*": "./lib/assets/*"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.less"
+  ],
   "directories": {
     "lib": "lib"
   },
