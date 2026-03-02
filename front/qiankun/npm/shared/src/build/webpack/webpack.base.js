@@ -129,11 +129,59 @@ class WebpackBaseBuilder {
       ? MiniCssExtractPlugin.loader
       : "style-loader";
 
-    // CSS / Less 相关规则
+    const scssRegex = /\.s[ac]ss$/;
+    const scssModuleRegex = /\.module\.s[ac]ss$/;
+
+    // CSS / Less / SCSS 相关规则
     config.module.rules.push(
       {
         test: /\.css$/,
         use: [styleLoader, "css-loader"],
+      },
+      {
+        test: scssRegex,
+        exclude: scssModuleRegex,
+        use: [
+          styleLoader,
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+
+            },
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                api: "modern",
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: scssModuleRegex,
+        use: [
+          styleLoader,
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+              modules: {
+                localIdentName: "[local]___[hash:base64:5]",
+              },
+            },
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                api: "modern",
+              },
+            },
+          },
+        ]
       },
       {
         test: lessRegex,

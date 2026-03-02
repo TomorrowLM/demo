@@ -1,14 +1,13 @@
-/* eslint-disable */
 import React from "react";
 import ReactDom from "react-dom";
 import { Provider } from "react-redux";
 import store from "@/store";
 // import VConsole from 'vconsole';
+import '@lm/shared/assets/styles/scss/index.scss';
 import App from './app'
 import { AppInit } from '@lm/shared';
 AppInit();
 
-console.log('render.js', window.__POWERED_BY_QIANKUN__)
 function render(props: any) {
   const { container } = props;
   ReactDom.render(<Provider store={store}>
