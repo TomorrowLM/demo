@@ -5,7 +5,7 @@ class CallbackRefs extends Component {
   render() {
     return (
       <div>
-        <Input ref={ this.props.iptRef} type="text" name="iptElmClass"/>
+        <input ref={ this.props.iptRef} type="text" name="iptElmClass"/>
       </div>
     );
   }

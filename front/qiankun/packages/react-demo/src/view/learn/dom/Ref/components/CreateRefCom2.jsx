@@ -1,7 +1,7 @@
 import { useSetState } from "ahooks";
 import React from "react";
 
-export default class CreateRefCom extends React.Component {
+export default class CreateRefCom2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

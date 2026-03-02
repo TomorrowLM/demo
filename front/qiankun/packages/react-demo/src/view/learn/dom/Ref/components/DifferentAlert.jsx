@@ -1,6 +1,6 @@
 import React, { createRef, useEffect, useState, useRef } from "react";
 import { Button, Input } from "antd";
-const UseRefAlert = () => {
+const DifferentAlert = () => {
   const [count1, setCount1] = useState(0);
   const [count2, setCount2] = useState(0);
   const latestCount = useRef(count2);
@@ -48,4 +48,4 @@ const UseRefAlert = () => {
   );
 };
 
-export default UseRefAlert;
+export default DifferentAlert;
