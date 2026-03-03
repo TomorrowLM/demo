@@ -117,7 +117,8 @@ const configs = [
   createConfig('src/build/index.js', { // 仅打包 build 目录为 CJS
     dir: 'lib/cjs',                    // 输出目录
     format: 'cjs',                     // 输出格式：CommonJS
-    preserveModules: false,
+    preserveModules: true,
+    preserveModulesRoot: 'src',
     // 使用 named 导出，避免消费方通过 chunk.default 访问默认导出
     exports: 'auto',               // 以具名导出形式输出，消除 Rollup 警告
     interop: 'auto'        // 自动处理默认导出的互操作

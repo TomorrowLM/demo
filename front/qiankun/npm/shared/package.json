@@ -1,37 +1,35 @@
 {
   "name": "@lm/shared",
   "version": "1.0.0",
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/cjs/build/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/types/index.d.ts",
   "exports": {
     ".": {
       "types": "./lib/esm/types/index.d.ts",
       "import": "./lib/esm/index.js",
-      "require": "./lib/cjs/index.js"
+      "require": "./lib/cjs/build/index.js"
     },
+    "./lib/esm/index.js": "./lib/esm/index.js",
+    "./lib/cjs/build/index.js": "./lib/cjs/build/index.js",
     "./build": {
-      "require": "./lib/cjs/config/build/index.js"
+      "require": "./lib/cjs/build/index.js"
     },
     "./utils": {
       "types": "./lib/esm/types/utils/index.d.ts",
-      "import": "./lib/esm/utils/index.js",
-      "require": "./lib/cjs/utils/index.js"
+      "import": "./lib/esm/utils/index.js"
     },
     "./utils/*": {
       "types": "./lib/esm/types/utils/*",
-      "import": "./lib/esm/utils/*",
-      "require": "./lib/cjs/utils/*"
+      "import": "./lib/esm/utils/*"
     },
     "./config": {
       "types": "./lib/esm/types/config/index.d.ts",
-      "import": "./lib/esm/config/index.js",
-      "require": "./lib/cjs/config/index.js"
+      "import": "./lib/esm/config/index.js"
     },
     "./config/*": {
       "types": "./lib/esm/types/config/*",
-      "import": "./lib/esm/config/*",
-      "require": "./lib/cjs/config/*"
+      "import": "./lib/esm/config/*"
     },
     "./assets/*": "./lib/assets/*"
   },

@@ -79,7 +79,7 @@ class Vue2CliBuilder {
         sourceMap: false,
         loaderOptions: {
           scss: {
-            additionalData: `@import "@lm/shared/assets/styles/index.scss";`, //注入全局样式
+            additionalData: `@use "@lm/shared/assets/styles/scss/index.scss" as *;`, //注入全局样式
           },
         },
       },
@@ -91,6 +91,22 @@ class Vue2CliBuilder {
        */
       configureWebpack: (config) => {
         config.resolve = config.resolve || {}
+        config.resolve.alias = config.resolve.alias || {};
+        //  确保 @lm/shared 的别名指向 ESM 版本，兼容 webpack5 的 tree-shaking 和 sideEffects 标记
+        config.resolve.alias['@lm/shared$'] = require.resolve('@lm/shared/lib/esm/index.js');
+        config.resolve.alias['@lm/shared/build$'] = require.resolve('@lm/shared/lib/cjs/build/index.js');
+        // config.resolve.fallback = Object.assign(
+        //   {
+        //     fs: false, // 彻底禁用 fs 模块，避免被 webpack 打包进来
+        //     module: false,
+        //     path: false,
+        //     vm: false,
+        //     process: false,
+        //   },
+        //   config.resolve.fallback || {}
+        // )
+        // config.resolve.mainFields = ['module', 'browser', 'main']; // 优先使用 ESM 模块
+
         config.output = config.output || {}
         config.plugins.push(...self.commonPluginFactory());
         if (self.GLOBAL_CONFIG.ENV_CONFIG.IS_QIANKUN) {
