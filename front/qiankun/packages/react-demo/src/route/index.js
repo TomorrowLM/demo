@@ -21,9 +21,9 @@ export const menuRoutes = [
     path: "/learn",
     children: [
       {
-        name: "react基础",
-        path: "/basic",
-        component: 'learn/basic',
+        name: "闭包",
+        path: "/closure",
+        component: 'learn/closure',
       },
       {
         name: 'hooks',
@@ -34,12 +34,6 @@ export const menuRoutes = [
             component: 'learn/hooks/useState',
             icon: <DesktopOutlined />,
           },
-          {
-            name: "ahooks",
-            path: "/ahooks",
-            component: 'learn/hooks/aHooks',
-            icon: <DesktopOutlined />
-          }
         ],
       },
       {
@@ -51,12 +45,6 @@ export const menuRoutes = [
             name: "ref",
             path: "/dom/ref",
             component: 'learn/dom/Ref',
-            icon: <DesktopOutlined />
-          },
-          {
-            name: "onRef",
-            path: "/dom/onRef",
-            component: 'learn/dom/OnRef',
             icon: <DesktopOutlined />
           },
           {
