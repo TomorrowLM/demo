@@ -106,7 +106,7 @@ export default class ViteBuilder {
       ],
       worker: { format: 'es' },
       css: {
-        preprocessorOptions: { scss: { additionalData: `@use \"@lm/shared/assets/styles/index.scss\" as *;` } },
+        preprocessorOptions: { scss: { additionalData: `@use \"@lm/shared/assets/styles/scss/index.scss\" as *;` } },
         modules: { scopeBehaviour: 'local', generateScopedName: '[name]__[local]___[hash:base64:5]', hashPrefix: 'prefix' }
       }
     })

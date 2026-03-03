@@ -153,6 +153,7 @@ class WebpackBaseBuilder {
           {
             loader: "sass-loader",
             options: {
+              additionalData: '@use "@lm/shared/assets/styles/scss/index.scss" as *;',
               sassOptions: {
                 api: "modern",
               },
@@ -176,6 +177,7 @@ class WebpackBaseBuilder {
           {
             loader: "sass-loader",
             options: {
+              additionalData: '@use "@lm/shared/assets/styles/scss/index.scss" as *;',
               sassOptions: {
                 api: "modern",
               },
