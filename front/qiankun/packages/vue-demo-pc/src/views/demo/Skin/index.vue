@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="tip tip1">测试class和变量</div>
     <div class="skin">颜色</div>
     <el-button @click="change">
       <span>切换</span>
@@ -39,7 +40,9 @@ export default class Skin extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
+.tip1 {
+  color: $text;
+}
 .skin {
   // @include themify();
   // $text: red;

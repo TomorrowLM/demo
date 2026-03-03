@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import store from '@/store';
 Vue.use(VueRouter); // 安装路由功能
-const isProd = process.env.APP_ENV === 'production';
+// const isProd = process.env.APP_ENV === 'production';
 const { APP_ROUTER_BASE } = GLOBAL_INFO;
 // 基础路由
 const whiteRoutes: Array<RouteConfig> = store.getters.whiteRoutes;

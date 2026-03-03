@@ -1,5 +1,5 @@
 {
-  "extends": "@lm/lint/tsLint/tsconfig.vue2.json",
+  // "extends": "@lm/lint/tsLint/tsconfig.vue2.json",
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
@@ -14,12 +14,12 @@
   // ts 排除的文件
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/**/*.js",
   ],
   // ts 管理的文件
   "include": [
     "src/**/*.ts",
-    "src/**/*.js",
     "src/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",

@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import ElementUI from 'element-ui';
+import * as ElementUI from 'element-ui';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import 'element-ui/lib/theme-chalk/index.css';
 import { AppInit } from '@lm/shared';
-AppInit()
+AppInit();
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 let instance: any = null;

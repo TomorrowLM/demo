@@ -100,7 +100,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './star.scss';
+@use './star.scss';
 
 .login {
   display: flex;

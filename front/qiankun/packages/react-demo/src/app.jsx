@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { userInfo } from "@/store/actions/userInfo";
 import { Spin } from "antd";
 import useAuthModel from "@/hox/auth";
+import styles from "@/assets/styles/index.module.scss";
 
 export default function App() {
   console.log(
@@ -35,6 +36,7 @@ export default function App() {
   }, [token, getUserInfo]);
   return (
     <>
+      {/* <div className={`${styles.tip} ${styles.tip1}`}>测试class和变量</div> */}
       <Router>
         {whiteRoute.map((val) => {
           return (
