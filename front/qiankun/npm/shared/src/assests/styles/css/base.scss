@@ -6,11 +6,11 @@ body {
 
 body {
   background-color: #fff;
-  // background-color: red;
   color: #222;
   font-size: 14px;
-  font-family: 'Helvetica Neue', Helvetica, sans-serif, Arial, 'PingFang SC', 'Microsoft YaHei', '微软雅黑', SimHei,
-    SimSun;
+  font-family:
+    "Helvetica Neue", Helvetica, sans-serif, Arial, "PingFang SC",
+    "Microsoft YaHei", "微软雅黑", SimHei, SimSun;
 }
 
 h1,
@@ -48,4 +48,8 @@ a:hover {
 a:active {
   text-decoration: none;
   color: black;
+}
+
+div {
+  font-size: 12px;
 }
