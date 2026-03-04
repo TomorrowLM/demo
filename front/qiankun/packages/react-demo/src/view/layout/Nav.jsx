@@ -9,7 +9,7 @@ const HomeNav = (props) => {
   const signOut = () => {
     window.localStorage.setItem("token", "");
     // HashRouter 场景下，内部路由只处理 hash 部分
-    history.push(`${GLOBAL_INFO.APP_ROUTER_BASE}/login`);
+    history.push("/login");
   };
   const menuItems = [
     {

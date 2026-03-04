@@ -37,7 +37,7 @@ export default function App() {
   return (
     <>
       {/* <div className={`${styles.tip} ${styles.tip1}`}>测试class和变量</div> */}
-      <Router>
+      <Router basename={GLOBAL_INFO.APP_ROUTER_BASE}>
         {whiteRoute.map((val) => {
           return (
             <Route key={val.path} path={val.path} component={val.component} />

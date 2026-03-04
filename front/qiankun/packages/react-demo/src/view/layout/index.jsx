@@ -47,7 +47,7 @@ export default function App(props) {
       });
   };
 
-  const menuItems = buildMenuItems(menuRoutes, GLOBAL_INFO.APP_ROUTER_BASE);
+  const menuItems = buildMenuItems(menuRoutes);
   // const branch = window.location.hash.replace(/#\//, "").split("/");
   const branch = window.location.pathname
     .replace(/\//, "")

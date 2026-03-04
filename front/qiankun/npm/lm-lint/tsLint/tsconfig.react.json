@@ -3,6 +3,7 @@
   "compilerOptions": {
     // React 项目通用 TS 配置，参考 vue-demo-pc
     "jsx": "react",
+    "checkJs": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node"

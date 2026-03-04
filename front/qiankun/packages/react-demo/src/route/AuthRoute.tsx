@@ -34,11 +34,24 @@ const AuthRoute = () => {
     //   set(res.data.data);
     // });
   };
+  // 路由拼接做了规范化，避免了父子路由路径拼接时出现重复斜杠或缺少斜杠的情况
+  const joinPaths = (parentPath, childPath) => {
+    if (!parentPath) return childPath || "";
+    if (!childPath) return parentPath;
+    const normalizedParent = parentPath.endsWith("/")
+      ? parentPath.slice(0, -1)
+      : parentPath;
+    const normalizedChild = childPath.startsWith("/")
+      ? childPath
+      : `/${childPath}`;
+    return `${normalizedParent}${normalizedChild}` || "/";
+  };
+
   //生成路由dom
   const mapRouteMethod = (data, parentPath = "") => {
     console.log("mapRouteMethod", data, parentPath);
     return data.map(({ path, exact, component, children }, index) => {
-      const fullPath = path ? `${parentPath}${path}` : parentPath;
+      const fullPath = path ? joinPaths(parentPath, path) : parentPath;
       // 对于仅作为分组的节点（没有 path，但有 children），直接下钻，不生成额外 Route，避免重复 key/path
       if (!path && children) {
         return mapRouteMethod(children, parentPath);
