@@ -18,29 +18,33 @@ export default function App(props) {
     setCollapsed(!collapsed);
   };
   const buildMenuItems = (router, parentPath = "") => {
-    return router.map((routerVal) => {
-      const fullPath = `${parentPath}${routerVal.path || ""}`;
-      // console.log(fullPath, GLOBAL_INFO.APP_ROUTER_BASE, "fullPath");
+    return router
+      .filter((routerVal) => routerVal?.isMenu !== 0)
+      .map((routerVal) => {
+        const fullPath = `${parentPath}${routerVal.path || ""}`;
+        const visibleChildren = (routerVal.children || []).filter(
+          (child) => child?.isMenu !== 0
+        );
 
-      if (!routerVal?.children?.length) {
+        if (!visibleChildren.length) {
+          return {
+            key: fullPath,
+            icon: routerVal.icon,
+            label: <Link to={fullPath}>{routerVal.name}</Link>,
+          };
+        }
+
+        const groupKey = routerVal.path
+          ? fullPath
+          : `group-${parentPath}-${routerVal.name}`;
+
         return {
-          key: fullPath,
-          icon: routerVal.icon,
-          label: <Link to={fullPath}>{routerVal.name}</Link>,
+          key: groupKey,
+          icon: <LaptopOutlined />,
+          label: routerVal.name,
+          children: buildMenuItems(visibleChildren, fullPath),
         };
-      }
-
-      const groupKey = routerVal.path
-        ? fullPath
-        : `group-${parentPath}-${routerVal.name}`;
-
-      return {
-        key: groupKey,
-        icon: <LaptopOutlined />,
-        label: routerVal.name,
-        children: buildMenuItems(routerVal.children, fullPath),
-      };
-    });
+      });
   };
 
   const menuItems = buildMenuItems(menuRoutes, GLOBAL_INFO.APP_ROUTER_BASE);

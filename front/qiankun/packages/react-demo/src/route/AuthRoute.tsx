@@ -45,7 +45,7 @@ const AuthRoute = () => {
       }
       const Component = !component
         ? children
-          ? ({ children: inner }) => <>{inner}</>
+          ? ({ children: inner }) => <>{inner}</> // 仅作为分组的节点（没有 component，但有 children），直接渲染 children
           : () => <div>404</div>
         : typeof component !== "string"
           ? component
