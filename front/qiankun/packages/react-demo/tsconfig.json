@@ -2,6 +2,9 @@
   "extends": "@lm/lint/tsLint/tsconfig.react.json",
   "compilerOptions": {
     "baseUrl": ".",
+    // "typeRoots": [
+    //   "./node_modules/@types"
+    // ],
     "paths": {
       "@/*": [
         "src/*"

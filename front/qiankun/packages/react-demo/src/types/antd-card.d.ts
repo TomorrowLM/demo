@@ -6,4 +6,5 @@ declare module 'antd' {
   // 这样就不会再触发 “返回类型 ReactNode 不是有效 JSX 元素” 的校验错误
   // 如果后面需要精确的 props 类型，可以再细化这里的 any
   // export const Card: React.FC<any>
+  export const Divider: React.FC<any>
 }
