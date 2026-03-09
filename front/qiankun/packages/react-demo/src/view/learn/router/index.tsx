@@ -1,38 +1,31 @@
 import React, { useEffect, useState, ReactNode } from "react";
 import { Divider } from "antd";
 import { Route, Link, Switch } from "react-router-dom";
+import LmCard from "@/components/Lm-card";
 
 interface RouterProps {
   children?: ReactNode;
 }
 const Router: React.FC<RouterProps> = (props: RouterProps) => {
   console.log(props.children);
-  const [count, setCount] = useState(0);
+
   useEffect(() => {
-    console.log("渲染 2");
+    console.log("渲染");
   });
   return (
     <div>
-      <p>路由嵌套示例</p>
-      <ul>
+      <LmCard title="路由嵌套示例">
         <li>
           <Link to="/learn/router/1">1</Link>
         </li>
         <li>
           <Link to="/learn/router/2">2</Link>
         </li>
-      </ul>
-      {/* '/router'路由没有设置 exact，那么会将匹配的子页面都渲染出来 */}
-      {/* <Switch>
-        <Route exact path="/router/:id" component={Second}></Route>
-      </Switch> */}
-      {props.children}
+
+        {props.children}
+      </LmCard>
       <Divider />
-      <p>路由渲染方式</p>
-      <div>
-        Count : {count}
-        <button onClick={() => setCount(count + 1)}>我是按钮</button>
-      </div>
+
     </div>
   );
 }

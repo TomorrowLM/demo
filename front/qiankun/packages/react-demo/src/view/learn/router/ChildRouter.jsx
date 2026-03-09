@@ -6,9 +6,7 @@ useEffect(()=>{
 })
   return (
     <div>
-      <ul>
-        <li><span>params.id:</span>{props.match.params.id}</li>
-      </ul>
+      我是子路由<span>params.id:</span>{props.match.params.id}
     </div>
   );
 }

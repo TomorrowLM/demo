@@ -1,0 +1,91 @@
+<>
+  {/* /learn */}
+  <Suspense fallback={<div />}>
+    <Route
+      path="/learn"
+      exact={false}
+      render={(props) => (
+        <Learn {...props}>
+          {/* /learn/closure */}
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/closure"
+              exact={false}
+              component={lazy(() => import("@/view/learn/closure"))}
+            />
+          </Suspense>
+
+          {/* hooks (纯分组节点：没有 path，所以不会生成 Route，只是下钻) */}
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/useState"
+              exact={false}
+              component={lazy(() => import("@/view/learn/hooks/useState"))}
+            />
+          </Suspense>
+
+          {/* ref (纯分组节点：没有 path，所以不会生成 Route，只是下钻) */}
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/dom/ref"
+              exact={false}
+              component={lazy(() => import("@/view/learn/dom/Ref"))}
+            />
+          </Suspense>
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/dom/findDomDode"
+              exact={false}
+              component={lazy(() => import("@/view/learn/dom/FindDomDode"))}
+            />
+          </Suspense>
+
+          {/* /learn/router/exact (你这里是组件直引入 Exact) */}
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/router/exact"
+              exact={true}
+              component={Exact}
+            />
+          </Suspense>
+
+          {/* /learn/router (父路由：component: 'learn/router') */}
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/router"
+              exact={false}
+              render={(props) => (
+                <Router {...props}>
+                  {/* /learn/router/:id */}
+                  <Suspense fallback={<div />}>
+                    <Route
+                      path="/learn/router/:id"
+                      exact={false}
+                      component={ChildRouter}
+                    />
+                  </Suspense>
+                </Router>
+              )}
+            />
+          </Suspense>
+
+          {/* component 分组节点... */}
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/render"
+              exact={false}
+              component={lazy(() => import("@/view/learn/component/Render"))}
+            />
+          </Suspense>
+          <Suspense fallback={<div />}>
+            <Route
+              path="/learn/communicate"
+              exact={false}
+              component={lazy(() => import("@/view/learn/component/Communicate"))}
+            />
+          </Suspense>
+        </Learn>
+      )}
+    />
+  </Suspense>
+</>
