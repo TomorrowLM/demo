@@ -1,4 +1,5 @@
 import type * as React from 'react'
+import LmCard from '@/components/Lm-card';
 
 // 覆盖/补充 antd 中 Card 的类型，让 TS 认为它是一个标准的 React 组件
 declare module 'antd' {
@@ -7,4 +8,6 @@ declare module 'antd' {
   // 如果后面需要精确的 props 类型，可以再细化这里的 any
   // export const Card: React.FC<any>
   export const Divider: React.FC<any>
+  export const Button: React.FC<any>
+  export const LmCard: React.FC<any>
 }

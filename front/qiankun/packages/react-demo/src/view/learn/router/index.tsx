@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ReactNode } from "react";
-import { Divider } from "antd";
-import { Route, Link, Switch } from "react-router-dom";
+import { Button, Divider } from "antd";
+import { Link, useHistory } from "react-router-dom";
 import LmCard from "@/components/Lm-card";
 
 interface RouterProps {
@@ -9,11 +9,17 @@ interface RouterProps {
 const Router: React.FC<RouterProps> = (props: RouterProps) => {
   console.log(props.children);
 
+  const history = useHistory();
   useEffect(() => {
     console.log("渲染");
   });
   return (
     <div>
+      <LmCard title="路由exact示例">
+        <Button onClick={() => {
+          history.push("/learn/router/exact")
+        }}>跳转到exact示例</Button>
+      </LmCard>
       <LmCard title="路由嵌套示例">
         <li>
           <Link to="/learn/router/1">1</Link>
@@ -24,7 +30,7 @@ const Router: React.FC<RouterProps> = (props: RouterProps) => {
         {props.children}
       </LmCard>
       <Divider />
- 
+
     </div>
   );
 }
