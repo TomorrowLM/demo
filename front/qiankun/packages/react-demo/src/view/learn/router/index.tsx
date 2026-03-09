@@ -21,11 +21,10 @@ const Router: React.FC<RouterProps> = (props: RouterProps) => {
         <li>
           <Link to="/learn/router/2">2</Link>
         </li>
-
         {props.children}
       </LmCard>
       <Divider />
-
+ 
     </div>
   );
 }

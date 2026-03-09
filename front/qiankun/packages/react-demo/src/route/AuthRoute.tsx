@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useEffect, lazy, Suspense, useCallback } from "react";
-import { useHistory, Route } from "react-router-dom";
+import { useHistory, Route, Switch } from "react-router-dom";
 import { Spin } from "antd";
 import { routes } from "@/route/index.js";
 import styles from "@/assets/styles/index.module.less";
@@ -65,34 +65,40 @@ const AuthRoute = () => {
           : lazy(() => import(`@/view/${component}`));
       if (children) {
         return (
-          <Suspense key={fullPath || index} fallback={<div>{/* <Spin></Spin> */}</div>}>
-            <Route
-              key={fullPath || index}
-              exact={exact ? exact : false}
-              path={fullPath}
-              render={(props) => {
-                return <Component>{mapRouteMethod(children, fullPath)} </Component>;
-              }}
-            ></Route>
-          </Suspense>
+          <Route
+            key={fullPath || index}
+            exact={exact ? exact : false}
+            path={fullPath}
+            render={(props) => {
+              return (
+                <Suspense fallback={<div>{/* <Spin></Spin> */}</div>}>
+                  <Component {...props}>
+                    {/* Switch 防止匹配相同path前缀 */}
+                    <Switch>{mapRouteMethod(children, fullPath)}</Switch>
+                  </Component>
+                </Suspense>
+              );
+            }}
+          />
         );
       }
       return (
-        <Suspense
+        <Route
           key={fullPath || index}
-          fallback={
-            <div className={styles.loading_container}>
-              <Spin></Spin>
-            </div>
-          }
-        >
-          <Route
-            key={fullPath || index}
-            path={fullPath}
-            exact={exact ? exact : false}
-            component={Component}
-          />
-        </Suspense>
+          path={fullPath}
+          exact={exact ? exact : false}
+          render={(props) => (
+            <Suspense
+              fallback={
+                <div className={styles.loading_container}>
+                  <Spin></Spin>
+                </div>
+              }
+            >
+              <Component {...props} />
+            </Suspense>
+          )}
+        />
       );
     });
   };
@@ -102,7 +108,9 @@ const AuthRoute = () => {
     getUserInfo();
   }, []);
   return (
-    <>{mapRouteMethod([routes])}</>
+    <Switch>
+      {mapRouteMethod([routes])}
+    </Switch>
   );
 };
 export default AuthRoute;
