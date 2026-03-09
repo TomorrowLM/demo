@@ -13,13 +13,13 @@ const Router: React.FC<RouterProps> = (props: RouterProps) => {
   });
   return (
     <div>
-      <p>router 没有设置 exact，那么会将匹配的子页面都渲染出来并放在一个页面</p>
+      <p>路由嵌套示例</p>
       <ul>
         <li>
-          <Link to="/learn/router/parent/1">1</Link>
+          <Link to="/learn/router/1">1</Link>
         </li>
         <li>
-          <Link to="/learn/router/parent/2">2</Link>
+          <Link to="/learn/router/2">2</Link>
         </li>
       </ul>
       {/* '/router'路由没有设置 exact，那么会将匹配的子页面都渲染出来 */}

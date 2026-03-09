@@ -4,6 +4,7 @@ import Layout from '@/view/layout/index'
 import Dashboard from "@/view/dashBoard";
 import ChildRouter from "@/view/learn/router/ChildRouter"
 import Login from "@/view/User/Login";
+import Exact from "@/view/learn/router/Exact";
 
 export const menuRoutes = [
   {
@@ -56,26 +57,28 @@ export const menuRoutes = [
         ]
       },
       {
+        name: "exact",
+        path: "/router/exact",
+        isMenu: 0,
+        component: Exact,
+        exact: true,
+        icon: <DesktopOutlined />
+      },
+      {
         name: '路由',
         icon: <LaptopOutlined />,
         isMenu: 1,
+        component: 'learn/router',
         path: "/router",
+        exact: false,
         children: [
           {
-            name: "路由嵌套",
-            path: "/parent",
-            component: 'learn/router',
-            icon: <DesktopOutlined />,
-            children: [
-              {
-                name: "路由通配符",
-                path: "/:id",
-                isMenu: 0,
-                component: ChildRouter,
-                icon: <DesktopOutlined />
-              }
-            ]
-          },
+            name: "路由通配符",
+            path: "/:id",
+            isMenu: 0,
+            component: ChildRouter,
+            icon: <DesktopOutlined />
+          }
         ]
       },
       {
