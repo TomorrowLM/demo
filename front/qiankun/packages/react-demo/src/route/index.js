@@ -2,9 +2,9 @@ import { LaptopOutlined, DesktopOutlined } from "@ant-design/icons";
 import React from "react";
 import Layout from '@/view/layout/index'
 import Dashboard from "@/view/dashBoard";
-import Second from "@/view/learn/router/components/Second"
+import ChildRouter from "@/view/learn/router/ChildRouter"
 import Login from "@/view/User/Login";
-console.log(GLOBAL_INFO.APP_ROUTER_BASE, "Second");
+
 export const menuRoutes = [
   {
     path: "/dashboard",
@@ -62,15 +62,16 @@ export const menuRoutes = [
         path: "/router",
         children: [
           {
-            name: "路由",
-            path: "learn/router",
-            component: 'Router',
+            name: "路由嵌套",
+            path: "/parent",
+            component: 'learn/router',
             icon: <DesktopOutlined />,
             children: [
               {
                 name: "路由通配符",
-                path: "learn/router/:id",
-                component: Second,
+                path: "/:id",
+                isMenu: 0,
+                component: ChildRouter,
                 icon: <DesktopOutlined />
               }
             ]
@@ -178,8 +179,7 @@ export const menuRoutes = [
 
 export const whiteRoute = [
   {
-    path: `${GLOBAL_INFO.APP_ROUTER_BASE}/login`,
-    // path: `/login`,
+    path: "/login",
     component: Login,
     isMenu: 0,
     exact: true,
@@ -187,7 +187,7 @@ export const whiteRoute = [
 ]
 
 export const routes = {
-  path: GLOBAL_INFO.APP_ROUTER_BASE,
+  path: "/",
   component: Layout,
   children: [
     ...menuRoutes
