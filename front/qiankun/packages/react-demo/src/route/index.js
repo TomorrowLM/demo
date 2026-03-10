@@ -61,8 +61,21 @@ export const menuRoutes = [
         path: "/router/exact",
         isMenu: 0,
         component: Exact,
-        exact: true,
-        icon: <DesktopOutlined />
+        exact: false,
+        // exact: true, // 精确匹配,/learn/router/exact/childExact会匹配到/exact,所以不能设置exact:true
+        icon: <DesktopOutlined />,
+        children: [
+          {
+            name: "exact",
+            path: "/childExact",
+            isMenu: 0,
+            component: Exact,
+            exact: false,
+            icon: <DesktopOutlined />,
+            children: [
+            ]
+          },
+        ]
       },
       {
         name: '路由',

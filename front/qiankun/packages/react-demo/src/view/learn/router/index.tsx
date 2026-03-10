@@ -18,7 +18,7 @@ const Router: React.FC<RouterProps> = (props: RouterProps) => {
       <LmCard title="路由exact示例">
         <Button onClick={() => {
           history.push("/learn/router/exact")
-        }}>跳转到exact示例</Button>
+        }}>跳转到exact示例, 不继承父路由内容</Button>
       </LmCard>
       <LmCard title="路由嵌套示例">
         <li>
