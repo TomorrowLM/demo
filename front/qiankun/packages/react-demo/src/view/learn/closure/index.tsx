@@ -134,7 +134,6 @@ function AsyncCallbackBug() {
   };
 
   const handleAsync = () => {
-    // 模拟一个 3 秒后才返回结果的异步请求
     request
       .get("/common/setTimeOut",)
       .then((res) => {

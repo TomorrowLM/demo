@@ -23,7 +23,7 @@ export default class UseState extends React.Component<{}, UseStateState> {
     this.setState({
       count: this.state.count + 1,
     });
-    console.log("dom", this.state.count);
+    console.log("dom打印", this.state.count);
   };
   onButtonClick = (type: number) => {
     if (type === 1) {

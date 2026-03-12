@@ -35,6 +35,12 @@ export const menuRoutes = [
             component: 'learn/hooks/useState',
             icon: <DesktopOutlined />,
           },
+          {
+            name: "useEffect",
+            path: "/useEffect",
+            component: 'learn/hooks/useEffect',
+            icon: <DesktopOutlined />,
+          },
         ],
       },
       {
@@ -61,8 +67,8 @@ export const menuRoutes = [
         path: "/router/exact",
         isMenu: 0,
         component: Exact,
-        exact: false,
-        // exact: true, // 精确匹配,/learn/router/exact/childExact会匹配到/exact,所以不能设置exact:true
+        // exact: false,
+        exact: true, // 精确匹配,/learn/router/exact/childExact会匹配到/learn/router/:id,所以不能设置exact:true
         icon: <DesktopOutlined />,
         children: [
           {
