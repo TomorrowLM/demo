@@ -5,6 +5,7 @@ node_modules
 **/stats.html
 */**/stats.html
 */dist
+**/ai-doc
 */**/lib
 */**/dist
 */**/tsconfig.tsbuildinfo
