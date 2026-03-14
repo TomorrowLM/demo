@@ -1,6 +1,9 @@
 {
   "scripts": {
     "backend": "cd back-end && npm run devstart",
+    "mcp:dev": "cd ai/mcp && npm run dev",
+    "mcp:build": "cd ai/mcp && npm run build",
+    "mcp:start": "cd ai/mcp && npm run start",
     "start:web1:nodemon": "nodemon",
     "serve:web1": "cd packages/vue-demo-mobile && npm run serve",
     "serve:web2": "cd packages/vue-demo-pc && npm run serve",
