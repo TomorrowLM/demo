@@ -11,8 +11,10 @@ export function findOperationByKeyword(doc: any, keyword: string): FoundOperatio
   const paths = doc?.paths;
   if (!paths || typeof paths !== "object") return undefined;
 
-  const normalizedKeyword = keyword.trim();
+  const normalizedKeyword = String(keyword ?? "").trim();
   if (!normalizedKeyword) return undefined;
+
+  const needle = normalizedKeyword.toLowerCase();
 
   const httpMethods = new Set([
     "get",
@@ -38,13 +40,12 @@ export function findOperationByKeyword(doc: any, keyword: string): FoundOperatio
       .map((v: any) => String(v));
 
     const haystack = textParts.join(" ").toLowerCase();
-    const needle = normalizedKeyword.toLowerCase();
     if (!haystack.includes(needle)) return -1;
 
     let score = 1;
-    if (String(op?.summary ?? "").includes(normalizedKeyword)) score += 3;
-    if (String(op?.operationId ?? "").includes(normalizedKeyword)) score += 2;
-    if (String(pathKey).includes(normalizedKeyword)) score += 1;
+    if (String(op?.summary ?? "").toLowerCase().includes(needle)) score += 3;
+    if (String(op?.operationId ?? "").toLowerCase().includes(needle)) score += 2;
+    if (String(pathKey).toLowerCase().includes(needle)) score += 1;
     return score;
   };
 
@@ -52,6 +53,8 @@ export function findOperationByKeyword(doc: any, keyword: string): FoundOperatio
 
   for (const [pathKey, item] of Object.entries(paths)) {
     if (!item || typeof item !== "object") continue;
+
+
     for (const [method, operation] of Object.entries(item as any)) {
       const m = String(method).toLowerCase();
       if (!httpMethods.has(m)) continue;

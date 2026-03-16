@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "my-server": {
+      "command": "npm",
+      "args": ["run", "dev"],
+      "env": {
+        "SERVER_PORT": "6278"
+      }
+    }
+  }
+}

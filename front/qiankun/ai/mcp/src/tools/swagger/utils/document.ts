@@ -28,15 +28,66 @@ async function tryFetchJson(url: string): Promise<unknown> {
     throw new Error(`swagger_get_model: 拉取失败 ${response.status} ${response.statusText}`);
   }
   const text = await response.text();
-  const json = JSON.parse(text) as unknown;
-  return json;
+  const trimmed = String(text ?? "").trim();
+  if (!trimmed) {
+    throw new Error(`swagger_get_model: 从 ${url} 获取到空响应`);
+  }
+
+  const contentType = String(response.headers.get("content-type") ?? "").toLowerCase();
+
+  // 如果返回的不是 application/json 且内容看起来也不是 JSON，尝试从文本中提取首个 JSON 对象/数组
+  if (!contentType.includes("application/json") && !trimmed.startsWith("{") && !trimmed.startsWith("[")) {
+    const m = trimmed.match(/({[\s\S]*}\s*)|([\[][\s\S]*\][\s\S]*)/);
+    if (m && m[0]) {
+      try {
+        return JSON.parse(m[0]);
+      } catch (err) {
+        // fallthrough to throw below with preview
+        void err;
+      }
+    }
+
+    throw new Error(
+      `swagger_get_model: URL 返回非 JSON 内容 (content-type: ${contentType || "unknown"})，URL: ${url}，响应预览: ${trimmed.slice(0,200)}`
+    );
+  }
+
+  try {
+    const json = JSON.parse(trimmed) as unknown;
+    return json;
+  } catch (err: any) {
+    throw new Error(`swagger_get_model: JSON 解析失败 ${url}: ${err?.message ?? String(err)}，响应预览: ${trimmed.slice(0,200)}`);
+  }
 }
 
 /**
  * 加载 Swagger/OpenAPI 文档（支持 HTTP URL 和本地文件路径）
  */
 export async function loadDocument(args: SwaggerGetModelArgs): Promise<any> {
-  if (args.document && typeof args.document === "object") return args.document;
+  // 如果调用方显式传入了非空对象形式的 document，则使用它；空对象会被忽略以避免覆盖有效的远程文档加载
+  if (args.document && typeof args.document === "object" && Object.keys(args.document).length > 0) {
+    return args.document;
+  }
+
+  // 如果 source 中包含 fragment（如 Swagger UI 的 #/.../operationId），
+  // 解析出可能的分组名和操作标识，便于在 swagger-resources 列表中定位对应的分组 JSON
+  let fragmentGroup: string | undefined;
+  let fragmentOperation: string | undefined;
+  try {
+    const rawSource = String(args.source ?? "");
+    if (rawSource.includes("#")) {
+      const frag = rawSource.split("#")[1] ?? "";
+      const parts = frag.split("/").filter(Boolean);
+      if (parts.length >= 2) {
+        fragmentGroup = decodeURIComponent(parts[parts.length - 2]);
+      }
+      if (parts.length >= 1) {
+        fragmentOperation = decodeURIComponent(parts[parts.length - 1]);
+      }
+    }
+  } catch (err) {
+    void err;
+  }
   
   // 使用默认 URL 如果 source 未提供或为空
   const defaultSource = "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/";
@@ -95,12 +146,31 @@ export async function loadDocument(args: SwaggerGetModelArgs): Promise<any> {
         if (isValidSpec(doc)) return doc;
 
         if (Array.isArray(doc)) {
-          const firstWithUrl = doc.find((item: any) => item && typeof item.url === "string") as
-            | { url: string }
-            | undefined;
+          // 优先尝试根据 fragmentGroup 或 fragmentOperation 在 swagger-resources 列表中定位对应条目
+          let match = undefined as any;
+          if (fragmentGroup) {
+            match = (doc as any[]).find((item: any) => {
+              if (!item) return false;
+              const n = String(item.name ?? item.title ?? "").toLowerCase();
+              const u = String(item.url ?? "").toLowerCase();
+              const g = String(fragmentGroup ?? "").toLowerCase();
+              return n.includes(g) || u.includes(encodeURIComponent(g)) || u.includes(g);
+            });
+          }
+
+          if (!match && fragmentOperation) {
+            const op = String(fragmentOperation ?? "").toLowerCase();
+            match = (doc as any[]).find((item: any) => {
+              const n = String(item.name ?? item.title ?? "").toLowerCase();
+              const u = String(item.url ?? "").toLowerCase();
+              return n.includes(op) || u.includes(encodeURIComponent(op)) || u.includes(op);
+            });
+          }
+
+          const firstWithUrl = match ?? (doc as any[]).find((item: any) => item && typeof item.url === "string");
           if (firstWithUrl?.url) {
             const base = new URL(url);
-            const nextUrl = new URL(firstWithUrl.url.replace(/^\//, ""), base).toString();
+            const nextUrl = new URL(String(firstWithUrl.url).replace(/^\//, ""), base).toString();
             const nextDoc = await tryFetchJson(nextUrl);
             if (isValidSpec(nextDoc)) return nextDoc;
           }
@@ -117,7 +187,13 @@ export async function loadDocument(args: SwaggerGetModelArgs): Promise<any> {
 
   const filePath = path.isAbsolute(source) ? source : path.resolve(process.cwd(), source);
   const raw = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(raw) as unknown;
+  const trimmed = String(raw ?? "").trim();
+  if (!trimmed) throw new Error(`swagger_get_model: 本地文件 ${filePath} 内容为空`);
+  try {
+    return JSON.parse(trimmed) as unknown;
+  } catch (err: any) {
+    throw new Error(`swagger_get_model: 解析本地 JSON 文件失败 ${filePath}: ${err?.message ?? String(err)}，文件预览: ${trimmed.slice(0,200)}`);
+  }
 }
 
 /**
