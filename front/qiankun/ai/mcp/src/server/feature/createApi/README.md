@@ -73,6 +73,21 @@ flowchart TD
 - 目标路径可选，若无则指令中不指定具体文件
 - 错误处理应友好，传递 Swagger 工具的错误信息
 
+## 使用示例
+
+以下是一个调用 `create_api` 工具的示例，用于生成“一起安-AI”创建预案接口的 TypeScript 代码：
+
+```json
+{
+  "swagger_get_model": {
+    "source": "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86/%E4%B8%80%E8%B5%B7%E5%AE%89-AI/createYlfaByAiUsingPOST"
+  },
+  "targetPath": "doc/test/api.ts"
+}
+```
+
+调用该工具后，将返回 Swagger 接口的详细信息（包括请求/响应模型）以及一条生成指令，指示模型在指定文件中创建对应的 TypeScript 函数和类型定义。
+
 ## 后续优化建议
 
 1. 支持批量处理多个接口
@@ -89,4 +104,4 @@ flowchart TD
 - [ ] 实现工具处理函数逻辑
 - [ ] 在服务器中注册新工具
 - [ ] 测试工具功能并验证生成的代码
-- [ ] 编写文档和使用示例
+- [x] 编写文档和使用示例
