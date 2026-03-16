@@ -10,6 +10,7 @@
     "start": "node dist/index.js",
     "dev": "node --loader ts-node/esm src/index.ts",
     "call:hello": "node scripts/call-hello.mjs",
+    "call:create-api": "node scripts/call-create-api.mjs",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {

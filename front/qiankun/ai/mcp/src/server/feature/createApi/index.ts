@@ -79,7 +79,7 @@ export async function handleCreateApiTool(request: CallToolRequest) {
   };
 
   const swaggerResult = await handleSwaggerGetModelTool(swaggerRequest);
-  
+
   // 提取 Swagger 工具返回的数据
   let swaggerData: any;
   if (swaggerResult.content && swaggerResult.content[0]?.type === "text") {
