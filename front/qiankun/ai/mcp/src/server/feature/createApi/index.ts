@@ -32,7 +32,7 @@ const swaggerGetModelInputSchema = {
 } as const;
 
 export const createApiTool = {
-  name: "create_api",
+  name: "create_api_mcp",
   description: "通过 Swagger 获取接口信息，并通知模型在指定 API 文件中创建接口函数和 TypeScript 类型",
   inputSchema: {
     type: "object",
@@ -65,7 +65,7 @@ export async function handleCreateApiTool(request: CallToolRequest) {
   } | undefined;
 
   if (!args?.get_swagger_mcp) {
-    throw new Error("create_api: 缺少必要的参数 'get_swagger_mcp'");
+    throw new Error("create_api_mcp: 缺少必要的参数 'get_swagger_mcp'");
   }
 
   // 调用 Swagger 工具的处理函数获取接口信息

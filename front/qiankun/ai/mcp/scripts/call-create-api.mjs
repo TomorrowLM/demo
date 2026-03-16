@@ -26,7 +26,7 @@ async function main() {
   await client.connect(transport);
 
   const result = await client.callTool({
-    name: "create_api",
+    name: "create_api_mcp",
     arguments: {
       get_swagger_mcp: {
         source: "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86/%E4%B8%80%E8%B5%B7%E5%AE%89-AI/createYlfaByAiUsingPOST",

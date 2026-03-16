@@ -2,7 +2,7 @@
 
 ## 概述
 
-创建一个新的 MCP 工具 `create_api`，其功能是通过调用现有的 Swagger MCP 工具获取接口信息，然后通知当前模型在项目中的指定 API 文件中创建接口函数以及对应的 TypeScript 类型。
+创建一个新的 MCP 工具 `create_api_mcp`，其功能是通过调用现有的 Swagger MCP 工具获取接口信息，然后通知当前模型在项目中的指定 API 文件中创建接口函数以及对应的 TypeScript 类型。
 
 ## 功能需求
 
@@ -38,7 +38,7 @@
 
 ```mermaid
 flowchart TD
-    A[用户调用 create_api 工具] --> B[参数验证]
+    A[用户调用 create_api_mcp 工具] --> B[参数验证]
     B --> C[构造 Swagger 工具请求]
     C --> D[调用 handleSwaggerGetModelTool]
     D --> E{获取接口信息}
@@ -75,7 +75,7 @@ flowchart TD
 
 ## 使用示例
 
-以下是一个调用 `create_api` 工具的示例，用于生成“一起安-AI”创建预案接口的 TypeScript 代码：
+以下是一个调用 `create_api_mcp` 工具的示例，用于生成“一起安-AI”创建预案接口的 TypeScript 代码：
 
 ```json
 {
