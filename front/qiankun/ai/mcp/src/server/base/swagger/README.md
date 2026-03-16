@@ -32,7 +32,7 @@ if (args.source !== undefined && args.source !== null && args.source.trim() !== 
 }
 
 if (!source || source.trim() === "") {
-  throw new Error("swagger_get_model: 需要提供 source 或 document");
+  throw new Error("get_swagger_mcp: 需要提供 source 或 document");
 }
 ```
 

@@ -37,7 +37,7 @@ export const createApiTool = {
   inputSchema: {
     type: "object",
     properties: {
-      swagger_get_model: {
+      get_swagger_mcp: {
         type: "object",
         description: "Swagger 工具参数",
         properties: swaggerGetModelInputSchema.properties,
@@ -48,13 +48,13 @@ export const createApiTool = {
         description: "目标 API 文件路径（可选），用于提示模型生成代码的位置",
       },
     },
-    required: ["swagger_get_model"],
+    required: ["get_swagger_mcp"],
   },
 } as const;
 
 export async function handleCreateApiTool(request: CallToolRequest) {
   const args = request.params.arguments as {
-    swagger_get_model: {
+    get_swagger_mcp: {
       source?: string;
       document?: unknown;
       name?: string;
@@ -64,8 +64,8 @@ export async function handleCreateApiTool(request: CallToolRequest) {
     targetPath?: string;
   } | undefined;
 
-  if (!args?.swagger_get_model) {
-    throw new Error("create_api: 缺少必要的参数 'swagger_get_model'");
+  if (!args?.get_swagger_mcp) {
+    throw new Error("create_api: 缺少必要的参数 'get_swagger_mcp'");
   }
 
   // 调用 Swagger 工具的处理函数获取接口信息
@@ -73,8 +73,8 @@ export async function handleCreateApiTool(request: CallToolRequest) {
     ...request,
     params: {
       ...request.params,
-      name: "swagger_get_model",
-      arguments: args.swagger_get_model,
+      name: "get_swagger_mcp",
+      arguments: args.get_swagger_mcp,
     },
   };
 

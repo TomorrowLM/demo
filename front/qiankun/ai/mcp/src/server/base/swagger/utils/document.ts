@@ -25,12 +25,12 @@ function isValidSpec(doc: any): boolean {
 async function tryFetchJson(url: string): Promise<unknown> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`swagger_get_model: 拉取失败 ${response.status} ${response.statusText}`);
+    throw new Error(`get_swagger_mcp: 拉取失败 ${response.status} ${response.statusText}`);
   }
   const text = await response.text();
   const trimmed = String(text ?? "").trim();
   if (!trimmed) {
-    throw new Error(`swagger_get_model: 从 ${url} 获取到空响应`);
+    throw new Error(`get_swagger_mcp: 从 ${url} 获取到空响应`);
   }
 
   const contentType = String(response.headers.get("content-type") ?? "").toLowerCase();
@@ -48,7 +48,7 @@ async function tryFetchJson(url: string): Promise<unknown> {
     }
 
     throw new Error(
-      `swagger_get_model: URL 返回非 JSON 内容 (content-type: ${contentType || "unknown"})，URL: ${url}，响应预览: ${trimmed.slice(0,200)}`
+      `get_swagger_mcp: URL 返回非 JSON 内容 (content-type: ${contentType || "unknown"})，URL: ${url}，响应预览: ${trimmed.slice(0,200)}`
     );
   }
 
@@ -56,7 +56,7 @@ async function tryFetchJson(url: string): Promise<unknown> {
     const json = JSON.parse(trimmed) as unknown;
     return json;
   } catch (err: any) {
-    throw new Error(`swagger_get_model: JSON 解析失败 ${url}: ${err?.message ?? String(err)}，响应预览: ${trimmed.slice(0,200)}`);
+    throw new Error(`get_swagger_mcp: JSON 解析失败 ${url}: ${err?.message ?? String(err)}，响应预览: ${trimmed.slice(0,200)}`);
   }
 }
 
@@ -109,7 +109,7 @@ export async function loadDocument(args: SwaggerGetModelArgs): Promise<any> {
   console.error(`DEBUG: final source = ${source}`);
   
   if (!source || source.trim() === "") {
-    throw new Error("swagger_get_model: 需要提供 source 或 document");
+    throw new Error("get_swagger_mcp: 需要提供 source 或 document");
   }
 
   if (isHttpUrl(source)) {
@@ -181,18 +181,18 @@ export async function loadDocument(args: SwaggerGetModelArgs): Promise<any> {
     }
 
     throw new Error(
-      `swagger_get_model: 无法从该 URL 获取可解析的 Swagger/OpenAPI JSON。请传入 JSON 文档地址（如 /v2/api-docs 或 /v3/api-docs），当前: ${source}`
+      `get_swagger_mcp: 无法从该 URL 获取可解析的 Swagger/OpenAPI JSON。请传入 JSON 文档地址（如 /v2/api-docs 或 /v3/api-docs），当前: ${source}`
     );
   }
 
   const filePath = path.isAbsolute(source) ? source : path.resolve(process.cwd(), source);
   const raw = await fs.readFile(filePath, "utf-8");
   const trimmed = String(raw ?? "").trim();
-  if (!trimmed) throw new Error(`swagger_get_model: 本地文件 ${filePath} 内容为空`);
+  if (!trimmed) throw new Error(`get_swagger_mcp: 本地文件 ${filePath} 内容为空`);
   try {
     return JSON.parse(trimmed) as unknown;
   } catch (err: any) {
-    throw new Error(`swagger_get_model: 解析本地 JSON 文件失败 ${filePath}: ${err?.message ?? String(err)}，文件预览: ${trimmed.slice(0,200)}`);
+    throw new Error(`get_swagger_mcp: 解析本地 JSON 文件失败 ${filePath}: ${err?.message ?? String(err)}，文件预览: ${trimmed.slice(0,200)}`);
   }
 }
 

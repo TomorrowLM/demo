@@ -15,7 +15,7 @@
 
 2. **处理流程**：
    - 工具接收调用请求，验证必要参数
-   - 调用现有的 `swagger_get_model` 工具（通过其处理函数）获取接口的详细信息
+   - 调用现有的 `get_swagger_mcp` 工具（通过其处理函数）获取接口的详细信息
    - 将 Swagger 工具的响应与一条生成指令组合
    - 返回组合后的 JSON 数据给模型，其中包含接口详情和生成代码的提示
 
@@ -79,7 +79,7 @@ flowchart TD
 
 ```json
 {
-  "swagger_get_model": {
+  "get_swagger_mcp": {
     "source": "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86/%E4%B8%80%E8%B5%B7%E5%AE%89-AI/createYlfaByAiUsingPOST"
   },
   "targetPath": "doc/test/api.ts"

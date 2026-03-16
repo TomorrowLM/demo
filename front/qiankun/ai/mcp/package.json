@@ -9,8 +9,10 @@
     "watch": "tsc --watch",
     "start": "node dist/index.js",
     "dev": "node --loader ts-node/esm src/index.ts",
-    "call:hello": "node scripts/call-hello.mjs",
-    "call:create-api": "node scripts/call-create-api.mjs",
+    "inspector": "npx @modelcontextprotocol/inspector --config ./inspector.json",
+    "call-hello": "node scripts/call-hello.mjs",
+    "call-get-swagger": "node scripts/call-get-swagger.mjs",
+    "call-create-api": "node scripts/call-create-api.mjs",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {

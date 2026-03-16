@@ -38,7 +38,7 @@ const swaggerGetModelInputSchema = {
 } as const;
 
 export const swaggerGetModelTool = {
-  name: "swagger_get_model",
+  name: "get_swagger_mcp",
   description: "读取 Swagger/OpenAPI 文档，列出模型或返回指定模型的数据结构（支持解析 $ref）",
   inputSchema: swaggerGetModelInputSchema,
 } as const;
