@@ -4,7 +4,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { isHttpUrl, normalizeSource } from "../../../utils/url.js";
+import { isHttpUrl, normalizeSource } from "../../../../utils/url.js";
 import type { SwaggerGetModelArgs } from "../types.js";
 
 /**

@@ -1,5 +1,5 @@
 import type { CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
-import { textResponseFromJson } from "../../utils/text.js";
+import { textResponseFromJson } from "../../../utils/text.js";
 import type { SwaggerGetModelArgs } from "./types.js";
 import {
   loadDocument,

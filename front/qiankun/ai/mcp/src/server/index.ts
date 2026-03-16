@@ -1,6 +1,6 @@
 import { CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
-import { helloWorldTool, handleHelloWorldTool } from "./hello-world/index.js";
-import { swaggerGetModelTool, handleSwaggerGetModelTool } from "./swagger/index.js";
+import { helloWorldTool, handleHelloWorldTool } from "./base/hello-world/index.js";
+import { swaggerGetModelTool, handleSwaggerGetModelTool } from "./base/swagger/index.js";
 
 export const tools = [helloWorldTool, swaggerGetModelTool];
 
