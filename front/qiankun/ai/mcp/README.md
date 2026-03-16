@@ -27,7 +27,7 @@ LM MCP Server 已通过 stdio 启动...
 
 ## 工具列表
 
-- `hello_world`：输入 `{ "name": "xxx" }`，返回一段问候文本
+- `hello_world_mcp`：输入 `{ "name": "xxx" }`，返回一段问候文本
 
 ## MCP 客户端配置示例
 

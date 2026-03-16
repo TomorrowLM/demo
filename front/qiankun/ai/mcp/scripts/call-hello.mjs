@@ -33,7 +33,7 @@ async function main() {
   process.stdout.write(`tools: ${tools.tools.map((t) => t.name).join(", ")}\n`);
 
   const result = await client.callTool({
-    name: "hello_world",
+    name: "hello_world_mcp",
     arguments: { name },
   });
 

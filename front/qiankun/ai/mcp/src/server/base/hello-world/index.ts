@@ -1,7 +1,7 @@
 import type { CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
 
 export const helloWorldTool = {
-  name: "hello_world",
+  name: "hello_world_mcp",
   description: "一个简单的测试工具，返回打招呼的信息",
   inputSchema: {
     type: "object",
