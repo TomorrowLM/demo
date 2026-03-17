@@ -2,7 +2,7 @@
  * Swagger/OpenAPI Schema 解析工具
  */
 
-import type { ResolveSchemaNodeOptions } from "../types.js";
+import type { ResolveSchemaNodeOptions } from "@/server/base/swagger/types.js";
 
 /**
  * 解码 JSON Pointer token

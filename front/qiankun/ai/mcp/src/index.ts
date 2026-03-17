@@ -7,7 +7,7 @@ import {
   ListToolsRequestSchema,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { tools, dispatchTool } from "./server/index.js";
+import { tools, dispatchTool } from "@/server/index.js";
 
 // 创建 MCP 服务器实例
 const server = new Server(

@@ -42,7 +42,7 @@ async function main() {
   if (maxDepth !== undefined) args.maxDepth = parseInt(maxDepth, 10);
 
   const result = await client.callTool({
-    name: "swagger_get_model",
+    name: "get_swagger_mcp",
     arguments: args,
   });
 

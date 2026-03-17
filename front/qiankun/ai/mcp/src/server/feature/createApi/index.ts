@@ -1,6 +1,6 @@
 import type { CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
-import { textResponseFromJson } from "../../../utils/text.js";
-import { handleSwaggerGetModelTool } from "../../base/swagger/index.js";
+import { textResponseFromJson } from "@/utils/text.js";
+import { handleSwaggerGetModelTool } from "@/server/base/swagger/index.js";
 
 // Swagger 工具的输入模式（从 swagger/index.ts 复制）
 const swaggerGetModelInputSchema = {

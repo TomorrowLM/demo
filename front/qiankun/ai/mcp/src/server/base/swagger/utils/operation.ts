@@ -2,7 +2,7 @@
  * Swagger/OpenAPI 操作查找和提取工具
  */
 
-import type { FoundOperation, OperationIO } from "../types.js";
+import type { FoundOperation, OperationIO } from "@/server/base/swagger/types.js";
 
 /**
  * 通过关键词查找操作

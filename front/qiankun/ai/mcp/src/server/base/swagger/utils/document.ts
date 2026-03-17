@@ -4,8 +4,8 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { isHttpUrl, normalizeSource } from "../../../../utils/url.js";
-import type { SwaggerGetModelArgs } from "../types.js";
+import { isHttpUrl, normalizeSource } from "@/utils/url.js";
+import type { SwaggerGetModelArgs } from "@/server/base/swagger/types.js";
 
 /**
  * 验证文档是否为有效的 Swagger/OpenAPI 规范
@@ -37,7 +37,7 @@ async function tryFetchJson(url: string): Promise<unknown> {
 
   // 如果返回的不是 application/json 且内容看起来也不是 JSON，尝试从文本中提取首个 JSON 对象/数组
   if (!contentType.includes("application/json") && !trimmed.startsWith("{") && !trimmed.startsWith("[")) {
-    const m = trimmed.match(/({[\s\S]*}\s*)|([\[][\s\S]*\][\s\S]*)/);
+    const m = trimmed.match(/({[\s\S]*}\s*)|(\[[\s\S]*][\s\S]*)/);
     if (m && m[0]) {
       try {
         return JSON.parse(m[0]);
