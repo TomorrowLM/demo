@@ -1,65 +1,92 @@
-export interface CreateYlfaByAiRequest {
-  modelName?: string; // 模型名称，默认：gpt-4.1
-  templateUrl?: string;
-  yldd?: string; // 演练地点
-  ylfams?: string; // 演练方案描述
-  ylmd?: string; // 演练目的
-  ylsj?: string; // 演练时间，ISO 8601 字符串
-}
-
-export interface SseEmitter {
-  timeout?: number;
+/**
+ * 基础响应类型
+ */
+export interface Result<T = any> {
+  code: number;
+  datas: T;
+  error?: string;
+  msg?: string;
+  path?: string;
+  traceId?: string;
 }
 
 /**
- * 调用 AI 生成演练方案（POST）
- * 注意：后端接口为 SSE（流式响应），此处以普通 POST+JSON 解析为例。
+ * 错误原因类型
  */
-export async function createYlfaByAiUsingPOST(
-  data: CreateYlfaByAiRequest,
-  baseUrl = ''
-): Promise<SseEmitter> {
-  const url = `${baseUrl}/dsb/yqarw/api/yqa/ai/sse/createYlfaByAi`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return (await res.json()) as SseEmitter;
-}
-
-export default createYlfaByAiUsingPOST;
-import request from '@/utils/request';
-
-// 错误原因
 export interface ErrorReason {
   articles: string[];
   reason: string;
 }
 
-// 风险引用
+/**
+ * 风险参考依据类型
+ */
 export interface RiskReference {
   articleName: string;
   items: string[];
   refNum: string;
 }
 
-// 风险类别生成响应
+/**
+ * YQA风险类别生成响应类型
+ */
 export interface YqaRiskCategoryGenResp {
   conclusion: string;
-  errorReason: ErrorReason;
+  errorReason?: ErrorReason;
   hitRisk: string[];
   isAiContent: string;
   riskCategory: number;
   riskMeasures: string;
-  riskReferences: RiskReference[];
+  riskReferences?: RiskReference[];
   userRiskCategory: number;
 }
 
-// API 函数：隐患确认AI识别隐患
-export function aiDetectRiskConfirm(riskId: number) {
-  return request.post<YqaRiskCategoryGenResp>(
-    `/dsb/yqarw/api/yqa/common/ai/detect/risk/level/${riskId}`
+/**
+ * 隐患确认AI识别隐患-隐患确认时调用
+ * 
+ * @param riskId 风险ID
+ * @returns 返回风险类别识别结果
+ */
+export async function aiDetectRiskConfirm(
+  riskId: number
+): Promise<Result<YqaRiskCategoryGenResp>> {
+  const response = await fetch(
+    `/dsb/yqarw/api/yqa/common/ai/detect/risk/level/${riskId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
   );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * 使用示例
+ */
+export async function exampleUsage() {
+  try {
+    const result = await aiDetectRiskConfirm(12345);
+    
+    if (result.code === 200) {
+      console.log('AI识别结果:', result.datas);
+      console.log('隐患类别:', result.datas.riskCategory);
+      console.log('判断结论:', result.datas.conclusion);
+      console.log('整改建议:', result.datas.riskMeasures);
+      
+      if (result.datas.riskReferences) {
+        console.log('法规依据:', result.datas.riskReferences);
+      }
+    } else {
+      console.error('请求失败:', result.msg);
+    }
+  } catch (error) {
+    console.error('调用API时发生错误:', error);
+  }
 }
