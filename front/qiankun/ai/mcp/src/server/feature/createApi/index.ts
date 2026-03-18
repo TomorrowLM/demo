@@ -72,8 +72,6 @@ export async function handleCreateApiTool(request: CallToolRequest) {
       return {
         swaggerData,
         instruction,
-        targetPath,
-        _note: "使用上述信息生成 API 代码，结构化指令提供了明确的任务和文件路径。",
       };
     })
   );
