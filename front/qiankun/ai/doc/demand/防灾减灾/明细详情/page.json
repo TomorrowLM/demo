@@ -1,0 +1,35 @@
+{
+  "name": "防灾减灾明细详情",
+  "page": {
+    "uiPath": "ai\\doc\\demand\\防灾减灾\\明细详情\\ui\\page.png",
+    "title": "防灾减灾明细详情",
+    "description": "防灾减灾明细详情页面",
+    "children": [
+      {
+        "title": "防灾减灾明细详情",
+        "description": "明细详情表单弹框页面",
+        "uiPath": "ai\\doc\\demand\\防灾减灾\\明细详情\\ui\\form.png",
+        "isComponent": true,
+        "type": "modal",
+        "depends": [
+          {
+            "sub": "新增",
+            "description": "点击新增弹出页面"
+          }
+        ],
+        "tools": {
+          "components": {
+            "an-ui": [
+              "FormPro"
+            ],
+            "antd-ui": [
+              "modal"
+            ]
+          },
+          "utils": [],
+          "modal": []
+        }
+      }
+    ]
+  }
+}
