@@ -7,11 +7,15 @@
 ## 功能需求
 
 1. **输入参数**：
-   - `source` (可选): Swagger/OpenAPI 文档 URL 或本地文件路径，默认使用现有 Swagger 工具的默认值 (`https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/`)
-   - `name` (必需): 接口名称或操作关键字
-   - `targetPath` (可选): 目标 API 文件路径，用于提示模型生成代码的位置
-   - `resolveRefs` (可选): 是否解析 $ref，默认 true
-   - `maxDepth` (可选): 解析深度，默认 6
+   - 顶层必须是对象，这是 MCP 工具 schema 的要求
+   - 仅支持通过 `requests` 字段传入对象数组进行批量处理
+   - `requests[].source` (可选): Swagger/OpenAPI 文档 URL 或本地文件路径，默认使用现有 Swagger 工具的默认值 (`https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/`)
+   - `requests[].name` (可选): 接口名称或操作关键字
+   - `requests[].targetPath` (可选): 目标 API 文件路径，用于提示模型生成代码的位置
+   - `requests[].resolveRefs` (可选): 是否解析 $ref，默认 true
+   - `requests[].maxDepth` (可选): 解析深度，默认 6
+   - `requests[].document` (可选): 直接传入 Swagger/OpenAPI 文档对象
+   - `requests` (必填): 批量请求数组
 
 2. **处理流程**：
    - 工具接收调用请求，验证必要参数
@@ -22,15 +26,17 @@
 3. **输出格式**：
    ```json
    {
-     "operation": {...},
-     "request": {...},
-     "response": {...},
+       "swaggerData": {
+          "operation": {...},
+          "request": {...},
+          "response": {...}
+       },
      "instruction": "请在文件 /path/to/api.ts 中创建对应的 TypeScript 函数和类型定义。",
      "targetPath": "/path/to/api.ts",
      "_note": "使用上述信息生成 API 代码，并写入指定文件（如果提供了 targetPath）。"
    }
    ```
-   如果 Swagger 工具返回的是模型定义，则结构类似。
+   返回上述结构组成的数组。Swagger 工具返回模型定义时，`swaggerData` 结构相应变化。
 
 4. **不写入文件系统**：工具本身不执行文件写入操作，仅提供信息并通知模型。
 
@@ -78,19 +84,22 @@ flowchart TD
 以下是一个调用 `create_api_mcp` 工具的示例，用于生成“一起安-AI”创建预案接口的 TypeScript 代码：
 
 ```json
+调用 `create_api_mcp` 工具
 {
-  "get_swagger_mcp": {
-    "source": "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86/%E4%B8%80%E8%B5%B7%E5%AE%89-AI/createYlfaByAiUsingPOST"
-  },
-  "targetPath": "doc/test/api.ts"
+   "requests": [
+      {
+         "source": "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86/%E4%B8%80%E8%B5%B7%E5%AE%89-AI/createYlfaByAiUsingPOST",
+         "targetPath": "doc/test/api.ts"
+      }
+   ]
 }
 ```
 
-调用该工具后，将返回 Swagger 接口的详细信息（包括请求/响应模型）以及一条生成指令，指示模型在指定文件中创建对应的 TypeScript 函数和类型定义。
+调用该工具后，将返回 Swagger 接口的详细信息数组以及生成指令，指示模型在指定文件中创建对应的 TypeScript 函数和类型定义。
 
 ## 后续优化建议
 
-1. 支持批量处理多个接口
+1. 支持为数组输入追加聚合级别的错误汇总
 2. 提供代码生成模板配置
 3. 支持自动检测项目中的 API 文件结构
 4. 添加生成代码的预览功能
