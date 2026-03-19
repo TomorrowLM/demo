@@ -11,7 +11,9 @@ type CreateUiToolArgs = {
 };
 
 type PageFilePayload = {
+	type?: string;
 	name?: string;
+	description?: string;
 	page?: PageDefinition;
 };
 
@@ -99,8 +101,8 @@ export async function handleCreateUiTool(request: CallToolRequest) {
 	const instruction = buildCreateUiInstruction(normalizedPage);
 
 	return textResponseFromJson({
-		type: "create_ui",
-		description: payload.name ?? normalizedPage.name,
+		type: payload.type ?? "create_ui",
+		description: payload.description ?? payload.name ?? normalizedPage.name,
 		page: normalizedPage,
 		instruction,
 	});
