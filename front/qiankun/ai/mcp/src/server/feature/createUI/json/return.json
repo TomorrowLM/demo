@@ -1,10 +1,12 @@
 {
-  "name": "防灾减灾明细详情",
+  "type": "create_ui",
+  "description": "防灾减灾明细详情",
   "page": {
     "name": "防灾减灾明细详情",
     "description": "防灾减灾明细详情页面",
     "uiPath": "ai\\doc\\demand\\防灾减灾\\明细详情\\ui\\page.png",
     "targetPath": "doc/test/ui.tsx",
+    "type": "page",
     "requests": [
       {
         "source": "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86/%E4%B8%80%E8%B5%B7%E5%AE%89-AI/createYlfaByAiUsingPOST",
@@ -12,6 +14,16 @@
         "apiName": "createYlfaByAiUsingPOST"
       }
     ],
+    "tools": {
+      "components": {
+        "an-ui": [
+          "TablePro"
+        ],
+        "antd-ui": []
+      },
+      "utils": [],
+      "modal": []
+    },
     "children": [
       {
         "name": "防灾减灾明细详情表单弹框页面",
@@ -38,6 +50,18 @@
           "modal": []
         }
       }
+    ]
+  },
+  "instruction": {
+    "tasks": [
+      {
+        "type": "create_page",
+        "name": "创建防灾减灾明细详情",
+        "description": "请根据页面配置和 UI 图片创建"
+      }
+    ],
+    "additionalNotes": [
+      "create_ui_mcp 不负责生成 API；如 page.requests 存在，必须先执行 create_api_mcp 并回填 apiName。"
     ]
   }
 }

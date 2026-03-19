@@ -8,10 +8,19 @@
     "requests": [
       {
         "source": "https://apit-dsb.dingtax.cn/dsb/yqarw/api/doc.html#/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86/%E4%B8%80%E8%B5%B7%E5%AE%89-AI/createYlfaByAiUsingPOST",
-        "targetPath": "doc/test/api.ts",
-        "apiName": "createYlfaByAiUsingPOST"
+        "targetPath": "doc/test/api.ts"
       }
     ],
+    "tools": {
+      "components": {
+        "an-ui": [
+          "TablePro"
+        ],
+        "antd-ui": []
+      },
+      "utils": [],
+      "modal": []
+    },
     "children": [
       {
         "name": "防灾减灾明细详情表单弹框页面",

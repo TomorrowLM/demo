@@ -5,7 +5,8 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "npx @modelcontextprotocol/inspector --config ./inspector.json",
+    "dev": "pnpm run build && node dist/index.js",
+    "inspector": "npx @modelcontextprotocol/inspector --config ./inspector.json",
     "start:watch": "nodemon --watch src --ext ts --exec \"pnpm run build && node dist/index.js\"",
     "build": "tsc && tsc-alias",
     "call-hello": "node scripts/call-hello.mjs",

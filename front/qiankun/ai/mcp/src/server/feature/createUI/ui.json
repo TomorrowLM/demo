@@ -1,0 +1,81 @@
+{
+  "name": "qiankun",
+  "page": [
+    {
+      "name": "防灾减灾",
+      "ui": {
+        "uiPath": "/dsb/yqarw/api/yqa/ai/sse/createYlfaByAi",
+        "title": "防灾减灾-AI",
+        "description": "AI生成演练方案",
+        "method": "post",
+        "summary": "AI生成演练方案",
+        "operationId": "createYlfaByAiUsingPOST",
+        "tags": [
+          "防灾减灾-AI"
+        ]
+      } 
+    }
+  ],
+  "match": "operation",
+  "keyword": "createYlfaByAiUsingPOST",
+  "operation": {
+    "path": "/dsb/yqarw/api/yqa/ai/sse/createYlfaByAi",
+    "method": "post",
+    "summary": "AI生成演练方案",
+    "operationId": "createYlfaByAiUsingPOST",
+    "tags": [
+      "一起安-AI"
+    ]
+  },
+  "request": {
+    "body": {
+      "title": "生成演练方案表单对象",
+      "type": "object",
+      "properties": {
+        "modelName": {
+          "type": "string",
+          "description": "模型名称默认：gpt-4.1"
+        },
+        "templateUrl": {
+          "type": "string",
+          "description": "模版地址"
+        },
+        "yldd": {
+          "type": "string",
+          "description": "演练地点"
+        },
+        "ylfams": {
+          "type": "string",
+          "description": "演练方案描述"
+        },
+        "ylmd": {
+          "type": "string",
+          "description": "演练目的"
+        },
+        "ylsj": {
+          "type": "string",
+          "description": "演练时间",
+          "format": "date-time"
+        }
+      },
+      "description": "任务管理-应急管理-应急演练"
+    },
+    "parameters": []
+  },
+  "response": {
+    "code": "200",
+    "body": {
+      "title": "SseEmitter",
+      "type": "object",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  },
+  "instruction": "请在文件 ai\\test\\api.ts 中创建对应的 TypeScript 函数和类型定义。",
+  "targetPath": "ai\\test\\api.ts",
+  "_note": "使用上述信息生成 API 代码，并写入指定文件（如果提供了 targetPath）。"
+}
