@@ -17,15 +17,32 @@ type CreateApiToolArgs = {
   requests?: CreateApiToolItemArgs[];
 };
 
+function getTextContent(content: Array<{ type: string; text?: string }> | undefined) {
+  if (!Array.isArray(content) || content.length === 0) {
+    return "";
+  }
+
+  return content
+    .filter((item) => item.type === "text" && typeof item.text === "string")
+    .map((item) => item.text!.replace(/^\[part \d+\/\d+\]\r?\n/, ""))
+    .join("");
+}
+
 function parseSwaggerResponse(swaggerResult: Awaited<ReturnType<typeof handleSwaggerGetModelTool>>) {
-  if (swaggerResult.content && swaggerResult.content[0]?.type === "text") {
+  const text = getTextContent(swaggerResult.content);
+
+  if (text) {
     try {
-      return JSON.parse(swaggerResult.content[0].text);
+      return JSON.parse(text);
     } catch (err) {
-      void err;
-      return { error: "解析 Swagger 响应失败" };
+      return {
+        error: "解析 Swagger 响应失败",
+        message: err instanceof Error ? err.message : String(err),
+        rawText: text,
+      };
     }
   }
+
   return { error: "Swagger 工具返回格式异常" };
 }
 
@@ -67,14 +84,15 @@ export async function handleCreateApiTool(request: CallToolRequest) {
 
       const swaggerResult = await handleSwaggerGetModelTool(swaggerRequest);
       const swaggerData = parseSwaggerResponse(swaggerResult);
-      const instruction = buildCreateApiInstruction(targetPath);
-
-      return {
-        swaggerData,
-        instruction,
-      };
+      const instruction = buildCreateApiInstruction(targetPath, swaggerData);
+      return instruction;
     })
   );
 
-  return textResponseFromJson(responseList);
+  // return textResponseFromJson(responseList);
+  return textResponseFromJson({
+    type: "create_api",
+    description: "创建 API 函数和 TypeScript 类型",
+    instructions: responseList,
+  });
 }

@@ -18,13 +18,29 @@ function joinPath(...parts: string[]): string {
   return parts.filter(part => part && part !== '.').join('\\');
 }
 
+type CreateApiInstructionTask = {
+  type: string;
+  filePath?: string;
+  description?: string;
+  requirements?: string[];
+}
+
+type CreateApiInstruction = {
+  targetPath?: string;
+  tasks: CreateApiInstructionTask[];
+  additionalNotes: string[];
+  resource?: {
+    swaggerData: unknown;
+  };
+}
+
 /**
  * 构建创建 API 代码的结构化指令
  * @param targetPath 目标文件路径
  * @returns 结构化指令对象
  */
-export function buildCreateApiInstruction(targetPath?: string) {
-  let instruction;
+export function buildCreateApiInstruction(targetPath?: string, swaggerData?: any): CreateApiInstruction {
+  let instruction: CreateApiInstruction;
   if (targetPath) {
     // 判断 targetPath 是否以 .ts 或 .tsx 结尾
     const isFilePath = targetPath.endsWith('.ts') || targetPath.endsWith('.tsx');
@@ -54,8 +70,10 @@ export function buildCreateApiInstruction(targetPath?: string) {
 
     // 构建结构化指令对象
     instruction = {
-      type: 'create_api_code',
-      targetPath: normalizePath(targetPath),
+      // targetPath: normalizePath(targetPath),
+      resource: {
+        swaggerData: swaggerData
+      },
       tasks: [
         {
           type: 'create_types',
@@ -94,7 +112,6 @@ export function buildCreateApiInstruction(targetPath?: string) {
     };
   } else {
     instruction = {
-      type: 'create_api_code',
       tasks: [
         {
           type: 'create_types',
@@ -107,7 +124,7 @@ export function buildCreateApiInstruction(targetPath?: string) {
           description: '创建 API 调用函数'
         }
       ],
-      additionalNotes: '请根据接口信息创建 TypeScript 函数和类型定义。'
+      additionalNotes: ['请根据接口信息创建 TypeScript 函数和类型定义。']
     };
   }
 
