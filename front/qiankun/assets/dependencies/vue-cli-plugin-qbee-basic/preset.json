@@ -1,0 +1,32 @@
+{
+  "useConfigFiles": true,
+  "plugins": {
+    "@vue/cli-plugin-babel": {},
+    "@vue/cli-plugin-typescript": {
+      "classComponent": true,
+      "useTsWithBabel": true
+    },
+    "@vue/eslint-config-typescript": {
+      "version": "^7.0.0"
+    },
+    "@typescript-eslint/eslint-plugin": {
+      "version": "^4.18.0"
+    },
+    "@typescript-eslint/parser": {
+      "version": "^4.18.0"
+    },
+    "typescript": {
+      "version": "~4.1.5"
+    },
+    "@vue/cli-plugin-router": {
+      "historyMode": false
+    },
+    "@vue/cli-plugin-vuex": {},
+    "vue-cli-plugin-qbee-basic": {},
+    "@vue/cli-plugin-eslint": {
+      "config": "base",
+      "lintOn": ["save"]
+    }
+  },
+  "cssPreprocessor": "node-sass"
+}

@@ -1,0 +1,17 @@
+<template>
+  <div id="{APP_NAME}">
+    <qbee-router qbeeSystem="{MICRO_NAME}" />
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import Test from '@/feature/test/index.vue';
+
+@Component({
+  components: {
+    Test
+  }
+})
+export default class App extends Vue {}
+</script>
