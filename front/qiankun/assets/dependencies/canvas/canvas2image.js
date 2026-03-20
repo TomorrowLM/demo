@@ -326,4 +326,4 @@ const Canvas2Image = (function () {
 })();
 
 // Export function, used in npm
-export default Canvas2Image;
+// export default Canvas2Image;
