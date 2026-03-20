@@ -8,6 +8,7 @@ node_modules
 **/ai-doc
 */**/lib
 */**/dist
+*/**/assets
 */**/tsconfig.tsbuildinfo
 
 # local env files
