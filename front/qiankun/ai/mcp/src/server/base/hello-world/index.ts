@@ -18,12 +18,12 @@ export const helloWorldTool = {
 export async function handleHelloWorldTool(request: CallToolRequest) {
   const args = request.params.arguments as { name?: string } | undefined;
   const name = args?.name || "World";
-
+  console.info(`Hello, ${name}! This is the MCP server speaking.`);
   return {
     content: [
       {
         type: "text" as const,
-        text: `Hello, xiao23 , ${name}! This is the MCP server speaking.`,
+        text: `Hello, ${name}! This is the MCP server speaking.`,
       },
     ],
   };
