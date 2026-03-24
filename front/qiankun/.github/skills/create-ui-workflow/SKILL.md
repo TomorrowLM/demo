@@ -50,7 +50,8 @@ description: "当需要根据 page.json 和 UI 图片创建页面时使用，尤
 1. `create_ui_mcp` 不会在内部执行 `create_api_mcp`
 2. 当 `page.requests` 存在时，`create_ui_mcp` 要求 `page.requests[].apiName` 已经存在
 3. UI 图片路径来源于 `page.uiPath` 和 `page.children[].uiPath`
-4. `create_ui_mcp` 的返回结构应与当前业务页面对应的 `return.json` 目标结构保持一致
+4. `page.depends` 用于描述组件、utils、model、images 等依赖，`page.requirements` 用于描述布局和交互要求
+5. `create_ui_mcp` 的返回结构应与当前业务页面对应的 `return.json` 目标结构保持一致
 
 ## 输入与关键文件
 
@@ -76,6 +77,13 @@ description: "当需要根据 page.json 和 UI 图片创建页面时使用，尤
 5. 业务目录中与该页面相关的配置文件
 
 当用户给出业务目录中的页面路径时，应优先读取用户指定的 `page.json`，并检查对应业务目录中的 UI 图片和页面配置，而不是依赖仓库内某个固定示例路径。
+
+当前 page.json 结构里，常见字段职责如下：
+
+1. `page.depends`：组件、工具、模型、图片等依赖声明
+2. `page.requirements`：布局、按钮、交互等页面要求
+3. `page.children[].depends`：子组件依赖
+4. `page.children[].requirements`：子组件自身的实现要求
 
 ## 必要的 MCP 调用顺序
 
@@ -167,7 +175,8 @@ description: "当需要根据 page.json 和 UI 图片创建页面时使用，尤
 
 1. `instruction` 用来描述模型下一步应该创建什么
 2. `page` 保持页面源配置，并可包含诸如 `type: "page"` 这类规范化字段
-3. 这里的结构是目标返回协议，具体内容应以当前业务页面的 `page.json` 和对应 `return.json` 约定为准
+3. `instruction.tasks[].requirements` 需要同时体现 `depends` 和 `requirements` 的约束
+4. 这里的结构是目标返回协议，具体内容应以当前业务页面的 `page.json` 和对应 `return.json` 约定为准
 
 ## API 名称处理规则
 
@@ -192,7 +201,8 @@ description: "当需要根据 page.json 和 UI 图片创建页面时使用，尤
 2. 让 `create_ui_mcp` 专注于读取 `page.json` 并返回 UI 指令
 3. 除非仓库明确要求，否则不要把图片路径复制到冗余字段中
 4. 优先使用 `page.uiPath` 和 `page.children[].uiPath`，而不是额外派生图片路径数组
-5. 保持当前业务页面对应的 `return.json` 目标结构与真实 MCP 返回结构一致
+5. 生成 instruction 时要把 `page.depends` 和 `page.requirements` 分开处理，不要混用字段语义
+6. 保持当前业务页面对应的 `return.json` 目标结构与真实 MCP 返回结构一致
 
 ## 校验清单
 
@@ -202,14 +212,16 @@ description: "当需要根据 page.json 和 UI 图片创建页面时使用，尤
 2. 在执行 `create_ui_mcp` 之前，每个 `requests` 项都已经有 `apiName`
 3. `create_ui_mcp` 返回了期望的顶层字段：`type`、`description`、`page`、`instruction`
 4. `instruction.tasks` 与页面和子组件的目标文件一致
-5. 当前业务页面对应的 `return.json` 目标结构与实际运行时返回结构一致
+5. `instruction.tasks[].requirements` 能体现 `depends` 与 `requirements` 的信息
+6. 当前业务页面对应的 `return.json` 目标结构与实际运行时返回结构一致
 
 ## 常见失败模式
 
 1. `create_ui_mcp` 执行失败，因为 `apiName` 从未被回填到 `page.json`
 2. 当前业务页面对应的 `return.json` 目标结构与真实 MCP 输出发生偏离
-3. 图片路径被复制到多个冗余字段后逐渐失去一致性
-4. `create_api_mcp` 虽然返回了有用指令，但没有把明确的 API 名称持久化下来
+3. 把 `page.depends` 错当成页面交互要求，导致 instruction 丢失真实布局/按钮约束
+4. 图片路径被复制到多个冗余字段后逐渐失去一致性
+5. `create_api_mcp` 虽然返回了有用指令，但没有把明确的 API 名称持久化下来
 
 ## 推荐的代理行为
 

@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 function getServerEntry() {
   const currentFilePath = fileURLToPath(import.meta.url);
   const scriptsDir = path.dirname(currentFilePath);
-  return path.join(scriptsDir, "..", "src", "index.ts");
+  return path.join(scriptsDir, "..", "dist", "index.js");
 }
 
 async function main() {
@@ -14,7 +14,7 @@ async function main() {
 
   const transport = new StdioClientTransport({
     command: "node",
-    args: ["--loader", "ts-node/esm", serverEntryPath],
+    args: [serverEntryPath],
     stderr: "inherit",
   });
 

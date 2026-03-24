@@ -20,6 +20,7 @@ type PageFilePayload = {
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDir = path.dirname(currentFilePath);
 
+// 解析输入的页面配置路径，支持绝对路径和相对于当前工作目录或当前文件目录的相对路径
 async function resolvePageFilePath(inputPath: string) {
 	const candidates = path.isAbsolute(inputPath)
 		? [inputPath]
@@ -37,12 +38,14 @@ async function resolvePageFilePath(inputPath: string) {
 	throw new Error(`create_ui_mcp: 未找到页面配置文件 ${inputPath}`);
 }
 
+// 检查 page.requests 中是否存在缺失 apiName 的项
 function getInvalidApiRequests(page: PageDefinition) {
 	return (page.requests ?? [])
 		.map((request, index) => ({ request, index }))
 		.filter(({ request }) => !request.apiName?.trim());
 }
 
+// 验证页面定义的完整性和正确性
 function validatePageDefinition(page: PageDefinition) {
 	if (!page.name) {
 		throw new Error("create_ui_mcp: page.name 不能为空");
@@ -98,7 +101,7 @@ export async function handleCreateUiTool(request: CallToolRequest) {
 		...payload.page,
 		type: payload.page.type ?? "page",
 	};
-	const instruction = buildCreateUiInstruction(normalizedPage);
+	const instruction = await buildCreateUiInstruction(normalizedPage);
 
 	return textResponseFromJson({
 		type: payload.type ?? "create_ui",

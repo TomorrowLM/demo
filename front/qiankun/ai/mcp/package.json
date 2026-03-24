@@ -12,6 +12,7 @@
     "call-hello": "node scripts/call-hello.mjs",
     "call-get-swagger": "node scripts/call-get-swagger.mjs",
     "call-create-api": "node scripts/call-create-api.mjs",
+    "call-create-ui": "node scripts/call-create-ui.mjs",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
