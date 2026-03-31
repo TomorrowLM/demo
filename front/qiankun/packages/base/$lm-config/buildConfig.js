@@ -1,6 +1,6 @@
 /**
  * 自动生成的构建配置快照，请勿手动修改。
- * 生成时间: 2026-03-31T02:39:13.788Z
+ * 生成时间: 2026-03-31T06:30:29.223Z
  * 项目名称: base-react-app
  * 项目版本: 0.1.0
  */
@@ -12,8 +12,8 @@ module.exports = {
     "app": "D:\\work\\demo\\front\\qiankun\\packages\\base\\src\\main.tsx"
   },
   "output": {
-    "path": "[undefined]",
-    "publicPath": "/",
+    "path": "D:\\work\\demo\\front\\qiankun\\packages\\dist\\qiankun",
+    "publicPath": "/qiankun/",
     "filename": "js/[name].[hash].js",
     "chunkFilename": "js/[name].[hash].js"
   },
@@ -84,7 +84,7 @@ module.exports = {
     {
       "__type": "DefinePlugin",
       "definitions": {
-        "GLOBAL_INFO": "{\"APP_BASE_API\":\"http://0.0.0.0:3600/\",\"PORT\":3500,\"APP_ENV\":\"development\",\"IS_PROD\":false,\"IS_QIANKUN\":false,\"Build_Path\":\"/\",\"APP_ROUTER_BASE\":\"/qiankun\",\"APP_NAME\":\"base-react-app\",\"APP_VERSION\":\"0.1.0\",\"APP_PATH\":\"D:\\\\work\\\\demo\\\\front\\\\qiankun\\\\packages\\\\base\"}"
+        "GLOBAL_INFO": "{\"APP_BASE_API\":\"http://0.0.0.0:3600/\",\"PORT\":3500,\"IS_PROD\":true,\"IS_QIANKUN\":false,\"APP_ENV\":\"production\",\"APP_OUTPUTDIR\":\"../dist/qiankun\",\"APP_ROUTER_BASE\":\"/qiankun\",\"Build_Path\":\"/qiankun/\",\"APP_NAME\":\"base-react-app\",\"APP_VERSION\":\"0.1.0\",\"APP_PATH\":\"D:\\\\work\\\\demo\\\\front\\\\qiankun\\\\packages\\\\base\"}"
       }
     },
     {

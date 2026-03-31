@@ -1,14 +1,14 @@
 .DS_Store
 rubbish
 node_modules
-**/bundle-report.html
-**/stats.html
-*/**/stats.html
+# **/bundle-report.html
+# **/stats.html
+# */**/stats.html
+# **/buildConfig.js
 */dist
 **/ai-doc
 */**/lib
 */**/dist
-**/buildConfig.js
 */assets
 ./assets
 */**/tsconfig.tsbuildinfo
