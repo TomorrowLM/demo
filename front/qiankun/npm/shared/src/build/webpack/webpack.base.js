@@ -1,5 +1,5 @@
 const path = require("path");
-const { getProjectInfo } = require("../core/scripts/app.js");
+const { getProjectInfo, createBuildConfigFile } = require("../core/scripts/app.js");
 const { getEnvConfig } = require("../core/scripts/env.js");
 let pluginHelpers = require("./plugin.js");
 let QiankunClass = require('../qiankun/index.js')
@@ -54,12 +54,10 @@ class WebpackBaseBuilder {
     const isDev = !this.GLOBAL_CONFIG.IS_PROD;
     const env = this.GLOBAL_CONFIG.ENV_CONFIG || {};
     const { IS_QIANKUN } = env;
-    const HtmlWebpackPlugin = helpers.safeRequire("html-webpack-plugin");
     const MiniCssExtractPlugin = helpers.safeRequire("mini-css-extract-plugin");
-    const BundleAnalyzerPlugin = (() => {
-      const p = helpers.safeRequire('webpack-bundle-analyzer');
-      return p && (p.BundleAnalyzerPlugin || p.BundleAnalyzer) ? (p.BundleAnalyzerPlugin || p.BundleAnalyzer) : null;
-    })();
+    const htmlWebpackPlugin = helpers.fetchHtmlWebpackPlugin(this.options.htmlOptions);
+    const miniCssExtractPlugin = helpers.fetchMiniCssExtractPlugin();
+    const bundleAnalyzerPlugin = helpers.fetchBundleAnalyzerPlugin(this.GLOBAL_CONFIG.APP_INFO.APP_PATH);
     const lessRegex = /\.less$/;
     const lessModuleRegex = /\.module\.less$/;
     console.log('[shared]WebpackBaseBuilder createConfig:', isDev, helpers.fetchProxyEntry(this.GLOBAL_CONFIG));
@@ -246,51 +244,21 @@ class WebpackBaseBuilder {
     );
 
     // HtmlWebpackPlugin
-    if (HtmlWebpackPlugin) {
-      config.plugins.push(
-        new HtmlWebpackPlugin(
-          Object.assign(
-            {
-              template: path.join(process.cwd(), "public/index.html"),
-              filename: "index.html",
-              title: "react app",
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true,
-              },
-            },
-            this.options.htmlOptions || {}
-          )
-        )
-      );
+    if (htmlWebpackPlugin) {
+      config.plugins.push(htmlWebpackPlugin);
     }
 
     // 抽离 CSS 插件
-    if (MiniCssExtractPlugin) {
-      config.plugins.push(
-        new MiniCssExtractPlugin({
-          filename: "css/[name].[hash].css",
-          chunkFilename: "css/[name].[hash].css",
-          // 忽略 CSS 顺序冲突（避免 MiniCssExtractPlugin 报错/警告）
-          ignoreOrder: true,
-        })
-      );
+    if (miniCssExtractPlugin) {
+      config.plugins.push(miniCssExtractPlugin);
     }
 
     // Bundle analyzer (only when BUNDLE_ANALYZE=true)
-    if (BundleAnalyzerPlugin) {
-      console.log('Enable BundleAnalyzerPlugin as BUNDLE_ANALYZE=true', BundleAnalyzerPlugin ? 1 : 0);
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: 'static',
-          openAnalyzer: false,
-          reportFilename: path.resolve(this.options.outputPath || './', 'bundle-report.html'),
-        })
-      );
+    if (bundleAnalyzerPlugin) {
+      config.plugins.push(bundleAnalyzerPlugin);
     }
 
-
+    createBuildConfigFile(config)
     return config;
   }
 }

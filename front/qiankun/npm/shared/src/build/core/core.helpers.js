@@ -3,9 +3,15 @@
  * - 严禁出现与具体框架强耦合的逻辑（如 Vue/React 插件）
  * - 仅包含通用的 webpack 配置拼装方法与“安全”插件注入
  */
-const path = require("path");
 const baseConfig = require("./baseConfig");
-const { alias, devServer, provideDefines } = baseConfig;
+const {
+  alias,
+  devServer,
+  createHtmlWebpackPlugin,
+  createMiniCssExtractPlugin,
+  provideDefines,
+  createBundleAnalyzerPlugin,
+} = baseConfig;
 
 // 安全 require（CI/打包流程等环境下不抛错）
 function safeRequire(name) {
@@ -60,6 +66,26 @@ function fetchDefinePlugin(config, defineObj = {}) {
   return defines;
 }
 
+function fetchBundleAnalyzerPlugin(appPath) {
+  return createBundleAnalyzerPlugin({
+    safeRequire,
+    appPath,
+  });
+}
+
+function fetchHtmlWebpackPlugin(htmlOptions) {
+  return createHtmlWebpackPlugin({
+    safeRequire,
+    htmlOptions,
+  });
+}
+
+function fetchMiniCssExtractPlugin() {
+  return createMiniCssExtractPlugin({
+    safeRequire,
+  });
+}
+
 /**
  * 注入 ProvidePlugin（安全）
  */
@@ -105,6 +131,9 @@ module.exports = {
   applyFilenameHashing,
   fetchAlias,
   fetchDefinePlugin,
+  fetchBundleAnalyzerPlugin,
+  fetchHtmlWebpackPlugin,
+  fetchMiniCssExtractPlugin,
   fetchProxyEntry,
   addProvidePlugin,
   addExternals,

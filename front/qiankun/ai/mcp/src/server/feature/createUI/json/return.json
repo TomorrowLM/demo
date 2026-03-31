@@ -134,6 +134,7 @@
     "additionalNotes": [
       "create_ui_mcp 不负责生成 API；如 page.requests 存在，必须先执行 create_api_mcp 并回填 apiName。",
       "page.depends 用于描述组件、工具、模型和图片等依赖；page.requirements 用于描述布局和交互要求。",
+      "为兼容历史数据，若仍存在 tools 字段，会按 depends 的同等语义处理。",
       "页面、子组件和弹框都应根据 page.uiPath 和 page.children[].uiPath 生成，而不是凭空补充未声明结构。"
     ]
   }

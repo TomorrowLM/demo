@@ -87,36 +87,101 @@ function getProjectInfo(defaultName = 'unknown-project') {
   };
 }
 
-// 获取项目路径
-// function getPackage() {
-//   const fs = tryRequire('fs') || require('fs');
-//   const path = tryRequire('path') || require('path');
+// 创建构建配置文件的工具函数
+function createBuildConfigFile(config) {
+  function isPlainObject(value) {
+    if (!value || Object.prototype.toString.call(value) !== '[object Object]') {
+      return false;
+    }
+    const prototype = Object.getPrototypeOf(value);
+    return prototype === Object.prototype || prototype === null;
+  }
 
-//   let dir = process.cwd();
-//   const root = path.parse(dir).root;
+  function serializeBuildConfig(value, seen = new WeakSet()) {
+    if (value === undefined) {
+      return '[undefined]';
+    }
 
-//   while (true) {
-//     const pkgPath = path.join(dir, 'package.json');
-//     if (fs.existsSync(pkgPath)) {
-//       try {
-//         const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-//         // 如果是 shared 包自己，继续向上查找；否则返回项目 info
-//         if (pkg.name !== '@lm/shared') {
-//           return { root: dir, name: pkg.name || '', packageJson: pkg };
-//         }
-//       } catch (e) {
-//         // 忽略 package.json 解析错误，继续向上查找
-//       }
-//     }
+    if (value === null || typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean') {
+      return value;
+    }
 
-//     if (dir === root) break;
-//     dir = path.dirname(dir);
-//   }
-//   return null;
-// }
+    if (typeof value === 'function') {
+      return `[Function ${value.name || 'anonymous'}]`;
+    }
+
+    if (value instanceof RegExp) {
+      return value.toString();
+    }
+
+    if (value instanceof Date) {
+      return value.toISOString();
+    }
+
+    if (Buffer.isBuffer(value)) {
+      return `[Buffer length=${value.length}]`;
+    }
+
+    if (seen.has(value)) {
+      return '[Circular]';
+    }
+
+    if (Array.isArray(value)) {
+      seen.add(value);
+      return value.map(item => serializeBuildConfig(item, seen));
+    }
+
+    if (!isPlainObject(value)) {
+      seen.add(value);
+      const serialized = {
+        __type: value.constructor && value.constructor.name ? value.constructor.name : 'Object'
+      };
+
+      Object.keys(value).forEach((key) => {
+        serialized[key] = serializeBuildConfig(value[key], seen);
+      });
+
+      return serialized;
+    }
+
+    seen.add(value);
+    return Object.keys(value).reduce((result, key) => {
+      result[key] = serializeBuildConfig(value[key], seen);
+      return result;
+    }, {});
+  }
+  const fs = tryRequire('fs') || require('fs');
+  const path = tryRequire('path') || require('path');
+  const configDir = path.resolve(APP_PATH, '$lm-config');
+  const buildConfigPath = path.resolve(configDir, 'buildConfig.js');
+  const projectInfo = getProjectInfo();
+  const serializedConfig = serializeBuildConfig(config);
+
+  if (!fs.existsSync(configDir)) {
+    fs.mkdirSync(configDir, { recursive: true });
+  }
+
+  const fileContent = [
+    '/**',
+    ' * 自动生成的构建配置快照，请勿手动修改。',
+    ` * 生成时间: ${new Date().toISOString()}`,
+    ` * 项目名称: ${projectInfo.APP_NAME}`,
+    ` * 项目版本: ${projectInfo.APP_VERSION}`,
+    ' */',
+    '',
+    'module.exports = ' + JSON.stringify(serializedConfig, null, 2) + ';',
+    ''
+  ].join('\n');
+
+  fs.writeFileSync(buildConfigPath, fileContent, 'utf8');
+  console.log(`[shared] 构建配置文件已创建: ${buildConfigPath}`);
+
+  return buildConfigPath;
+}
 
 module.exports = {
   getDependency,
   getProjectPackageJson,
   getProjectInfo,
+  createBuildConfigFile
 };
