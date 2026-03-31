@@ -8,6 +8,7 @@ node_modules
 **/ai-doc
 */**/lib
 */**/dist
+**/buildConfig.js
 */assets
 ./assets
 */**/tsconfig.tsbuildinfo

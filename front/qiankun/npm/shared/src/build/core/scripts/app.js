@@ -1,7 +1,8 @@
 /**
  * 项目相关的辅助方法
  */
-const APP_PATH = process.cwd()
+const APP_PATH = process.cwd();
+const pc = require('picocolors');
 
 // 中文解释：尝试通过间接调用 require 来加载模块，避免被打包工具静态分析
 function tryRequire(name) {
@@ -174,7 +175,7 @@ function createBuildConfigFile(config) {
   ].join('\n');
 
   fs.writeFileSync(buildConfigPath, fileContent, 'utf8');
-  console.log(`[shared] 构建配置文件已创建: ${buildConfigPath}`);
+  console.log(pc.green(`[shared] 构建配置文件已创建: ${buildConfigPath}`));
 
   return buildConfigPath;
 }
