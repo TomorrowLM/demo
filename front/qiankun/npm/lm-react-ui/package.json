@@ -1,0 +1,59 @@
+{
+  "name": "@lm/react-ui",
+  "version": "1.0.0",
+  "description": "React UI library built with Vite",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./loading": {
+      "types": "./dist/loading/index.d.ts",
+      "import": "./dist/loading/index.js",
+      "require": "./dist/loading/index.cjs"
+    },
+    "./org-layout": {
+      "types": "./dist/org-layout/index.d.ts",
+      "import": "./dist/org-layout/index.js",
+      "require": "./dist/org-layout/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "sideEffects": [
+    "**/*.less",
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "antd": "^5.27.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "antd": "^5.27.0",
+    "less": "^4.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.4.19",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}

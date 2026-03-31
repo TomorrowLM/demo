@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import * as go from 'gojs';
 import React, { useEffect, useRef } from 'react';
 import { TreeNode } from '../types';

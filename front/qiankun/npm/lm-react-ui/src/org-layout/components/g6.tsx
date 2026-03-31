@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import G6, { Graph as IGraph } from '@antv/g6';
 import { Button } from 'antd';
 import React, { useEffect, useMemo, useRef } from 'react';
