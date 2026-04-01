@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink, Outlet, useMatches, useMatch } from 'react-router-dom'
 import { baseMenuItems } from '../../router/baseRoutes.js'
-import SubMenu from '../../components/SubMenu';
+import SubMenu from '@/components/SubMenu';
 
 type RouteMeta = {
   name?: string
