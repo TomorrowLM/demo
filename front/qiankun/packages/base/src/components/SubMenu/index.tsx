@@ -15,7 +15,7 @@ const SubMenu: React.FC<{ parentPath: string }> = ({ parentPath }) => {
   if (!children.length) return null;
   return (
     <nav className={styles.submenu}>
-      {children.map((item) => (
+      {children.map((item: any) => (
         <NavLink
           key={item.path}
           to={`${parentPath}/${item.path}`}
