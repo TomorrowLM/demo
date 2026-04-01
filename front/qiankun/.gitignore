@@ -1,7 +1,7 @@
 .DS_Store
 rubbish
 node_modules
-# **/bundle-report.html
+**/bundle-report.html
 # **/stats.html
 # */**/stats.html
 # **/buildConfig.js

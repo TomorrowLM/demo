@@ -1,6 +1,7 @@
 import React from 'react'
-import { NavLink, Outlet, useMatches } from 'react-router-dom'
+import { NavLink, Outlet, useMatches, useMatch } from 'react-router-dom'
 import { baseMenuItems } from '../../router/baseRoutes.js'
+import SubMenu from '../../components/SubMenu';
 
 type RouteMeta = {
   name?: string
@@ -17,7 +18,6 @@ const ComPage: React.FC = () => {
     title?: string
     description?: string
   }>
-
   return (
     <div
       style={{
@@ -74,6 +74,10 @@ const ComPage: React.FC = () => {
         </nav>
       </aside>
       <main style={{ flex: 1, padding: 24 }}>
+        {/* 二级菜单，仅在 react 路由下展示 */}
+        {matches.some(m => m.pathname.endsWith('/react')) && (
+          <SubMenu parentPath="react" />
+        )}
         <Outlet />
       </main>
     </div>
