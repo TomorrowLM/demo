@@ -25,11 +25,13 @@ export function useChatStream() {
           message: text,
           signal: controller.signal,
           onMessage: (event) => {
+            console.log('event', event);
             const updated = applySSEEvent(
               event,
               useChatStore.getState().messages,
               assistantId,
             );
+            console.log('updated', updated);
             useChatStore.setState({ messages: updated });
           },
           onError: (err) => {
