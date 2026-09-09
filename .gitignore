@@ -25,4 +25,5 @@ pnpm-debug.log*
 *.sw?
 *.exe
 *.vc
+*Cache
 front/前端案例
