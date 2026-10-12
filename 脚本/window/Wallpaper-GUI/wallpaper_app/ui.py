@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 import shutil
 import threading
@@ -11,6 +12,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QComboBox, QDialog, QFrame, QGridLayout, QHBoxLayout, QLabel, QMainWindow, QFileDialog, QPushButton, QScrollArea, QVBoxLayout, QWidget
 
 from .cache import CacheIndex, ImageRecord
+from .favorites import FavoriteStore
 from .local_library import records_from_folder
 from .platforms import create_wallpaper_adapter
 from .providers import fetch_bing, fetch_spotlight
@@ -37,9 +39,10 @@ class DownloadSignals(QObject):
 
 
 class ImagePreviewDialog(QDialog):
-    def __init__(self, image: ImageRecord, apply_callback, parent: QWidget) -> None:
+    def __init__(self, image: ImageRecord, apply_callback, parent: QWidget, favorite_callback=None, favorite: bool = False) -> None:
         super().__init__(parent)
         self.image = image
+        self.favorite_callback = favorite_callback
         self.setWindowTitle(f"预览：{image.title}")
         self.setMinimumSize(720, 560)
         layout = QVBoxLayout(self)
@@ -57,14 +60,31 @@ class ImagePreviewDialog(QDialog):
         layout.addWidget(metadata)
         actions = QHBoxLayout()
         actions.addStretch()
+        self.favorite_button = QPushButton()
+        self.favorite_button.setObjectName("favoriteButton")
+        self.favorite_button.setCheckable(True)
+        self.favorite_button.setChecked(favorite)
+        self.favorite_button.clicked.connect(self._toggle_favorite)
+        self._update_favorite_button()
         self.apply_button = QPushButton("应用壁纸")
         self.apply_button.setObjectName("primary")
         self.apply_button.clicked.connect(lambda: apply_callback(image))
         close_button = QPushButton("关闭")
         close_button.clicked.connect(self.accept)
+        actions.addWidget(self.favorite_button)
         actions.addWidget(self.apply_button)
         actions.addWidget(close_button)
         layout.addLayout(actions)
+
+    def _update_favorite_button(self) -> None:
+        favorite = self.favorite_button.isChecked()
+        self.favorite_button.setText("♥" if favorite else "♡")
+        self.favorite_button.setToolTip("取消收藏" if favorite else "收藏并保存")
+
+    def _toggle_favorite(self, checked: bool) -> None:
+        if self.favorite_callback is not None and not self.favorite_callback(self.image, checked):
+            self.favorite_button.setChecked(not checked)
+        self._update_favorite_button()
 
 
 class ElidedLabel(QLabel):
@@ -77,11 +97,12 @@ class ElidedLabel(QLabel):
 
 
 class ImageCard(QFrame):
-    def __init__(self, image: ImageRecord, apply_callback, preview_callback) -> None:
+    def __init__(self, image: ImageRecord, apply_callback, preview_callback, favorite: bool = False, favorite_callback=None) -> None:
         super().__init__()
         self.setObjectName("card")
         self.setMaximumWidth(324)
         self.image = image
+        self.favorite_callback = favorite_callback
         layout = QVBoxLayout(self)
         preview = QLabel()
         preview.setFixedSize(300, 168)
@@ -99,18 +120,58 @@ class ImageCard(QFrame):
         meta = QLabel(f"{image.source} · {image.date or '已缓存'}")
         meta.setStyleSheet("color:#8fa1b4;font-size:11px")
         layout.addWidget(meta)
+        actions = QHBoxLayout()
         button = QPushButton("应用壁纸")
         button.clicked.connect(lambda: apply_callback(image))
-        layout.addWidget(button)
+        actions.addWidget(button)
+        self.favorite_button = QPushButton()
+        self.favorite_button.setObjectName("favoriteButton")
+        self.favorite_button.setCheckable(True)
+        self.favorite_button.setChecked(favorite)
+        self.favorite_button.clicked.connect(self._toggle_favorite)
+        self._update_favorite_button()
+        actions.addWidget(self.favorite_button)
+        layout.addLayout(actions)
         preview_button = QPushButton("放大预览")
         preview_button.clicked.connect(lambda: preview_callback(image))
         layout.addWidget(preview_button)
+
+    def _update_favorite_button(self) -> None:
+        favorite = self.favorite_button.isChecked()
+        self.favorite_button.setText("♥" if favorite else "♡")
+        self.favorite_button.setToolTip("取消收藏" if favorite else "收藏并保存")
+
+    def _toggle_favorite(self, checked: bool) -> None:
+        if self.favorite_callback is not None and not self.favorite_callback(self.image, checked):
+            self.favorite_button.setChecked(not checked)
+        self._update_favorite_button()
+
+
+def _runtime_data_root() -> Path:
+    configured = os.environ.get("WALLPAPER_GUI_DATA_ROOT", "").strip()
+    if configured:
+        return Path(configured)
+
+    module_root = Path(__file__).resolve().parents[1]
+    return module_root.parent if module_root.name.lower() == "app" else module_root
+
+
+def _default_cache_root(data_root: Path) -> Path:
+    return data_root / "cache" if (data_root / "app").is_dir() else data_root / "Cache"
 
 
 class MainWindow(QMainWindow):
     def __init__(self, cache_root: Path | None = None) -> None:
         super().__init__()
-        self.cache = CacheIndex(cache_root or Path(__file__).resolve().parents[1] / "Cache")
+        data_root = _runtime_data_root() if cache_root is None else Path(cache_root)
+        actual_cache_root = _default_cache_root(data_root) if cache_root is None else Path(cache_root)
+        self.cache = CacheIndex(actual_cache_root)
+        favorites_path = data_root / "config" / "favorites.json" if cache_root is None else (
+            actual_cache_root.parent / "config" / "favorites.json"
+            if actual_cache_root.name.lower() == "cache"
+            else actual_cache_root / "favorites.json"
+        )
+        self.favorites = FavoriteStore(favorites_path)
         self.bing_offset = 0
         self.mode = "线上"
         self.online_source = "Bing"
@@ -259,7 +320,11 @@ class MainWindow(QMainWindow):
             item = self.grid.takeAt(0)
             if item.widget(): item.widget().deleteLater()
         for index, image in enumerate(images[:30]):
-            self.grid.addWidget(ImageCard(image, self.apply_image, self.preview_image), index // 3, index % 3)
+            self.grid.addWidget(
+                ImageCard(image, self.apply_image, self.preview_image, self.is_favorite(image), self.toggle_favorite),
+                index // 3,
+                index % 3,
+            )
 
     def fetch_more(self) -> None:
         self.refresh_button.setEnabled(False); self.status.setText("正在后台获取壁纸…")
@@ -293,12 +358,33 @@ class MainWindow(QMainWindow):
         self.status.setText(f"下载失败：{message}"); self.refresh_button.setEnabled(True)
 
     def apply_image(self, image: ImageRecord) -> None:
-        destination = Path.home() / "Pictures" / "Online Wallpapers" / Path(image.file).name
-        destination.parent.mkdir(parents=True, exist_ok=True); shutil.copy2(image.file, destination)
-        self._sync(destination, f"已应用：{image.title}")
+        self._sync(Path(image.file), f"已应用：{image.title}")
+
+    def is_favorite(self, image: ImageRecord) -> bool:
+        return self.favorites.contains(image.key)
+
+    def toggle_favorite(self, image: ImageRecord, favorite: bool) -> bool:
+        try:
+            if favorite:
+                source = Path(image.file)
+                if not source.is_file():
+                    raise FileNotFoundError(str(source))
+                destination = Path.home() / "Pictures" / "Online Wallpapers" / source.name
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                if source.resolve() != destination.resolve():
+                    shutil.copy2(source, destination)
+                self.favorites.add(image.key)
+                self.status.setText(f"已收藏并保存：{image.title}")
+            else:
+                self.favorites.remove(image.key)
+                self.status.setText(f"已取消收藏：{image.title}（已保存图片未删除）")
+            return True
+        except (OSError, shutil.Error) as error:
+            self.status.setText(f"收藏失败：{error}")
+            return False
 
     def create_preview_dialog(self, image: ImageRecord) -> ImagePreviewDialog:
-        return ImagePreviewDialog(image, self.apply_image, self)
+        return ImagePreviewDialog(image, self.apply_image, self, self.toggle_favorite, self.is_favorite(image))
 
     def preview_image(self, image: ImageRecord) -> None:
         self.create_preview_dialog(image).exec()

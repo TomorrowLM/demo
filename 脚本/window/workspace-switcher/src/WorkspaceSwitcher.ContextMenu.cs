@@ -54,7 +54,7 @@ namespace WorkspaceSwitcher.App
             MinimumSize = new Size(220, 0);
             BackColor = Color.FromArgb(238, 248, 251, 255);
             ForeColor = Color.FromArgb(WorkspaceVisualMetrics.TextArgb);
-            Font = new Font(WorkspaceVisualMetrics.FontFamilyName, 16f, FontStyle.Regular, GraphicsUnit.Pixel);
+            Font = new Font(WorkspaceVisualMetrics.FontFamilyName, 14f, FontStyle.Regular, GraphicsUnit.Pixel);
             Padding = new Padding(8);
             ShowImageMargin = false;
             ShowCheckMargin = false;

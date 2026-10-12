@@ -9,13 +9,15 @@ namespace WorkspaceSwitcher.App
         // Windows 11 system backdrop attributes. TransientWindow is the
         // system-composited Acrylic-like material used for floating surfaces.
         private const int DwmwaUseImmersiveDarkMode = 20;
+        private const int DwmwaBorderColor = 34;
         private const int DwmwaWindowCornerPreference = 33;
         private const int DwmwaSystemBackdropType = 38;
         private const int DwmstbTransientWindow = 3;
         private const int DwmcpRound = 2;
+        private const int AcrylicBorderColor = 0x00D5E3F5;
         private const int WcaWindowCompositionAttribute = 19;
         private const int AccentEnableAcrylicBlurBehind = 4;
-        private const uint AcrylicGradientColor = 0x553A2D48;
+        private const uint AcrylicGradientColor = 0x66F5F7FB;
 
         [StructLayout(LayoutKind.Sequential)]
         private struct AccentPolicy
@@ -57,6 +59,7 @@ namespace WorkspaceSwitcher.App
             {
                 bool acrylicApplied = TryApplyWin32Acrylic(window);
                 bool cornerApplied = TryApplyRoundedCorners(window);
+                bool borderApplied = TryApplyWindowBorder(window);
                 bool systemApplied = false;
                 if (!acrylicApplied)
                 {
@@ -68,6 +71,7 @@ namespace WorkspaceSwitcher.App
                     + " system=" + systemApplied
                     + " win32Acrylic=" + acrylicApplied
                     + " corners=" + cornerApplied
+                    + " border=" + borderApplied
                     + " result=" + applied);
                 return applied;
             }
@@ -99,6 +103,12 @@ namespace WorkspaceSwitcher.App
         {
             int cornerPreference = DwmcpRound;
             return SetAttribute(window, DwmwaWindowCornerPreference, ref cornerPreference, "cornerPreference");
+        }
+
+        private static bool TryApplyWindowBorder(IntPtr window)
+        {
+            int borderColor = AcrylicBorderColor;
+            return SetAttribute(window, DwmwaBorderColor, ref borderColor, "borderColor");
         }
 
         private static bool TryApplyWin32Acrylic(IntPtr window)

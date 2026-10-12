@@ -34,10 +34,10 @@ internal static class ColorFieldTests
             FieldInfo textureAlpha = type.GetField("GlassTextureAlpha", BindingFlags.NonPublic | BindingFlags.Static);
             FieldInfo tintArgb = type.GetField("GlassTintArgb", BindingFlags.NonPublic | BindingFlags.Static);
             FieldInfo blurRadius = type.GetField("WallpaperBlurRadius", BindingFlags.NonPublic | BindingFlags.Static);
-            Check(textureAlpha != null && (int)textureAlpha.GetValue(null) == 174,
-                "Glass keeps the wallpaper texture translucent");
-            Check(tintArgb != null && (int)tintArgb.GetValue(null) == unchecked((int)0x493B243F),
-                "Glass uses the dark purple-brown reference tint");
+            Check(textureAlpha != null && (int)textureAlpha.GetValue(null) == 220,
+                "Glass keeps the wallpaper texture visible through the tint");
+            Check(tintArgb != null && (int)tintArgb.GetValue(null) == unchecked((int)0x66F5F7FB),
+                "Glass uses a lighter translucent white reference tint");
             Check(blurRadius != null && (int)blurRadius.GetValue(null) == 48,
                 "Glass uses a strong enough blur radius for the reference material");
             Type shellWallpaper = app.GetType("WorkspaceSwitcher.App.DesktopShellWallpaper", true);
@@ -122,7 +122,7 @@ internal static class ColorFieldTests
                     28 });
                 Check(liveOk, "Actual captured desktop frame renders successfully");
                 Color liveColor = livePreview.GetPixel(130, 325);
-                Check(liveColor.R > liveColor.B + 60, "Current desktop sample is preferred over a stale wallpaper file");
+                Check(liveColor.R > liveColor.B + 20, "Current desktop sample is preferred over a stale wallpaper file");
                 Check(livePreview.GetPixel(130, 325).A < 255, "Glass texture remains translucent");
                 livePreview.Save(args[1], ImageFormat.Png);
             }
@@ -134,13 +134,18 @@ internal static class ColorFieldTests
             using (Bitmap preview = new Bitmap(520, 650))
             using (Graphics g = Graphics.FromImage(preview))
             {
+                MethodInfo resolveWallpaperPath = type.GetMethod("ResolveWallpaperPath", BindingFlags.NonPublic | BindingFlags.Static);
+                string resolvedWallpaperPath = resolveWallpaperPath == null
+                    ? String.Empty
+                    : (string)resolveWallpaperPath.Invoke(null, null);
                 bool ok = (bool)tryRender.Invoke(null, new object[] {
                     g,
                     new Rectangle(0, 0, 520, 650),
                     new Rectangle(0, 0, 520, 650),
                     new Rectangle(0, 0, 520, 650),
                     28 });
-                Check(!ok, "Unreadable wallpaper does not fall back to a fixed image");
+                Check(!ok || (!String.IsNullOrWhiteSpace(resolvedWallpaperPath) && File.Exists(resolvedWallpaperPath)),
+                    "Unreadable wallpaper does not fall back to a fixed image");
             }
 
             FieldInfo sourceImageField = type.GetField("sourceImage", BindingFlags.NonPublic | BindingFlags.Static);

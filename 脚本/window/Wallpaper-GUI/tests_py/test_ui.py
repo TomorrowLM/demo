@@ -14,6 +14,7 @@ def test_main_window_exposes_wallpaper_actions(qtbot, tmp_path):
     assert window.sync_button.text() == "同步当前桌面壁纸"
     assert window.refresh_button.text() == "获取更多 Bing 图片"
     assert window.bing_source_button.isChecked()
+    assert hasattr(window, "favorites")
 
 
 def test_background_image_signal_adds_card_immediately(qtbot, tmp_path):
@@ -110,6 +111,52 @@ def test_preview_dialog_contains_selected_image_details(qtbot, tmp_path):
 
     assert dialog.windowTitle() == "预览：湖泊"
     assert dialog.apply_button.text() == "应用壁纸"
+    assert dialog.favorite_button.text() == "♡"
+
+
+def test_apply_wallpaper_only_changes_desktop_and_does_not_copy(qtbot, tmp_path, monkeypatch):
+    home = tmp_path / "home"
+    image_file = tmp_path / "cache" / "one.jpg"
+    image_file.parent.mkdir()
+    image_file.write_bytes(b"image")
+    record = ImageRecord("Bing", "第一张", "2026-09-09", "https://example.com/one", file=str(image_file))
+    calls = []
+
+    class Adapter:
+        def sync_wallpaper(self, path):
+            calls.append(path)
+
+    monkeypatch.setattr(ui.Path, "home", lambda: home)
+    monkeypatch.setattr(ui, "create_wallpaper_adapter", lambda: Adapter())
+    window = ui.MainWindow(cache_root=tmp_path / "Cache")
+    qtbot.addWidget(window)
+
+    window.apply_image(record)
+
+    assert calls == [image_file]
+    assert not (home / "Pictures" / "Online Wallpapers" / image_file.name).exists()
+
+
+def test_favorite_copies_image_and_restores_after_restart(qtbot, tmp_path, monkeypatch):
+    home = tmp_path / "home"
+    image_file = tmp_path / "cache" / "one.jpg"
+    image_file.parent.mkdir()
+    image_file.write_bytes(b"image")
+    record = ImageRecord("Bing", "第一张", "2026-09-09", "https://example.com/one", file=str(image_file))
+    monkeypatch.setattr(ui.Path, "home", lambda: home)
+
+    window = ui.MainWindow(cache_root=tmp_path / "Cache")
+    qtbot.addWidget(window)
+    assert window.toggle_favorite(record, True)
+    assert (home / "Pictures" / "Online Wallpapers" / image_file.name).exists()
+
+    reloaded = ui.MainWindow(cache_root=tmp_path / "Cache")
+    qtbot.addWidget(reloaded)
+    assert reloaded.is_favorite(record)
+
+    assert reloaded.toggle_favorite(record, False)
+    assert not reloaded.is_favorite(record)
+    assert (home / "Pictures" / "Online Wallpapers" / image_file.name).exists()
 
 
 def test_choosing_local_folder_persists_and_loads_its_images(qtbot, tmp_path, monkeypatch):

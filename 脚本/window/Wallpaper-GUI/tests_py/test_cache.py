@@ -1,4 +1,5 @@
 from wallpaper_app.cache import CacheIndex, ImageRecord, cache_file_path
+from wallpaper_app.favorites import FavoriteStore
 from wallpaper_app import providers
 
 
@@ -29,3 +30,20 @@ def test_bing_reports_each_image_after_it_is_cached(tmp_path, monkeypatch):
 
     assert len(received) == 1
     assert received[0].title == "第一张"
+
+
+def test_favorites_round_trip_persists_across_store_instances(tmp_path):
+    path = tmp_path / "config" / "favorites.json"
+    store = FavoriteStore(path)
+
+    store.add("Bing|20260908")
+    store.add("Bing|20260908")
+    store.add("Windows 聚焦|spotlight-hash")
+
+    reloaded = FavoriteStore(path)
+    assert reloaded.contains("Bing|20260908")
+    assert reloaded.contains("Windows 聚焦|spotlight-hash")
+    assert reloaded.keys() == {"Bing|20260908", "Windows 聚焦|spotlight-hash"}
+
+    reloaded.remove("Bing|20260908")
+    assert not FavoriteStore(path).contains("Bing|20260908")

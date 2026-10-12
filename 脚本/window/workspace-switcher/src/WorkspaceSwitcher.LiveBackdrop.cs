@@ -11,7 +11,7 @@ namespace WorkspaceSwitcher.App
 internal static class LiveWallpaperBackdrop
 {
     private const int GlassTextureAlpha = 174;
-    private const int GlassTintArgb = unchecked((int)0x493B243F);
+    private const int GlassTintArgb = unchecked((int)0xA6F5F7FB);
     private const int WallpaperBlurRadius = 48;
     private const int WallpaperBlurPasses = 3;
         private const uint SpiGetDesktopWallpaper = 0x0073;

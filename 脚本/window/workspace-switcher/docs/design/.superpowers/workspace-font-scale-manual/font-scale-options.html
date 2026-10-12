@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workspace 字号对比</title>
+<style>
+  :root { color-scheme: dark; font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; padding: 28px; color: #f7f8ff; background: linear-gradient(135deg,#1a2434,#5e4656 55%,#1f3447); }
+  h1 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+  .hint { margin: 0 0 22px; color: #d3d9e8; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(260px, 1fr)); gap: 20px; max-width: 1200px; }
+  .option { cursor: pointer; border: 1px solid rgba(255,255,255,.48); border-radius: 20px; padding: 14px; background: rgba(27,32,47,.56); backdrop-filter: blur(18px); transition: border-color .15s, transform .15s; }
+  .option:hover { transform: translateY(-2px); border-color: #76a7ff; }
+  .option.selected { border: 2px solid #78a7ff; box-shadow: 0 0 0 3px rgba(120,167,255,.18); }
+  .label { display:flex; align-items:center; justify-content:space-between; margin: 0 4px 10px; }
+  .label strong { font-size: 17px; }
+  .label span { color:#aebbd5; font-size:12px; }
+  .panel { padding: 16px; border: 1px solid rgba(255,255,255,.55); border-radius: 17px; background: rgba(55,47,65,.76); }
+  .toolbar { display:flex; justify-content:flex-end; gap:8px; margin-bottom:12px; }
+  .button { min-width:92px; height:34px; border:1px solid #d7e3f7; border-radius:10px; background:#fff; color:#315cba; display:flex; justify-content:center; align-items:center; }
+  .tabs { display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin-bottom:18px; }
+  .tab { height:36px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:#fff; color:#172239; }
+  .tab.active { color:#2f6ce5; background:#edf4ff; border:1px solid #5e91ff; }
+  .card { margin-bottom:12px; padding:13px; border-radius:15px; background:#fff; color:#132039; }
+  .card-title { display:flex; align-items:center; gap:12px; font-size: var(--title); font-weight:700; line-height:1.1; margin-bottom:10px; }
+  .num { color:#3571e4; font-weight:700; }
+  .row { display:inline-flex; align-items:center; gap:12px; padding:7px 11px; margin: 0 6px 6px 0; border:1px solid #d7e2f2; border-radius:10px; background:#f7faff; font-size: var(--item); color:#1b2a42; line-height:1.1; }
+  .dot { color:#4b7ff0; }
+  .add { min-height:126px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .add .plus { color:#73819a; font-size:calc(var(--add) + 4px); line-height:1; }
+  .add strong { margin-top:8px; font-size:var(--add); line-height:1.1; }
+  .add span { margin-top:7px; color:#71809b; font-size:var(--small); }
+  .active { background:#edf4ff; border:1px solid #5f91ff; }
+  @media (max-width: 920px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <h1>工作区字号对比</h1>
+  <p class="hint">当前截图的文字比例偏大。请选择更接近你希望的整体密度。</p>
+  <div class="grid">
+    <div class="option" data-choice="a" onclick="selectOption(this)">
+      <div class="label"><strong>A · 当前版本</strong><span>标题 28.8 / 应用 21.6</span></div>
+      <div class="panel" style="--title:28.8px;--item:21.6px;--add:28.8px;--small:18px">
+        <div class="toolbar"><div class="button">刷新工作区</div><div class="button">隐藏</div></div>
+        <div class="tabs"><div class="tab active">全部</div><div class="tab">显示器 1</div><div class="tab">显示器 2</div></div>
+        <div class="card"><div class="card-title"><span class="num">01</span>工作区 1</div><div class="row"><span class="dot">•</span>Clash for Windows</div><div class="row"><span class="dot">•</span>Weixin — 微信</div></div>
+        <div class="card add"><div class="plus">＋</div><strong>新增工作区</strong><span>点击创建，或把窗口拖到这里</span></div>
+        <div class="card active"><div class="card-title"><span class="num">02</span>当前工作区</div><div class="row"><span class="dot">•</span>ChatGPT</div></div>
+      </div>
+    </div>
+    <div class="option" data-choice="b" onclick="selectOption(this)">
+      <div class="label"><strong>B · 平衡推荐</strong><span>标题 24 / 应用 18</span></div>
+      <div class="panel" style="--title:24px;--item:18px;--add:24px;--small:15px">
+        <div class="toolbar"><div class="button">刷新工作区</div><div class="button">隐藏</div></div>
+        <div class="tabs"><div class="tab active">全部</div><div class="tab">显示器 1</div><div class="tab">显示器 2</div></div>
+        <div class="card"><div class="card-title"><span class="num">01</span>工作区 1</div><div class="row"><span class="dot">•</span>Clash for Windows</div><div class="row"><span class="dot">•</span>Weixin — 微信</div></div>
+        <div class="card add"><div class="plus">＋</div><strong>新增工作区</strong><span>点击创建，或把窗口拖到这里</span></div>
+        <div class="card active"><div class="card-title"><span class="num">02</span>当前工作区</div><div class="row"><span class="dot">•</span>ChatGPT</div></div>
+      </div>
+    </div>
+    <div class="option" data-choice="c" onclick="selectOption(this)">
+      <div class="label"><strong>C · 紧凑</strong><span>标题 22 / 应用 16</span></div>
+      <div class="panel" style="--title:22px;--item:16px;--add:22px;--small:14px">
+        <div class="toolbar"><div class="button">刷新工作区</div><div class="button">隐藏</div></div>
+        <div class="tabs"><div class="tab active">全部</div><div class="tab">显示器 1</div><div class="tab">显示器 2</div></div>
+        <div class="card"><div class="card-title"><span class="num">01</span>工作区 1</div><div class="row"><span class="dot">•</span>Clash for Windows</div><div class="row"><span class="dot">•</span>Weixin — 微信</div></div>
+        <div class="card add"><div class="plus">＋</div><strong>新增工作区</strong><span>点击创建，或把窗口拖到这里</span></div>
+        <div class="card active"><div class="card-title"><span class="num">02</span>当前工作区</div><div class="row"><span class="dot">•</span>ChatGPT</div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function selectOption(node) {
+      document.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
+      node.classList.add('selected');
+      document.title = '已选择 ' + node.dataset.choice.toUpperCase();
+    }
+  </script>
+</body>
+</html>

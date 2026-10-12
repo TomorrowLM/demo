@@ -1,0 +1,15 @@
+﻿{
+    "Timestamp":  "2026-10-12T13:31:53.5255641+08:00",
+    "Source":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub",
+    "Build":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\build",
+    "App":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\app",
+    "Launcher":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\app\\ToolHubLauncher.exe",
+    "Config":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\config",
+    "WindowRoot":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync",
+    "Shortcut":  "",
+    "Installer":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\app\\ToolHubInstaller.exe",
+    "DeferredFiles":  [
+
+                      ],
+    "Started":  false
+}

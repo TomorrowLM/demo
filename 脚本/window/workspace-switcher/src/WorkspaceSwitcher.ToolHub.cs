@@ -57,8 +57,8 @@ namespace WorkspaceSwitcher.App
         private readonly IList<ToolHubItem> allTools;
         private IList<ToolHubItem> visibleTools;
         private readonly TextBox searchBox;
-        private readonly Font labelFont = new Font("Microsoft YaHei UI", 17.5f, FontStyle.Regular, GraphicsUnit.Pixel);
-        private readonly Font emptyFont = new Font("Microsoft YaHei UI", 15f, FontStyle.Regular, GraphicsUnit.Pixel);
+        private readonly Font labelFont = new Font("Microsoft YaHei UI", 15f, FontStyle.Regular, GraphicsUnit.Pixel);
+        private readonly Font emptyFont = new Font("Microsoft YaHei UI", 13f, FontStyle.Regular, GraphicsUnit.Pixel);
         private int hoveredIndex = -1;
 
         public ToolHubForm(WorkspaceForm workspacePanel, IList<ToolHubItem> tools)
@@ -83,7 +83,7 @@ namespace WorkspaceSwitcher.App
                 BorderStyle = BorderStyle.None,
                 BackColor = PanelColor,
                 ForeColor = InkColor,
-                Font = new Font("Microsoft YaHei UI", 16f, FontStyle.Regular, GraphicsUnit.Pixel),
+                Font = new Font("Microsoft YaHei UI", 14f, FontStyle.Regular, GraphicsUnit.Pixel),
                 Location = new Point(38, SearchTop + 17),
                 Size = new Size(SearchWidth - 56, 36),
                 TabStop = true

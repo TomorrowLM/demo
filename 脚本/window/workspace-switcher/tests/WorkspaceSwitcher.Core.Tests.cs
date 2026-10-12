@@ -128,6 +128,55 @@ internal static class WorkspaceSwitcherCoreTests
         Assert(!(bool)shouldSwitchForForeground.Invoke(null, new object[] { 2, 2, false }), "Activation in the current workspace does not switch again");
         Assert(!(bool)shouldSwitchForForeground.Invoke(null, new object[] { 1, 2, true }), "Programmatic activation does not recurse");
 
+        MethodInfo shouldProcessForegroundEvent = foregroundPolicyType.GetMethod("ShouldProcessWindowEvent");
+        Assert(shouldProcessForegroundEvent != null, "Foreground activation can reject stale queued events");
+        if (shouldProcessForegroundEvent != null)
+        {
+            Assert((bool)shouldProcessForegroundEvent.Invoke(null, new object[] { (long)101, (long)101 }), "The current foreground event is processed");
+            Assert(!(bool)shouldProcessForegroundEvent.Invoke(null, new object[] { (long)101, (long)202 }), "A queued event for an old window is ignored");
+            Assert(!(bool)shouldProcessForegroundEvent.Invoke(null, new object[] { (long)101, (long)0 }), "An event is ignored when no foreground window is available");
+        }
+
+        Type foregroundRecoveryPolicyType = assembly.GetType("WorkspaceSwitcher.Core.ForegroundWindowRecoveryPolicy");
+        Assert(foregroundRecoveryPolicyType != null, "Foreground window recovery policy exists");
+        if (foregroundRecoveryPolicyType == null)
+        {
+            return 1;
+        }
+
+        MethodInfo shouldUseOnlyProcessMatch = foregroundRecoveryPolicyType.GetMethod("ShouldUseOnlyProcessMatch");
+        Assert(shouldUseOnlyProcessMatch != null, "Foreground window recovery policy API exists");
+        if (shouldUseOnlyProcessMatch == null)
+        {
+            return 1;
+        }
+
+        Assert((bool)shouldUseOnlyProcessMatch.Invoke(null, new object[] { 1, 1, 1 }), "A sole live process window can recover by process identity");
+        Assert(!(bool)shouldUseOnlyProcessMatch.Invoke(null, new object[] { 1, 1, 2 }), "Multiple live VS Code windows cannot recover by process identity alone");
+        Assert(!(bool)shouldUseOnlyProcessMatch.Invoke(null, new object[] { 2, 1, 1 }), "Multiple saved windows cannot recover by process identity alone");
+
+        Type windowRecoveryPolicyType = assembly.GetType("WorkspaceSwitcher.Core.WorkspaceWindowRecoveryPolicy");
+        Assert(windowRecoveryPolicyType != null, "Workspace window recovery policy exists");
+        if (windowRecoveryPolicyType != null)
+        {
+            MethodInfo shouldUseUniqueCandidate = windowRecoveryPolicyType.GetMethod("ShouldUseUniqueCandidate");
+            Assert(shouldUseUniqueCandidate != null, "Workspace window recovery policy API exists");
+            if (shouldUseUniqueCandidate != null)
+            {
+                Assert((bool)shouldUseUniqueCandidate.Invoke(null, new object[] { 1 }), "A unique title or launch-profile match can recover");
+                Assert(!(bool)shouldUseUniqueCandidate.Invoke(null, new object[] { 2 }), "Duplicate title matches cannot recover by title alone");
+            }
+
+            MethodInfo shouldScanLaunchProfile = windowRecoveryPolicyType.GetMethod("ShouldScanLaunchProfile");
+            Assert(shouldScanLaunchProfile != null, "Workspace window recovery can gate the expensive launch-profile scan");
+            if (shouldScanLaunchProfile != null)
+            {
+                Assert(!(bool)shouldScanLaunchProfile.Invoke(null, new object[] { 1 }), "A unique title match skips the expensive launch-profile scan");
+                Assert((bool)shouldScanLaunchProfile.Invoke(null, new object[] { 0 }), "No title match still allows launch-profile recovery");
+                Assert((bool)shouldScanLaunchProfile.Invoke(null, new object[] { 2 }), "Duplicate title matches still allow launch-profile recovery");
+            }
+        }
+
         Type focusPolicyType = assembly.GetType("WorkspaceSwitcher.Core.WorkspaceFocusPolicy");
         Assert(focusPolicyType != null, "Workspace focus policy type exists");
         if (focusPolicyType == null)
@@ -290,6 +339,7 @@ internal static class WorkspaceSwitcherCoreTests
         MethodInfo removeWindow = RequireMethod(catalogType, "RemoveWindow", 1);
         MethodInfo rebindWindow = RequireMethod(catalogType, "RebindWindow", 2);
         MethodInfo setWindowMaximized = RequireMethod(catalogType, "SetWindowMaximized", 2);
+        MethodInfo setLaunchProfile = RequireMethod(catalogType, "SetLaunchProfile", 3);
         MethodInfo getWindowWorkspaceId = RequireMethod(catalogType, "GetWindowWorkspaceId", 1);
         Assert(assignWindow != null, "AssignWindow API exists");
         Assert(getItems != null, "GetWorkspaceItems API exists");
@@ -298,8 +348,9 @@ internal static class WorkspaceSwitcherCoreTests
         Assert(removeWindow != null, "RemoveWindow API exists");
         Assert(rebindWindow != null, "RebindWindow API exists for restarted applications");
         Assert(setWindowMaximized != null, "SetWindowMaximized API exists");
+        Assert(setLaunchProfile != null, "SetLaunchProfile API exists");
         Assert(getWindowWorkspaceId != null, "Window workspace lookup API exists");
-        if (assignWindow == null || getItems == null || moveWindow == null || moveWorkspaceItems == null || removeWindow == null || rebindWindow == null || setWindowMaximized == null || getWindowWorkspaceId == null)
+        if (assignWindow == null || getItems == null || moveWindow == null || moveWorkspaceItems == null || removeWindow == null || rebindWindow == null || setWindowMaximized == null || setLaunchProfile == null || getWindowWorkspaceId == null)
         {
             return 1;
         }
@@ -317,6 +368,43 @@ internal static class WorkspaceSwitcherCoreTests
             setWindowMaximized.Invoke(catalog, new object[] { (long)101, true });
             PropertyInfo isMaximized = item.GetType().GetProperty("IsMaximized");
             Assert(isMaximized != null && (bool)isMaximized.GetValue(item, null), "Workspace records a maximized window state");
+            setLaunchProfile.Invoke(catalog, new object[]
+            {
+                (long)101,
+                "--new-window \"D:\\孚嘉\\code\\yqa.code-workspace\"",
+                "D:\\software\\front\\Microsoft VS Code"
+            });
+            PropertyInfo launchArguments = item.GetType().GetProperty("LaunchArguments");
+            PropertyInfo workingDirectory = item.GetType().GetProperty("WorkingDirectory");
+            Assert(launchArguments != null && (string)launchArguments.GetValue(item, null) == "--new-window \"D:\\孚嘉\\code\\yqa.code-workspace\"",
+                "Each window retains its own launch arguments");
+            Assert(workingDirectory != null && (string)workingDirectory.GetValue(item, null) == "D:\\software\\front\\Microsoft VS Code",
+                "Each window retains its working directory");
+        }
+
+        Type launchParserType = assembly.GetType("WorkspaceSwitcher.Core.WorkspaceLaunchProfileParser");
+        Assert(launchParserType != null, "Workspace launch profile parser exists");
+        if (launchParserType != null)
+        {
+            MethodInfo extractArguments = launchParserType.GetMethod("ExtractArguments", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo getWorkingDirectory = launchParserType.GetMethod("GetWorkingDirectory", BindingFlags.Public | BindingFlags.Static);
+            Assert(extractArguments != null && getWorkingDirectory != null, "Workspace launch profile parser APIs exist");
+            if (extractArguments != null && getWorkingDirectory != null)
+            {
+                string codeArguments = (string)extractArguments.Invoke(null, new object[]
+                {
+                    "\"D:\\software\\front\\Microsoft VS Code\\Code.exe\" --new-window \"D:\\孚嘉\\code\\yqa.code-workspace\"",
+                    "D:\\software\\front\\Microsoft VS Code\\Code.exe"
+                });
+                Assert(codeArguments == "--new-window \"D:\\孚嘉\\code\\yqa.code-workspace\"",
+                    "Launch parser preserves a quoted VS Code workspace argument");
+                string workingPath = (string)getWorkingDirectory.Invoke(null, new object[]
+                {
+                    "D:\\software\\front\\Microsoft VS Code\\Code.exe"
+                });
+                Assert(workingPath == "D:\\software\\front\\Microsoft VS Code",
+                    "Launch parser derives the executable working directory");
+            }
         }
 
         moveWindow.Invoke(catalog, new object[] { (long)101, 1 });
@@ -372,6 +460,8 @@ internal static class WorkspaceSwitcherCoreTests
                 itemSnapshotType.GetProperty("WindowHandle").SetValue(itemSnapshot, 1234L, null);
                 itemSnapshotType.GetProperty("WorkspaceId").SetValue(itemSnapshot, 2, null);
                 itemSnapshotType.GetProperty("DisplayName").SetValue(itemSnapshot, "VS Code — fugle", null);
+                itemSnapshotType.GetProperty("LaunchArguments").SetValue(itemSnapshot, "--new-window \"D:\\孚嘉\\code\\yqa.code-workspace\"", null);
+                itemSnapshotType.GetProperty("WorkingDirectory").SetValue(itemSnapshot, "D:\\software\\front\\Microsoft VS Code", null);
                 System.Collections.IList snapshotItems = (System.Collections.IList)snapshotType.GetProperty("Items").GetValue(snapshot, null);
                 snapshotItems.Add(itemSnapshot);
                 string serialized = (string)serialize.Invoke(null, new object[] { snapshot });
@@ -384,6 +474,14 @@ internal static class WorkspaceSwitcherCoreTests
                 {
                     object restoredHeight = restoredHeights[0];
                     Assert((int)restoredHeight.GetType().GetProperty("Height").GetValue(restoredHeight, null) == 140, "Workspace card height is persisted");
+                }
+                if (restoredItems.Count == 1)
+                {
+                    object restoredItem = restoredItems[0];
+                    Assert((string)restoredItem.GetType().GetProperty("LaunchArguments").GetValue(restoredItem, null) == "--new-window \"D:\\孚嘉\\code\\yqa.code-workspace\"",
+                        "Workspace state persists per-window launch arguments");
+                    Assert((string)restoredItem.GetType().GetProperty("WorkingDirectory").GetValue(restoredItem, null) == "D:\\software\\front\\Microsoft VS Code",
+                        "Workspace state persists per-window working directory");
                 }
 
                 snapshotType.GetProperty("PanelX").SetValue(snapshot, 120, null);
@@ -411,6 +509,24 @@ internal static class WorkspaceSwitcherCoreTests
                 Assert((int)clampHeight.Invoke(null, new object[] { 40 }) == 76, "Workspace card resize has a minimum height");
                 Assert((int)clampHeight.Invoke(null, new object[] { 300 }) == 240, "Workspace card resize has a maximum height");
                 Assert((int)clampHeight.Invoke(null, new object[] { 140 }) == 140, "Workspace card resize keeps values inside the range");
+            }
+        }
+
+        Type dpiLayoutType = assembly.GetType("WorkspaceSwitcher.Core.DpiLayoutPolicy");
+        Assert(dpiLayoutType != null, "DPI layout policy type exists");
+        if (dpiLayoutType != null)
+        {
+            MethodInfo scaleValue = dpiLayoutType.GetMethod("ScaleValue");
+            MethodInfo unscaleValue = dpiLayoutType.GetMethod("UnscaleValue");
+            MethodInfo scaleFontSize = dpiLayoutType.GetMethod("ScaleFontSize");
+            Assert(scaleValue != null && unscaleValue != null && scaleFontSize != null, "DPI layout policy exposes reversible layout and font scaling");
+            if (scaleValue != null && unscaleValue != null)
+            {
+                Assert((int)scaleValue.Invoke(null, new object[] { 520, 96 }) == 520, "Base DPI keeps the design size");
+                Assert((int)scaleValue.Invoke(null, new object[] { 520, 192 }) == 1040, "High DPI scales the design size");
+                Assert((int)unscaleValue.Invoke(null, new object[] { 1040, 192 }) == 520, "Device size converts back to the design size");
+                Assert(scaleFontSize != null && Math.Abs((float)scaleFontSize.Invoke(null, new object[] { 16f, 96 }) - 16f) < 0.01f, "Base DPI keeps the logical font size");
+                Assert(scaleFontSize != null && Math.Abs((float)scaleFontSize.Invoke(null, new object[] { 16f, 192 }) - 8f) < 0.01f, "High DPI compensates the transformed font size");
             }
         }
 

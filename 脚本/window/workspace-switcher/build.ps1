@@ -1,10 +1,15 @@
 param(
     [switch]$RunTests,
-    [string]$OutputDirectory = (Join-Path ([Environment]::GetFolderPath([Environment+SpecialFolder]::UserProfile)) '.lm-exe\workspace-switcher\build')
+    [string]$OutputDirectory = ''
 )
 
 $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $MyInvocation.MyCommand.Path
+$OutputDirectory = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
+    if ($RunTests) { 'build-test' } else { 'build' }
+} else {
+    $OutputDirectory
+}
 $build = if ([System.IO.Path]::IsPathRooted($OutputDirectory)) {
     $OutputDirectory
 } else {

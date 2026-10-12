@@ -21,7 +21,12 @@ $scriptDirectory = Split-Path -Parent $PSCommandPath
 if ([string]::IsNullOrWhiteSpace($scriptDirectory)) {
     $scriptDirectory = (Get-Location).Path
 }
-$defaultOutputDirectory = Join-Path $scriptDirectory "reports"
+$runtimeRoot = Split-Path -Parent $scriptDirectory
+$defaultOutputDirectory = if ((Split-Path -Leaf $scriptDirectory).ToLowerInvariant() -eq "app") {
+    Join-Path $runtimeRoot "logs"
+} else {
+    Join-Path $scriptDirectory "reports"
+}
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     $OutputDirectory = $defaultOutputDirectory
 }

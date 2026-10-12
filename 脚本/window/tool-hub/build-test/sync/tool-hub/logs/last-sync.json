@@ -1,0 +1,14 @@
+﻿{
+    "Timestamp":  "2026-10-12T13:31:53.5325625+08:00",
+    "Source":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub",
+    "ArtifactRoot":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync",
+    "ToolHub":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\app\\ToolHub.exe",
+    "ToolHubLauncher":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\app\\ToolHubLauncher.exe",
+    "WorkspaceSwitcher":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\workspace-switcher\\app\\WorkspaceSwitcher.exe",
+    "Wallpaper":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\Wallpaper-GUI\\app\\Wallpaper-GUI.cmd",
+    "DesktopRepair":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\desktop-black-screen-repair\\app\\Repair-DesktopBlackScreen.cmd",
+    "DeferredFiles":  [
+
+                      ],
+    "SyncLog":  "D:\\LM\\lm-project\\脚本\\window\\tool-hub\\build-test\\sync\\tool-hub\\logs\\sync-20261012-133133.log"
+}

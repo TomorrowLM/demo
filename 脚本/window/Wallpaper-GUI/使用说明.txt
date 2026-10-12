@@ -8,6 +8,6 @@ python -m pip install -r requirements.txt
 
 本地图库点击“选择文件夹”后会递归读取其中的 jpg、jpeg、png、webp 与 bmp 图片；选择过的文件夹和当前选择会保存到 Cache/settings.json，重启后可直接切换访问。点击卡片或“放大预览”可查看大图。
 
-点击“应用壁纸”会把图片保存到 Pictures/Online Wallpapers 后设置壁纸。“同步当前桌面壁纸”会读取当前系统壁纸：Windows 通过 pyvda 同步所有虚拟桌面；macOS 设置当前桌面/显示器壁纸，但系统不保证同步所有 Spaces。
+点击“应用壁纸”只设置当前壁纸，不复制文件。点击卡片上的爱心按钮才会收藏壁纸并复制到 Pictures/Online Wallpapers；收藏记录保存到 config/favorites.json，重启后会恢复爱心状态。取消爱心只取消收藏标记，不删除已经保存的图片。“同步当前桌面壁纸”会读取当前系统壁纸：Windows 通过 pyvda 同步所有虚拟桌面；macOS 设置当前桌面/显示器壁纸，但系统不保证同步所有 Spaces。
 
 界面最多显示 30 张缩略图卡片；“清理缓存”只清理线上缓存，不会删除本地文件夹设置、原始本地图片或 Pictures/Online Wallpapers 中已保存的壁纸。

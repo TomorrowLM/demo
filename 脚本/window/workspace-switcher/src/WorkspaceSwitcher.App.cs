@@ -101,11 +101,13 @@ namespace WorkspaceSwitcher.App
 
     internal static class NativeMethods
     {
+        internal const int WM_SHOW_PANEL = 0x8001;
         internal const int WM_HOTKEY = 0x0312;
         internal const int WM_CLOSE = 0x0010;
         internal const int WM_ERASEBKGND = 0x0014;
         internal const int WM_MOUSEACTIVATE = 0x0021;
         internal const int WM_NCHITTEST = 0x0084;
+        internal const int WM_DPICHANGED = 0x02E0;
         internal const int MA_NOACTIVATE = 0x0003;
         internal const int HTCLIENT = 1;
         internal const int HTTRANSPARENT = -1;
@@ -226,6 +228,9 @@ namespace WorkspaceSwitcher.App
         internal static extern bool GetWindowRect(IntPtr hWnd, out Rect rectangle);
 
         [DllImport("user32.dll")]
+        internal static extern uint GetDpiForWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
         internal static extern bool GetClientRect(IntPtr hWnd, out Rect rectangle);
 
         [DllImport("user32.dll")]
@@ -325,7 +330,7 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, 10f, FontStyle.Bold, GraphicsUnit.Pixel))
+            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, 9f, FontStyle.Bold, GraphicsUnit.Pixel))
             using (Brush foreground = new SolidBrush(Color.White))
             {
                 e.Graphics.DrawString(title, font, foreground, 12, 12);
@@ -393,22 +398,22 @@ namespace WorkspaceSwitcher.App
 
     internal static class WorkspaceVisualMetrics
     {
-        public const int CardTop = 122;
-        public const int CardGap = 12;
-        public const int CardHeight = 112;
-        public const int AddBlockHeight = 158;
+        public const int CardTop = 108;
+        public const int CardGap = 8;
+        public const int CardHeight = 80;
+        public const int AddBlockHeight = 80;
         public const int SideMargin = 20;
         public const int PanelWidth = 520;
-        public const int PanelHeight = 820;
+        public const int PanelHeight = 360;
         public const int PanelMinimumWidth = 360;
-        public const int PanelMinimumHeight = 360;
+        public const int PanelMinimumHeight = 300;
         public const int PanelMaximumWidth = 760;
         public const int PanelMaximumHeight = 0;
         public const int PanelResizeGrip = 12;
         public const int PanelRadius = 20;
         public const int PanelBorderInset = 1;
-        public const int PanelBorderArgb = unchecked((int)0x4AFFFFFF);
-        public const int GridGap = 12;
+        public const int PanelBorderArgb = unchecked((int)0x24FFFFFF);
+        public const int GridGap = 8;
         public const int PanelBackgroundArgb = -459777;
         public const int PanelGlassBackgroundArgb = 1727593471;
         public const int CardBackgroundArgb = -1;
@@ -431,25 +436,28 @@ namespace WorkspaceSwitcher.App
         public const int AppButtonVerticalPadding = 7;
         public const int AppButtonHorizontalGap = 8;
         public const int AppButtonVerticalGap = 12;
-        public const int DisplayTabTop = 54;
-        public const int DisplayTabHeight = 42;
-        public const int DisplayTabGap = 8;
-        public const int DisplayTabRadius = 10;
-        public const float TitleFontSize = 28.8f;
-        public const float ItemFontSize = 21.6f;
-        public const float AddTitleFontSize = 28.8f;
-        public const float SmallFontSize = 18f;
-        public const int HideButtonWidth = 81;
-        public const int HideButtonHeight = 39;
-        public const int HideButtonRadius = 9;
-        public const int HideButtonTopMargin = 8;
-        public const float HideButtonFontSize = 27f;
-        public const int RefreshButtonWidth = 126;
-        public const int RefreshButtonHeight = 39;
-        public const int RefreshButtonRadius = 9;
-        public const int DeleteButtonWidth = 76;
-        public const int DeleteButtonHeight = 31;
-        public const int DeleteButtonRadius = 9;
+        public const int DisplayTabTop = 48;
+        public const int DisplayTabHeight = 36;
+        public const int DisplayTabGap = 6;
+        public const int DisplayTabRadius = 8;
+        public const float TitleFontSize = 22f;
+        public const float ItemFontSize = 17f;
+        public const float AddTitleFontSize = 22f;
+        public const float SmallFontSize = 11f;
+        public const int HideButtonWidth = 72;
+        public const int HideButtonHeight = 34;
+        public const int HideButtonRadius = 8;
+        public const int HideButtonTopMargin = 6;
+        public const float ControlFontSize = 16f;
+        public const float HideButtonFontSize = ControlFontSize;
+        public const int RefreshButtonWidth = 110;
+        public const int RefreshButtonHeight = 34;
+        public const int RefreshButtonRadius = 8;
+        public const int DeleteButtonWidth = 58;
+        public const int DeleteButtonHeight = 24;
+        public const int DeleteButtonRadius = 7;
+        public const int DeleteButtonTopOffset = 5;
+        public const float DeleteButtonFontSize = 14f;
         public const int DeleteButtonArgb = -5036746;
         public const int DeleteButtonBorderArgb = -1933766;
         public const string FontFamilyName = "Microsoft YaHei UI";
@@ -504,7 +512,7 @@ namespace WorkspaceSwitcher.App
             using (Brush fill = new SolidBrush(Color.FromArgb(WorkspaceVisualMetrics.ActiveCardBackgroundArgb)))
             using (Pen border = new Pen(Color.FromArgb(WorkspaceVisualMetrics.ActiveCardBorderArgb), 2f))
             using (Brush foreground = new SolidBrush(Color.FromArgb(WorkspaceVisualMetrics.TextArgb)))
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, 10f, FontStyle.Bold, GraphicsUnit.Pixel))
+            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, 9f, FontStyle.Bold, GraphicsUnit.Pixel))
             {
                 e.Graphics.FillPath(fill, path);
                 e.Graphics.DrawPath(border, path);
@@ -583,17 +591,27 @@ namespace WorkspaceSwitcher.App
         private Point panelResizeStartScreen;
         private Rectangle panelResizeStartBounds;
         private Rectangle savedPanelBounds;
+        private Size savedPanelLogicalSize;
         private bool hasSavedPanelBounds;
+        private bool hasSavedPanelLogicalSize;
+        private int currentDpi = DpiLayoutPolicy.BaseDpi;
+        private int contentScrollOffset;
         private bool nativeGlassBackdropApplied;
         private readonly System.Windows.Forms.Timer applicationClickTimer = new System.Windows.Forms.Timer();
         private readonly System.Windows.Forms.Timer glassRefreshTimer = new System.Windows.Forms.Timer();
         private WorkspaceItem pendingApplicationClick;
+        private bool isClosing;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+                isClosing = true;
+                dragTimer.Stop();
+                applicationClickTimer.Stop();
+                glassRefreshTimer.Stop();
                 DisposeDisplayContextMenu();
+                dragTimer.Dispose();
                 applicationClickTimer.Dispose();
                 glassRefreshTimer.Dispose();
             }
@@ -605,7 +623,7 @@ namespace WorkspaceSwitcher.App
         {
             statePath = GetWorkspaceStatePath();
             MigrateLegacyStateIfNeeded();
-            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(WorkspaceVisualMetrics.PanelBackgroundArgb);
             DoubleBuffered = true;
             SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.ResizeRedraw, true);
@@ -616,6 +634,7 @@ namespace WorkspaceSwitcher.App
             Width = WorkspaceVisualMetrics.PanelWidth;
             Height = WorkspaceVisualMetrics.PanelHeight;
             LoadState();
+            RefreshWorkspaceAvailability();
             Resize += delegate { UpdatePanelRegion(); Invalidate(true); Update(); };
             UpdatePanelRegion();
             applicationClickTimer.Interval = Math.Max(1, SystemInformation.DoubleClickTime);
@@ -631,6 +650,18 @@ namespace WorkspaceSwitcher.App
             glassRefreshTimer.Start();
             dragTimer.Interval = 16;
             dragTimer.Tick += delegate { PollDrag(); };
+            MouseWheel += delegate(object sender, MouseEventArgs args)
+            {
+                Point logicalPoint = ToLogicalPoint(args.Location);
+                if (!GetContentViewportBounds().Contains(logicalPoint))
+                {
+                    return;
+                }
+
+                int step = Math.Max(24, (int)Math.Round(WorkspaceVisualMetrics.ItemFontSize * 2));
+                SetContentScrollOffset(contentScrollOffset - Math.Sign(args.Delta) * step);
+                Invalidate();
+            };
             MouseDown += delegate(object sender, MouseEventArgs args)
             {
                 if (args.Button != MouseButtons.Left)
@@ -638,7 +669,9 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
-                panelResizeEdge = WorkspacePanelLayout.GetResizeEdgeAt(args.Location, ClientSize, WorkspaceVisualMetrics.PanelResizeGrip);
+                Point logicalPoint = ToLogicalPoint(args.Location);
+                Size logicalClientSize = GetLogicalClientSize();
+                panelResizeEdge = WorkspacePanelLayout.GetResizeEdgeAt(logicalPoint, logicalClientSize, WorkspaceVisualMetrics.PanelResizeGrip);
                 if (panelResizeEdge != PanelResizeEdge.None)
                 {
                     panelResizeStartScreen = PointToScreen(args.Location);
@@ -648,18 +681,18 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
-                int resizeWorkspaceId = GetResizeHandleAt(args.X, args.Y);
+                int resizeWorkspaceId = GetResizeHandleAt(logicalPoint.X, logicalPoint.Y);
                 if (resizeWorkspaceId != 0)
                 {
                     resizingWorkspaceId = resizeWorkspaceId;
-                    resizeStartY = args.Y;
+                    resizeStartY = logicalPoint.Y;
                     resizeStartHeight = GetWorkspaceCardHeight(resizeWorkspaceId);
                     ignoreNextClick = true;
                     Capture = true;
                     return;
                 }
 
-                if (CanDragPanelAt(args.Location))
+                if (CanDragPanelAt(logicalPoint))
                 {
                     isDraggingPanel = true;
                     panelDragStartScreen = PointToScreen(args.Location);
@@ -669,19 +702,20 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
-                if (GetDeleteButtonWorkspaceAt(args.X, args.Y) != 0)
+                if (GetDeleteButtonWorkspaceAt(logicalPoint.X, logicalPoint.Y) != 0)
                 {
                     workspaceCardPressed = 0;
                     Capture = false;
                     return;
                 }
 
-                workspaceCardPressed = GetWorkspaceAt(args.X, args.Y);
-                workspaceCardPressPoint = args.Location;
+                workspaceCardPressed = GetWorkspaceAt(logicalPoint.X, logicalPoint.Y);
+                workspaceCardPressPoint = logicalPoint;
             Capture = true;
             };
             MouseMove += delegate(object sender, MouseEventArgs args)
             {
+                Point logicalPoint = ToLogicalPoint(args.Location);
                 if (panelResizeEdge != PanelResizeEdge.None)
                 {
                     if (args.Button == MouseButtons.Left)
@@ -706,7 +740,7 @@ namespace WorkspaceSwitcher.App
                 {
                     if (args.Button == MouseButtons.Left)
                     {
-                        SetWorkspaceHeight(resizingWorkspaceId, resizeStartHeight + args.Y - resizeStartY);
+                        SetWorkspaceHeight(resizingWorkspaceId, resizeStartHeight + logicalPoint.Y - resizeStartY);
                         Invalidate();
                     }
                     return;
@@ -714,14 +748,14 @@ namespace WorkspaceSwitcher.App
 
                 if (args.Button == MouseButtons.None)
                 {
-                    PanelResizeEdge edge = WorkspacePanelLayout.GetResizeEdgeAt(args.Location, ClientSize, WorkspaceVisualMetrics.PanelResizeGrip);
+                    PanelResizeEdge edge = WorkspacePanelLayout.GetResizeEdgeAt(logicalPoint, GetLogicalClientSize(), WorkspaceVisualMetrics.PanelResizeGrip);
                     Cursor = GetPanelResizeCursor(edge);
                     if (edge == PanelResizeEdge.None)
                     {
-                        Cursor = GetResizeHandleAt(args.X, args.Y) == 0 ? (CanDragPanelAt(args.Location) ? Cursors.SizeAll : Cursors.Default) : Cursors.SizeNS;
+                        Cursor = GetResizeHandleAt(logicalPoint.X, logicalPoint.Y) == 0 ? (CanDragPanelAt(logicalPoint) ? Cursors.SizeAll : Cursors.Default) : Cursors.SizeNS;
                     }
 
-                    int nextHoveredWorkspaceId = GetWorkspaceAt(args.X, args.Y);
+                    int nextHoveredWorkspaceId = GetWorkspaceAt(logicalPoint.X, logicalPoint.Y);
                     if (hoveredWorkspaceId != nextHoveredWorkspaceId)
                     {
                         hoveredWorkspaceId = nextHoveredWorkspaceId;
@@ -734,7 +768,7 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
-                if (!isReorderingWorkspaces && WorkspaceDragPolicy.ShouldStartReorder(workspaceCardPressed, args.X - workspaceCardPressPoint.X, args.Y - workspaceCardPressPoint.Y))
+                if (!isReorderingWorkspaces && WorkspaceDragPolicy.ShouldStartReorder(workspaceCardPressed, logicalPoint.X - workspaceCardPressPoint.X, logicalPoint.Y - workspaceCardPressPoint.Y))
                 {
                     isReorderingWorkspaces = true;
                     workspaceGhost = new WorkspaceDragGhostForm("工作区 " + workspaceCardPressed);
@@ -744,7 +778,7 @@ namespace WorkspaceSwitcher.App
 
                 if (isReorderingWorkspaces)
                 {
-                    workspaceCardDropIndex = GetWorkspaceInsertIndex(args.Y);
+                    workspaceCardDropIndex = GetWorkspaceInsertIndex(logicalPoint.Y);
                     if (workspaceGhost != null)
                     {
                         workspaceGhost.MoveToPointer(PointToScreen(args.Location));
@@ -759,6 +793,8 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
+                Point logicalPoint = ToLogicalPoint(args.Location);
+
                 if (ignoreNextClick)
                 {
                     ignoreNextClick = false;
@@ -766,7 +802,7 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
-                DisplayTabLayout displayTab = GetDisplayTabAt(args.X, args.Y);
+                DisplayTabLayout displayTab = GetDisplayTabAt(logicalPoint.X, logicalPoint.Y);
                 if (displayTab != null)
                 {
                     CancelPendingWorkspaceItemClick();
@@ -775,28 +811,28 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
-                if (IsHideButtonAt(args.X, args.Y))
+                if (IsHideButtonAt(logicalPoint.X, logicalPoint.Y))
                 {
                     CancelPendingWorkspaceItemClick();
                     Hide();
                     return;
                 }
 
-                if (IsRefreshButtonAt(args.X, args.Y))
+                if (IsRefreshButtonAt(logicalPoint.X, logicalPoint.Y))
                 {
                     CancelPendingWorkspaceItemClick();
                     RefreshWorkspaceState();
                     return;
                 }
 
-                if (IsAddBlockAt(args.Y))
+                if (IsAddBlockAt(logicalPoint.Y))
                 {
                     CancelPendingWorkspaceItemClick();
                     CreateWorkspaceFromAddBlock();
                     return;
                 }
 
-                int workspaceToDelete = GetDeleteButtonWorkspaceAt(args.X, args.Y);
+                int workspaceToDelete = GetDeleteButtonWorkspaceAt(logicalPoint.X, logicalPoint.Y);
                 if (workspaceToDelete != 0)
                 {
                     CancelPendingWorkspaceItemClick();
@@ -804,16 +840,16 @@ namespace WorkspaceSwitcher.App
                     return;
                 }
 
-                WorkspaceItem selectedItem = GetWorkspaceItemAt(args.X, args.Y);
+                WorkspaceItem selectedItem = GetWorkspaceItemAt(logicalPoint.X, logicalPoint.Y);
                 if (selectedItem != null)
                 {
                     workspaceCardPressed = 0;
-                    QueueWorkspaceItemClick(selectedItem);
+                    FocusWorkspaceItem(selectedItem);
                     return;
                 }
 
                 CancelPendingWorkspaceItemClick();
-                int id = GetWorkspaceAt(args.X, args.Y);
+                int id = GetWorkspaceAt(logicalPoint.X, logicalPoint.Y);
                 int pressedWorkspaceId = workspaceCardPressed;
                 workspaceCardPressed = 0;
                 if (WorkspaceCardClickPolicy.ShouldActivate(pressedWorkspaceId, id))
@@ -823,17 +859,18 @@ namespace WorkspaceSwitcher.App
             };
             MouseUp += delegate(object sender, MouseEventArgs args)
             {
+                Point logicalPoint = ToLogicalPoint(args.Location);
                 if (args.Button == MouseButtons.Right)
                 {
                     CancelPendingWorkspaceItemClick();
-                    WorkspaceItem contextItem = GetWorkspaceItemAt(args.X, args.Y);
+                    WorkspaceItem contextItem = GetWorkspaceItemAt(logicalPoint.X, logicalPoint.Y);
                     if (contextItem != null)
                     {
                         ShowDisplayContextMenu(contextItem, PointToScreen(args.Location));
                         return;
                     }
 
-                    if (args.Y < CardTop)
+                    if (logicalPoint.Y < CardTop)
                     {
                         ExitAndRestore();
                     }
@@ -843,6 +880,7 @@ namespace WorkspaceSwitcher.App
                     panelResizeEdge = PanelResizeEdge.None;
                     hasSavedPanelBounds = true;
                     savedPanelBounds = Bounds;
+                    UpdateSavedLogicalSizeFromBounds(Bounds.Size);
                     SaveState();
                     ignoreNextClick = true;
                     Capture = false;
@@ -888,14 +926,11 @@ namespace WorkspaceSwitcher.App
                 if (args.Button == MouseButtons.Left)
                 {
                     CancelPendingWorkspaceItemClick();
-                    WorkspaceItem selectedItem = GetWorkspaceItemAt(args.X, args.Y);
+                    Point logicalPoint = ToLogicalPoint(args.Location);
+                    WorkspaceItem selectedItem = GetWorkspaceItemAt(logicalPoint.X, logicalPoint.Y);
                     if (selectedItem != null)
                     {
                         ToggleWindowMaximize(selectedItem);
-                    }
-                    else
-                    {
-                        ToggleSingleWindowMaximize(GetWorkspaceAt(args.X, args.Y));
                     }
                 }
             };
@@ -904,6 +939,7 @@ namespace WorkspaceSwitcher.App
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+            currentDpi = GetWindowDpi();
             // Use Win32 Acrylic. The compositor performs the blur behind the
             // client area; this form never samples or repaints the desktop.
             nativeGlassBackdropApplied = GlassWindowBackdrop.TryApply(Handle);
@@ -1040,6 +1076,12 @@ namespace WorkspaceSwitcher.App
 
         protected override void WndProc(ref Message message)
         {
+            if (message.Msg == NativeMethods.WM_SHOW_PANEL)
+            {
+                ShowPanelFromExternalRequest();
+                return;
+            }
+
             if (message.Msg == NativeMethods.WM_HOTKEY && message.WParam.ToInt32() == HotKeyId)
             {
                 TogglePanel();
@@ -1052,11 +1094,18 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
+            if (message.Msg == NativeMethods.WM_DPICHANGED)
+            {
+                KeepPanelSizeOnDpiChange(GetDpiFromMessage(message.WParam));
+                message.Result = IntPtr.Zero;
+                return;
+            }
+
             if (panelIsPassive && message.Msg == NativeMethods.WM_NCHITTEST)
             {
                 int screenX = unchecked((short)(long)message.LParam);
                 int screenY = unchecked((short)(((long)message.LParam) >> 16));
-                Point clientPoint = PointToClient(new Point(screenX, screenY));
+                Point clientPoint = ToLogicalPoint(PointToClient(new Point(screenX, screenY)));
                 message.Result = new IntPtr(IsPanelInteractiveAt(clientPoint)
                     ? NativeMethods.HTCLIENT
                     : NativeMethods.HTTRANSPARENT);
@@ -1072,9 +1121,29 @@ namespace WorkspaceSwitcher.App
             base.WndProc(ref message);
         }
 
+        private void ShowPanelFromExternalRequest()
+        {
+            if (isClosing || IsDisposed || Disposing)
+            {
+                return;
+            }
+
+            if (!Visible)
+            {
+                PlaceAtCenter();
+                Show();
+            }
+
+            EnsureAlwaysOnTop();
+            Invalidate();
+        }
+
         private bool IsPanelInteractiveAt(Point clientPoint)
         {
-            if (!ClientRectangle.Contains(clientPoint))
+            Size logicalClientSize = GetLogicalClientSize();
+            if (clientPoint.X < 0 || clientPoint.Y < 0
+                || clientPoint.X >= logicalClientSize.Width
+                || clientPoint.Y >= logicalClientSize.Height)
             {
                 return false;
             }
@@ -1085,7 +1154,7 @@ namespace WorkspaceSwitcher.App
                 || IsAddBlockAt(clientPoint.Y)
                 || GetDeleteButtonWorkspaceAt(clientPoint.X, clientPoint.Y) != 0
                 || GetResizeHandleAt(clientPoint.X, clientPoint.Y) != 0
-                || WorkspacePanelLayout.GetResizeEdgeAt(clientPoint, ClientSize, WorkspaceVisualMetrics.PanelResizeGrip) != PanelResizeEdge.None
+                || WorkspacePanelLayout.GetResizeEdgeAt(clientPoint, GetLogicalClientSize(), WorkspaceVisualMetrics.PanelResizeGrip) != PanelResizeEdge.None
                 || GetWorkspaceAt(clientPoint.X, clientPoint.Y) != 0
                 || GetWorkspaceItemAt(clientPoint.X, clientPoint.Y) != null)
             {
@@ -1103,6 +1172,11 @@ namespace WorkspaceSwitcher.App
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
+            if (isClosing || IsDisposed || Disposing)
+            {
+                return;
+            }
+
             if (Visible && IsHandleCreated)
             {
                 // The handle-created attempt can report success before DWM has
@@ -1110,11 +1184,7 @@ namespace WorkspaceSwitcher.App
                 // is visible, then make one queued retry for the compositor.
                 nativeGlassBackdropApplied = false;
                 TryAttachNativeGlassBackdrop();
-                BeginInvoke((MethodInvoker)(() =>
-                {
-                    nativeGlassBackdropApplied = false;
-                    TryAttachNativeGlassBackdrop();
-                }));
+                QueueBackdropRetry();
             }
             dragTimer.Enabled = Visible;
             if (Visible)
@@ -1122,6 +1192,34 @@ namespace WorkspaceSwitcher.App
                 PlaceAtCenter();
                 EnsureAlwaysOnTop();
                 Invalidate();
+            }
+        }
+
+        private void QueueBackdropRetry()
+        {
+            if (isClosing || IsDisposed || Disposing || !IsHandleCreated)
+            {
+                return;
+            }
+
+            try
+            {
+                BeginInvoke((MethodInvoker)(() =>
+                {
+                    if (isClosing || IsDisposed || Disposing || !IsHandleCreated || !Visible)
+                    {
+                        return;
+                    }
+
+                    nativeGlassBackdropApplied = false;
+                    TryAttachNativeGlassBackdrop();
+                }));
+            }
+            catch (ObjectDisposedException)
+            {
+            }
+            catch (InvalidOperationException)
+            {
             }
         }
 
@@ -1148,15 +1246,15 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
-            if (ClientSize.Width < WorkspaceVisualMetrics.PanelRadius * 2
-                || ClientSize.Height < WorkspaceVisualMetrics.PanelRadius * 2)
+            if (ClientSize.Width < ScaleLogicalValue(WorkspaceVisualMetrics.PanelRadius * 2)
+                || ClientSize.Height < ScaleLogicalValue(WorkspaceVisualMetrics.PanelRadius * 2))
             {
                 return;
             }
 
             using (System.Drawing.Drawing2D.GraphicsPath path = WorkspaceVisuals.CreateRoundedPath(
-                GetPanelShapeBounds(),
-                GetPanelShapeRadius()))
+                GetPanelDeviceShapeBounds(),
+                ScaleLogicalValue(GetPanelShapeRadius())))
             {
                 Region previousRegion = Region;
                 Region = new Region(path);
@@ -1180,6 +1278,17 @@ namespace WorkspaceSwitcher.App
         private Rectangle GetPanelShapeBounds()
         {
             int inset = WorkspaceVisualMetrics.PanelBorderInset;
+            Size logicalClientSize = GetLogicalClientSize();
+            return new Rectangle(
+                inset,
+                inset,
+                Math.Max(1, logicalClientSize.Width - inset * 2),
+                Math.Max(1, logicalClientSize.Height - inset * 2));
+        }
+
+        private Rectangle GetPanelDeviceShapeBounds()
+        {
+            int inset = ScaleLogicalValue(WorkspaceVisualMetrics.PanelBorderInset);
             return new Rectangle(
                 inset,
                 inset,
@@ -1199,38 +1308,42 @@ namespace WorkspaceSwitcher.App
             ConfigureRendering(graphics);
             Rectangle panelScreenBounds = RectangleToScreen(ClientRectangle);
             Rectangle screenBounds = Screen.FromHandle(Handle).Bounds;
-            // When native Acrylic is available, Windows already composites
-            // the exact pixels behind this window. Do not paint a second
-            // wallpaper-file approximation over it: DynamicTheme files may
-            // use a different crop than the desktop compositor.
-            bool wallpaperGlassRendered = false;
-            if (!nativeGlassBackdropApplied)
-            {
-                wallpaperGlassRendered = WallpaperGlassSurface.TryRender(
-                    graphics,
-                    ClientRectangle,
-                    panelScreenBounds,
-                    screenBounds,
-                    WorkspaceVisualMetrics.PanelRadius);
-            }
+            // Some Windows builds return success from the native Acrylic API
+            // while rendering only a flat system surface. Always keep the
+            // verified wallpaper glass layer as a visible fallback; native
+            // Acrylic remains enabled as a compositor enhancement.
+            bool wallpaperGlassRendered = !nativeGlassBackdropApplied && WallpaperGlassSurface.TryRender(
+                graphics,
+                ClientRectangle,
+                panelScreenBounds,
+                screenBounds,
+                WorkspaceVisualMetrics.PanelRadius);
             if (!wallpaperGlassRendered && !nativeGlassBackdropApplied)
             {
                 graphics.Clear(Color.FromArgb(WorkspaceVisualMetrics.PanelBackgroundArgb));
             }
-            using (System.Drawing.Drawing2D.GraphicsPath panelPath = WorkspaceVisuals.CreateRoundedPath(
-                GetPanelShapeBounds(), GetPanelShapeRadius()))
-            using (Pen glassBorder = new Pen(Color.FromArgb(WorkspaceVisualMetrics.PanelBorderArgb), 1f))
+            graphics.ScaleTransform((float)currentDpi / DpiLayoutPolicy.BaseDpi, (float)currentDpi / DpiLayoutPolicy.BaseDpi);
+            if (!nativeGlassBackdropApplied)
             {
-                graphics.DrawPath(glassBorder, panelPath);
+                using (System.Drawing.Drawing2D.GraphicsPath panelPath = WorkspaceVisuals.CreateRoundedPath(
+                    GetPanelShapeBounds(), GetPanelShapeRadius()))
+                using (Pen glassBorder = new Pen(Color.FromArgb(WorkspaceVisualMetrics.PanelBorderArgb), 1f))
+                {
+                    graphics.DrawPath(glassBorder, panelPath);
+                }
             }
-            using (Font titleFont = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.TitleFontSize, FontStyle.Bold, GraphicsUnit.Pixel))
-            using (Font itemFont = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular, GraphicsUnit.Pixel))
-            using (Font addTitleFont = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.AddTitleFontSize, FontStyle.Bold, GraphicsUnit.Pixel))
-            using (Font smallFont = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.SmallFontSize, FontStyle.Regular, GraphicsUnit.Pixel))
-            using (Font displayTabFont = new Font(WorkspaceVisualMetrics.FontFamilyName, 15f, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (Font titleFont = CreateTextFont(WorkspaceVisualMetrics.TitleFontSize, FontStyle.Bold))
+            using (Font itemFont = CreateTextFont(WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular))
+            using (Font addTitleFont = CreateTextFont(WorkspaceVisualMetrics.AddTitleFontSize, FontStyle.Bold))
+            using (Font smallFont = CreateTextFont(WorkspaceVisualMetrics.SmallFontSize, FontStyle.Regular))
+            using (Font displayTabFont = CreateTextFont(WorkspaceVisualMetrics.ControlFontSize, FontStyle.Regular))
             using (Brush muted = new SolidBrush(Color.FromArgb(WorkspaceVisualMetrics.MutedTextArgb)))
             {
                 DrawDisplayTabs(graphics, displayTabFont);
+                SetContentScrollOffset(contentScrollOffset);
+                System.Drawing.Drawing2D.GraphicsState contentState = graphics.Save();
+                graphics.SetClip(GetContentViewportBounds());
+                graphics.TranslateTransform(0, -contentScrollOffset);
                 foreach (int id in workspaceLayout.GetWorkspaceIds())
                 {
                     Rectangle card = GetWorkspaceCardBounds(id);
@@ -1275,7 +1388,9 @@ namespace WorkspaceSwitcher.App
                         }
                     }
                 }
+                graphics.Restore(contentState);
             }
+            DrawContentScrollBar(graphics);
             DrawRefreshButton(graphics);
             DrawHideButton(graphics);
         }
@@ -1292,6 +1407,11 @@ namespace WorkspaceSwitcher.App
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            isClosing = true;
+            dragTimer.Stop();
+            applicationClickTimer.Stop();
+            glassRefreshTimer.Stop();
+            CancelPendingWorkspaceItemClick();
             CancelPendingDrag();
             EndWorkspaceCardReorder();
             SaveState();
@@ -1319,12 +1439,21 @@ namespace WorkspaceSwitcher.App
             return 11 + titleFont.Height + 8;
         }
 
-        private static int GetItemTopOffset()
+        private int GetItemTopOffset()
         {
-            using (Font titleFont = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.TitleFontSize, FontStyle.Bold, GraphicsUnit.Pixel))
+            using (Font titleFont = CreateTextFont(WorkspaceVisualMetrics.TitleFontSize, FontStyle.Bold))
             {
                 return GetItemTopOffset(titleFont);
             }
+        }
+
+        private Font CreateTextFont(float logicalFontSize, FontStyle style)
+        {
+            return new Font(
+                WorkspaceVisualMetrics.FontFamilyName,
+                DpiLayoutPolicy.ScaleFontSize(logicalFontSize, currentDpi),
+                style,
+                GraphicsUnit.Pixel);
         }
 
         private static int GetItemRowHeight(Font itemFont)
@@ -1360,7 +1489,7 @@ namespace WorkspaceSwitcher.App
 
         private int GetWorkspaceCardWidth(int workspaceId)
         {
-            int fullWidth = ClientSize.Width - WorkspaceVisualMetrics.SideMargin * 2;
+            int fullWidth = GetLogicalClientSize().Width - WorkspaceVisualMetrics.SideMargin * 2;
             return workspaceId == 1 ? fullWidth : (fullWidth - WorkspaceVisualMetrics.GridGap) / 2;
         }
 
@@ -1389,8 +1518,8 @@ namespace WorkspaceSwitcher.App
             int rows = 1;
             int itemTopOffset;
             int itemButtonHeight;
-            using (Font titleFont = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.TitleFontSize, FontStyle.Bold, GraphicsUnit.Pixel))
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (Font titleFont = CreateTextFont(WorkspaceVisualMetrics.TitleFontSize, FontStyle.Bold))
+            using (Font font = CreateTextFont(WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular))
             {
                 itemTopOffset = GetItemTopOffset(titleFont);
                 itemButtonHeight = GetAppButtonHeight(font);
@@ -1414,6 +1543,35 @@ namespace WorkspaceSwitcher.App
             return Math.Max(
                 WorkspaceVisualMetrics.CardHeight,
                 itemTopOffset + rows * itemButtonHeight + (rows - 1) * WorkspaceVisualMetrics.AppButtonVerticalGap + 12);
+        }
+
+        private int GetAutomaticPanelHeight()
+        {
+            return Math.Max(WorkspaceVisualMetrics.PanelMinimumHeight, GetContentContentBottom());
+        }
+
+        private void FitPanelHeightToContent()
+        {
+            if (!IsHandleCreated || IsDisposed)
+            {
+                return;
+            }
+
+            Rectangle area = Screen.FromHandle(Handle).WorkingArea;
+            int logicalWidth = GetLogicalClientSize().Width;
+            int logicalHeight = GetAutomaticPanelHeight();
+            Size size = WorkspacePanelLayout.ClampPanelSize(
+                ScaleLogicalSize(new Size(logicalWidth, logicalHeight)),
+                GetDeviceMinimumSize(),
+                GetPanelMaximumSize(area));
+            int left = Math.Max(area.Left, Math.Min(Left, area.Right - size.Width));
+            int top = Math.Max(area.Top, Math.Min(Top, area.Bottom - size.Height));
+            Bounds = new Rectangle(left, top, size.Width, size.Height);
+            savedPanelBounds = Bounds;
+            savedPanelLogicalSize = new Size(logicalWidth, logicalHeight);
+            hasSavedPanelBounds = true;
+            hasSavedPanelLogicalSize = true;
+            UpdatePanelRegion();
         }
 
         private void SetWorkspaceHeight(int workspaceId, int height)
@@ -1469,35 +1627,130 @@ namespace WorkspaceSwitcher.App
         private void PlaceAtCenter()
         {
             Rectangle area = Screen.FromHandle(Handle).WorkingArea;
-            bool savedPanelIsOversized = hasSavedPanelBounds
-                && savedPanelBounds.Width > WorkspaceVisualMetrics.PanelMaximumWidth;
-            if (hasSavedPanelBounds && !savedPanelIsOversized)
+            int logicalWidth = hasSavedPanelLogicalSize
+                ? savedPanelLogicalSize.Width
+                : WorkspaceVisualMetrics.PanelWidth;
+            if (logicalWidth < WorkspaceVisualMetrics.PanelMinimumWidth
+                || logicalWidth > WorkspaceVisualMetrics.PanelMaximumWidth)
             {
-                Size size = WorkspacePanelLayout.ClampPanelSize(
-                    savedPanelBounds.Size,
-                    new Size(WorkspaceVisualMetrics.PanelMinimumWidth, WorkspaceVisualMetrics.PanelMinimumHeight),
-                    GetPanelMaximumSize(area));
-                int left = Math.Max(area.Left, Math.Min(savedPanelBounds.Left, area.Right - size.Width));
-                int top = Math.Max(area.Top, Math.Min(savedPanelBounds.Top, area.Bottom - size.Height));
-                Bounds = new Rectangle(left, top, size.Width, size.Height);
-                savedPanelBounds = Bounds;
-                return;
+                logicalWidth = WorkspaceVisualMetrics.PanelWidth;
             }
 
-            Size defaultSize = WorkspacePanelLayout.ClampPanelSize(
-                new Size(WorkspaceVisualMetrics.PanelWidth, WorkspaceVisualMetrics.PanelHeight),
-                new Size(WorkspaceVisualMetrics.PanelMinimumWidth, WorkspaceVisualMetrics.PanelMinimumHeight),
+            Size automaticSize = WorkspacePanelLayout.ClampPanelSize(
+                ScaleLogicalSize(new Size(logicalWidth, GetAutomaticPanelHeight())),
+                GetDeviceMinimumSize(),
                 GetPanelMaximumSize(area));
-            Bounds = WorkspacePanelLayout.GetTopRightBounds(area, defaultSize);
+            int left = hasSavedPanelBounds
+                ? Math.Max(area.Left, Math.Min(savedPanelBounds.Left, area.Right - automaticSize.Width))
+                : area.Right - automaticSize.Width;
+            int top = hasSavedPanelBounds
+                ? Math.Max(area.Top, Math.Min(savedPanelBounds.Top, area.Bottom - automaticSize.Height))
+                : area.Top;
+            Bounds = new Rectangle(left, top, automaticSize.Width, automaticSize.Height);
             savedPanelBounds = Bounds;
+            savedPanelLogicalSize = new Size(logicalWidth, GetAutomaticPanelHeight());
             hasSavedPanelBounds = true;
+            hasSavedPanelLogicalSize = true;
         }
 
-        private static Size GetPanelMaximumSize(Rectangle area)
+        private void KeepPanelSizeOnDpiChange(int requestedDpi)
+        {
+            int nextDpi = requestedDpi > 0 ? requestedDpi : GetWindowDpi();
+            if (!hasSavedPanelLogicalSize)
+            {
+                savedPanelLogicalSize = UnscaleDeviceSize(Size, currentDpi);
+                hasSavedPanelLogicalSize = true;
+            }
+            currentDpi = nextDpi;
+            Point center = new Point(Left + Math.Max(1, Width) / 2, Top + Math.Max(1, Height) / 2);
+            Rectangle area = Screen.FromPoint(center).WorkingArea;
+            Size size = WorkspacePanelLayout.ClampPanelSize(
+                ScaleLogicalSize(new Size(savedPanelLogicalSize.Width, GetAutomaticPanelHeight())),
+                GetDeviceMinimumSize(),
+                GetPanelMaximumSize(area));
+            int left = Math.Max(area.Left, Math.Min(Left, area.Right - size.Width));
+            int top = Math.Max(area.Top, Math.Min(Top, area.Bottom - size.Height));
+            Bounds = new Rectangle(left, top, size.Width, size.Height);
+            savedPanelBounds = Bounds;
+            savedPanelLogicalSize = new Size(UnscaleDeviceSize(size, nextDpi).Width, GetAutomaticPanelHeight());
+            hasSavedPanelBounds = true;
+            UpdatePanelRegion();
+            Invalidate(true);
+        }
+
+        private Size GetPanelMaximumSize(Rectangle area)
         {
             return new Size(
-                Math.Min(WorkspaceVisualMetrics.PanelMaximumWidth, area.Width),
+                Math.Min(ScaleLogicalValue(WorkspaceVisualMetrics.PanelMaximumWidth), area.Width),
                 area.Height);
+        }
+
+        private int GetWindowDpi()
+        {
+            try
+            {
+                if (IsHandleCreated)
+                {
+                    uint dpi = NativeMethods.GetDpiForWindow(Handle);
+                    if (dpi > 0)
+                    {
+                        return (int)dpi;
+                    }
+                }
+            }
+            catch (EntryPointNotFoundException)
+            {
+            }
+            return DpiLayoutPolicy.BaseDpi;
+        }
+
+        private static int GetDpiFromMessage(IntPtr wParam)
+        {
+            int dpi = unchecked((int)(long)wParam) & 0xFFFF;
+            return dpi > 0 ? dpi : DpiLayoutPolicy.BaseDpi;
+        }
+
+        private static int ScaleLogicalValue(int value, int dpi)
+        {
+            return DpiLayoutPolicy.ScaleValue(value, dpi);
+        }
+
+        private int ScaleLogicalValue(int value)
+        {
+            return ScaleLogicalValue(value, currentDpi);
+        }
+
+        private Size ScaleLogicalSize(Size logicalSize)
+        {
+            return new Size(
+                ScaleLogicalValue(logicalSize.Width),
+                ScaleLogicalValue(logicalSize.Height));
+        }
+
+        private static Size UnscaleDeviceSize(Size deviceSize, int dpi)
+        {
+            return new Size(
+                DpiLayoutPolicy.UnscaleValue(deviceSize.Width, dpi),
+                DpiLayoutPolicy.UnscaleValue(deviceSize.Height, dpi));
+        }
+
+        private Size GetDeviceMinimumSize()
+        {
+            return ScaleLogicalSize(new Size(
+                WorkspaceVisualMetrics.PanelMinimumWidth,
+                WorkspaceVisualMetrics.PanelMinimumHeight));
+        }
+
+        private Size GetLogicalClientSize()
+        {
+            return UnscaleDeviceSize(ClientSize, currentDpi);
+        }
+
+        private Point ToLogicalPoint(Point devicePoint)
+        {
+            return new Point(
+                DpiLayoutPolicy.UnscaleValue(devicePoint.X, currentDpi),
+                DpiLayoutPolicy.UnscaleValue(devicePoint.Y, currentDpi));
         }
 
         private bool CanDragPanelAt(Point location)
@@ -1511,13 +1764,96 @@ namespace WorkspaceSwitcher.App
                 return false;
             }
 
-            return WorkspacePanelLayout.GetResizeEdgeAt(location, ClientSize, WorkspaceVisualMetrics.PanelResizeGrip) == PanelResizeEdge.None;
+            return WorkspacePanelLayout.GetResizeEdgeAt(location, GetLogicalClientSize(), WorkspaceVisualMetrics.PanelResizeGrip) == PanelResizeEdge.None;
+        }
+
+        private Rectangle GetContentViewportBounds()
+        {
+            Size logicalClientSize = GetLogicalClientSize();
+            return new Rectangle(
+                0,
+                WorkspaceVisualMetrics.CardTop,
+                logicalClientSize.Width,
+                Math.Max(1, logicalClientSize.Height - WorkspaceVisualMetrics.CardTop - WorkspaceVisualMetrics.SideMargin));
+        }
+
+        private int GetContentContentBottom()
+        {
+            int bottom = GetAddBlockBounds().Bottom;
+            foreach (int workspaceId in workspaceLayout.GetWorkspaceIds())
+            {
+                bottom = Math.Max(bottom, GetWorkspaceCardBounds(workspaceId).Bottom);
+            }
+
+            return bottom + WorkspaceVisualMetrics.SideMargin;
+        }
+
+        private int GetContentScrollMaximum()
+        {
+            return Math.Max(0, GetContentContentBottom() - GetContentViewportBounds().Bottom);
+        }
+
+        private void SetContentScrollOffset(int value)
+        {
+            contentScrollOffset = Math.Max(0, Math.Min(value, GetContentScrollMaximum()));
+        }
+
+        private Rectangle GetContentScrollTrackBounds()
+        {
+            if (GetContentScrollMaximum() <= 0)
+            {
+                return Rectangle.Empty;
+            }
+
+            Rectangle viewport = GetContentViewportBounds();
+            return new Rectangle(
+                Math.Max(0, viewport.Right - 8),
+                viewport.Top + 4,
+                4,
+                Math.Max(1, viewport.Height - 8));
+        }
+
+        private Rectangle GetContentScrollThumbBounds()
+        {
+            Rectangle track = GetContentScrollTrackBounds();
+            if (track.IsEmpty)
+            {
+                return Rectangle.Empty;
+            }
+
+            Rectangle viewport = GetContentViewportBounds();
+            int contentHeight = Math.Max(viewport.Height, GetContentContentBottom() - viewport.Top);
+            int thumbHeight = Math.Max(28, (int)Math.Round(track.Height * (double)viewport.Height / contentHeight));
+            thumbHeight = Math.Min(track.Height, thumbHeight);
+            int travel = Math.Max(0, track.Height - thumbHeight);
+            int thumbTop = track.Top + (GetContentScrollMaximum() == 0
+                ? 0
+                : (int)Math.Round(travel * (double)contentScrollOffset / GetContentScrollMaximum()));
+            return new Rectangle(track.Left, thumbTop, track.Width, thumbHeight);
+        }
+
+        private void DrawContentScrollBar(Graphics graphics)
+        {
+            Rectangle track = GetContentScrollTrackBounds();
+            Rectangle thumb = GetContentScrollThumbBounds();
+            if (track.IsEmpty || thumb.IsEmpty)
+            {
+                return;
+            }
+
+            using (Brush trackBrush = new SolidBrush(Color.FromArgb(48, 255, 255, 255)))
+            using (Brush thumbBrush = new SolidBrush(Color.FromArgb(150, 235, 240, 250)))
+            {
+                graphics.FillRectangle(trackBrush, track);
+                graphics.FillRectangle(thumbBrush, thumb);
+            }
         }
 
         private Rectangle GetHideButtonBounds()
         {
+            Size logicalClientSize = GetLogicalClientSize();
             return new Rectangle(
-                ClientSize.Width - HideButtonWidth - WorkspaceVisualMetrics.SideMargin,
+                logicalClientSize.Width - HideButtonWidth - WorkspaceVisualMetrics.SideMargin,
                 WorkspaceVisualMetrics.HideButtonTopMargin,
                 HideButtonWidth,
                 HideButtonHeight);
@@ -1534,12 +1870,11 @@ namespace WorkspaceSwitcher.App
             using (System.Drawing.Drawing2D.GraphicsPath path = WorkspaceVisuals.CreateRoundedPath(button, WorkspaceVisualMetrics.HideButtonRadius))
             using (Brush fill = new SolidBrush(Color.FromArgb(WorkspaceVisualMetrics.CardBackgroundArgb)))
             using (Pen border = new Pen(Color.FromArgb(WorkspaceVisualMetrics.CardBorderArgb), 1f))
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.HideButtonFontSize, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (Font font = CreateTextFont(WorkspaceVisualMetrics.HideButtonFontSize, FontStyle.Regular))
             {
                 graphics.FillPath(fill, path);
                 graphics.DrawPath(border, path);
-                Size textSize = TextRenderer.MeasureText("隐藏", font, new Size(80, 30), TextFormatFlags.NoPadding);
-                DrawText(graphics, "隐藏", font, new Point(button.Left + (button.Width - textSize.Width) / 2, button.Top + (button.Height - textSize.Height) / 2), Color.FromArgb(WorkspaceVisualMetrics.MutedTextArgb));
+                DrawCenteredText(graphics, "隐藏", font, button, Color.FromArgb(WorkspaceVisualMetrics.MutedTextArgb));
             }
         }
 
@@ -1548,7 +1883,7 @@ namespace WorkspaceSwitcher.App
             System.Collections.Generic.List<DisplayTabLayout> tabs = new System.Collections.Generic.List<DisplayTabLayout>();
             Screen[] screens = Screen.AllScreens;
             int count = screens.Length + 1;
-            int availableWidth = ClientSize.Width - WorkspaceVisualMetrics.SideMargin * 2 - WorkspaceVisualMetrics.DisplayTabGap * (count - 1);
+            int availableWidth = GetLogicalClientSize().Width - WorkspaceVisualMetrics.SideMargin * 2 - WorkspaceVisualMetrics.DisplayTabGap * (count - 1);
             int tabWidth = Math.Max(68, availableWidth / count);
             int left = WorkspaceVisualMetrics.SideMargin;
             tabs.Add(new DisplayTabLayout
@@ -1604,12 +1939,11 @@ namespace WorkspaceSwitcher.App
                     graphics.DrawPath(borderPen, path);
                 }
 
-                Size textSize = TextRenderer.MeasureText(tab.Label, font, new Size(tab.Bounds.Width, tab.Bounds.Height), TextFormatFlags.NoPadding);
-                DrawText(
+                DrawCenteredText(
                     graphics,
                     tab.Label,
                     font,
-                    new Point(tab.Bounds.Left + (tab.Bounds.Width - textSize.Width) / 2, tab.Bounds.Top + (tab.Bounds.Height - textSize.Height) / 2),
+                    tab.Bounds,
                     isSelected ? Color.FromArgb(WorkspaceVisualMetrics.AccentArgb) : Color.FromArgb(WorkspaceVisualMetrics.TextArgb));
             }
         }
@@ -1624,16 +1958,22 @@ namespace WorkspaceSwitcher.App
             Rectangle card = GetWorkspaceCardBounds(workspaceId);
             return new Rectangle(
                 card.Right - WorkspaceVisualMetrics.DeleteButtonWidth - 12,
-                card.Top + 10,
+                card.Top + WorkspaceVisualMetrics.DeleteButtonTopOffset,
                 WorkspaceVisualMetrics.DeleteButtonWidth,
                 WorkspaceVisualMetrics.DeleteButtonHeight);
         }
 
         private int GetDeleteButtonWorkspaceAt(int clientX, int clientY)
         {
+            if (!GetContentViewportBounds().Contains(clientX, clientY))
+            {
+                return 0;
+            }
+
+            int contentY = clientY + contentScrollOffset;
             foreach (int workspaceId in workspaceLayout.GetWorkspaceIds())
             {
-                if (workspaceId > 1 && GetDeleteButtonBounds(workspaceId).Contains(clientX, clientY))
+                if (workspaceId > 1 && GetDeleteButtonBounds(workspaceId).Contains(clientX, contentY))
                 {
                     return workspaceId;
                 }
@@ -1648,13 +1988,12 @@ namespace WorkspaceSwitcher.App
             using (System.Drawing.Drawing2D.GraphicsPath path = WorkspaceVisuals.CreateRoundedPath(button, WorkspaceVisualMetrics.DeleteButtonRadius))
             using (Brush fill = new SolidBrush(Color.White))
             using (Pen border = new Pen(Color.FromArgb(WorkspaceVisualMetrics.DeleteButtonBorderArgb), 1f))
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, 16f, FontStyle.Bold, GraphicsUnit.Pixel))
+            using (Font font = CreateTextFont(WorkspaceVisualMetrics.DeleteButtonFontSize, FontStyle.Bold))
             {
                 graphics.FillPath(fill, path);
                 graphics.DrawPath(border, path);
                 string label = "删除";
-                Size textSize = TextRenderer.MeasureText(label, font, new Size(button.Width, button.Height), TextFormatFlags.NoPadding);
-                DrawText(graphics, label, font, new Point(button.Left + (button.Width - textSize.Width) / 2, button.Top + (button.Height - textSize.Height) / 2), Color.FromArgb(WorkspaceVisualMetrics.DeleteButtonArgb));
+                DrawCenteredText(graphics, label, font, button, Color.FromArgb(WorkspaceVisualMetrics.DeleteButtonArgb));
             }
         }
 
@@ -1707,7 +2046,7 @@ namespace WorkspaceSwitcher.App
             Rectangle area = Screen.FromPoint(cursor).WorkingArea;
             Size size = WorkspacePanelLayout.ClampPanelSize(
                 bounds.Size,
-                new Size(WorkspaceVisualMetrics.PanelMinimumWidth, WorkspaceVisualMetrics.PanelMinimumHeight),
+                GetDeviceMinimumSize(),
                 GetPanelMaximumSize(area));
             if (bounds.Right == panelResizeStartBounds.Right)
             {
@@ -1722,7 +2061,14 @@ namespace WorkspaceSwitcher.App
             bounds.Y = Math.Max(area.Top, Math.Min(bounds.Y, area.Bottom - bounds.Height));
             Bounds = bounds;
             savedPanelBounds = Bounds;
+            UpdateSavedLogicalSizeFromBounds(Bounds.Size);
             hasSavedPanelBounds = true;
+        }
+
+        private void UpdateSavedLogicalSizeFromBounds(Size deviceSize)
+        {
+            savedPanelLogicalSize = UnscaleDeviceSize(deviceSize, currentDpi);
+            hasSavedPanelLogicalSize = true;
         }
 
         private void DrawWorkspaceItems(Graphics graphics, Font font, Brush muted, Rectangle card, int workspaceId)
@@ -1988,7 +2334,7 @@ namespace WorkspaceSwitcher.App
                 return Rectangle.Empty;
             }
 
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (Font font = CreateTextFont(WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular))
             {
                 foreach (int workspaceId in workspaceLayout.GetWorkspaceIds())
                 {
@@ -1997,7 +2343,9 @@ namespace WorkspaceSwitcher.App
                     {
                         if (layout.Item.WindowHandle == item.WindowHandle)
                         {
-                            return RectangleToScreen(layout.Bounds);
+                            Rectangle visibleBounds = layout.Bounds;
+                            visibleBounds.Offset(0, -contentScrollOffset);
+                            return RectangleToScreen(visibleBounds);
                         }
                     }
                 }
@@ -2136,13 +2484,13 @@ namespace WorkspaceSwitcher.App
             {
                 string plus = "＋";
                 Size plusSize = TextRenderer.MeasureText(plus, titleFont, new Size(500, 50), TextFormatFlags.NoPadding);
-                DrawText(graphics, plus, titleFont, new Point(addBlock.Left + (addBlock.Width - plusSize.Width) / 2, addBlock.Top + 14), Color.FromArgb(WorkspaceVisualMetrics.MutedTextArgb));
+                DrawText(graphics, plus, titleFont, new Point(addBlock.Left + (addBlock.Width - plusSize.Width) / 2, addBlock.Top + 5), Color.FromArgb(WorkspaceVisualMetrics.MutedTextArgb));
                 string label = "新增工作区";
                 Size labelSize = TextRenderer.MeasureText(label, titleFont, new Size(500, 50), TextFormatFlags.NoPadding);
-                DrawText(graphics, label, titleFont, new Point(addBlock.Left + (addBlock.Width - labelSize.Width) / 2, addBlock.Top + 52), Color.FromArgb(WorkspaceVisualMetrics.TextArgb));
+                DrawText(graphics, label, titleFont, new Point(addBlock.Left + (addBlock.Width - labelSize.Width) / 2, addBlock.Top + 29), Color.FromArgb(WorkspaceVisualMetrics.TextArgb));
                 string hint = "点击创建，或把窗口拖到这里";
                 Size hintSize = TextRenderer.MeasureText(hint, smallFont, new Size(600, 40), TextFormatFlags.NoPadding);
-                DrawText(graphics, hint, smallFont, new Point(addBlock.Left + (addBlock.Width - hintSize.Width) / 2, addBlock.Top + 94), Color.FromArgb(WorkspaceVisualMetrics.MutedTextArgb));
+                DrawText(graphics, hint, smallFont, new Point(addBlock.Left + (addBlock.Width - hintSize.Width) / 2, addBlock.Top + 57), Color.FromArgb(WorkspaceVisualMetrics.MutedTextArgb));
             }
         }
 
@@ -2153,6 +2501,18 @@ namespace WorkspaceSwitcher.App
             {
                 format.FormatFlags |= StringFormatFlags.NoClip | StringFormatFlags.NoWrap;
                 graphics.DrawString(text, font, brush, new PointF(location.X, location.Y), format);
+            }
+        }
+
+        private static void DrawCenteredText(Graphics graphics, string text, Font font, Rectangle bounds, Color color)
+        {
+            using (SolidBrush brush = new SolidBrush(color))
+            using (StringFormat format = (StringFormat)StringFormat.GenericTypographic.Clone())
+            {
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Center;
+                format.FormatFlags |= StringFormatFlags.NoClip | StringFormatFlags.NoWrap;
+                graphics.DrawString(text, font, brush, bounds, format);
             }
         }
 
@@ -2192,7 +2552,7 @@ namespace WorkspaceSwitcher.App
         private Rectangle GetAddBlockBounds()
         {
             Rectangle firstCard = GetWorkspaceCardBounds(1);
-            return new Rectangle(WorkspaceVisualMetrics.SideMargin, firstCard.Bottom + CardGap, ClientSize.Width - WorkspaceVisualMetrics.SideMargin * 2, AddBlockHeight);
+            return new Rectangle(WorkspaceVisualMetrics.SideMargin, firstCard.Bottom + CardGap, GetLogicalClientSize().Width - WorkspaceVisualMetrics.SideMargin * 2, AddBlockHeight);
         }
 
         private int GetGridStartTop()
@@ -2202,7 +2562,10 @@ namespace WorkspaceSwitcher.App
 
         private bool IsAddBlockAt(int clientY)
         {
-            return GetAddBlockBounds().Contains(20, clientY);
+            Rectangle viewport = GetContentViewportBounds();
+            return viewport.Top <= clientY
+                && clientY < viewport.Bottom
+                && GetAddBlockBounds().Contains(20, clientY + contentScrollOffset);
         }
 
         private int GetWorkspaceDisplayIndex(int workspaceId)
@@ -2221,10 +2584,16 @@ namespace WorkspaceSwitcher.App
 
         private int GetResizeHandleAt(int clientX, int clientY)
         {
+            if (!GetContentViewportBounds().Contains(clientX, clientY))
+            {
+                return 0;
+            }
+
+            int contentY = clientY + contentScrollOffset;
             foreach (int workspaceId in workspaceLayout.GetWorkspaceIds())
             {
                 Rectangle card = GetWorkspaceCardBounds(workspaceId);
-                if (clientX >= card.Left && clientX <= card.Right && clientY >= card.Bottom - 8 && clientY <= card.Bottom + 4)
+                if (clientX >= card.Left && clientX <= card.Right && contentY >= card.Bottom - 8 && contentY <= card.Bottom + 4)
                 {
                     return workspaceId;
                 }
@@ -2235,11 +2604,12 @@ namespace WorkspaceSwitcher.App
 
         private int GetWorkspaceInsertIndex(int clientY)
         {
+            int contentY = clientY + contentScrollOffset;
             System.Collections.Generic.IList<int> ids = workspaceLayout.GetWorkspaceIds();
             for (int index = 1; index < ids.Count; index++)
             {
                 Rectangle card = GetWorkspaceCardBounds(ids[index]);
-                if (clientY < card.Top + card.Height / 2)
+                if (contentY < card.Top + card.Height / 2)
                 {
                     return index;
                 }
@@ -2253,6 +2623,7 @@ namespace WorkspaceSwitcher.App
             int workspaceId = workspaceLayout.CreateWorkspace();
             if (workspaceId != 0)
             {
+                FitPanelHeightToContent();
                 SaveState();
                 ShowWorkspace(workspaceId);
             }
@@ -2297,6 +2668,7 @@ namespace WorkspaceSwitcher.App
             }
 
             selectedApplicationWindowHandle = 0;
+            FitPanelHeightToContent();
             SaveState();
             Invalidate();
         }
@@ -2323,35 +2695,6 @@ namespace WorkspaceSwitcher.App
             workspaceCardPressed = 0;
             workspaceCardDropIndex = -1;
             Capture = false;
-        }
-
-        private void ToggleSingleWindowMaximize(int workspaceId)
-        {
-            if (workspaceId == 0)
-            {
-                return;
-            }
-
-            System.Collections.Generic.IList<WorkspaceItem> items = catalog.GetWorkspaceItems(workspaceId);
-            if (items.Count != 1)
-            {
-                return;
-            }
-
-            WorkspaceItem item = items[0];
-            IntPtr window = new IntPtr(item.WindowHandle);
-            if (!NativeMethods.IsWindow(window))
-            {
-                catalog.RemoveWindow(item.WindowHandle);
-                return;
-            }
-
-            ShowWorkspace(workspaceId);
-            bool shouldMaximize = !NativeMethods.IsZoomed(window);
-            catalog.SetWindowMaximized(item.WindowHandle, shouldMaximize);
-            ShowWindowUsingSavedState(window, shouldMaximize);
-            NativeMethods.SetForegroundWindow(window);
-            Invalidate();
         }
 
         private void ToggleWindowMaximize(WorkspaceItem item)
@@ -2390,6 +2733,14 @@ namespace WorkspaceSwitcher.App
 
         private void RefreshWorkspaceState()
         {
+            RefreshWorkspaceAvailability();
+            FitPanelHeightToContent();
+            SaveState();
+            Invalidate();
+        }
+
+        private void RefreshWorkspaceAvailability()
+        {
             foreach (int workspaceId in workspaceLayout.GetWorkspaceIds())
             {
                 foreach (WorkspaceItem item in catalog.GetWorkspaceItems(workspaceId))
@@ -2399,15 +2750,13 @@ namespace WorkspaceSwitcher.App
                     catalog.SetWindowAvailable(item.WindowHandle, available);
                 }
             }
-
-            SaveState();
-            Invalidate();
         }
 
         private Rectangle GetRefreshButtonBounds()
         {
+            int logicalWidth = GetLogicalClientSize().Width;
             return new Rectangle(
-                ClientSize.Width - WorkspaceVisualMetrics.SideMargin - WorkspaceVisualMetrics.HideButtonWidth - 8 - WorkspaceVisualMetrics.RefreshButtonWidth,
+                logicalWidth - WorkspaceVisualMetrics.SideMargin - WorkspaceVisualMetrics.HideButtonWidth - 6 - WorkspaceVisualMetrics.RefreshButtonWidth,
                 WorkspaceVisualMetrics.HideButtonTopMargin,
                 WorkspaceVisualMetrics.RefreshButtonWidth,
                 WorkspaceVisualMetrics.RefreshButtonHeight);
@@ -2424,13 +2773,12 @@ namespace WorkspaceSwitcher.App
             using (System.Drawing.Drawing2D.GraphicsPath path = WorkspaceVisuals.CreateRoundedPath(button, WorkspaceVisualMetrics.RefreshButtonRadius))
             using (Brush fill = new SolidBrush(Color.FromArgb(WorkspaceVisualMetrics.CardBackgroundArgb)))
             using (Pen border = new Pen(Color.FromArgb(WorkspaceVisualMetrics.CardBorderArgb), 1f))
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, 16f, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (Font font = CreateTextFont(WorkspaceVisualMetrics.ControlFontSize, FontStyle.Regular))
             {
                 graphics.FillPath(fill, path);
                 graphics.DrawPath(border, path);
                 string label = "刷新工作区";
-                Size textSize = TextRenderer.MeasureText(label, font, new Size(button.Width, button.Height), TextFormatFlags.NoPadding);
-                DrawText(graphics, label, font, new Point(button.Left + (button.Width - textSize.Width) / 2, button.Top + (button.Height - textSize.Height) / 2), Color.FromArgb(WorkspaceVisualMetrics.AccentArgb));
+                DrawCenteredText(graphics, label, font, button, Color.FromArgb(WorkspaceVisualMetrics.AccentArgb));
             }
         }
 
@@ -2487,12 +2835,11 @@ namespace WorkspaceSwitcher.App
                 dragPreview.MoveToPointer(cursor);
             }
 
-            int clientX = cursor.X - Left;
-            int clientY = cursor.Y - Top;
+            Point logicalCursor = ToLogicalPoint(new Point(cursor.X - Left, cursor.Y - Top));
             int newHighlight = dragging && Bounds.Contains(cursor.X, cursor.Y)
-                ? GetWorkspaceAt(clientX, clientY)
+                ? GetWorkspaceAt(logicalCursor.X, logicalCursor.Y)
                 : 0;
-            bool newAddHighlight = dragging && Bounds.Contains(cursor.X, cursor.Y) && IsAddBlockAt(clientY);
+            bool newAddHighlight = dragging && Bounds.Contains(cursor.X, cursor.Y) && IsAddBlockAt(logicalCursor.Y);
             if (highlightedWorkspace != newHighlight || highlightedAddBlock != newAddHighlight)
             {
                 highlightedWorkspace = newHighlight;
@@ -2531,14 +2878,20 @@ namespace WorkspaceSwitcher.App
 
         private int GetWorkspaceAt(int clientY)
         {
-            return GetWorkspaceAt(ClientSize.Width / 2, clientY);
+            return GetWorkspaceAt(GetLogicalClientSize().Width / 2, clientY);
         }
 
         private int GetWorkspaceAt(int clientX, int clientY)
         {
+            if (!GetContentViewportBounds().Contains(clientX, clientY))
+            {
+                return 0;
+            }
+
+            int contentY = clientY + contentScrollOffset;
             foreach (int workspaceId in workspaceLayout.GetWorkspaceIds())
             {
-                if (GetWorkspaceCardBounds(workspaceId).Contains(clientX, clientY))
+                if (GetWorkspaceCardBounds(workspaceId).Contains(clientX, contentY))
                 {
                     return workspaceId;
                 }
@@ -2549,7 +2902,7 @@ namespace WorkspaceSwitcher.App
 
         private WorkspaceItem GetWorkspaceItemAt(int clientY)
         {
-            return GetWorkspaceItemAt(ClientSize.Width / 2, clientY);
+            return GetWorkspaceItemAt(GetLogicalClientSize().Width / 2, clientY);
         }
 
         private WorkspaceItem GetWorkspaceItemAt(int clientX, int clientY)
@@ -2561,11 +2914,12 @@ namespace WorkspaceSwitcher.App
             }
 
             Rectangle card = GetWorkspaceCardBounds(workspaceId);
-            using (Font font = new Font(WorkspaceVisualMetrics.FontFamilyName, WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular, GraphicsUnit.Pixel))
+            int contentY = clientY + contentScrollOffset;
+            using (Font font = CreateTextFont(WorkspaceVisualMetrics.ItemFontSize, FontStyle.Regular))
             {
                 foreach (WorkspaceItemLayout layout in GetWorkspaceItemLayouts(card, workspaceId, font))
                 {
-                    if (layout.Bounds.Contains(clientX, clientY))
+                    if (layout.Bounds.Contains(clientX, contentY))
                     {
                         return layout.Item;
                     }
@@ -2587,37 +2941,71 @@ namespace WorkspaceSwitcher.App
             {
                 uint liveProcessId;
                 NativeMethods.GetWindowThreadProcessId(window, out liveProcessId);
-                catalog.SetExecutablePath(window.ToInt64(), GetProcessExecutablePath(liveProcessId));
+                string executablePath = GetProcessExecutablePath(liveProcessId);
+                catalog.SetExecutablePath(window.ToInt64(), executablePath);
+                CaptureLaunchProfileIfMissing(item, window, liveProcessId, executablePath);
                 catalog.SetWindowAvailable(window.ToInt64(), true);
                 return true;
             }
 
-            IntPtr exactMatch = IntPtr.Zero;
+            IntPtr titleMatch = IntPtr.Zero;
             IntPtr onlyProcessMatch = IntPtr.Zero;
+            System.Collections.Generic.List<IntPtr> processMatches = new System.Collections.Generic.List<IntPtr>();
             int processMatchCount = 0;
+            int titleMatchCount = 0;
             NativeMethods.EnumWindows(delegate(IntPtr candidate, IntPtr data)
             {
-                if (!IsWorkspaceItemWindow(item, candidate, true))
+                if (!IsWorkspaceItemWindow(item, candidate, true)
+                    || IsWindowAssignedToAnotherItem(item, candidate))
                 {
                     return true;
                 }
 
                 processMatchCount++;
                 onlyProcessMatch = candidate;
+                processMatches.Add(candidate);
                 if (String.Equals(GetWindowTitle(candidate), item.Title, StringComparison.Ordinal))
                 {
-                    exactMatch = candidate;
-                    return false;
+                    titleMatchCount++;
+                    titleMatch = candidate;
                 }
 
                 return true;
             }, IntPtr.Zero);
 
-            IntPtr resolved = exactMatch != IntPtr.Zero
-                ? exactMatch
-                : processMatchCount == 1 && GetSavedProcessItemCount(item.ProcessName) == 1
-                    ? onlyProcessMatch
-                    : IntPtr.Zero;
+            IntPtr resolved = WorkspaceWindowRecoveryPolicy.ShouldUseUniqueCandidate(titleMatchCount)
+                ? titleMatch
+                : IntPtr.Zero;
+            if (resolved == IntPtr.Zero
+                && WorkspaceWindowRecoveryPolicy.ShouldScanLaunchProfile(titleMatchCount)
+                && !String.IsNullOrEmpty(item.LaunchArguments))
+            {
+                IntPtr launchProfileMatch = IntPtr.Zero;
+                int launchProfileMatchCount = 0;
+                foreach (IntPtr candidate in processMatches)
+                {
+                    if (HasSameLaunchArguments(item.LaunchArguments, candidate))
+                    {
+                        launchProfileMatchCount++;
+                        launchProfileMatch = candidate;
+                    }
+                }
+
+                if (WorkspaceWindowRecoveryPolicy.ShouldUseUniqueCandidate(launchProfileMatchCount))
+                {
+                    resolved = launchProfileMatch;
+                }
+            }
+
+            if (resolved == IntPtr.Zero
+                && titleMatchCount == 0
+                && ForegroundWindowRecoveryPolicy.ShouldUseOnlyProcessMatch(
+                    processMatchCount,
+                    GetSavedProcessItemCount(item.ProcessName),
+                    GetProcessWindowCount(item.ProcessName)))
+            {
+                resolved = onlyProcessMatch;
+            }
             if (resolved == IntPtr.Zero)
             {
                 catalog.SetWindowAvailable(item.WindowHandle, false);
@@ -2631,11 +3019,56 @@ namespace WorkspaceSwitcher.App
 
             uint resolvedProcessId;
             NativeMethods.GetWindowThreadProcessId(resolved, out resolvedProcessId);
-            catalog.SetExecutablePath(resolved.ToInt64(), GetProcessExecutablePath(resolvedProcessId));
+            string resolvedExecutablePath = GetProcessExecutablePath(resolvedProcessId);
+            catalog.SetExecutablePath(resolved.ToInt64(), resolvedExecutablePath);
+            CaptureLaunchProfileIfMissing(item, resolved, resolvedProcessId, resolvedExecutablePath);
             catalog.SetWindowAvailable(resolved.ToInt64(), true);
 
             window = resolved;
             return true;
+        }
+
+        private bool IsWindowAssignedToAnotherItem(WorkspaceItem item, IntPtr window)
+        {
+            foreach (WorkspaceItem savedItem in catalog.GetAllItems())
+            {
+                if (!Object.ReferenceEquals(savedItem, item)
+                    && savedItem.WindowHandle == window.ToInt64())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool HasSameLaunchArguments(string savedArguments, IntPtr window)
+        {
+            uint processId;
+            NativeMethods.GetWindowThreadProcessId(window, out processId);
+            string executablePath = GetProcessExecutablePath(processId);
+            string commandLine = GetCommandLine(processId);
+            string liveArguments = WorkspaceLaunchProfileParser.ExtractArguments(commandLine, executablePath);
+            return !String.IsNullOrWhiteSpace(liveArguments)
+                && String.Equals(savedArguments.Trim(), liveArguments.Trim(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void CaptureLaunchProfileIfMissing(WorkspaceItem item, IntPtr window, uint processId, string executablePath)
+        {
+            if (item == null || (!String.IsNullOrEmpty(item.LaunchArguments) && !String.IsNullOrEmpty(item.WorkingDirectory)))
+            {
+                return;
+            }
+
+            string commandLine = GetCommandLine(processId);
+            catalog.SetLaunchProfile(
+                window.ToInt64(),
+                String.IsNullOrEmpty(item.LaunchArguments)
+                    ? WorkspaceLaunchProfileParser.ExtractArguments(commandLine, executablePath)
+                    : item.LaunchArguments,
+                String.IsNullOrEmpty(item.WorkingDirectory)
+                    ? WorkspaceLaunchProfileParser.GetWorkingDirectory(executablePath)
+                    : item.WorkingDirectory);
         }
 
         private int GetSavedProcessItemCount(string processName)
@@ -2689,7 +3122,8 @@ namespace WorkspaceSwitcher.App
             }
 
             bool forceNewWindow = String.Equals(item.ProcessName, "Code.exe", StringComparison.OrdinalIgnoreCase);
-            System.Collections.Generic.HashSet<long> existingProcessWindows = forceNewWindow
+            bool expectNewWindow = true;
+            System.Collections.Generic.HashSet<long> existingProcessWindows = expectNewWindow
                 ? GetVisibleProcessWindows(item.ProcessName)
                 : null;
 
@@ -2700,9 +3134,21 @@ namespace WorkspaceSwitcher.App
                     FileName = executable,
                     UseShellExecute = true
                 };
+                startInfo.Arguments = item.LaunchArguments ?? String.Empty;
                 if (forceNewWindow)
                 {
-                    startInfo.Arguments = "--new-window";
+                    if (String.IsNullOrWhiteSpace(startInfo.Arguments))
+                    {
+                        startInfo.Arguments = "--new-window";
+                    }
+                    else if (startInfo.Arguments.IndexOf("--new-window", StringComparison.OrdinalIgnoreCase) < 0)
+                    {
+                        startInfo.Arguments = "--new-window " + startInfo.Arguments;
+                    }
+                }
+                if (!String.IsNullOrWhiteSpace(item.WorkingDirectory) && Directory.Exists(item.WorkingDirectory))
+                {
+                    startInfo.WorkingDirectory = item.WorkingDirectory;
                 }
 
                 using (Process process = Process.Start(startInfo))
@@ -2724,26 +3170,22 @@ namespace WorkspaceSwitcher.App
                 return false;
             }
 
-            if (forceNewWindow)
+            if (expectNewWindow)
             {
                 IntPtr launchedWindow = WaitForNewProcessWindow(item.ProcessName, existingProcessWindows);
-                if (launchedWindow == IntPtr.Zero || !catalog.RebindWindow(item.WindowHandle, launchedWindow.ToInt64()))
+                if (launchedWindow != IntPtr.Zero && catalog.RebindWindow(item.WindowHandle, launchedWindow.ToInt64()))
                 {
-                    return false;
+                    item = FindWorkspaceItem(item.WorkspaceId, launchedWindow.ToInt64());
+                    if (item != null)
+                    {
+                        uint launchedProcessId;
+                        NativeMethods.GetWindowThreadProcessId(launchedWindow, out launchedProcessId);
+                        catalog.SetExecutablePath(launchedWindow.ToInt64(), GetProcessExecutablePath(launchedProcessId));
+                        catalog.SetWindowAvailable(launchedWindow.ToInt64(), true);
+                        window = launchedWindow;
+                        return true;
+                    }
                 }
-
-                item = FindWorkspaceItem(item.WorkspaceId, launchedWindow.ToInt64());
-                if (item == null)
-                {
-                    return false;
-                }
-
-                uint launchedProcessId;
-                NativeMethods.GetWindowThreadProcessId(launchedWindow, out launchedProcessId);
-                catalog.SetExecutablePath(launchedWindow.ToInt64(), GetProcessExecutablePath(launchedProcessId));
-                catalog.SetWindowAvailable(launchedWindow.ToInt64(), true);
-                window = launchedWindow;
-                return true;
             }
 
             return TryResolveWorkspaceWindow(item, out window);
@@ -2769,6 +3211,28 @@ namespace WorkspaceSwitcher.App
                 return true;
             }, IntPtr.Zero);
             return handles;
+        }
+
+        private int GetProcessWindowCount(string processName)
+        {
+            int count = 0;
+            NativeMethods.EnumWindows(delegate(IntPtr candidate, IntPtr data)
+            {
+                if (!IsCandidateWindow(candidate))
+                {
+                    return true;
+                }
+
+                uint processId;
+                NativeMethods.GetWindowThreadProcessId(candidate, out processId);
+                if (String.Equals(GetProcessName(processId), processName, StringComparison.OrdinalIgnoreCase))
+                {
+                    count++;
+                }
+
+                return true;
+            }, IntPtr.Zero);
+            return count;
         }
 
         private IntPtr WaitForNewProcessWindow(string processName, System.Collections.Generic.HashSet<long> existingHandles)
@@ -2951,6 +3415,14 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
+            IntPtr currentForegroundWindow = NativeMethods.GetForegroundWindow();
+            if (!ForegroundActivationPolicy.ShouldProcessWindowEvent(
+                window.ToInt64(),
+                currentForegroundWindow.ToInt64()))
+            {
+                return;
+            }
+
             WorkspaceItem foregroundItem;
             if (!TryResolveForegroundWorkspaceItem(window, out foregroundItem))
             {
@@ -3017,7 +3489,12 @@ namespace WorkspaceSwitcher.App
 
             WorkspaceItem resolvedItem = exactMatch != null
                 ? exactMatch
-                : processMatchCount == 1 ? onlyProcessMatch : null;
+                : ForegroundWindowRecoveryPolicy.ShouldUseOnlyProcessMatch(
+                    processMatchCount,
+                    GetSavedProcessItemCount(processName),
+                    GetProcessWindowCount(processName))
+                    ? onlyProcessMatch
+                    : null;
             if (resolvedItem == null)
             {
                 return false;
@@ -3090,6 +3567,16 @@ namespace WorkspaceSwitcher.App
 
         private void AddWindowToWorkspace(IntPtr window, int workspaceId, bool wasMaximized)
         {
+            int existingWorkspaceId = catalog.GetWindowWorkspaceId(window.ToInt64());
+            if (existingWorkspaceId != 0)
+            {
+                catalog.MoveWindow(window.ToInt64(), workspaceId);
+                catalog.SetWindowMaximized(window.ToInt64(), wasMaximized);
+                catalog.SetWindowAvailable(window.ToInt64(), true);
+                SaveState();
+                return;
+            }
+
             uint processId;
             NativeMethods.GetWindowThreadProcessId(window, out processId);
             string processName = "";
@@ -3102,8 +3589,14 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
-            catalog.AssignWindow(workspaceId, window.ToInt64(), GetWindowTitle(window), processName, GetCommandLine(processId));
-            catalog.SetExecutablePath(window.ToInt64(), GetProcessExecutablePath(processId));
+            string commandLine = GetCommandLine(processId);
+            string executablePath = GetProcessExecutablePath(processId);
+            catalog.AssignWindow(workspaceId, window.ToInt64(), GetWindowTitle(window), processName, commandLine);
+            catalog.SetExecutablePath(window.ToInt64(), executablePath);
+            catalog.SetLaunchProfile(
+                window.ToInt64(),
+                WorkspaceLaunchProfileParser.ExtractArguments(commandLine, executablePath),
+                WorkspaceLaunchProfileParser.GetWorkingDirectory(executablePath));
             catalog.SetWindowMaximized(window.ToInt64(), wasMaximized);
             SaveState();
         }
@@ -3375,16 +3868,13 @@ namespace WorkspaceSwitcher.App
                 {
                     catalog.RestoreItem(item);
                 }
-                foreach (WorkspaceHeightSnapshot height in snapshot.Heights)
-                {
-                    if (height.WorkspaceId >= 1 && height.WorkspaceId <= WorkspaceLayout.MaximumWorkspaceCount)
-                    {
-                        workspaceHeights[height.WorkspaceId] = WorkspaceResizePolicy.ClampHeight(height.Height);
-                    }
-                }
+                // Card heights are now content-driven. Older saved manual heights
+                // are intentionally ignored so they cannot reintroduce oversized cards.
                 if (snapshot.PanelWidth > 0 && snapshot.PanelHeight > 0)
                 {
-                    savedPanelBounds = new Rectangle(snapshot.PanelX, snapshot.PanelY, snapshot.PanelWidth, snapshot.PanelHeight);
+                    savedPanelLogicalSize = new Size(snapshot.PanelWidth, snapshot.PanelHeight);
+                    hasSavedPanelLogicalSize = true;
+                    savedPanelBounds = new Rectangle(snapshot.PanelX, snapshot.PanelY, 0, 0);
                     hasSavedPanelBounds = true;
                 }
             }
@@ -3453,6 +3943,8 @@ namespace WorkspaceSwitcher.App
                         Title = item.Title,
                         ProcessName = item.ProcessName,
                         ExecutablePath = item.ExecutablePath,
+                        LaunchArguments = item.LaunchArguments,
+                        WorkingDirectory = item.WorkingDirectory,
                         DisplayName = item.DisplayName,
                         IsMaximized = item.IsMaximized
                     });
@@ -3472,8 +3964,11 @@ namespace WorkspaceSwitcher.App
                 {
                     snapshot.PanelX = panelBounds.X;
                     snapshot.PanelY = panelBounds.Y;
-                    snapshot.PanelWidth = panelBounds.Width;
-                    snapshot.PanelHeight = panelBounds.Height;
+                    Size logicalSize = hasSavedPanelLogicalSize
+                        ? savedPanelLogicalSize
+                        : UnscaleDeviceSize(panelBounds.Size, currentDpi);
+                    snapshot.PanelWidth = logicalSize.Width;
+                    snapshot.PanelHeight = logicalSize.Height;
                 }
 
                 string directory = Path.GetDirectoryName(statePath);
@@ -3494,16 +3989,34 @@ namespace WorkspaceSwitcher.App
 
     internal static class Program
     {
+        private const string InstanceMutexName = "WorkspaceSwitcher.SingleInstance";
+        private const string ShowRequestEventName = "WorkspaceSwitcher.ShowRequest";
         private static WorkspaceForm panel;
+        private static EventWaitHandle showRequestEvent;
+        private static RegisteredWaitHandle showRequestRegistration;
 
         [STAThread]
         private static void Main()
         {
+            bool showPanelOnStart = false;
+            foreach (string argument in Environment.GetCommandLineArgs())
+            {
+                if (String.Equals(argument, "--show", StringComparison.OrdinalIgnoreCase))
+                {
+                    showPanelOnStart = true;
+                    break;
+                }
+            }
+
             bool ownsMutex;
-            using (Mutex mutex = new Mutex(true, "WorkspaceSwitcher.SingleInstance", out ownsMutex))
+            using (Mutex mutex = new Mutex(true, InstanceMutexName, out ownsMutex))
             {
                 if (!ownsMutex)
                 {
+                    if (showPanelOnStart)
+                    {
+                        SignalShowRequest();
+                    }
                     return;
                 }
 
@@ -3512,25 +4025,88 @@ namespace WorkspaceSwitcher.App
                 Application.SetCompatibleTextRenderingDefault(false);
                 panel = new WorkspaceForm();
                 IntPtr panelHandle = panel.Handle;
-                bool showPanelOnStart = false;
-                foreach (string argument in Environment.GetCommandLineArgs())
-                {
-                    if (String.Equals(argument, "--show", StringComparison.OrdinalIgnoreCase))
-                    {
-                        showPanelOnStart = true;
-                        break;
-                    }
-                }
+                RegisterShowRequestListener(panelHandle);
 
-                if (showPanelOnStart)
+                try
                 {
-                    panel.Show();
+                    if (showPanelOnStart)
+                    {
+                        panel.Show();
+                    }
+                    else
+                    {
+                        panel.Hide();
+                    }
+                    Application.Run();
                 }
-                else
+                finally
                 {
-                    panel.Hide();
+                    UnregisterShowRequestListener();
                 }
-                Application.Run();
+            }
+        }
+
+        private static void RegisterShowRequestListener(IntPtr panelHandle)
+        {
+            try
+            {
+                bool createdNew;
+                showRequestEvent = new EventWaitHandle(
+                    false,
+                    EventResetMode.AutoReset,
+                    ShowRequestEventName,
+                    out createdNew);
+                showRequestRegistration = ThreadPool.RegisterWaitForSingleObject(
+                    showRequestEvent,
+                    delegate(object state, bool timedOut)
+                    {
+                        if (!timedOut && NativeMethods.IsWindow(panelHandle))
+                        {
+                            NativeMethods.PostMessage(panelHandle, NativeMethods.WM_SHOW_PANEL, IntPtr.Zero, IntPtr.Zero);
+                        }
+                    },
+                    null,
+                    Timeout.Infinite,
+                    false);
+            }
+            catch (Exception)
+            {
+                UnregisterShowRequestListener();
+            }
+        }
+
+        private static void SignalShowRequest()
+        {
+            try
+            {
+                using (EventWaitHandle request = EventWaitHandle.OpenExisting(ShowRequestEventName))
+                {
+                    request.Set();
+                }
+            }
+            catch (WaitHandleCannotBeOpenedException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+            catch (System.Security.SecurityException)
+            {
+            }
+        }
+
+        private static void UnregisterShowRequestListener()
+        {
+            if (showRequestRegistration != null)
+            {
+                showRequestRegistration.Unregister(null);
+                showRequestRegistration = null;
+            }
+
+            if (showRequestEvent != null)
+            {
+                showRequestEvent.Dispose();
+                showRequestEvent = null;
             }
         }
 

@@ -21,6 +21,32 @@ namespace WorkspaceSwitcher.Core
         {
             return !isProgrammaticActivation && activatedWindowWorkspaceId != 0 && activatedWindowWorkspaceId != activeWorkspaceId;
         }
+
+        public static bool ShouldProcessWindowEvent(long eventWindowHandle, long foregroundWindowHandle)
+        {
+            return eventWindowHandle != 0 && foregroundWindowHandle != 0 && eventWindowHandle == foregroundWindowHandle;
+        }
+    }
+
+    public static class ForegroundWindowRecoveryPolicy
+    {
+        public static bool ShouldUseOnlyProcessMatch(int processMatchCount, int savedItemCount, int liveWindowCount)
+        {
+            return processMatchCount == 1 && savedItemCount == 1 && liveWindowCount == 1;
+        }
+    }
+
+    public static class WorkspaceWindowRecoveryPolicy
+    {
+        public static bool ShouldUseUniqueCandidate(int candidateMatchCount)
+        {
+            return candidateMatchCount == 1;
+        }
+
+        public static bool ShouldScanLaunchProfile(int titleMatchCount)
+        {
+            return titleMatchCount != 1;
+        }
     }
 
     public static class WorkspaceFocusPolicy
@@ -182,6 +208,29 @@ namespace WorkspaceSwitcher.Core
         }
     }
 
+    public static class DpiLayoutPolicy
+    {
+        public const int BaseDpi = 96;
+
+        public static int ScaleValue(int logicalValue, int dpi)
+        {
+            int safeDpi = Math.Max(BaseDpi, dpi);
+            return Math.Max(1, (int)Math.Round(logicalValue * (double)safeDpi / BaseDpi));
+        }
+
+        public static int UnscaleValue(int deviceValue, int dpi)
+        {
+            int safeDpi = Math.Max(BaseDpi, dpi);
+            return Math.Max(1, (int)Math.Round(deviceValue * (double)BaseDpi / safeDpi));
+        }
+
+        public static float ScaleFontSize(float logicalFontSize, int dpi)
+        {
+            int safeDpi = Math.Max(BaseDpi, dpi);
+            return logicalFontSize * BaseDpi / safeDpi;
+        }
+    }
+
     public static class DragPreviewPolicy
     {
         private const int CustomTitleBarHeight = 48;
@@ -215,9 +264,61 @@ namespace WorkspaceSwitcher.Core
         public string Title { get; internal set; }
         public string ProcessName { get; internal set; }
         public string ExecutablePath { get; internal set; }
+        public string LaunchArguments { get; internal set; }
+        public string WorkingDirectory { get; internal set; }
         public string DisplayName { get; internal set; }
         public bool IsAvailable { get; internal set; }
         public bool IsMaximized { get; internal set; }
+    }
+
+    public static class WorkspaceLaunchProfileParser
+    {
+        public static string ExtractArguments(string commandLine, string executablePath)
+        {
+            string source = (commandLine ?? String.Empty).Trim();
+            if (String.IsNullOrEmpty(source))
+            {
+                return String.Empty;
+            }
+
+            int tokenEnd;
+            if (source[0] == '"')
+            {
+                tokenEnd = source.IndexOf('"', 1);
+                if (tokenEnd < 0)
+                {
+                    return String.Empty;
+                }
+                tokenEnd++;
+            }
+            else
+            {
+                tokenEnd = source.IndexOfAny(new char[] { ' ', '\t' });
+                if (tokenEnd < 0)
+                {
+                    return String.Empty;
+                }
+            }
+
+            return source.Substring(tokenEnd).TrimStart();
+        }
+
+        public static string GetWorkingDirectory(string executablePath)
+        {
+            if (String.IsNullOrWhiteSpace(executablePath))
+            {
+                return String.Empty;
+            }
+
+            try
+            {
+                return Path.GetDirectoryName(executablePath) ?? String.Empty;
+            }
+            catch (ArgumentException)
+            {
+                return String.Empty;
+            }
+        }
     }
 
     public sealed class WorkspaceCatalog
@@ -234,6 +335,8 @@ namespace WorkspaceSwitcher.Core
                 Title = title ?? String.Empty,
                 ProcessName = processName ?? String.Empty,
                 ExecutablePath = String.Empty,
+                LaunchArguments = String.Empty,
+                WorkingDirectory = String.Empty,
                 DisplayName = CreateDisplayName(title, processName, commandLine),
                 IsAvailable = true
             };
@@ -342,6 +445,16 @@ namespace WorkspaceSwitcher.Core
             }
         }
 
+        public void SetLaunchProfile(long windowHandle, string launchArguments, string workingDirectory)
+        {
+            WorkspaceItem item;
+            if (items.TryGetValue(windowHandle, out item))
+            {
+                item.LaunchArguments = launchArguments ?? String.Empty;
+                item.WorkingDirectory = workingDirectory ?? String.Empty;
+            }
+        }
+
         public void SetWindowAvailable(long windowHandle, bool isAvailable)
         {
             WorkspaceItem item;
@@ -377,6 +490,8 @@ namespace WorkspaceSwitcher.Core
                 Title = snapshot.Title ?? String.Empty,
                 ProcessName = snapshot.ProcessName ?? String.Empty,
                 ExecutablePath = snapshot.ExecutablePath ?? String.Empty,
+                LaunchArguments = snapshot.LaunchArguments ?? String.Empty,
+                WorkingDirectory = snapshot.WorkingDirectory ?? String.Empty,
                 DisplayName = snapshot.DisplayName ?? String.Empty,
                 IsAvailable = true,
                 IsMaximized = snapshot.IsMaximized
@@ -474,6 +589,8 @@ namespace WorkspaceSwitcher.Core
         public string Title { get; set; }
         public string ProcessName { get; set; }
         public string ExecutablePath { get; set; }
+        public string LaunchArguments { get; set; }
+        public string WorkingDirectory { get; set; }
         public string DisplayName { get; set; }
         public bool IsMaximized { get; set; }
     }
@@ -534,6 +651,8 @@ namespace WorkspaceSwitcher.Core
                     writer.WriteElementString("title", item.Title ?? String.Empty);
                     writer.WriteElementString("process", item.ProcessName ?? String.Empty);
                     writer.WriteElementString("path", item.ExecutablePath ?? String.Empty);
+                    writer.WriteElementString("args", item.LaunchArguments ?? String.Empty);
+                    writer.WriteElementString("workingDirectory", item.WorkingDirectory ?? String.Empty);
                     writer.WriteElementString("display", item.DisplayName ?? String.Empty);
                     writer.WriteEndElement();
                 }
@@ -606,6 +725,8 @@ namespace WorkspaceSwitcher.Core
                         Title = ReadElement(node, "title"),
                         ProcessName = ReadElement(node, "process"),
                         ExecutablePath = ReadElement(node, "path"),
+                        LaunchArguments = ReadElement(node, "args"),
+                        WorkingDirectory = ReadElement(node, "workingDirectory"),
                         DisplayName = ReadElement(node, "display")
                     });
                 }
