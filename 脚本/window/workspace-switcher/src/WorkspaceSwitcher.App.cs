@@ -249,6 +249,15 @@ namespace WorkspaceSwitcher.App
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         internal static extern IntPtr GetModuleHandle(string moduleName);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        internal static extern IntPtr OpenProcess(uint access, bool inheritHandle, uint processId);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern bool QueryFullProcessImageName(IntPtr process, uint flags, System.Text.StringBuilder path, ref uint size);
+
+        [DllImport("kernel32.dll")]
+        internal static extern bool CloseHandle(IntPtr handle);
+
         [DllImport("user32.dll", EntryPoint = "SetProcessDpiAwarenessContext", SetLastError = true)]
         internal static extern bool SetProcessDpiAwarenessContext(IntPtr dpiContext);
 
@@ -599,6 +608,7 @@ namespace WorkspaceSwitcher.App
         private bool nativeGlassBackdropApplied;
         private readonly System.Windows.Forms.Timer applicationClickTimer = new System.Windows.Forms.Timer();
         private readonly System.Windows.Forms.Timer glassRefreshTimer = new System.Windows.Forms.Timer();
+        private readonly System.Collections.Generic.HashSet<long> launchProfileCapturePending = new System.Collections.Generic.HashSet<long>();
         private WorkspaceItem pendingApplicationClick;
         private bool isClosing;
 
@@ -854,7 +864,7 @@ namespace WorkspaceSwitcher.App
                 workspaceCardPressed = 0;
                 if (WorkspaceCardClickPolicy.ShouldActivate(pressedWorkspaceId, id))
                 {
-                    ShowWorkspace(pressedWorkspaceId, 0, true);
+                    ShowWorkspace(pressedWorkspaceId);
                 }
             };
             MouseUp += delegate(object sender, MouseEventArgs args)
@@ -923,7 +933,9 @@ namespace WorkspaceSwitcher.App
             };
             MouseDoubleClick += delegate(object sender, MouseEventArgs args)
             {
-                if (args.Button == MouseButtons.Left)
+                if (args.Button == MouseButtons.Left && !ignoreNextClick
+                    && !isReorderingWorkspaces && !isDraggingPanel
+                    && panelResizeEdge == PanelResizeEdge.None && resizingWorkspaceId == 0)
                 {
                     CancelPendingWorkspaceItemClick();
                     Point logicalPoint = ToLogicalPoint(args.Location);
@@ -931,6 +943,16 @@ namespace WorkspaceSwitcher.App
                     if (selectedItem != null)
                     {
                         ToggleWindowMaximize(selectedItem);
+                        return;
+                    }
+
+                    int id = GetWorkspaceAt(logicalPoint.X, logicalPoint.Y);
+                    int pressedWorkspaceId = workspaceCardPressed;
+                    workspaceCardPressed = 0;
+                    if (GetDeleteButtonWorkspaceAt(logicalPoint.X, logicalPoint.Y) == 0
+                        && WorkspaceCardClickPolicy.ShouldMinimize(pressedWorkspaceId, id, args.Clicks))
+                    {
+                        ShowWorkspace(pressedWorkspaceId, 0, true);
                     }
                 }
             };
@@ -2716,7 +2738,7 @@ namespace WorkspaceSwitcher.App
                     }
                 }
 
-                ShowWorkspace(item.WorkspaceId, window.ToInt64(), true);
+                ShowWorkspace(item.WorkspaceId, window.ToInt64());
                 bool shouldMaximize = !NativeMethods.IsZoomed(window);
                 catalog.SetWindowMaximized(item.WindowHandle, shouldMaximize);
                 ShowWindowUsingSavedState(window, shouldMaximize);
@@ -3060,15 +3082,56 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
-            string commandLine = GetCommandLine(processId);
-            catalog.SetLaunchProfile(
-                window.ToInt64(),
-                String.IsNullOrEmpty(item.LaunchArguments)
+            QueueLaunchProfileCapture(item, window, processId, executablePath);
+        }
+
+        private void QueueLaunchProfileCapture(WorkspaceItem item, IntPtr window, uint processId, string executablePath)
+        {
+            long windowHandle = window.ToInt64();
+            if (!launchProfileCapturePending.Add(windowHandle))
+            {
+                return;
+            }
+
+            int workspaceId = item.WorkspaceId;
+            string initialArguments = item.LaunchArguments ?? String.Empty;
+            string initialWorkingDirectory = item.WorkingDirectory ?? String.Empty;
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                string commandLine = GetCommandLineFromWmi(processId);
+                string arguments = String.IsNullOrEmpty(initialArguments)
                     ? WorkspaceLaunchProfileParser.ExtractArguments(commandLine, executablePath)
-                    : item.LaunchArguments,
-                String.IsNullOrEmpty(item.WorkingDirectory)
+                    : initialArguments;
+                string workingDirectory = String.IsNullOrEmpty(initialWorkingDirectory)
                     ? WorkspaceLaunchProfileParser.GetWorkingDirectory(executablePath)
-                    : item.WorkingDirectory);
+                    : initialWorkingDirectory;
+
+                try
+                {
+                    BeginInvoke((Action)delegate
+                    {
+                        launchProfileCapturePending.Remove(windowHandle);
+                        WorkspaceItem current = FindWorkspaceItem(workspaceId, windowHandle);
+                        if (current == null)
+                        {
+                            return;
+                        }
+
+                        catalog.SetLaunchProfile(
+                            current.WindowHandle,
+                            String.IsNullOrEmpty(current.LaunchArguments) ? arguments : current.LaunchArguments,
+                            String.IsNullOrEmpty(current.WorkingDirectory) ? workingDirectory : current.WorkingDirectory);
+                        SaveState();
+                        Invalidate();
+                    });
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+                catch (InvalidOperationException)
+                {
+                }
+            });
         }
 
         private int GetSavedProcessItemCount(string processName)
@@ -3272,13 +3335,42 @@ namespace WorkspaceSwitcher.App
 
         private static string GetProcessName(uint processId)
         {
-            try
-            {
-                return Process.GetProcessById((int)processId).ProcessName + ".exe";
-            }
-            catch (ArgumentException)
+            // Process.GetProcessById(...).ProcessName under .NET Framework loads
+            // a system process snapshot per lookup. Foreground recovery calls
+            // this once per HWND, including hundreds of background windows;
+            // that blocked the UI timer for seconds when a new window activated.
+            // Query only the target process, without retaining a PID/name cache
+            // (PIDs can be reused after an application exits).
+            IntPtr process = NativeMethods.OpenProcess(0x1000, false, processId);
+            if (process == IntPtr.Zero)
             {
                 return String.Empty;
+            }
+
+            try
+            {
+                System.Text.StringBuilder path = new System.Text.StringBuilder(1024);
+                uint size = (uint)path.Capacity;
+                if (!NativeMethods.QueryFullProcessImageName(process, 0, path, ref size))
+                {
+                    if (Marshal.GetLastWin32Error() != 122)
+                    {
+                        return String.Empty;
+                    }
+
+                    path = new System.Text.StringBuilder(32768);
+                    size = (uint)path.Capacity;
+                    if (!NativeMethods.QueryFullProcessImageName(process, 0, path, ref size))
+                    {
+                        return String.Empty;
+                    }
+                }
+
+                return Path.GetFileName(path.ToString());
+            }
+            finally
+            {
+                NativeMethods.CloseHandle(process);
             }
         }
 
@@ -3328,7 +3420,16 @@ namespace WorkspaceSwitcher.App
                 return false;
             }
 
-            return DragPreviewPolicy.IsTitleBarPoint(cursor.Y, windowRectangle.Top, clientOrigin.Y);
+            return IsChromeWindow(window)
+                ? DragPreviewPolicy.IsChromeTitleBarPoint(cursor.Y, windowRectangle.Top, clientOrigin.Y)
+                : DragPreviewPolicy.IsTitleBarPoint(cursor.Y, windowRectangle.Top, clientOrigin.Y);
+        }
+
+        private static bool IsChromeWindow(IntPtr window)
+        {
+            System.Text.StringBuilder className = new System.Text.StringBuilder(128);
+            return NativeMethods.GetClassName(window, className, className.Capacity) > 0
+                && String.Equals(className.ToString(), "Chrome_WidgetWin_1", StringComparison.OrdinalIgnoreCase);
         }
 
         private void BeginDragPreview(IntPtr window, NativeMethods.Point cursor)
@@ -3337,7 +3438,12 @@ namespace WorkspaceSwitcher.App
             dragSource = window;
             dragging = true;
             dragSourceWasMaximized = NativeMethods.IsZoomed(window);
-            dragPreview = new DragPreviewForm(CaptureWindow(window), GetWindowTitle(window));
+            // Do not call PrintWindow synchronously from the 16 ms UI timer. Some
+            // Electron/UWP windows do not return promptly, which used to prevent
+            // the preview from being created and made WorkspaceSwitcher appear
+            // hung while the user was dragging. The title-only preview is a
+            // reliable fallback and is created before any optional rendering.
+            dragPreview = new DragPreviewForm(null, GetWindowTitle(window));
             dragPreview.MoveToPointer(cursor);
             dragPreview.Show(this);
         }
@@ -3589,16 +3695,18 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
-            string commandLine = GetCommandLine(processId);
             string executablePath = GetProcessExecutablePath(processId);
-            catalog.AssignWindow(workspaceId, window.ToInt64(), GetWindowTitle(window), processName, commandLine);
+            catalog.AssignWindow(workspaceId, window.ToInt64(), GetWindowTitle(window), processName, String.Empty);
             catalog.SetExecutablePath(window.ToInt64(), executablePath);
             catalog.SetLaunchProfile(
                 window.ToInt64(),
-                WorkspaceLaunchProfileParser.ExtractArguments(commandLine, executablePath),
+                String.Empty,
                 WorkspaceLaunchProfileParser.GetWorkingDirectory(executablePath));
             catalog.SetWindowMaximized(window.ToInt64(), wasMaximized);
             SaveState();
+
+            WorkspaceItem item = FindWorkspaceItem(workspaceId, window.ToInt64());
+            CaptureLaunchProfileIfMissing(item, window, processId, executablePath);
         }
 
         private static string GetProcessExecutablePath(uint processId)
@@ -3626,14 +3734,45 @@ namespace WorkspaceSwitcher.App
 
         private static string GetCommandLine(uint processId)
         {
+            string result = String.Empty;
+            using (ManualResetEvent completed = new ManualResetEvent(false))
+            {
+                ThreadPool.QueueUserWorkItem(delegate
+                {
+                    try
+                    {
+                        result = GetCommandLineFromWmi(processId);
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            completed.Set();
+                        }
+                        catch (ObjectDisposedException)
+                        {
+                        }
+                    }
+                });
+                completed.WaitOne(250);
+            }
+
+            return result;
+        }
+
+        private static string GetCommandLineFromWmi(uint processId)
+        {
             try
             {
                 using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + processId))
-                using (ManagementObjectCollection results = searcher.Get())
                 {
-                    foreach (ManagementObject result in results)
+                    searcher.Options.Timeout = TimeSpan.FromMilliseconds(250);
+                    using (ManagementObjectCollection results = searcher.Get())
                     {
-                        return result["CommandLine"] as string ?? String.Empty;
+                        foreach (ManagementObject result in results)
+                        {
+                            return result["CommandLine"] as string ?? String.Empty;
+                        }
                     }
                 }
             }
@@ -3641,6 +3780,12 @@ namespace WorkspaceSwitcher.App
             {
             }
             catch (UnauthorizedAccessException)
+            {
+            }
+            catch (InvalidOperationException)
+            {
+            }
+            catch (System.Runtime.InteropServices.COMException)
             {
             }
 
@@ -3675,7 +3820,6 @@ namespace WorkspaceSwitcher.App
             bool keepPanelVisible = Visible;
             activeWorkspace = workspaceId;
             selectedApplicationWindowHandle = selectedWindowHandle;
-            string selectedDisplayDeviceName = GetWindowDisplayDeviceName(new IntPtr(selectedWindowHandle));
             IntPtr firstWindow = IntPtr.Zero;
             foreach (int id in workspaceLayout.GetWorkspaceIds())
             {
@@ -3691,24 +3835,20 @@ namespace WorkspaceSwitcher.App
 
                     if (!WorkspaceVisibilityPolicy.ShouldHide(id, workspaceId))
                     {
-                        if (minimizeAllItems
-                            && (selectedWindowHandle == 0
-                                ? WorkspaceFocusPolicy.ShouldMinimizeAllForWorkspaceClick(workspaceId, id, item.WindowHandle)
-                                : WorkspaceFocusPolicy.ShouldMinimizePeerForApplicationFocus(workspaceId, id, selectedWindowHandle, item.WindowHandle)))
+                        if (minimizeAllItems && selectedWindowHandle == 0
+                            && WorkspaceFocusPolicy.ShouldMinimizeAllForWorkspaceClick(workspaceId, id, item.WindowHandle))
                         {
                             catalog.SetWindowMaximized(item.WindowHandle, NativeMethods.IsZoomed(window));
                             NativeMethods.ShowWindow(window, NativeMethods.SW_MINIMIZE);
                         }
-                        else if (WorkspaceFocusPolicy.ShouldMinimizePeerOnDisplay(
-                            workspaceId,
-                            id,
-                            selectedWindowHandle,
-                            item.WindowHandle,
-                            selectedDisplayDeviceName,
-                            GetWindowDisplayDeviceName(window)))
+                        else if (selectedWindowHandle != 0 && item.WindowHandle != selectedWindowHandle
+                            && NativeMethods.IsWindowVisible(window))
                         {
-                            catalog.SetWindowMaximized(item.WindowHandle, NativeMethods.IsZoomed(window));
-                            NativeMethods.ShowWindow(window, NativeMethods.SW_MINIMIZE);
+                            // Application clicks affect only the selected window.
+                            // Preserve visible peers, including minimized peers,
+                            // on every display. Hidden workspace peers can still
+                            // be restored when switching to their workspace.
+                            continue;
                         }
                         else
                         {

@@ -88,10 +88,11 @@ internal static class WorkspaceSwitcherCoreTests
         }
 
         MethodInfo isTitleBarPoint = dragPreviewPolicyType.GetMethod("IsTitleBarPoint");
+        MethodInfo isChromeTitleBarPoint = dragPreviewPolicyType.GetMethod("IsChromeTitleBarPoint");
         MethodInfo getPreviewLeft = dragPreviewPolicyType.GetMethod("GetPreviewLeft");
         MethodInfo getPreviewTop = dragPreviewPolicyType.GetMethod("GetPreviewTop");
-        Assert(isTitleBarPoint != null && getPreviewLeft != null && getPreviewTop != null, "Drag preview policy APIs exist");
-        if (isTitleBarPoint == null || getPreviewLeft == null || getPreviewTop == null)
+        Assert(isTitleBarPoint != null && isChromeTitleBarPoint != null && getPreviewLeft != null && getPreviewTop != null, "Drag preview policy APIs exist");
+        if (isTitleBarPoint == null || isChromeTitleBarPoint == null || getPreviewLeft == null || getPreviewTop == null)
         {
             return 1;
         }
@@ -100,6 +101,8 @@ internal static class WorkspaceSwitcherCoreTests
         Assert(!(bool)isTitleBarPoint.Invoke(null, new object[] { 150, 100, 138 }), "A client-area click does not start the preview");
         Assert((bool)isTitleBarPoint.Invoke(null, new object[] { 125, 100, 100 }), "Custom title bars use the top drag zone");
         Assert(!(bool)isTitleBarPoint.Invoke(null, new object[] { 155, 100, 100 }), "Custom title-bar drag zone has a fixed lower bound");
+        Assert((bool)isChromeTitleBarPoint.Invoke(null, new object[] { 180, 100, 100 }), "Chrome tab and title controls use the expanded top drag zone");
+        Assert(!(bool)isChromeTitleBarPoint.Invoke(null, new object[] { 197, 100, 100 }), "Chrome content below the expanded top drag zone is not treated as a window drag");
         Assert((int)getPreviewLeft.Invoke(null, new object[] { 500, 240 }) == 380, "Preview centers under the pointer horizontally");
         Assert((int)getPreviewTop.Invoke(null, new object[] { 400, 120 }) == 340, "Preview centers under the pointer vertically");
         MethodInfo hasMovedEnough = dragPreviewPolicyType.GetMethod("HasMovedEnough");
@@ -191,7 +194,7 @@ internal static class WorkspaceSwitcherCoreTests
             return 1;
         }
 
-        Assert((bool)shouldMinimizePeer.Invoke(null, new object[] { 2, 2, (long)101, (long)202 }), "Clicking an app minimizes other apps in the same workspace");
+        Assert(!(bool)shouldMinimizePeer.Invoke(null, new object[] { 2, 2, (long)101, (long)202 }), "Clicking an app leaves other apps in the same workspace unchanged");
         Assert(!(bool)shouldMinimizePeer.Invoke(null, new object[] { 1, 2, (long)101, (long)202 }), "Clicking an app does not minimize apps in another workspace");
         Assert(!(bool)shouldMinimizePeer.Invoke(null, new object[] { 2, 2, (long)101, (long)101 }), "Clicking an app does not minimize itself");
 
@@ -202,7 +205,7 @@ internal static class WorkspaceSwitcherCoreTests
             return 1;
         }
 
-        Assert((bool)shouldMinimizePeerForFocus.Invoke(null, new object[] { 2, 2, (long)101, (long)202 }), "Double-clicking an app keeps its workspace peers minimized");
+        Assert(!(bool)shouldMinimizePeerForFocus.Invoke(null, new object[] { 2, 2, (long)101, (long)202 }), "Double-clicking an app must not minimize workspace peers");
         Assert(!(bool)shouldMinimizePeerForFocus.Invoke(null, new object[] { 2, 2, (long)101, (long)101 }), "Double-clicking an app keeps the selected app visible");
         Assert(!(bool)shouldMinimizePeerForFocus.Invoke(null, new object[] { 1, 2, (long)101, (long)202 }), "Double-clicking an app does not minimize another workspace");
 
@@ -224,7 +227,7 @@ internal static class WorkspaceSwitcherCoreTests
             return 1;
         }
 
-        Assert((bool)shouldMinimizePeerOnDisplay.Invoke(null, new object[] { 2, 2, (long)101, (long)202, "\\\\.\\DISPLAY1", "\\\\.\\DISPLAY1" }), "Clicking an app minimizes peers on the same display");
+        Assert(!(bool)shouldMinimizePeerOnDisplay.Invoke(null, new object[] { 2, 2, (long)101, (long)202, "\\\\.\\DISPLAY1", "\\\\.\\DISPLAY1" }), "The first click of an app double-click must not minimize same-display peers");
         Assert(!(bool)shouldMinimizePeerOnDisplay.Invoke(null, new object[] { 2, 2, (long)101, (long)202, "\\\\.\\DISPLAY1", "\\\\.\\DISPLAY2" }), "Clicking an app leaves peers on another display unchanged");
         Assert(!(bool)shouldMinimizePeerOnDisplay.Invoke(null, new object[] { 2, 2, (long)101, (long)202, "", "\\\\.\\DISPLAY1" }), "Unknown display identity does not trigger extra minimization");
 
@@ -254,6 +257,15 @@ internal static class WorkspaceSwitcherCoreTests
         }
 
         MethodInfo shouldActivateWorkspaceCard = workspaceCardClickPolicyType.GetMethod("ShouldActivate");
+        MethodInfo shouldMinimizeWorkspaceCard = workspaceCardClickPolicyType.GetMethod("ShouldMinimize");
+        Assert(shouldMinimizeWorkspaceCard != null, "Workspace minimization requires an explicit click-count decision");
+        if (shouldMinimizeWorkspaceCard != null)
+        {
+            Assert(!(bool)shouldMinimizeWorkspaceCard.Invoke(null, new object[] { 2, 2, 1 }), "Single workspace click never minimizes applications");
+            Assert((bool)shouldMinimizeWorkspaceCard.Invoke(null, new object[] { 2, 2, 2 }), "Double workspace click minimizes its applications");
+            Assert(!(bool)shouldMinimizeWorkspaceCard.Invoke(null, new object[] { 2, 3, 2 }), "Double-click crossing workspace cards does not minimize");
+            Assert(!(bool)shouldMinimizeWorkspaceCard.Invoke(null, new object[] { 0, 0, 2 }), "Double-click outside workspace cards does not minimize");
+        }
         Assert(shouldActivateWorkspaceCard != null, "Workspace card click policy exposes the activation decision");
         if (shouldActivateWorkspaceCard == null)
         {

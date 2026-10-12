@@ -53,18 +53,14 @@ namespace WorkspaceSwitcher.Core
     {
         public static bool ShouldMinimizePeer(int selectedWorkspaceId, int itemWorkspaceId, long selectedWindowHandle, long itemWindowHandle)
         {
-            return selectedWorkspaceId == itemWorkspaceId
-                && selectedWindowHandle != 0
-                && itemWindowHandle != 0
-                && selectedWindowHandle != itemWindowHandle;
+            // Keep this public policy compatible with existing callers, but
+            // focusing an application no longer minimizes any peer window.
+            return false;
         }
 
         public static bool ShouldMinimizePeerForApplicationFocus(int selectedWorkspaceId, int itemWorkspaceId, long selectedWindowHandle, long itemWindowHandle)
         {
-            return selectedWorkspaceId == itemWorkspaceId
-                && selectedWindowHandle != 0
-                && itemWindowHandle != 0
-                && selectedWindowHandle != itemWindowHandle;
+            return false;
         }
 
         public static bool ShouldMinimizeAllForWorkspaceClick(int clickedWorkspaceId, int itemWorkspaceId, long itemWindowHandle)
@@ -100,6 +96,11 @@ namespace WorkspaceSwitcher.Core
 
     public static class WorkspaceCardClickPolicy
     {
+        public static bool ShouldMinimize(int pressedWorkspaceId, int clickedWorkspaceId, int clickCount)
+        {
+            return clickCount == 2 && ShouldActivate(pressedWorkspaceId, clickedWorkspaceId);
+        }
+
         public static bool ShouldActivate(int pressedWorkspaceId, int clickedWorkspaceId)
         {
             return pressedWorkspaceId != 0 && pressedWorkspaceId == clickedWorkspaceId;
@@ -234,10 +235,21 @@ namespace WorkspaceSwitcher.Core
     public static class DragPreviewPolicy
     {
         private const int CustomTitleBarHeight = 48;
+        private const int ChromeTitleBarHeight = 96;
 
         public static bool IsTitleBarPoint(int cursorY, int windowTop, int clientTop)
         {
-            int titleBarBottom = Math.Max(clientTop, windowTop + CustomTitleBarHeight);
+            return IsTitleBarPoint(cursorY, windowTop, clientTop, CustomTitleBarHeight);
+        }
+
+        public static bool IsChromeTitleBarPoint(int cursorY, int windowTop, int clientTop)
+        {
+            return IsTitleBarPoint(cursorY, windowTop, clientTop, ChromeTitleBarHeight);
+        }
+
+        private static bool IsTitleBarPoint(int cursorY, int windowTop, int clientTop, int titleBarHeight)
+        {
+            int titleBarBottom = Math.Max(clientTop, windowTop + titleBarHeight);
             return cursorY >= windowTop && cursorY < titleBarBottom;
         }
 

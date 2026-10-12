@@ -62,6 +62,11 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & $coreTests $core
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+$processTests = Join-Path $build 'WorkspaceSwitcher.ProcessLookup.Tests.exe'
+& $csc /nologo /target:exe ('/out:' + $processTests) /reference:System.dll (Join-Path $project 'tests\WorkspaceSwitcher.ProcessLookup.Tests.cs')
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& $processTests $app
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & $appTests $app (Join-Path $project 'src')
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 $colorTests = Join-Path $build 'WorkspaceSwitcher.ColorField.Tests.exe'

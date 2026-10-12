@@ -1,0 +1,430 @@
+PASS Core library is built
+PASS Automatic memory stop is not included
+PASS Workspace visibility policy type exists
+PASS Workspace visibility policy API exists
+PASS Current workspace windows remain visible
+PASS Inactive workspace windows are hidden from docks
+PASS Drag preview policy type exists
+PASS Drag preview policy APIs exist
+PASS Only a title-bar drag starts the preview
+PASS A client-area click does not start the preview
+PASS Custom title bars use the top drag zone
+PASS Custom title-bar drag zone has a fixed lower bound
+PASS Chrome tab and title controls use the expanded top drag zone
+PASS Chrome content below the expanded top drag zone is not treated as a window drag
+PASS Preview centers under the pointer horizontally
+PASS Preview centers under the pointer vertically
+PASS Drag preview policy has a movement threshold
+PASS A title-bar click does not immediately create a drag preview
+PASS Moving beyond the threshold creates a drag preview
+PASS Foreground activation policy type exists
+PASS Foreground activation policy API exists
+PASS Dock activation switches to the assigned workspace
+PASS Activation in the current workspace does not switch again
+PASS Programmatic activation does not recurse
+PASS Foreground activation can reject stale queued events
+PASS The current foreground event is processed
+PASS A queued event for an old window is ignored
+PASS An event is ignored when no foreground window is available
+PASS Foreground window recovery policy exists
+PASS Foreground window recovery policy API exists
+PASS A sole live process window can recover by process identity
+PASS Multiple live VS Code windows cannot recover by process identity alone
+PASS Multiple saved windows cannot recover by process identity alone
+PASS Workspace window recovery policy exists
+PASS Workspace window recovery policy API exists
+PASS A unique title or launch-profile match can recover
+PASS Duplicate title matches cannot recover by title alone
+PASS Workspace window recovery can gate the expensive launch-profile scan
+PASS A unique title match skips the expensive launch-profile scan
+PASS No title match still allows launch-profile recovery
+PASS Duplicate title matches still allow launch-profile recovery
+PASS Workspace focus policy type exists
+PASS Workspace focus policy API exists
+PASS Clicking an app minimizes other apps in the same workspace
+PASS Clicking an app does not minimize apps in another workspace
+PASS Clicking an app does not minimize itself
+PASS Workspace focus policy exposes double-click peer minimization
+PASS Double-clicking an app keeps its workspace peers minimized
+PASS Double-clicking an app keeps the selected app visible
+PASS Double-clicking an app does not minimize another workspace
+PASS Workspace focus policy exposes the batch minimize decision
+PASS Clicking a workspace minimizes every app in that workspace
+PASS Clicking a workspace does not minimize apps in another workspace
+PASS Batch minimize ignores an unassigned window handle
+PASS Workspace focus policy exposes the same-display decision
+PASS Clicking an app minimizes peers on the same display
+PASS Clicking an app leaves peers on another display unchanged
+PASS Unknown display identity does not trigger extra minimization
+PASS Display filter policy type exists
+PASS Display filter policy exposes the highlight decision
+PASS All displays keeps each app highlighted
+PASS Selected display highlights matching apps
+PASS Selected display dims apps from another display
+PASS Workspace card click policy type exists
+PASS Workspace card click policy exposes the activation decision
+PASS A complete click on the pressed workspace activates it once
+PASS Releasing over another workspace does not activate either workspace
+PASS A click without a recorded workspace press does not activate a workspace
+PASS Dynamic workspace layout type exists
+PASS Dynamic workspace layout APIs exist
+PASS Only the default workspace exists initially
+PASS First new workspace follows the default workspace
+PASS Additional workspaces can be created
+PASS New workspaces use the expected vertical order
+PASS Later workspaces can be reordered after the default workspace
+PASS Workspace creation stops at nine workspaces
+PASS Default workspace cannot be deleted
+PASS A non-default workspace can be deleted
+PASS Deleting a workspace preserves the remaining workspace order
+PASS Creating after deletion reuses the available workspace ID
+PASS Workspace drag policy type exists
+PASS Workspace drag threshold API exists
+PASS Small pointer movement does not start card dragging
+PASS Card dragging starts after the pointer threshold
+PASS Default workspace is not draggable
+PASS WorkspaceCatalog type exists
+PASS AssignWindow API exists
+PASS GetWorkspaceItems API exists
+PASS MoveWindow API exists
+PASS Workspace items can be moved in one operation
+PASS RemoveWindow API exists
+PASS RebindWindow API exists for restarted applications
+PASS SetWindowMaximized API exists
+PASS SetLaunchProfile API exists
+PASS Window workspace lookup API exists
+PASS Assigned window resolves to its workspace
+PASS Unassigned window has no workspace
+PASS Assigned window appears in selected workspace
+PASS VS Code shows the project folder name beside the app name
+PASS Workspace records a maximized window state
+PASS Each window retains its own launch arguments
+PASS Each window retains its working directory
+PASS Workspace launch profile parser exists
+PASS Workspace launch profile parser APIs exist
+PASS Launch parser preserves a quoted VS Code workspace argument
+PASS Launch parser derives the executable working directory
+PASS Moving removes window from old workspace
+PASS Moving adds window to new workspace
+PASS Removing clears the window assignment
+PASS A restarted application can rebind its saved window handle
+PASS Rebinding replaces the stale handle without losing the workspace
+PASS Browser puts the app name before the page title
+PASS File Explorer puts the app name before the folder title
+PASS Deleting a workspace can transfer every app to the default workspace
+PASS Transferred apps leave the deleted workspace
+PASS Transferred apps retain assignments in the default workspace
+PASS Workspace state persistence types exist
+PASS Workspace state can be serialized and restored
+PASS Workspace height state type exists
+PASS Workspace state round-trips without losing app assignments
+PASS Workspace card height is persisted
+PASS Workspace state persists per-window launch arguments
+PASS Workspace state persists per-window working directory
+PASS Workspace panel position and size are persisted
+PASS Workspace card resize policy exists
+PASS Workspace card height can be clamped
+PASS Workspace card resize has a minimum height
+PASS Workspace card resize has a maximum height
+PASS Workspace card resize keeps values inside the range
+PASS DPI layout policy type exists
+PASS DPI layout policy exposes reversible layout and font scaling
+PASS Base DPI keeps the design size
+PASS High DPI scales the design size
+PASS Device size converts back to the design size
+PASS Base DPI keeps the logical font size
+PASS High DPI compensates the transformed font size
+200 process lookups: 14 ms
+PASS process identity and drag lookup latency
+PASS Workspace switcher application is built
+PASS Right panel layout type exists
+PASS Workspace panel form exists
+PASS Topmost drag preview form exists
+PASS Workspace card drag ghost form exists
+PASS Workspace visual metrics are centralized
+PASS Display context menu has a reusable placement policy
+PASS Workspace panel has a native DWM glass renderer
+PASS Display context menu placement exposes a pure calculation
+PASS Display context menu flips away from the bottom-right edge
+PASS Display context menu placement understands the clicked app bounds
+PASS Display context menu avoids covering the clicked app when the right side is tight
+PASS Panel can calculate a top-right floating position
+PASS Panel size can be clamped safely
+PASS Panel exposes edge resize hit-testing
+PASS Floating panel is placed at the top-right
+PASS Panel provides a restore-before-exit path
+PASS Panel handles foreground activation from docks and taskbar
+PASS Panel captures a window for the drag preview
+PASS Native foreground event hook is available
+PASS Preview uses window rendering instead of desktop capture
+PASS Right panel hit-test API exists
+PASS First workspace card accepts a drop
+PASS Second workspace card accepts a drop
+PASS Card gap does not accept a drop
+PASS Outside the cards does not accept a drop
+PASS Large add-workspace block hit-test API exists
+PASS Large add-workspace block follows the default workspace
+PASS Card gap is not part of the add-workspace block
+PASS Panel can create a workspace from the large add block
+PASS Panel can reorder workspace cards
+PASS Workspace cards do not toggle an app on double-click
+PASS App title can toggle its window on double-click
+PASS App title hit-test uses both horizontal and vertical position
+PASS Workspace cards expose a bottom-edge resize hit-test
+PASS Panel exposes a top hide button hit-test
+PASS Non-default workspace cards expose a delete button hit-test
+PASS Panel can delete a workspace after confirmation
+PASS Panel configures high-quality text rendering
+PASS User data is stored below the per-user .lm-exe root
+PASS Workspace state uses the persistent workspace-state.xml file
+PASS Panel uses grayscale anti-aliased text for translucent glass
+PASS Panel draws text with the graphics anti-aliasing mode
+PASS Panel uses typographic text metrics for stable GDI+ drawing
+PASS Panel has one centered text drawing helper for controls
+PASS Control text is horizontally centered by its layout rectangle
+PASS Control text is vertically centered by its layout rectangle
+PASS Display tabs do not mix GDI measurement with GDI+ drawing
+PASS Top-level controls share one font-size metric
+PASS Panel avoids ClearType color fringes on translucent glass
+PASS Panel does not use GDI ClearType text drawing
+PASS Panel uses pixel-sized fonts for stable DPI layout
+PASS Workspace title spacing follows the actual number width
+PASS Workspace cards reserve height for wrapped app rows
+PASS Panel height is calculated from its visible content
+PASS Panel refits after workspace content changes
+PASS App rows use the shared dynamic title spacing
+PASS App buttons reserve space for the bullet marker and padding
+PASS Applications are rendered as rounded buttons
+PASS Selected application has a dedicated visual state
+PASS Application drawing and hit-testing share button bounds
+PASS Application buttons use an explicit horizontal gap
+PASS Application buttons use an explicit vertical gap
+PASS Panel handles mouse-wheel scrolling
+PASS Panel keeps an independent content scroll offset
+PASS Panel clamps content scrolling to its content height
+PASS Panel draws a discoverable content scrollbar
+PASS Workspace content translates with the scroll offset
+PASS Panel applies a rounded clipping region
+PASS Panel clipping uses the shared rounded path
+PASS Add-workspace block uses the Fluent white card surface
+PASS Process opts into per-monitor DPI awareness
+PASS Custom pixel panel disables WinForms automatic size scaling
+PASS Panel handles monitor DPI changes explicitly
+PASS Panel preserves its physical size when crossing monitors
+PASS DPI changes prefer the persisted logical panel size
+PASS Panel persists a DPI-independent logical size
+PASS Panel scales its physical bounds from the logical size
+PASS Panel compensates font size for the drawing transform
+PASS Panel scales custom drawing with the monitor DPI
+PASS Panel layout uses logical client coordinates
+PASS Panel handles mouse activation explicitly
+PASS Panel clicks do not steal foreground activation
+PASS Panel remains interactive without becoming the foreground window
+PASS Switching workspaces does not hide the panel
+PASS Workspace switching preserves an already-visible panel
+PASS Panel has a compact maximum width
+PASS Oversized saved panel widths are migrated to the compact layout
+PASS Panel is topmost without activating the panel window
+PASS Hotkey registration failure is observable
+PASS Hotkey has a fallback keyboard hook
+PASS Fallback uses a low-level keyboard hook
+PASS Fallback tracks physical Control key state
+PASS Fallback tracks physical Alt key state
+PASS Fallback posts the toggle back to the panel message queue
+PASS Panel has an explicit topmost enforcement path
+PASS Panel uses the native topmost z-order API
+PASS Panel requests the Windows topmost layer
+PASS Panel requests the topmost extended window style at creation
+PASS Topmost enforcement does not steal app focus
+PASS Drag preview refreshes at approximately sixty frames per second
+PASS Drag overlays are mouse transparent
+PASS Drag overlays handle mouse hit testing explicitly
+PASS Drag overlays pass mouse hit testing to the underlying window
+PASS Drag preview waits for actual pointer movement
+PASS Drag preview is shown without blocking on window capture
+PASS Drag start does not synchronously capture the dragged window
+PASS Chrome windows have an application-specific drag zone
+PASS Drag detection uses the active top-level window
+PASS Drag detection does not replace the active window with a child window
+PASS Panel height uses the monitor working area when no fixed limit is configured
+PASS Clicking an app minimizes peer windows
+PASS Clicking an app scopes peer minimization to the selected display
+PASS Display window operations use a dedicated service
+PASS Display actions use the custom glass context menu
+PASS Workspace panel uses the native Windows glass backdrop
+PASS Workspace panel requests a system-composited backdrop
+PASS Workspace panel targets the Windows system backdrop attribute
+PASS Workspace panel requests the Acrylic-like transient material
+PASS Workspace panel configures the system backdrop theme
+PASS Workspace panel has a Win32 Acrylic fallback
+PASS Workspace panel uses the Win32 Acrylic composition API
+PASS Workspace panel uses the Acrylic blur state
+PASS Workspace panel keeps the white acrylic tint visibly translucent
+PASS Workspace panel requests native rounded corners
+PASS Workspace panel removes the legacy Region when native corners are active
+PASS Workspace panel does not stack two backdrop materials
+PASS Native DWM backdrop remains enabled with the visible wallpaper fallback
+PASS Workspace panel resets the native backdrop on handle recreation
+PASS Workspace panel attaches the backdrop after the popup is visible
+PASS Workspace panel leaves the native backdrop unpainted
+PASS Workspace panel blocks background erasure over the native backdrop
+PASS Workspace panel only paints the fallback wallpaper glass when native glass is unavailable
+PASS Wallpaper glass uses the panel's actual screen position
+PASS Wallpaper glass follows the panel's current display position
+PASS Unreadable wallpaper preserves the native DWM glass backdrop
+PASS Wallpaper glass has a low-frequency refresh path
+PASS Wallpaper glass refreshes without a high-frequency repaint loop
+PASS Panel border uses a one-pixel inset to preserve a smooth outer curve
+PASS Panel region and border share the inset rounded shape
+PASS Panel glass edge uses a low-alpha highlight instead of a white arc
+PASS Panel border color is centralized with the glass metrics
+PASS Native glass configures the outer DWM border color
+PASS Native glass applies the outer border policy
+PASS Native glass does not paint a second bright client border
+PASS Panel border does not use a bright white highlight
+PASS Workspace panel does not use a near-zero Acrylic alpha
+PASS Workspace panel does not retain a wallpaper sampling renderer
+PASS Workspace panel does not capture desktop pixels
+PASS Workspace panel does not sample the screen for its glass surface
+PASS Workspace panel does not run a wallpaper refresh timer
+PASS Workspace panel does not refresh a sampled backdrop
+PASS Workspace panel does not capture before showing
+PASS Acrylic does not trust the compatibility-shimmed .NET Framework OS version
+PASS Workspace panel does not enable a WinForms color key that breaks DWM composition
+PASS Workspace panel keeps a static fallback color centralized
+PASS Workspace panel does not use a static wallpaper snapshot
+PASS Display context menu keeps a readable minimum width
+PASS Display context menu keeps a readable row height
+PASS Display context menu uses the screen-aware placement policy
+PASS Peer windows use the system minimize action
+PASS App focus passes the resolved live window into workspace switching
+PASS Workspace switcher exposes a named show-request event for the existing instance
+PASS Workspace switcher listens for show requests without polling
+PASS A second workspace process signals the existing instance
+PASS Workspace switcher has a private show-panel message
+PASS The existing workspace instance handles an external show request
+FAIL Wallpaper glass can find an accessible runtime wallpaper cache
+FAIL Wallpaper glass searches the deployed wallpaper cache
+PASS App clicks can recover windows whose handles changed after restart
+PASS Window recovery scans current top-level windows
+PASS Window recovery ignores stale hidden handles
+PASS Window recovery validates the saved process identity
+PASS Window management protects the desktop shell from hide and minimize operations
+PASS Desktop shell protection identifies native shell window classes
+PASS Window recovery prefers the saved window title
+PASS Window recovery persists the new live handle
+PASS App clicks can relaunch a closed application
+PASS Application relaunch uses an explicit process start request
+PASS Application records retain a launchable executable path
+PASS Newly assigned windows persist launch profiles
+PASS Application launch arguments use the shared parser
+PASS Application relaunch uses saved per-window arguments
+PASS Application relaunch uses the saved working directory
+PASS Existing running windows upgrade legacy records with launch profiles
+PASS Launch profile capture is scheduled outside the UI thread
+PASS WMI launch profile lookup does not block the UI thread
+PASS Command line lookup has a bounded wait
+PASS WMI command line enumeration has a bounded timeout
+PASS Every relaunched window waits for its own new window handle
+PASS Startup refresh only checks application availability
+PASS Loading state does not automatically launch missing applications
+PASS Panel exposes a workspace refresh path
+PASS Workspace switches suppress foreground feedback for the full transition
+PASS Foreground windows can recover newly created application handles
+PASS Foreground recovery compares the live window with saved workspace items
+PASS Foreground recovery ignores delayed events for hidden windows
+PASS Ambiguous process windows are not assigned across multiple workspace records
+PASS Foreground recovery rejects ambiguous same-process windows
+PASS Restart recovery rejects duplicate title matches
+PASS Restart recovery can compare launch profiles
+PASS Dragging a managed window keeps its existing record
+PASS Dragging a managed window moves it instead of replacing it
+PASS Launching a VS Code workspace opens a distinct window
+PASS Managed hidden windows are restored instead of relaunched
+PASS Panel exposes a refresh button hit-test
+PASS Workspace apps retain an availability status
+PASS App context actions can move an app to a workspace
+PASS App context actions can close an application
+PASS App context actions can remove an application record from a workspace
+PASS App context menu distinguishes record removal from closing an application
+PASS Closing an app uses the native close message
+PASS Double-clicking an app keeps peer apps minimized
+PASS Desktop shortcut has a visible startup mode
+PASS Application distinguishes desktop launch from background startup
+PASS Desktop launch shows the workspace panel
+PASS Workspace card clicks batch-minimize the selected workspace
+PASS Panel draws the all-displays and monitor filter tabs
+PASS Display filter tabs use a shared hit-test
+PASS Panel enumerates every connected Windows display
+PASS App styling follows the selected display filter
+PASS App context actions can move a single window across displays
+PASS Workspace activation uses the recorded press and release targets
+PASS Application clicks use the system double-click interval
+PASS Single application clicks are not deferred behind double-click detection
+PASS Deferred application clicks have an explicit flush path
+PASS Double-clicks cancel the pending single application click
+PASS Single application clicks focus the selected application immediately
+PASS Application focus releases panel mouse capture
+PASS Application focus keeps the workspace panel visible
+PASS Application focus keeps the panel in a controlled topmost layer
+PASS Programmatic window changes suppress foreground feedback
+PASS Visible passive panels pass mouse hit-testing through
+PASS Passive panels keep workspace cards and controls clickable
+PASS Application focus also releases native mouse capture
+PASS Application focus restores foreground synchronization after window resolution
+PASS Hotkey detects a visible passive panel
+PASS Non-default workspace cards draw a delete action
+PASS Delete button uses a compact width
+PASS Delete button uses a compact height
+PASS Delete button sits in the card header area
+PASS Delete button uses a compact label size
+PASS Deleting a workspace requires confirmation
+PASS Deleting a workspace transfers apps to the default workspace
+PASS Deleting a workspace removes its layout card
+PASS Display context menu has an owned lifetime
+PASS Display context menu has an explicit disposal path
+PASS Display context menu is not disposed during its close callback
+PASS Workspace form tracks its closing lifecycle
+PASS Workspace form centralizes deferred backdrop callbacks
+PASS Deferred backdrop callbacks handle disposed forms
+PASS Workspace form stops drag polling before closing
+PASS Workspace form stops deferred app clicks before closing
+PASS Workspace form stops backdrop refresh before closing
+PASS Workspace form disposes the drag timer
+PASS Cards leave a compact gap below the display filter tabs
+PASS Workspace cards keep a wider margin from the panel edge
+PASS Workspace cards use a compact adaptive baseline height
+PASS Add-workspace block uses a compact adaptive height
+PASS Workspace title uses the readable pixel font size
+PASS App names use the enlarged readable pixel font size
+PASS Add-workspace title uses the readable pixel font size
+PASS Add-workspace hint uses the readable pixel font size
+PASS Top-level controls use the readable control font size
+PASS Hide button text uses the shared readable control font size
+PASS Hide button uses the smaller top-control width
+PASS Hide button uses the smaller top-control height
+PASS Refresh button uses the smaller top-control width
+PASS Refresh button uses the smaller top-control height
+PASS Display tabs move up with the compact top controls
+PASS Display tabs use the smaller top-control height
+PASS Application buttons use an eight-pixel horizontal gap
+PASS Application buttons use a twelve-pixel vertical gap
+PASS Sidebar uses an opaque white surface for readable text
+PASS Floating workspace container uses the enlarged scheme width
+PASS Floating workspace container can be expanded horizontally
+PASS Floating workspace container has no fixed vertical limit
+PASS Panel resize has a forgiving edge hit area
+PASS Scheme 1 surface colors are centralized
+PASS Scheme 1 border colors are centralized
+PASS Scheme 1 workspace cards use the enlarged radius
+PASS Scheme 1 add-workspace block uses the enlarged radius
+PASS Panel itself uses a visible rounded radius
+PASS Workspace panel is globally opaque for readable text
+PASS Scheme 1 panel uses the exact Fluent surface color
+PASS Scheme 1 cards use the exact white surface color
+PASS Scheme 1 active card uses the exact blue surface color
+PASS Workspace cards are opaque
+PASS Program row hit-test API exists
+PASS First program row is selectable
+PASS Second program row is selectable
+PASS Area below program rows is not selectable
