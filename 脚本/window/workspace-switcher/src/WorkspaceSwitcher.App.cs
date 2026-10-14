@@ -123,11 +123,13 @@ namespace WorkspaceSwitcher.App
         internal const int VK_LMENU = 0xA4;
         internal const int VK_RMENU = 0xA5;
         internal const int VK_SPACE = 0x20;
+        internal const int VK_1 = 0x31;
         internal const uint MOD_ALT = 0x0001;
         internal const uint MOD_CONTROL = 0x0002;
         internal const int SW_HIDE = 0;
         internal const int SW_SHOWNOACTIVATE = 4;
         internal const int SW_MINIMIZE = 6;
+        internal const int SW_SHOWMINNOACTIVE = 7;
         internal const int SW_SHOWMAXIMIZED = 3;
         internal const int SW_RESTORE = 9;
         internal static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
@@ -138,6 +140,10 @@ namespace WorkspaceSwitcher.App
         internal const uint SWP_SHOWWINDOW = 0x0040;
         internal const int VK_LBUTTON = 0x01;
         internal const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+        internal const uint EVENT_SYSTEM_MINIMIZESTART = 0x0016;
+        internal const uint EVENT_SYSTEM_MINIMIZEEND = 0x0017;
+        internal const int OBJID_WINDOW = 0;
+        internal const int CHILDID_SELF = 0;
         internal const uint WINEVENT_OUTOFCONTEXT = 0x0000;
         internal const uint WINEVENT_SKIPOWNPROCESS = 0x0002;
         internal const uint PW_RENDERFULLCONTENT = 0x00000002;
@@ -223,6 +229,9 @@ namespace WorkspaceSwitcher.App
 
         [DllImport("user32.dll")]
         internal static extern bool IsZoomed(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        internal static extern bool IsIconic(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         internal static extern bool GetWindowRect(IntPtr hWnd, out Rect rectangle);
@@ -552,6 +561,7 @@ namespace WorkspaceSwitcher.App
         }
 
         private const int HotKeyId = 7101;
+        private const int WorkspaceHotKeyIdBase = HotKeyId + 1;
         private const int AddBlockHeight = WorkspaceVisualMetrics.AddBlockHeight;
         private const int HideButtonWidth = WorkspaceVisualMetrics.HideButtonWidth;
         private const int HideButtonHeight = WorkspaceVisualMetrics.HideButtonHeight;
@@ -574,7 +584,14 @@ namespace WorkspaceSwitcher.App
         private bool dragSourceWasMaximized;
         private IntPtr foregroundEventHook = IntPtr.Zero;
         private NativeMethods.WinEventDelegate foregroundEventCallback;
+        private IntPtr windowStateEventHook = IntPtr.Zero;
+        private NativeMethods.WinEventDelegate windowStateEventCallback;
+        private readonly System.Collections.Generic.HashSet<long> pendingWorkspaceMinimizeEvents =
+            new System.Collections.Generic.HashSet<long>();
+        private readonly System.Collections.Generic.HashSet<long> workspaceMinimizedWindows =
+            new System.Collections.Generic.HashSet<long>();
         private bool usingRegisteredHotKey;
+        private readonly bool[] workspaceHotKeysRegistered = new bool[WorkspaceLayout.MaximumWorkspaceCount];
         private IntPtr keyboardHook = IntPtr.Zero;
         private NativeMethods.LowLevelKeyboardProc keyboardHookCallback;
         private bool lowLevelHotkeyDown;
@@ -966,6 +983,7 @@ namespace WorkspaceSwitcher.App
             // client area; this form never samples or repaints the desktop.
             nativeGlassBackdropApplied = GlassWindowBackdrop.TryApply(Handle);
             usingRegisteredHotKey = NativeMethods.RegisterHotKey(Handle, HotKeyId, NativeMethods.MOD_CONTROL | NativeMethods.MOD_ALT, NativeMethods.VK_SPACE);
+            RegisterWorkspaceHotKeys();
             if (!usingRegisteredHotKey)
             {
                 InstallKeyboardHook();
@@ -979,6 +997,16 @@ namespace WorkspaceSwitcher.App
                 0,
                 0,
                 NativeMethods.WINEVENT_OUTOFCONTEXT | NativeMethods.WINEVENT_SKIPOWNPROCESS);
+            windowStateEventCallback = OnTrackedWindowStateChanged;
+            windowStateEventHook = NativeMethods.SetWinEventHook(
+                NativeMethods.EVENT_SYSTEM_MINIMIZESTART,
+                NativeMethods.EVENT_SYSTEM_MINIMIZEEND,
+                IntPtr.Zero,
+                windowStateEventCallback,
+                0,
+                0,
+                NativeMethods.WINEVENT_OUTOFCONTEXT | NativeMethods.WINEVENT_SKIPOWNPROCESS);
+            CaptureInitialMinimizedWindowStates();
             PlaceAtCenter();
             RefreshWorkspaceState();
         }
@@ -990,15 +1018,31 @@ namespace WorkspaceSwitcher.App
                 NativeMethods.UnregisterHotKey(Handle, HotKeyId);
                 usingRegisteredHotKey = false;
             }
+            for (int index = 0; index < workspaceHotKeysRegistered.Length; index++)
+            {
+                if (workspaceHotKeysRegistered[index])
+                {
+                    NativeMethods.UnregisterHotKey(Handle, WorkspaceHotKeyIdBase + index);
+                    workspaceHotKeysRegistered[index] = false;
+                }
+            }
             UninstallKeyboardHook();
             if (foregroundEventHook != IntPtr.Zero)
             {
                 NativeMethods.UnhookWinEvent(foregroundEventHook);
                 foregroundEventHook = IntPtr.Zero;
             }
+            if (windowStateEventHook != IntPtr.Zero)
+            {
+                NativeMethods.UnhookWinEvent(windowStateEventHook);
+                windowStateEventHook = IntPtr.Zero;
+            }
 
             nativeGlassBackdropApplied = false;
             foregroundEventCallback = null;
+            windowStateEventCallback = null;
+            pendingWorkspaceMinimizeEvents.Clear();
+            workspaceMinimizedWindows.Clear();
             base.OnHandleDestroyed(e);
         }
 
@@ -1025,6 +1069,21 @@ namespace WorkspaceSwitcher.App
             catch (DllNotFoundException)
             {
                 keyboardHook = IntPtr.Zero;
+            }
+        }
+
+        private void RegisterWorkspaceHotKeys()
+        {
+            for (int index = 0; index < workspaceHotKeysRegistered.Length; index++)
+            {
+                // A registration conflict disables only that digit. The fallback
+                // hook remains reserved for Ctrl+Alt+Space so other applications'
+                // shortcuts are never intercepted.
+                workspaceHotKeysRegistered[index] = NativeMethods.RegisterHotKey(
+                    Handle,
+                    WorkspaceHotKeyIdBase + index,
+                    NativeMethods.MOD_CONTROL | NativeMethods.MOD_ALT,
+                    (uint)(NativeMethods.VK_1 + index));
             }
         }
 
@@ -1104,10 +1163,29 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
-            if (message.Msg == NativeMethods.WM_HOTKEY && message.WParam.ToInt32() == HotKeyId)
+            if (message.Msg == NativeMethods.WM_HOTKEY)
             {
-                TogglePanel();
-                return;
+                int hotKeyId = message.WParam.ToInt32();
+                if (hotKeyId == HotKeyId)
+                {
+                    TogglePanel();
+                    return;
+                }
+
+                if (hotKeyId >= WorkspaceHotKeyIdBase
+                    && hotKeyId < WorkspaceHotKeyIdBase + WorkspaceLayout.MaximumWorkspaceCount)
+                {
+                    int workspaceId = WorkspaceHotKeyPolicy.ResolveWorkspaceId(
+                        hotKeyId,
+                        WorkspaceHotKeyIdBase,
+                        workspaceLayout.GetWorkspaceIds());
+                    if (workspaceId != 0)
+                    {
+                        ShowWorkspace(workspaceId);
+                    }
+
+                    return;
+                }
             }
 
             if (message.Msg == NativeMethods.WM_MOUSEACTIVATE)
@@ -2285,7 +2363,7 @@ namespace WorkspaceSwitcher.App
             catalog.MoveWindow(item.WindowHandle, targetWorkspaceId);
             if (targetWorkspaceId == activeWorkspace)
             {
-                ShowWindowUsingSavedState(window, item.IsMaximized);
+                ShowWorkspaceItem(item, window, false);
             }
             else
             {
@@ -2738,6 +2816,8 @@ namespace WorkspaceSwitcher.App
                     }
                 }
 
+                item = FindWorkspaceItem(item.WorkspaceId, window.ToInt64()) ?? item;
+                catalog.SetWindowUserMinimized(item.WindowHandle, false);
                 ShowWorkspace(item.WorkspaceId, window.ToInt64());
                 bool shouldMaximize = !NativeMethods.IsZoomed(window);
                 catalog.SetWindowMaximized(item.WindowHandle, shouldMaximize);
@@ -2771,6 +2851,31 @@ namespace WorkspaceSwitcher.App
                     bool available = TryResolveWorkspaceWindow(item, out window);
                     catalog.SetWindowAvailable(item.WindowHandle, available);
                 }
+            }
+        }
+
+        private void CaptureInitialMinimizedWindowStates()
+        {
+            bool changed = false;
+            foreach (WorkspaceItem item in catalog.GetAllItems())
+            {
+                IntPtr window;
+                if (!TryResolveWorkspaceWindow(item, out window))
+                {
+                    continue;
+                }
+
+                bool isMinimized = NativeMethods.IsIconic(window);
+                if (item.IsUserMinimized != isMinimized)
+                {
+                    catalog.SetWindowUserMinimized(item.WindowHandle, isMinimized);
+                    changed = true;
+                }
+            }
+
+            if (changed)
+            {
+                SaveState();
             }
         }
 
@@ -3514,6 +3619,73 @@ namespace WorkspaceSwitcher.App
             }
         }
 
+        private void OnTrackedWindowStateChanged(IntPtr hook, uint eventType, IntPtr window, int objectId, int childId, uint eventThread, uint eventTime)
+        {
+            if ((eventType != NativeMethods.EVENT_SYSTEM_MINIMIZESTART && eventType != NativeMethods.EVENT_SYSTEM_MINIMIZEEND)
+                || window == IntPtr.Zero
+                || objectId != NativeMethods.OBJID_WINDOW
+                || childId != NativeMethods.CHILDID_SELF
+                || IsDisposed
+                || !IsHandleCreated)
+            {
+                return;
+            }
+
+            try
+            {
+                BeginInvoke((Action)delegate { HandleTrackedWindowStateChanged(window, eventType); });
+            }
+            catch (InvalidOperationException)
+            {
+            }
+        }
+
+        private void HandleTrackedWindowStateChanged(IntPtr window, uint eventType)
+        {
+            if (isClosing || !NativeMethods.IsWindow(window))
+            {
+                return;
+            }
+
+            bool isMinimizeStart = eventType == NativeMethods.EVENT_SYSTEM_MINIMIZESTART;
+            long windowHandle = window.ToInt64();
+            bool isWorkspaceSwitcherAction = ConsumePendingWorkspaceMinimizeEvent(windowHandle, isMinimizeStart);
+            if (isMinimizeStart && isWorkspaceSwitcherAction)
+            {
+                workspaceMinimizedWindows.Add(windowHandle);
+            }
+            else if (!isMinimizeStart || !isWorkspaceSwitcherAction)
+            {
+                workspaceMinimizedWindows.Remove(windowHandle);
+            }
+
+            WorkspaceItem item = FindWorkspaceItemByHandle(windowHandle);
+            if (item == null)
+            {
+                return;
+            }
+
+            bool nextState = WorkspaceWindowStatePolicy.ApplyMinimizeEvent(
+                item.IsUserMinimized,
+                isMinimizeStart,
+                isWorkspaceSwitcherAction);
+            if (nextState != item.IsUserMinimized)
+            {
+                catalog.SetWindowUserMinimized(windowHandle, nextState);
+                SaveState();
+            }
+        }
+
+        private bool ConsumePendingWorkspaceMinimizeEvent(long windowHandle, bool isMinimizeStart)
+        {
+            return pendingWorkspaceMinimizeEvents.Remove(windowHandle) && isMinimizeStart;
+        }
+
+        private bool HasPendingWorkspaceMinimizeEvent(long windowHandle)
+        {
+            return pendingWorkspaceMinimizeEvents.Contains(windowHandle);
+        }
+
         private void HandleForegroundWindow(IntPtr window)
         {
             if (foregroundSyncSuppression > 0)
@@ -3544,8 +3716,13 @@ namespace WorkspaceSwitcher.App
             isHandlingForegroundActivation = true;
             try
             {
+                if (foregroundItem.IsUserMinimized)
+                {
+                    catalog.SetWindowUserMinimized(foregroundItem.WindowHandle, false);
+                    SaveState();
+                }
                 ShowWorkspace(workspaceId);
-                ShowWindowUsingSavedState(window, foregroundItem.IsMaximized);
+                ShowWorkspaceItem(foregroundItem, window, true);
                 NativeMethods.SetForegroundWindow(window);
             }
             finally
@@ -3627,6 +3804,19 @@ namespace WorkspaceSwitcher.App
         private WorkspaceItem FindWorkspaceItem(int workspaceId, long windowHandle)
         {
             foreach (WorkspaceItem item in catalog.GetWorkspaceItems(workspaceId))
+            {
+                if (item.WindowHandle == windowHandle)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
+        private WorkspaceItem FindWorkspaceItemByHandle(long windowHandle)
+        {
+            foreach (WorkspaceItem item in catalog.GetAllItems())
             {
                 if (item.WindowHandle == windowHandle)
                 {
@@ -3839,7 +4029,7 @@ namespace WorkspaceSwitcher.App
                             && WorkspaceFocusPolicy.ShouldMinimizeAllForWorkspaceClick(workspaceId, id, item.WindowHandle))
                         {
                             catalog.SetWindowMaximized(item.WindowHandle, NativeMethods.IsZoomed(window));
-                            NativeMethods.ShowWindow(window, NativeMethods.SW_MINIMIZE);
+                            MinimizeWindowFromWorkspaceAction(window);
                         }
                         else if (selectedWindowHandle != 0 && item.WindowHandle != selectedWindowHandle
                             && NativeMethods.IsWindowVisible(window))
@@ -3852,8 +4042,8 @@ namespace WorkspaceSwitcher.App
                         }
                         else
                         {
-                            ShowWindowUsingSavedState(window, item.IsMaximized);
-                            if (firstWindow == IntPtr.Zero)
+                            bool canActivate = ShowWorkspaceItem(item, window, false);
+                            if (canActivate && firstWindow == IntPtr.Zero)
                             {
                                 firstWindow = window;
                             }
@@ -3861,6 +4051,7 @@ namespace WorkspaceSwitcher.App
                     }
                     else
                     {
+                        CaptureMinimizedStateBeforeHiding(item, window);
                         catalog.SetWindowMaximized(item.WindowHandle, NativeMethods.IsZoomed(window));
                         NativeMethods.ShowWindow(window, NativeMethods.SW_HIDE);
                     }
@@ -3960,8 +4151,10 @@ namespace WorkspaceSwitcher.App
                     }
                 }
 
+                item = FindWorkspaceItem(item.WorkspaceId, window.ToInt64()) ?? item;
+                catalog.SetWindowUserMinimized(item.WindowHandle, false);
                 ShowWorkspace(item.WorkspaceId, window.ToInt64());
-                ShowWindowUsingSavedState(window, item.IsMaximized);
+                ShowWorkspaceItem(item, window, true);
                 NativeMethods.SetForegroundWindow(window);
             }
             finally
@@ -3980,7 +4173,7 @@ namespace WorkspaceSwitcher.App
                     IntPtr window = new IntPtr(item.WindowHandle);
                     if (NativeMethods.IsWindow(window))
                     {
-                        ShowWindowUsingSavedState(window, item.IsMaximized);
+                        ShowWorkspaceItem(item, window, false);
                     }
                 }
             }
@@ -4086,7 +4279,8 @@ namespace WorkspaceSwitcher.App
                         LaunchArguments = item.LaunchArguments,
                         WorkingDirectory = item.WorkingDirectory,
                         DisplayName = item.DisplayName,
-                        IsMaximized = item.IsMaximized
+                        IsMaximized = item.IsMaximized,
+                        IsUserMinimized = item.IsUserMinimized
                     });
                 }
 
@@ -4118,6 +4312,75 @@ namespace WorkspaceSwitcher.App
             catch (Exception)
             {
             }
+        }
+
+        private void MinimizeWindowFromWorkspaceAction(IntPtr window)
+        {
+            if (window == IntPtr.Zero || !NativeMethods.IsWindow(window) || NativeMethods.IsIconic(window))
+            {
+                return;
+            }
+
+            long windowHandle = window.ToInt64();
+            pendingWorkspaceMinimizeEvents.Add(windowHandle);
+            workspaceMinimizedWindows.Add(windowHandle);
+            NativeMethods.ShowWindow(window, NativeMethods.SW_MINIMIZE);
+            if (!NativeMethods.IsIconic(window))
+            {
+                pendingWorkspaceMinimizeEvents.Remove(windowHandle);
+                workspaceMinimizedWindows.Remove(windowHandle);
+            }
+        }
+
+        private void CaptureMinimizedStateBeforeHiding(WorkspaceItem item, IntPtr window)
+        {
+            if (item == null || window == IntPtr.Zero || !NativeMethods.IsWindow(window))
+            {
+                return;
+            }
+
+            long windowHandle = window.ToInt64();
+            if (HasPendingWorkspaceMinimizeEvent(windowHandle))
+            {
+                return;
+            }
+
+            bool isMinimized = NativeMethods.IsIconic(window);
+            if (isMinimized && workspaceMinimizedWindows.Contains(windowHandle))
+            {
+                return;
+            }
+
+            if (!isMinimized)
+            {
+                pendingWorkspaceMinimizeEvents.Remove(windowHandle);
+                workspaceMinimizedWindows.Remove(windowHandle);
+            }
+
+            if (item.IsUserMinimized != isMinimized)
+            {
+                catalog.SetWindowUserMinimized(windowHandle, isMinimized);
+            }
+        }
+
+        private bool ShowWorkspaceItem(WorkspaceItem item, IntPtr window, bool explicitFocus)
+        {
+            if (item != null && WorkspaceWindowStatePolicy.ShouldShowMinimized(item.IsUserMinimized, explicitFocus))
+            {
+                NativeMethods.ShowWindow(window, NativeMethods.SW_SHOWMINNOACTIVE);
+                return false;
+            }
+
+            if (item != null)
+            {
+                if (windowStateEventHook == IntPtr.Zero && !NativeMethods.IsIconic(window))
+                {
+                    pendingWorkspaceMinimizeEvents.Remove(item.WindowHandle);
+                    workspaceMinimizedWindows.Remove(item.WindowHandle);
+                }
+            }
+            ShowWindowUsingSavedState(window, item != null && item.IsMaximized);
+            return true;
         }
 
         private static void ShowWindowUsingSavedState(IntPtr window, bool isMaximized)

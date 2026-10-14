@@ -14,9 +14,6 @@ namespace ToolHub.App
     public sealed class ToolHubForm : Form
     {
         private const int HubWidth = 360;
-        private const int HubHeight = 526;
-        private const int MainPanelHeight = 356;
-        private const int SearchTop = 382;
         private const int SearchWidth = 250;
         private const int SearchHeight = 72;
         private const int ActionLeft = 274;
@@ -37,6 +34,7 @@ namespace ToolHub.App
         private static readonly Color ExitHover = Color.FromArgb(255, 241, 243);
 
         private readonly IList<ToolHubTool> allTools;
+        private readonly ToolHubLayout layout;
         private readonly IList<Process> launchedProcesses = new List<Process>();
         private IList<ToolHubTool> visibleTools;
         private readonly TextBox searchBox;
@@ -55,6 +53,7 @@ namespace ToolHub.App
         public ToolHubForm(IList<ToolHubTool> tools)
         {
             allTools = tools ?? new List<ToolHubTool>();
+            layout = new ToolHubLayout(allTools.Count);
             visibleTools = ToolHubCatalog.Filter(allTools, string.Empty);
 
             AutoScaleMode = AutoScaleMode.None;
@@ -63,7 +62,7 @@ namespace ToolHub.App
             StartPosition = FormStartPosition.Manual;
             TopMost = true;
             KeyPreview = true;
-            ClientSize = new Size(HubWidth, HubHeight);
+            ClientSize = new Size(HubWidth, layout.HubHeight);
             BackColor = Surface;
             try
             {
@@ -92,7 +91,7 @@ namespace ToolHub.App
                 BackColor = Surface,
                 ForeColor = Muted,
                 Font = new Font("Microsoft YaHei UI", 16F, FontStyle.Regular, GraphicsUnit.Pixel),
-                Location = new Point(31, SearchTop + 23),
+                Location = new Point(31, layout.SearchTop + 23),
                 Size = new Size(SearchWidth - 48, 33),
                 TabStop = true
             };
@@ -174,7 +173,7 @@ namespace ToolHub.App
             graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             graphics.Clear(Surface);
 
-            using (GraphicsPath mainPath = CreateRoundedPath(new Rectangle(0, 0, HubWidth, MainPanelHeight), 28))
+            using (GraphicsPath mainPath = CreateRoundedPath(new Rectangle(0, 0, HubWidth, layout.MainPanelHeight), 28))
             using (SolidBrush mainBrush = new SolidBrush(Surface))
             {
                 graphics.FillPath(mainBrush, mainPath);
@@ -290,13 +289,13 @@ namespace ToolHub.App
             }
 
             int rowIndex = GetRowIndex(e.Location);
-            if (rowIndex == Math.Min(visibleTools.Count, 3))
+            if (rowIndex == Math.Min(visibleTools.Count, layout.ToolCount))
             {
                 ExitApplication();
                 return;
             }
 
-            if (rowIndex >= 0 && rowIndex < visibleTools.Count && rowIndex < 3)
+            if (rowIndex >= 0 && rowIndex < visibleTools.Count && rowIndex < layout.ToolCount)
             {
                 LaunchTool(visibleTools[rowIndex]);
             }
@@ -364,7 +363,7 @@ namespace ToolHub.App
             using (SolidBrush disabledBrush = new SolidBrush(Muted))
             using (Pen hoverPen = new Pen(Hover, 1F))
             {
-                for (int i = 0; i < visibleTools.Count && i < 3; i++)
+                for (int i = 0; i < visibleTools.Count && i < layout.ToolCount; i++)
                 {
                     ToolHubTool tool = visibleTools[i];
                     int top = RowTop + i * RowHeight;
@@ -388,7 +387,7 @@ namespace ToolHub.App
                     graphics.DrawString("没有匹配的工具", labelFont, disabledBrush, 34F, RowTop + 32F);
                 }
 
-                DrawExitRow(graphics, Math.Min(visibleTools.Count, 3));
+                DrawExitRow(graphics, Math.Min(visibleTools.Count, layout.ToolCount));
             }
         }
 
@@ -416,7 +415,7 @@ namespace ToolHub.App
 
         private void DrawSearchSurface(Graphics graphics)
         {
-            using (GraphicsPath path = CreateRoundedPath(new Rectangle(7, SearchTop, SearchWidth, SearchHeight), 38))
+            using (GraphicsPath path = CreateRoundedPath(new Rectangle(7, layout.SearchTop, SearchWidth, SearchHeight), 38))
             using (SolidBrush brush = new SolidBrush(Surface))
             {
                 graphics.FillPath(brush, path);
@@ -425,7 +424,7 @@ namespace ToolHub.App
 
         private void DrawActionButton(Graphics graphics)
         {
-            actionBounds = new Rectangle(ActionLeft, SearchTop, ActionSize, ActionSize);
+            actionBounds = new Rectangle(ActionLeft, layout.SearchTop, ActionSize, ActionSize);
             ToolHubIcon.Draw(graphics, actionBounds);
         }
 
@@ -464,6 +463,21 @@ namespace ToolHub.App
                     graphics.DrawArc(pen, origin.X + 8, origin.Y + 11, 8, 8, 205, 140);
                     graphics.DrawLine(pen, origin.X + 14, origin.Y + 15, origin.X + 19, origin.Y + 10);
                 }
+                else if (id == "system-diagnostics")
+                {
+                    graphics.DrawLine(pen, origin.X + 1, origin.Y + 25, origin.X + 28, origin.Y + 25);
+                    graphics.DrawLine(pen, origin.X + 3, origin.Y + 23, origin.X + 3, origin.Y + 4);
+                    Point[] pulse =
+                    {
+                        new Point(origin.X + 5, origin.Y + 17),
+                        new Point(origin.X + 10, origin.Y + 17),
+                        new Point(origin.X + 13, origin.Y + 9),
+                        new Point(origin.X + 17, origin.Y + 21),
+                        new Point(origin.X + 20, origin.Y + 14),
+                        new Point(origin.X + 26, origin.Y + 14)
+                    };
+                    graphics.DrawLines(pen, pulse);
+                }
                 else
                 {
                     graphics.DrawEllipse(pen, origin.X + 2, origin.Y + 4, 17, 17);
@@ -494,7 +508,7 @@ namespace ToolHub.App
 
         private int GetRowIndex(Point point)
         {
-            int rowCount = Math.Min(visibleTools.Count, 3) + 1;
+            int rowCount = Math.Min(visibleTools.Count, layout.ToolCount) + 1;
             if (point.X < 10 || point.X > HubWidth - 10 || point.Y < RowTop || point.Y >= RowTop + rowCount * RowHeight)
             {
                 return -1;
@@ -624,16 +638,16 @@ namespace ToolHub.App
         private GraphicsPath BuildWindowPath()
         {
             GraphicsPath path = new GraphicsPath();
-            path.AddPath(CreateRoundedPath(new Rectangle(0, 0, HubWidth, MainPanelHeight), 28), false);
-            path.AddPath(CreateRoundedPath(new Rectangle(7, SearchTop, SearchWidth, SearchHeight), 38), false);
-            path.AddEllipse(new Rectangle(ActionLeft, SearchTop, ActionSize, ActionSize));
+            path.AddPath(CreateRoundedPath(new Rectangle(0, 0, HubWidth, layout.MainPanelHeight), 28), false);
+            path.AddPath(CreateRoundedPath(new Rectangle(7, layout.SearchTop, SearchWidth, SearchHeight), 38), false);
+            path.AddEllipse(new Rectangle(ActionLeft, layout.SearchTop, ActionSize, ActionSize));
             return path;
         }
 
         private GraphicsPath BuildCollapsedPath()
         {
             GraphicsPath path = new GraphicsPath();
-            path.AddEllipse(new Rectangle(ActionLeft, SearchTop, ActionSize, ActionSize));
+            path.AddEllipse(new Rectangle(ActionLeft, layout.SearchTop, ActionSize, ActionSize));
             return path;
         }
 

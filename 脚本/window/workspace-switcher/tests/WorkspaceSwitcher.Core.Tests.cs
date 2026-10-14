@@ -351,6 +351,7 @@ internal static class WorkspaceSwitcherCoreTests
         MethodInfo removeWindow = RequireMethod(catalogType, "RemoveWindow", 1);
         MethodInfo rebindWindow = RequireMethod(catalogType, "RebindWindow", 2);
         MethodInfo setWindowMaximized = RequireMethod(catalogType, "SetWindowMaximized", 2);
+        MethodInfo setWindowUserMinimized = RequireMethod(catalogType, "SetWindowUserMinimized", 2);
         MethodInfo setLaunchProfile = RequireMethod(catalogType, "SetLaunchProfile", 3);
         MethodInfo getWindowWorkspaceId = RequireMethod(catalogType, "GetWindowWorkspaceId", 1);
         Assert(assignWindow != null, "AssignWindow API exists");
@@ -360,6 +361,7 @@ internal static class WorkspaceSwitcherCoreTests
         Assert(removeWindow != null, "RemoveWindow API exists");
         Assert(rebindWindow != null, "RebindWindow API exists for restarted applications");
         Assert(setWindowMaximized != null, "SetWindowMaximized API exists");
+        Assert(setWindowUserMinimized != null, "Workspace can record a user-minimized window");
         Assert(setLaunchProfile != null, "SetLaunchProfile API exists");
         Assert(getWindowWorkspaceId != null, "Window workspace lookup API exists");
         if (assignWindow == null || getItems == null || moveWindow == null || moveWorkspaceItems == null || removeWindow == null || rebindWindow == null || setWindowMaximized == null || setLaunchProfile == null || getWindowWorkspaceId == null)
@@ -380,6 +382,13 @@ internal static class WorkspaceSwitcherCoreTests
             setWindowMaximized.Invoke(catalog, new object[] { (long)101, true });
             PropertyInfo isMaximized = item.GetType().GetProperty("IsMaximized");
             Assert(isMaximized != null && (bool)isMaximized.GetValue(item, null), "Workspace records a maximized window state");
+            PropertyInfo isUserMinimized = item.GetType().GetProperty("IsUserMinimized");
+            Assert(isUserMinimized != null && !(bool)isUserMinimized.GetValue(item, null), "New window assignments are not user-minimized by default");
+            if (setWindowUserMinimized != null)
+            {
+                setWindowUserMinimized.Invoke(catalog, new object[] { (long)101, true });
+                Assert(isUserMinimized != null && (bool)isUserMinimized.GetValue(item, null), "Workspace records an externally minimized window");
+            }
             setLaunchProfile.Invoke(catalog, new object[]
             {
                 (long)101,
@@ -474,6 +483,12 @@ internal static class WorkspaceSwitcherCoreTests
                 itemSnapshotType.GetProperty("DisplayName").SetValue(itemSnapshot, "VS Code — fugle", null);
                 itemSnapshotType.GetProperty("LaunchArguments").SetValue(itemSnapshot, "--new-window \"D:\\孚嘉\\code\\yqa.code-workspace\"", null);
                 itemSnapshotType.GetProperty("WorkingDirectory").SetValue(itemSnapshot, "D:\\software\\front\\Microsoft VS Code", null);
+                PropertyInfo snapshotIsUserMinimized = itemSnapshotType.GetProperty("IsUserMinimized");
+                Assert(snapshotIsUserMinimized != null, "Window snapshot exposes user-minimized state");
+                if (snapshotIsUserMinimized != null)
+                {
+                    snapshotIsUserMinimized.SetValue(itemSnapshot, true, null);
+                }
                 System.Collections.IList snapshotItems = (System.Collections.IList)snapshotType.GetProperty("Items").GetValue(snapshot, null);
                 snapshotItems.Add(itemSnapshot);
                 string serialized = (string)serialize.Invoke(null, new object[] { snapshot });
@@ -494,7 +509,19 @@ internal static class WorkspaceSwitcherCoreTests
                         "Workspace state persists per-window launch arguments");
                     Assert((string)restoredItem.GetType().GetProperty("WorkingDirectory").GetValue(restoredItem, null) == "D:\\software\\front\\Microsoft VS Code",
                         "Workspace state persists per-window working directory");
+                    PropertyInfo restoredIsUserMinimized = restoredItem.GetType().GetProperty("IsUserMinimized");
+                    Assert(restoredIsUserMinimized != null && (bool)restoredIsUserMinimized.GetValue(restoredItem, null),
+                        "Workspace state persists a user-minimized window");
                 }
+
+                object legacyRestored = deserialize.Invoke(null, new object[]
+                {
+                    "<workspaceState><workspaces><workspace id=\"1\" /></workspaces><items><item handle=\"1234\" workspace=\"1\" maximized=\"false\"><title>Legacy</title><process>legacy.exe</process></item></items></workspaceState>"
+                });
+                System.Collections.IList legacyItems = (System.Collections.IList)snapshotType.GetProperty("Items").GetValue(legacyRestored, null);
+                PropertyInfo legacyIsUserMinimized = itemSnapshotType.GetProperty("IsUserMinimized");
+                Assert(legacyItems.Count == 1 && legacyIsUserMinimized != null && !(bool)legacyIsUserMinimized.GetValue(legacyItems[0], null),
+                    "Legacy workspace state without minimized attribute defaults to normal");
 
                 snapshotType.GetProperty("PanelX").SetValue(snapshot, 120, null);
                 snapshotType.GetProperty("PanelY").SetValue(snapshot, 80, null);
@@ -507,6 +534,24 @@ internal static class WorkspaceSwitcherCoreTests
                        (int)snapshotType.GetProperty("PanelWidth").GetValue(panelRestored, null) == 420 &&
                        (int)snapshotType.GetProperty("PanelHeight").GetValue(panelRestored, null) == 600,
                        "Workspace panel position and size are persisted");
+            }
+        }
+
+        Type windowStatePolicyType = assembly.GetType("WorkspaceSwitcher.Core.WorkspaceWindowStatePolicy");
+        Assert(windowStatePolicyType != null, "Workspace window state policy exists");
+        if (windowStatePolicyType != null)
+        {
+            MethodInfo applyMinimizeEvent = windowStatePolicyType.GetMethod("ApplyMinimizeEvent", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo shouldShowMinimized = windowStatePolicyType.GetMethod("ShouldShowMinimized", BindingFlags.Public | BindingFlags.Static);
+            Assert(applyMinimizeEvent != null && shouldShowMinimized != null, "Window state policy exposes event and activation decisions");
+            if (applyMinimizeEvent != null && shouldShowMinimized != null)
+            {
+                Assert((bool)applyMinimizeEvent.Invoke(null, new object[] { false, true, false }), "An external minimize event is recorded");
+                Assert(!(bool)applyMinimizeEvent.Invoke(null, new object[] { true, false, false }), "An external restore event clears the minimized state");
+                Assert(!(bool)applyMinimizeEvent.Invoke(null, new object[] { false, true, true }), "WorkspaceSwitcher minimize events are not recorded as user minimization");
+                Assert((bool)shouldShowMinimized.Invoke(null, new object[] { true, false }), "Workspace switching preserves a user's minimized state");
+                Assert(!(bool)shouldShowMinimized.Invoke(null, new object[] { true, true }), "Explicitly opening an app overrides its minimized state");
+                Assert(!(bool)shouldShowMinimized.Invoke(null, new object[] { false, false }), "Ordinary windows follow their saved normal or maximized state");
             }
         }
 

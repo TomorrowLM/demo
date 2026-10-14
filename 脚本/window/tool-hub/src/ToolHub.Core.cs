@@ -57,6 +57,26 @@ namespace ToolHub.Core
         public bool UseShellExecute { get; private set; }
     }
 
+    public sealed class ToolHubLayout
+    {
+        private const int RowTop = 18;
+        private const int RowHeight = 76;
+        private const int SearchHeight = 72;
+
+        public ToolHubLayout(int toolCount)
+        {
+            ToolCount = Math.Max(0, toolCount);
+            MainPanelHeight = RowTop + (ToolCount + 1) * RowHeight + 34;
+            SearchTop = MainPanelHeight + 26;
+            HubHeight = SearchTop + SearchHeight + 72;
+        }
+
+        public int ToolCount { get; private set; }
+        public int MainPanelHeight { get; private set; }
+        public int SearchTop { get; private set; }
+        public int HubHeight { get; private set; }
+    }
+
     public static class ToolHubCatalog
     {
         public static IList<ToolHubTool> GetTools(string windowRoot)
@@ -65,9 +85,11 @@ namespace ToolHub.Core
             string workspaceDirectory = Path.Combine(root, "workspace-switcher");
             string wallpaperDirectory = Path.Combine(root, "Wallpaper-GUI");
             string repairDirectory = Path.Combine(root, "desktop-black-screen-repair");
+            string diagnosticsDirectory = Path.Combine(root, "system-stability-diagnostics");
             string workspaceEntry = FindWorkspaceExecutable(workspaceDirectory);
             string wallpaperEntry = FindEntryPoint(wallpaperDirectory, "Wallpaper-GUI.cmd");
             string repairEntry = FindEntryPoint(repairDirectory, "Repair-DesktopBlackScreen.cmd");
+            string diagnosticsEntry = FindExecutable(diagnosticsDirectory, "SystemStabilityDiagnostics.exe");
 
             return new List<ToolHubTool>
             {
@@ -94,8 +116,31 @@ namespace ToolHub.Core
                     repairEntry,
                     string.Empty,
                     Path.GetDirectoryName(repairEntry),
-                    ToolHubLaunchKind.CommandFile)
+                    ToolHubLaunchKind.CommandFile),
+                new ToolHubTool(
+                    "system-diagnostics",
+                    "系统稳定性诊断",
+                    "记录系统卡顿、鼠标卡顿和应用无响应时的资源状态",
+                    diagnosticsEntry,
+                    string.Empty,
+                    Path.GetDirectoryName(diagnosticsEntry),
+                    ToolHubLaunchKind.Executable)
             };
+        }
+
+        private static string FindExecutable(string toolDirectory, string fileName)
+        {
+            string[] buildDirectories = { "app", "build", "build-test" };
+            foreach (string buildDirectory in buildDirectories)
+            {
+                string candidate = Path.Combine(toolDirectory, buildDirectory, fileName);
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            return Path.Combine(toolDirectory, "app", fileName);
         }
 
         private static string FindWorkspaceExecutable(string workspaceDirectory)

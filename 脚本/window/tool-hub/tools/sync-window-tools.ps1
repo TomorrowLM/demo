@@ -13,10 +13,12 @@ $sourceWindowRoot = Split-Path -Parent $ProjectRoot
 $workspaceSource = Join-Path $sourceWindowRoot 'workspace-switcher'
 $wallpaperSource = Join-Path $sourceWindowRoot 'Wallpaper-GUI'
 $repairSource = Join-Path $sourceWindowRoot 'desktop-black-screen-repair'
+$diagnosticsSource = Join-Path $sourceWindowRoot 'system-stability-diagnostics'
 $toolHubArtifact = Join-Path $ArtifactRoot 'tool-hub'
 $workspaceArtifact = Join-Path $ArtifactRoot 'workspace-switcher'
 $wallpaperArtifact = Join-Path $ArtifactRoot 'Wallpaper-GUI'
 $repairArtifact = Join-Path $ArtifactRoot 'desktop-black-screen-repair'
+$diagnosticsArtifact = Join-Path $ArtifactRoot 'system-stability-diagnostics'
 $logDirectory = Join-Path $toolHubArtifact 'logs'
 $backupDirectory = Join-Path $toolHubArtifact 'backups'
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
@@ -39,7 +41,11 @@ New-Item -ItemType Directory -Force -Path @(
     (Join-Path $wallpaperArtifact 'logs'),
     (Join-Path $repairArtifact 'app'),
     (Join-Path $repairArtifact 'config'),
-    (Join-Path $repairArtifact 'logs')
+    (Join-Path $repairArtifact 'logs'),
+    (Join-Path $diagnosticsArtifact 'app'),
+    (Join-Path $diagnosticsArtifact 'config'),
+    (Join-Path $diagnosticsArtifact 'build'),
+    (Join-Path $diagnosticsArtifact 'logs')
 ) | Out-Null
 
 function Remove-DesktopShortcut {
@@ -189,6 +195,7 @@ function Migrate-WallpaperCache {
 if (-not (Test-Path -LiteralPath $workspaceSource -PathType Container)) { throw "缺少源码目录：$workspaceSource" }
 if (-not (Test-Path -LiteralPath $wallpaperSource -PathType Container)) { throw "缺少源码目录：$wallpaperSource" }
 if (-not (Test-Path -LiteralPath $repairSource -PathType Container)) { throw "缺少源码目录：$repairSource" }
+if (-not (Test-Path -LiteralPath $diagnosticsSource -PathType Container)) { throw "缺少源码目录：$diagnosticsSource" }
 
 Write-Output "同步开始：$ProjectRoot" | Tee-Object -FilePath $syncLog
 
@@ -211,13 +218,24 @@ foreach ($file in Get-ChildItem -LiteralPath $repairSource -File | Where-Object 
     Copy-Item -LiteralPath $file.FullName -Destination (Join-Path (Join-Path $repairArtifact 'app') $file.Name) -Force
 }
 
+$diagnosticsBuild = Join-Path $diagnosticsArtifact 'build'
+$diagnosticsBuildLog = Join-Path $logDirectory "system-stability-diagnostics-$stamp.log"
+Invoke-LoggedScript -ScriptPath (Join-Path $diagnosticsSource 'build.ps1') -Parameters @{
+    RunTests = $true
+    OutputDirectory = $diagnosticsBuild
+} -LogPath $diagnosticsBuildLog
+Backup-AppDirectory -Path (Join-Path $diagnosticsArtifact 'app') -Name 'system-stability-diagnostics'
+Copy-DeployedFile -Source (Join-Path $diagnosticsBuild 'SystemStabilityDiagnostics.exe') -Destination (Join-Path $diagnosticsArtifact 'app\SystemStabilityDiagnostics.exe')
+Copy-DeployedFile -Source (Join-Path $diagnosticsBuild 'SystemStabilityDiagnostics.Core.dll') -Destination (Join-Path $diagnosticsArtifact 'app\SystemStabilityDiagnostics.Core.dll')
+
 $toolRootConfig = Join-Path $toolHubArtifact 'config\window-root.txt'
 Write-Utf8NoBom -Path $toolRootConfig -Value $ArtifactRoot
 $toolRootsConfig = Join-Path $toolHubArtifact 'config\tool-roots.ini'
 $toolRootLines = @(
     "workspace-switcher=$(Join-Path $workspaceArtifact 'app\WorkspaceSwitcher.exe')",
     "wallpaper-gui=$(Join-Path $wallpaperArtifact 'app\Wallpaper-GUI.cmd')",
-    "desktop-black-screen-repair=$(Join-Path $repairArtifact 'app\Repair-DesktopBlackScreen.cmd')"
+    "desktop-black-screen-repair=$(Join-Path $repairArtifact 'app\Repair-DesktopBlackScreen.cmd')",
+    "system-stability-diagnostics=$(Join-Path $diagnosticsArtifact 'app\SystemStabilityDiagnostics.exe')"
 )
 Write-Utf8NoBom -Path $toolRootsConfig -Value ($toolRootLines -join [Environment]::NewLine)
 
@@ -270,6 +288,7 @@ if ($Start) {
     WorkspaceSwitcher = Join-Path $workspaceArtifact 'app\WorkspaceSwitcher.exe'
     Wallpaper = Join-Path $wallpaperArtifact 'app\Wallpaper-GUI.cmd'
     DesktopRepair = Join-Path $repairArtifact 'app\Repair-DesktopBlackScreen.cmd'
+    SystemStabilityDiagnostics = Join-Path $diagnosticsArtifact 'app\SystemStabilityDiagnostics.exe'
     DeferredFiles = @($deferredFiles)
     SyncLog = $syncLog
 } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $logDirectory 'last-sync.json') -Encoding UTF8

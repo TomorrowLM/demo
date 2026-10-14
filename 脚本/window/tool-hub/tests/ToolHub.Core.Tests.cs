@@ -33,11 +33,13 @@ internal static class ToolHubCoreTests
         Type toolType = assembly.GetType("ToolHub.Core.ToolHubTool");
         Type resolverType = assembly.GetType("ToolHub.Core.ToolHubPathResolver");
         Type launcherType = assembly.GetType("ToolHub.Core.ToolHubLauncher");
+        Type layoutType = assembly.GetType("ToolHub.Core.ToolHubLayout");
 
         Assert(catalogType != null, "catalog type exists");
         Assert(toolType != null, "tool type exists");
         Assert(resolverType != null, "path resolver exists");
         Assert(launcherType != null, "launcher exists");
+        Assert(layoutType != null, "tool hub layout adapts to the number of tools");
 
         if (resolverType != null)
         {
@@ -80,9 +82,9 @@ internal static class ToolHubCoreTests
             string fakeWindowRoot = Path.Combine(Path.GetTempPath(), "tool-hub-window");
             object tools = catalogType.GetMethod("GetTools").Invoke(null, new object[] { fakeWindowRoot });
             IList toolList = (IList)tools;
-            Assert(toolList.Count == 3, "catalog contains the three window tools");
+            Assert(toolList.Count == 4, "catalog contains the four window tools");
 
-            string[] expectedIds = { "workspace", "wallpaper", "desktop-repair" };
+            string[] expectedIds = { "workspace", "wallpaper", "desktop-repair", "system-diagnostics" };
             for (int i = 0; i < expectedIds.Length && i < toolList.Count; i++)
             {
                 object tool = toolList[i];
@@ -97,12 +99,15 @@ internal static class ToolHubCoreTests
             string deployedWorkspaceApp = Path.Combine(deployedRoot, "workspace-switcher", "app");
             string deployedWallpaperApp = Path.Combine(deployedRoot, "Wallpaper-GUI", "app");
             string deployedRepairApp = Path.Combine(deployedRoot, "desktop-black-screen-repair", "app");
+            string deployedDiagnosticsApp = Path.Combine(deployedRoot, "system-stability-diagnostics", "app");
             Directory.CreateDirectory(deployedWorkspaceApp);
             Directory.CreateDirectory(deployedWallpaperApp);
             Directory.CreateDirectory(deployedRepairApp);
+            Directory.CreateDirectory(deployedDiagnosticsApp);
             File.WriteAllBytes(Path.Combine(deployedWorkspaceApp, "WorkspaceSwitcher.exe"), new byte[] { 1 });
             File.WriteAllText(Path.Combine(deployedWallpaperApp, "Wallpaper-GUI.cmd"), "@echo off");
             File.WriteAllText(Path.Combine(deployedRepairApp, "Repair-DesktopBlackScreen.cmd"), "@echo off");
+            File.WriteAllBytes(Path.Combine(deployedDiagnosticsApp, "SystemStabilityDiagnostics.exe"), new byte[] { 1 });
 
             IList deployedTools = (IList)catalogType.GetMethod("GetTools").Invoke(null, new object[] { deployedRoot });
             Assert(((string)toolType.GetProperty("EntryPath").GetValue(deployedTools[0], null))
@@ -114,6 +119,45 @@ internal static class ToolHubCoreTests
             Assert(((string)toolType.GetProperty("EntryPath").GetValue(deployedTools[2], null))
                     .Equals(Path.Combine(deployedRepairApp, "Repair-DesktopBlackScreen.cmd"), StringComparison.OrdinalIgnoreCase),
                 "desktop repair tool prefers the deployed app directory");
+            if (deployedTools.Count > 3)
+            {
+                Assert(((string)toolType.GetProperty("EntryPath").GetValue(deployedTools[3], null))
+                        .Equals(Path.Combine(deployedDiagnosticsApp, "SystemStabilityDiagnostics.exe"), StringComparison.OrdinalIgnoreCase),
+                    "system diagnostics tool prefers the deployed app directory");
+                Assert((bool)toolType.GetProperty("IsAvailable").GetValue(deployedTools[3], null),
+                    "system diagnostics tool is enabled when its deployed executable exists");
+
+                if (launcherType != null)
+                {
+                    object diagnosticsRequest = launcherType.GetMethod("CreateRequest").Invoke(null,
+                        new object[] { deployedTools[3], "cmd.exe" });
+                    string diagnosticsFileName = (string)diagnosticsRequest.GetType().GetProperty("FileName")
+                        .GetValue(diagnosticsRequest, null);
+                    Assert(diagnosticsFileName.Equals(Path.Combine(deployedDiagnosticsApp, "SystemStabilityDiagnostics.exe"),
+                            StringComparison.OrdinalIgnoreCase),
+                        "system diagnostics executable launches directly as an independent app");
+                }
+            }
+            else
+            {
+                Assert(false, "system diagnostics tool is included in the deployed catalog");
+            }
+
+            if (layoutType != null)
+            {
+                object threeToolLayout = Activator.CreateInstance(layoutType, new object[] { 3 });
+                object fourToolLayout = Activator.CreateInstance(layoutType, new object[] { 4 });
+                Assert((int)layoutType.GetProperty("MainPanelHeight").GetValue(threeToolLayout, null) == 356,
+                    "three-tool panel preserves its established height");
+                Assert((int)layoutType.GetProperty("SearchTop").GetValue(threeToolLayout, null) == 382,
+                    "three-tool search placement remains unchanged");
+                Assert((int)layoutType.GetProperty("MainPanelHeight").GetValue(fourToolLayout, null) > 356,
+                    "four-tool panel grows to fit the added row");
+                Assert((int)layoutType.GetProperty("SearchTop").GetValue(fourToolLayout, null) > 382,
+                    "four-tool search surface stays below the tool rows");
+                Assert((int)layoutType.GetProperty("HubHeight").GetValue(fourToolLayout, null) == 602,
+                    "expanded fourth row retains the established bottom action geometry");
+            }
 
             var filterMethod = catalogType.GetMethod("Filter");
             IList filtered = (IList)filterMethod.Invoke(null, new object[] { tools, "壁纸" });

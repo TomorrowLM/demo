@@ -107,6 +107,23 @@ namespace WorkspaceSwitcher.Core
         }
     }
 
+    public static class WorkspaceHotKeyPolicy
+    {
+        public static int ResolveWorkspaceId(int hotKeyId, int firstWorkspaceHotKeyId, IList<int> workspaceIds)
+        {
+            int workspaceIndex = hotKeyId - firstWorkspaceHotKeyId;
+            if (workspaceIndex < 0
+                || workspaceIndex >= WorkspaceLayout.MaximumWorkspaceCount
+                || workspaceIds == null
+                || workspaceIndex >= workspaceIds.Count)
+            {
+                return 0;
+            }
+
+            return workspaceIds[workspaceIndex];
+        }
+    }
+
     public sealed class WorkspaceLayout
     {
         public const int MaximumWorkspaceCount = 9;
@@ -281,6 +298,20 @@ namespace WorkspaceSwitcher.Core
         public string DisplayName { get; internal set; }
         public bool IsAvailable { get; internal set; }
         public bool IsMaximized { get; internal set; }
+        public bool IsUserMinimized { get; internal set; }
+    }
+
+    public static class WorkspaceWindowStatePolicy
+    {
+        public static bool ApplyMinimizeEvent(bool wasUserMinimized, bool isMinimizeStart, bool isWorkspaceSwitcherAction)
+        {
+            return isWorkspaceSwitcherAction ? wasUserMinimized : isMinimizeStart;
+        }
+
+        public static bool ShouldShowMinimized(bool isUserMinimized, bool isExplicitFocus)
+        {
+            return isUserMinimized && !isExplicitFocus;
+        }
     }
 
     public static class WorkspaceLaunchProfileParser
@@ -448,6 +479,15 @@ namespace WorkspaceSwitcher.Core
             }
         }
 
+        public void SetWindowUserMinimized(long windowHandle, bool isUserMinimized)
+        {
+            WorkspaceItem item;
+            if (items.TryGetValue(windowHandle, out item))
+            {
+                item.IsUserMinimized = isUserMinimized;
+            }
+        }
+
         public void SetExecutablePath(long windowHandle, string executablePath)
         {
             WorkspaceItem item;
@@ -506,7 +546,8 @@ namespace WorkspaceSwitcher.Core
                 WorkingDirectory = snapshot.WorkingDirectory ?? String.Empty,
                 DisplayName = snapshot.DisplayName ?? String.Empty,
                 IsAvailable = true,
-                IsMaximized = snapshot.IsMaximized
+                IsMaximized = snapshot.IsMaximized,
+                IsUserMinimized = snapshot.IsUserMinimized
             };
         }
 
@@ -605,6 +646,7 @@ namespace WorkspaceSwitcher.Core
         public string WorkingDirectory { get; set; }
         public string DisplayName { get; set; }
         public bool IsMaximized { get; set; }
+        public bool IsUserMinimized { get; set; }
     }
 
     public sealed class WorkspaceStateSnapshot
@@ -660,6 +702,7 @@ namespace WorkspaceSwitcher.Core
                     writer.WriteAttributeString("handle", item.WindowHandle.ToString());
                     writer.WriteAttributeString("workspace", item.WorkspaceId.ToString());
                     writer.WriteAttributeString("maximized", item.IsMaximized ? "true" : "false");
+                    writer.WriteAttributeString("minimized", item.IsUserMinimized ? "true" : "false");
                     writer.WriteElementString("title", item.Title ?? String.Empty);
                     writer.WriteElementString("process", item.ProcessName ?? String.Empty);
                     writer.WriteElementString("path", item.ExecutablePath ?? String.Empty);
@@ -729,11 +772,13 @@ namespace WorkspaceSwitcher.Core
                         continue;
                     }
 
+                    XmlAttribute minimizedAttribute = node.Attributes["minimized"];
                     snapshot.Items.Add(new WorkspaceItemSnapshot
                     {
                         WindowHandle = windowHandle,
                         WorkspaceId = workspaceId,
                         IsMaximized = String.Equals(node.Attributes["maximized"].Value, "true", StringComparison.OrdinalIgnoreCase),
+                        IsUserMinimized = minimizedAttribute != null && String.Equals(minimizedAttribute.Value, "true", StringComparison.OrdinalIgnoreCase),
                         Title = ReadElement(node, "title"),
                         ProcessName = ReadElement(node, "process"),
                         ExecutablePath = ReadElement(node, "path"),

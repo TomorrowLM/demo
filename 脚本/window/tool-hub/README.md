@@ -1,12 +1,15 @@
 # Windows ToolHub
 
-独立的 Windows 桌面工具中心，界面是靠近鼠标弹出的圆角浮动面板，当前接入 `window` 目录下的三个现有工具。源码和运行时严格分离：`脚本\window` 只保留源码，实际运行文件、用户配置、缓存、日志和备份统一放在 `C:\Users\<当前用户>\.lm-exe`。
+独立的 Windows 桌面工具中心，界面是靠近鼠标弹出的圆角浮动面板，当前接入 `window` 目录下的四个独立工具。源码和运行时严格分离：`脚本\window` 只保留源码，实际运行文件、用户配置、缓存、日志和备份统一放在 `C:\Users\<当前用户>\.lm-exe`。
 
 - 工作区切换：启动 `.lm-exe\workspace-switcher\app\WorkspaceSwitcher.exe`，并附加 `--show`；如果工作区切换器已经在后台运行，现有实例会被唤醒并显示面板，不会再被第二个单实例进程吞掉请求。
 - 壁纸中心：启动 `.lm-exe\Wallpaper-GUI\app\Wallpaper-GUI.cmd`
 - 桌面修复：启动 `.lm-exe\desktop-black-screen-repair\app\Repair-DesktopBlackScreen.cmd`
+- 系统稳定性诊断：启动 `.lm-exe\system-stability-diagnostics\app\SystemStabilityDiagnostics.exe`
 
-ToolHub 不引用三个工具的源码、DLL 或内部状态，只负责启动部署后的独立入口。因此原工具的单独入口、快捷方式和构建方式保持不变；三个工具仍然可以单独运行。ToolHub 只记录本次由它启动的子进程，关闭 ToolHub 时会请求这些子进程正常退出；用户单独启动的工具不会被 ToolHub 关闭。
+ToolHub 不引用子工具的源码、DLL 或内部状态，只负责启动部署后的独立入口。因此原工具的单独入口、快捷方式和构建方式保持不变；四个工具仍然可以单独运行。ToolHub 只记录本次由它启动的子进程，关闭 ToolHub 时会请求这些子进程正常退出；用户单独启动的工具不会被 ToolHub 关闭。
+
+“系统稳定性诊断”用于在用户主动开始后，以 5 秒间隔记录 CPU、可用内存和高占用进程（按 CPU 占用与专用内存占物理内存的比例综合排序，同时记录工作集、句柄、线程）；单次采样最长 10 分钟。用户可标记鼠标指针卡顿、整机卡顿、应用无响应或应用崩溃的发生时刻，并只读查看最近 14 天 Windows Application/System 日志中的警告和错误。记录不会自动关闭应用、重启 Explorer、修改系统设置或采集转储；这些数据用于后续关联分析，不会单凭一次采样断言根因。
 
 ## 构建和运行
 
@@ -72,13 +75,17 @@ C:\Users\<当前用户>\.lm-exe\
 │  ├─ config\          # favorites.json
 │  ├─ cache\            # images.jsonl、下载图片
 │  └─ logs\
-└─ desktop-black-screen-repair\
+├─ desktop-black-screen-repair\
+│  ├─ app\
+│  ├─ config\
+│  └─ logs\
+└─ system-stability-diagnostics\
    ├─ app\
    ├─ config\
-   └─ logs\
+   └─ logs\              # 每日 JSONL 诊断记录
 ```
 
-`tools\build-toolhub.ps1` 负责 ToolHub 单体构建和部署；`tools\sync-window-tools.ps1` 负责四个运行时目录的完整同步。两者会显式使用 `.lm-exe` 下的构建路径，不会把部署产物写回源码目录。运行时优先读取 `tool-hub\config\window-root.txt` 和 `tool-roots.ini`，因此部署后不会再回到源码目录寻找工具。
+`tools\build-toolhub.ps1` 负责 ToolHub 单体构建和部署；`tools\sync-window-tools.ps1` 负责五个运行时目录的完整同步。两者会显式使用 `.lm-exe` 下的构建路径，不会把部署产物写回源码目录。运行时优先读取 `tool-hub\config\window-root.txt` 和 `tool-roots.ini`，因此部署后不会再回到源码目录寻找工具。
 
 如果某个运行中的 EXE/DLL 被 Windows 占用，同步脚本不会强制结束进程，而是把新文件写成同目录的 `.next` 待更新文件，并记录在 `tool-hub\logs\last-sync.json` 的 `DeferredFiles` 中。关闭对应工具后，重新点击桌面的 `ToolHub.lnk` 会先尝试完成替换；也可以再运行 `ToolHubInstaller.exe` 或同步脚本。
 
@@ -91,7 +98,7 @@ C:\Users\<当前用户>\.lm-exe\tool-hub\
 ├─ config\
 │  ├─ window-root.txt   # .lm-exe 运行时根目录
 │  ├─ source-root.txt   # 同步脚本所在的 tool-hub 源码目录
-│  └─ tool-roots.ini    # 三个部署后工具的明确入口
+│  └─ tool-roots.ini    # 四个部署后工具的明确入口
 ├─ cache\               # 可重新生成的缓存
 ├─ logs\                # 构建和部署日志
 ├─ diagnostics\         # 诊断信息
@@ -105,6 +112,14 @@ C:\Users\<当前用户>\.lm-exe\workspace-switcher\config\workspace-state.xml
 ```
 
 ToolHub 当前不会持久化自己的拖动位置、搜索内容或展开状态；这些交互状态只在当前运行期间有效。点击 ToolHub 中的工具，只会启动对应的独立入口，不会复制或修改该工具的用户状态。
+
+系统稳定性诊断的历史记录位于：
+
+```text
+C:\Users\<当前用户>\.lm-exe\system-stability-diagnostics\logs\system-stability-YYYYMMDD.jsonl
+```
+
+每条 JSONL 记录是一条用户卡顿标记或资源快照。关闭并重新打开诊断工具后，最近记录仍会显示；Windows 事件历史则受 Windows 自身的保留和轮转策略管理。
 
 壁纸工具的下载缓存从源码目录 `Wallpaper-GUI\Cache` 迁移到 `.lm-exe\Wallpaper-GUI\cache`；收藏记录保存在 `.lm-exe\Wallpaper-GUI\config\favorites.json`。点击“应用壁纸”只设置当前桌面，点击爱心才会把图片复制到 `Pictures\Online Wallpapers`，取消爱心不会删除已经保存的图片。
 

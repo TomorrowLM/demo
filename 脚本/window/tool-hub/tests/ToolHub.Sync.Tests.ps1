@@ -29,6 +29,7 @@ $expectedFiles = @(
     (Join-Path $ArtifactRoot 'workspace-switcher\app\WorkspaceSwitcher.exe'),
     (Join-Path $ArtifactRoot 'Wallpaper-GUI\app\Wallpaper-GUI.cmd'),
     (Join-Path $ArtifactRoot 'desktop-black-screen-repair\app\Repair-DesktopBlackScreen.cmd'),
+    (Join-Path $ArtifactRoot 'system-stability-diagnostics\app\SystemStabilityDiagnostics.exe'),
     (Join-Path $ArtifactRoot 'tool-hub\app\ToolHub.exe'),
     (Join-Path $ArtifactRoot 'tool-hub\app\ToolHubLauncher.exe'),
     (Join-Path $ArtifactRoot 'tool-hub\app\ToolHubInstaller.exe'),
@@ -38,6 +39,11 @@ foreach ($expectedFile in $expectedFiles) {
     if (-not (Test-Path -LiteralPath $expectedFile -PathType Leaf)) {
         throw "Expected deployed file not found: $expectedFile"
     }
+}
+
+$toolRoots = Get-Content -Raw (Join-Path $ArtifactRoot 'tool-hub\config\tool-roots.ini')
+if ($toolRoots -notmatch '(?m)^system-stability-diagnostics=') {
+    throw 'System stability diagnostics entry is missing from tool-roots.ini'
 }
 
 Write-Output 'PASS ToolHub.Sync.Tests'

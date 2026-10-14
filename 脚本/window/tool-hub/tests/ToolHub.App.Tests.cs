@@ -69,6 +69,10 @@ internal static class ToolHubAppTests
         Assert(source.Contains("OnMouseEnter"), "tool hub expands when the icon is hovered");
         Assert(source.Contains("SetExpanded(false)"), "tool hub has a collapsed icon state");
         Assert(source.Contains("searchBox.Visible = expanded"), "tool hub hides the search box while collapsed");
+        Assert(source.Contains("ToolHubLayout"), "tool hub sizes its panel from the number of catalog tools");
+        Assert(!source.Contains("i < 3"), "tool rows are not capped at the previous three-tool limit");
+        Assert(source.Contains("rowIndex < layout.ToolCount"), "the fourth tool row is included in click routing");
+        Assert(source.Contains("Math.Min(visibleTools.Count, layout.ToolCount)"), "exit row follows the dynamic tool list");
 
         int launchStart = source.IndexOf("private void LaunchTool", StringComparison.Ordinal);
         int launchEnd = source.IndexOf("private void PositionNearCursor", launchStart, StringComparison.Ordinal);

@@ -121,6 +121,12 @@ internal static class WorkspaceSwitcherAppTests
         Type nativeType = application.GetType("WorkspaceSwitcher.App.NativeMethods");
         Assert(nativeType != null && nativeType.GetMethod("SetWinEventHook", BindingFlags.NonPublic | BindingFlags.Static) != null, "Native foreground event hook is available");
         Assert(nativeType != null && nativeType.GetMethod("PrintWindow", BindingFlags.NonPublic | BindingFlags.Static) != null, "Preview uses window rendering instead of desktop capture");
+        FieldInfo minimizeStartEvent = nativeType == null ? null : nativeType.GetField("EVENT_SYSTEM_MINIMIZESTART", BindingFlags.NonPublic | BindingFlags.Static);
+        FieldInfo minimizeEndEvent = nativeType == null ? null : nativeType.GetField("EVENT_SYSTEM_MINIMIZEEND", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert(minimizeStartEvent != null && Convert.ToUInt32(minimizeStartEvent.GetRawConstantValue()) == 0x0016, "Windows minimize-start event is configured");
+        Assert(minimizeEndEvent != null && Convert.ToUInt32(minimizeEndEvent.GetRawConstantValue()) == 0x0017, "Windows minimize-end event is configured");
+        Assert(formType.GetField("windowStateEventHook", BindingFlags.NonPublic | BindingFlags.Instance) != null, "Window-state event hook has a lifecycle-managed handle");
+        Assert(formType.GetMethod("OnTrackedWindowStateChanged", BindingFlags.NonPublic | BindingFlags.Instance) != null, "Panel tracks minimize and restore events for assigned windows");
 
         MethodInfo lookup = layoutType.GetMethod("GetWorkspaceIdAtY", BindingFlags.Public | BindingFlags.Static);
         Assert(lookup != null, "Right panel hit-test API exists");
@@ -171,6 +177,12 @@ internal static class WorkspaceSwitcherAppTests
             source += File.ReadAllText(Path.Combine(sourceDirectory, "WorkspaceSwitcher.Glass.cs"));
             source += File.ReadAllText(Path.Combine(sourceDirectory, "WorkspaceSwitcher.ContextMenu.cs"));
             string wallpaperSource = File.ReadAllText(Path.Combine(sourceDirectory, "WorkspaceSwitcher.LiveBackdrop.cs"));
+            Assert(source.Contains("NativeMethods.EVENT_SYSTEM_MINIMIZESTART"), "Panel subscribes to system minimize events");
+            Assert(source.Contains("NativeMethods.EVENT_SYSTEM_MINIMIZEEND"), "Panel subscribes to system restore events");
+            Assert(source.Contains("NativeMethods.SW_SHOWMINNOACTIVE"), "Workspace switching preserves minimized state without stealing focus");
+            Assert(source.Contains("pendingWorkspaceMinimizeEvents"), "WorkspaceSwitcher-initiated minimize events are excluded from user state");
+            Assert(source.Contains("workspaceMinimizedWindows"), "WorkspaceSwitcher batch minimization remains distinct from user minimization");
+            Assert(source.Contains("CaptureMinimizedStateBeforeHiding"), "Switch-away captures a minimize action before hiding the window");
             Assert(source.Contains(".lm-exe"), "User data is stored below the per-user .lm-exe root");
             Assert(source.Contains("workspace-state.xml"), "Workspace state uses the persistent workspace-state.xml file");
             Assert(source.Contains("AntiAliasGridFit"), "Panel uses grayscale anti-aliased text for translucent glass");
