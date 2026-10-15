@@ -2,6 +2,7 @@ const vscode = require("vscode");
 const {
   createMarkdownPreviewPanel,
 } = require("./src/preview-panel");
+const { syncSelectionToCopilot } = require("./src/copilot-selection");
 
 class PreviewManager {
   constructor(context, onSelection) {
@@ -36,9 +37,12 @@ class PreviewManager {
 }
 
 function activate(context) {
-  const pendingSelections = new Map();
   const previewManager = new PreviewManager(context, (uri, selection) => {
-    pendingSelections.set(uri.toString(), { uri, selection });
+    void syncSelectionToCopilot(vscode, uri, selection).catch((error) => {
+      vscode.window.showErrorMessage(
+        `无法打开 Copilot Chat：${error instanceof Error ? error.message : String(error)}`,
+      );
+    });
   });
 
   context.subscriptions.push(
@@ -64,7 +68,16 @@ function activate(context) {
         return;
       }
 
-      await vscode.commands.executeCommand("workbench.action.chat.open");
+      try {
+        await syncSelectionToCopilot(vscode, editor.document.uri, {
+          startLine: editor.selection.start.line + 1,
+          endLine: editor.selection.end.line + 1,
+        });
+      } catch (error) {
+        vscode.window.showErrorMessage(
+          `无法打开 Copilot Chat：${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
     }),
 
     vscode.workspace.onDidChangeTextDocument((event) => {
@@ -76,7 +89,6 @@ function activate(context) {
 
   context.subscriptions.push({
     dispose() {
-      pendingSelections.clear();
       previewManager.panels.clear();
     },
   });
