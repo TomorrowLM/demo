@@ -1,0 +1,48 @@
+{
+  "name": "lm-md",
+  "displayName": "LM Markdown Copilot Preview",
+  "description": "Selectable Markdown preview that syncs source ranges to native Copilot Chat.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": ">=1.95.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onCommand:lmMd.openPreview",
+    "onCommand:lmMd.openCopilotForSelection"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "lmMd.openPreview",
+        "title": "LM Markdown: Open Selectable Preview"
+      },
+      {
+        "command": "lmMd.openCopilotForSelection",
+        "title": "LM Markdown: Open Copilot for Selection"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "lmMd.openPreview",
+          "when": "editorLangId == markdown",
+          "group": "navigation@9"
+        },
+        {
+          "command": "lmMd.openCopilotForSelection",
+          "when": "editorLangId == markdown && editorHasSelection",
+          "group": "navigation@10"
+        }
+      ]
+    }
+  }
+}
