@@ -33,6 +33,15 @@ namespace WorkspaceSwitcher.App
             return new Rectangle(workingArea.Right - panelSize.Width, workingArea.Top, panelSize.Width, panelSize.Height);
         }
 
+        public static Rectangle KeepWithinWorkingArea(Rectangle preferredBounds, Size requestedSize, Rectangle workingArea)
+        {
+            int width = Math.Max(1, Math.Min(requestedSize.Width, workingArea.Width));
+            int height = Math.Max(1, Math.Min(requestedSize.Height, workingArea.Height));
+            int left = Math.Max(workingArea.Left, Math.Min(preferredBounds.Left, workingArea.Right - width));
+            int top = Math.Max(workingArea.Top, Math.Min(preferredBounds.Top, workingArea.Bottom - height));
+            return new Rectangle(left, top, width, height);
+        }
+
         public static Size ClampPanelSize(Size requested, Size minimum, Size maximum)
         {
             int width = Math.Max(minimum.Width, Math.Min(maximum.Width, requested.Width));
@@ -138,6 +147,11 @@ namespace WorkspaceSwitcher.App
         internal const uint SWP_NOZORDER = 0x0004;
         internal const uint SWP_NOACTIVATE = 0x0010;
         internal const uint SWP_SHOWWINDOW = 0x0040;
+        internal const uint SWP_FRAMECHANGED = 0x0020;
+        internal const uint RDW_INVALIDATE = 0x0001;
+        internal const uint RDW_ERASE = 0x0004;
+        internal const uint RDW_ALLCHILDREN = 0x0080;
+        internal const uint RDW_FRAME = 0x0400;
         internal const int VK_LBUTTON = 0x01;
         internal const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
         internal const uint EVENT_SYSTEM_MINIMIZESTART = 0x0016;
@@ -168,6 +182,17 @@ namespace WorkspaceSwitcher.App
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        internal struct WindowPlacement
+        {
+            internal int Length;
+            internal int Flags;
+            internal int ShowCommand;
+            internal Point MinPosition;
+            internal Point MaxPosition;
+            internal Rect NormalPosition;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
         internal struct KeyboardInput
         {
             internal uint VirtualKeyCode;
@@ -185,6 +210,9 @@ namespace WorkspaceSwitcher.App
 
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool SetWindowPos(IntPtr window, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool RedrawWindow(IntPtr window, IntPtr updateRect, IntPtr updateRegion, uint flags);
 
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr SetWindowsHookEx(int hookType, LowLevelKeyboardProc callback, IntPtr module, uint threadId);
@@ -235,6 +263,12 @@ namespace WorkspaceSwitcher.App
 
         [DllImport("user32.dll")]
         internal static extern bool GetWindowRect(IntPtr hWnd, out Rect rectangle);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool GetWindowPlacement(IntPtr hWnd, ref WindowPlacement placement);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool SetWindowPlacement(IntPtr hWnd, ref WindowPlacement placement);
 
         [DllImport("user32.dll")]
         internal static extern uint GetDpiForWindow(IntPtr hWnd);
@@ -1196,7 +1230,9 @@ namespace WorkspaceSwitcher.App
 
             if (message.Msg == NativeMethods.WM_DPICHANGED)
             {
-                KeepPanelSizeOnDpiChange(GetDpiFromMessage(message.WParam));
+                KeepPanelSizeOnDpiChange(
+                    GetDpiFromMessage(message.WParam),
+                    GetSuggestedDpiBounds(message.LParam));
                 message.Result = IntPtr.Zero;
                 return;
             }
@@ -1753,7 +1789,7 @@ namespace WorkspaceSwitcher.App
             hasSavedPanelLogicalSize = true;
         }
 
-        private void KeepPanelSizeOnDpiChange(int requestedDpi)
+        private void KeepPanelSizeOnDpiChange(int requestedDpi, Rectangle suggestedBounds)
         {
             int nextDpi = requestedDpi > 0 ? requestedDpi : GetWindowDpi();
             if (!hasSavedPanelLogicalSize)
@@ -1762,20 +1798,36 @@ namespace WorkspaceSwitcher.App
                 hasSavedPanelLogicalSize = true;
             }
             currentDpi = nextDpi;
-            Point center = new Point(Left + Math.Max(1, Width) / 2, Top + Math.Max(1, Height) / 2);
-            Rectangle area = Screen.FromPoint(center).WorkingArea;
+            Rectangle preferredBounds = suggestedBounds.Width > 0 && suggestedBounds.Height > 0
+                ? suggestedBounds
+                : Bounds;
+            Rectangle area = Screen.FromRectangle(preferredBounds).WorkingArea;
             Size size = WorkspacePanelLayout.ClampPanelSize(
                 ScaleLogicalSize(new Size(savedPanelLogicalSize.Width, GetAutomaticPanelHeight())),
                 GetDeviceMinimumSize(),
                 GetPanelMaximumSize(area));
-            int left = Math.Max(area.Left, Math.Min(Left, area.Right - size.Width));
-            int top = Math.Max(area.Top, Math.Min(Top, area.Bottom - size.Height));
-            Bounds = new Rectangle(left, top, size.Width, size.Height);
+            Bounds = WorkspacePanelLayout.KeepWithinWorkingArea(
+                new Rectangle(preferredBounds.Location, size),
+                size,
+                area);
             savedPanelBounds = Bounds;
             savedPanelLogicalSize = new Size(UnscaleDeviceSize(size, nextDpi).Width, GetAutomaticPanelHeight());
             hasSavedPanelBounds = true;
             UpdatePanelRegion();
             Invalidate(true);
+        }
+
+        private static Rectangle GetSuggestedDpiBounds(IntPtr boundsPointer)
+        {
+            if (boundsPointer == IntPtr.Zero)
+            {
+                return Rectangle.Empty;
+            }
+
+            NativeMethods.Rect suggested = (NativeMethods.Rect)Marshal.PtrToStructure(
+                boundsPointer,
+                typeof(NativeMethods.Rect));
+            return Rectangle.FromLTRB(suggested.Left, suggested.Top, suggested.Right, suggested.Bottom);
         }
 
         private Size GetPanelMaximumSize(Rectangle area)
@@ -2501,6 +2553,13 @@ namespace WorkspaceSwitcher.App
                 return;
             }
 
+            if (NativeMethods.IsIconic(window))
+            {
+                MoveMinimizedWindowToDisplay(window, targetScreen);
+                Invalidate();
+                return;
+            }
+
             NativeMethods.Rect rawBounds;
             if (!NativeMethods.GetWindowRect(window, out rawBounds))
             {
@@ -2508,17 +2567,77 @@ namespace WorkspaceSwitcher.App
             }
 
             Screen sourceScreen = Screen.FromHandle(window);
+            bool isMaximized = NativeMethods.IsZoomed(window);
             Rectangle sourceBounds = Rectangle.FromLTRB(rawBounds.Left, rawBounds.Top, rawBounds.Right, rawBounds.Bottom);
-            Rectangle targetBounds = MapWindowBoundsToDisplay(sourceBounds, sourceScreen.WorkingArea, targetScreen.WorkingArea);
-            NativeMethods.SetWindowPos(
+            Rectangle targetBounds = isMaximized
+                ? targetScreen.Bounds
+                : MapWindowBoundsToDisplay(sourceBounds, sourceScreen.WorkingArea, targetScreen.WorkingArea);
+            bool moved = NativeMethods.SetWindowPos(
                 window,
                 IntPtr.Zero,
                 targetBounds.Left,
                 targetBounds.Top,
                 targetBounds.Width,
                 targetBounds.Height,
-                NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_FRAMECHANGED);
+            if (moved)
+            {
+                NativeMethods.RedrawWindow(
+                    window,
+                    IntPtr.Zero,
+                    IntPtr.Zero,
+                    NativeMethods.RDW_INVALIDATE
+                        | NativeMethods.RDW_ERASE
+                        | NativeMethods.RDW_ALLCHILDREN
+                        | NativeMethods.RDW_FRAME);
+            }
             Invalidate();
+        }
+
+        private static bool MoveMinimizedWindowToDisplay(IntPtr window, Screen targetScreen)
+        {
+            NativeMethods.WindowPlacement placement = new NativeMethods.WindowPlacement();
+            placement.Length = Marshal.SizeOf(typeof(NativeMethods.WindowPlacement));
+            if (!NativeMethods.GetWindowPlacement(window, ref placement))
+            {
+                return false;
+            }
+
+            Point workspaceScreenOffset = GetWorkspaceScreenOffset();
+            Rectangle normalWorkspaceBounds = Rectangle.FromLTRB(
+                placement.NormalPosition.Left,
+                placement.NormalPosition.Top,
+                placement.NormalPosition.Right,
+                placement.NormalPosition.Bottom);
+            Rectangle normalScreenBounds = normalWorkspaceBounds;
+            normalScreenBounds.Offset(workspaceScreenOffset);
+            Screen sourceScreen = Screen.FromRectangle(normalScreenBounds);
+            Rectangle targetScreenBounds = MapWindowBoundsToDisplay(
+                normalScreenBounds,
+                sourceScreen.WorkingArea,
+                targetScreen.WorkingArea);
+            targetScreenBounds.Offset(-workspaceScreenOffset.X, -workspaceScreenOffset.Y);
+            placement.NormalPosition = new NativeMethods.Rect
+            {
+                Left = targetScreenBounds.Left,
+                Top = targetScreenBounds.Top,
+                Right = targetScreenBounds.Right,
+                Bottom = targetScreenBounds.Bottom
+            };
+            return NativeMethods.SetWindowPlacement(window, ref placement);
+        }
+
+        private static Point GetWorkspaceScreenOffset()
+        {
+            Screen primary = Screen.PrimaryScreen;
+            if (primary == null)
+            {
+                return Point.Empty;
+            }
+
+            return new Point(
+                primary.WorkingArea.Left - primary.Bounds.Left,
+                primary.WorkingArea.Top - primary.Bounds.Top);
         }
 
         private static Rectangle MapWindowBoundsToDisplay(Rectangle sourceBounds, Rectangle sourceArea, Rectangle targetArea)
@@ -3287,6 +3406,23 @@ namespace WorkspaceSwitcher.App
             if (String.IsNullOrEmpty(executable))
             {
                 return false;
+            }
+
+            // Keep the WorkspaceSwitcher launch entry aligned with the pinned
+            // VS Code version when the side-by-side 1.141.2 build is present.
+            // Existing non-VS Code applications and already-versioned paths
+            // remain unchanged.
+            if (String.Equals(Path.GetFileName(executable), "Code.exe", StringComparison.OrdinalIgnoreCase))
+            {
+                string executableDirectory = Path.GetDirectoryName(executable);
+                if (!String.IsNullOrEmpty(executableDirectory))
+                {
+                    string preferredCode = Path.Combine(executableDirectory, "1.141.2", "Code.exe");
+                    if (File.Exists(preferredCode))
+                    {
+                        executable = preferredCode;
+                    }
+                }
             }
 
             bool forceNewWindow = String.Equals(item.ProcessName, "Code.exe", StringComparison.OrdinalIgnoreCase);

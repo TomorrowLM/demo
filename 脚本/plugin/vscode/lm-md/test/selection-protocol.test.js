@@ -12,8 +12,33 @@ test("normalizes a preview selection message", () => {
     }),
     {
       text: "正文",
+      ranges: [{ startLine: 3, endLine: 4 }],
       startLine: 3,
       endLine: 4,
+    },
+  );
+});
+
+test("preserves each disjoint preview selection as its own source range", () => {
+  assert.deepEqual(
+    normalizePreviewSelection({
+      type: "previewSelection",
+      text: "第一段\n第二段",
+      ranges: [
+        { startLine: 12, endLine: 13 },
+        { startLine: 3, endLine: 4 },
+      ],
+      startLine: 3,
+      endLine: 13,
+    }),
+    {
+      text: "第一段\n第二段",
+      ranges: [
+        { startLine: 3, endLine: 4 },
+        { startLine: 12, endLine: 13 },
+      ],
+      startLine: 3,
+      endLine: 13,
     },
   );
 });

@@ -60,6 +60,54 @@ internal static class SystemStabilityDiagnosticsTests
             Assert(live.Processes.All(process => process.CpuPercent >= 0 && process.CpuPercent <= 100),
                 "collector reports bounded per-process CPU percentages");
 
+            var gpuSamples = new List<KeyValuePair<string, double>>
+            {
+                new KeyValuePair<string, double>("pid_1_luid_0x0_0x1_phys_0_eng_0_engtype_3D", 34),
+                new KeyValuePair<string, double>("pid_2_luid_0x0_0x1_phys_0_eng_0_engtype_3D", 26),
+                new KeyValuePair<string, double>("pid_1_luid_0x0_0x1_phys_0_eng_1_engtype_Copy", 72),
+                new KeyValuePair<string, double>("pid_3_luid_0x0_0x2_phys_0_eng_0_engtype_3D", 88)
+            };
+            double? gpuPercent = WindowsSystemUsageReader.AggregateGpuUtilization(gpuSamples);
+            Assert(gpuPercent.HasValue && Math.Abs(gpuPercent.Value - 88) < 0.01,
+                "GPU utilization sums processes per engine and reports the busiest engine across adapters");
+            double? noGpu = WindowsSystemUsageReader.AggregateGpuUtilization(
+                new List<KeyValuePair<string, double>>
+                {
+                    new KeyValuePair<string, double>("unrecognized-instance", 35),
+                    new KeyValuePair<string, double>("pid_4_luid_0x0_0x1_phys_0_eng_0_engtype_3D", double.NaN)
+                });
+            Assert(!noGpu.HasValue, "GPU utilization is unavailable when counters provide no valid engine sample");
+            double? boundedGpu = WindowsSystemUsageReader.AggregateGpuUtilization(
+                new List<KeyValuePair<string, double>>
+                {
+                    new KeyValuePair<string, double>("pid_1_luid_0x0_0x1_phys_0_eng_0_engtype_3D", 82),
+                    new KeyValuePair<string, double>("pid_2_luid_0x0_0x1_phys_0_eng_0_engtype_3D", 41)
+                });
+            Assert(boundedGpu.HasValue && Math.Abs(boundedGpu.Value - 100) < 0.01,
+                "aggregated GPU utilization is clamped to 100 percent");
+
+            int recordsBeforeLiveUsage = reopenedStore.ReadRecentRecords(10).Count;
+            using (var liveUsageReader = new WindowsSystemUsageReader())
+            {
+                liveUsageReader.Capture();
+                System.Threading.Thread.Sleep(1100);
+                SystemUsageSnapshot currentUsage = liveUsageReader.Capture();
+                Assert(currentUsage.TotalMemoryMb > 0,
+                    "live usage reader reads physical memory without starting a recording session");
+                Assert(currentUsage.CpuPercent >= 0 && currentUsage.CpuPercent <= 100,
+                    "live usage reader reports bounded CPU utilization");
+                Assert(currentUsage.AvailableMemoryMb + currentUsage.UsedMemoryMb <= currentUsage.TotalMemoryMb,
+                    "live usage reports consistent used and available memory");
+                Assert(!currentUsage.GpuPercent.HasValue ||
+                    (currentUsage.GpuPercent.Value >= 0 && currentUsage.GpuPercent.Value <= 100),
+                    "live GPU utilization is absent or bounded when the system counter is unavailable");
+                Console.WriteLine("LIVE GPU " + (currentUsage.GpuPercent.HasValue
+                    ? currentUsage.GpuPercent.Value.ToString("0.0") + "%"
+                    : "unavailable"));
+            }
+            Assert(reopenedStore.ReadRecentRecords(10).Count == recordsBeforeLiveUsage,
+                "automatic live metrics do not append sampling history");
+
             var rankedCandidates = new List<ProcessResourceSnapshot>();
             for (int index = 0; index < 12; index++)
             {

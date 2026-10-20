@@ -36,10 +36,12 @@ namespace SystemStabilityDiagnostics.App
         private static readonly TimeSpan SamplingInterval = TimeSpan.FromSeconds(5);
 
         private readonly WindowsResourceCollector collector;
+        private readonly WindowsSystemUsageReader liveUsageReader = new WindowsSystemUsageReader();
         private readonly DiagnosticLogStore store;
         private readonly Stopwatch samplingWatch = new Stopwatch();
         private SplitContainer resourceSplit;
         private Label cpuValue;
+        private Label gpuValue;
         private Label memoryValue;
         private Label samplingValue;
         private Label samplingDescription;
@@ -54,6 +56,10 @@ namespace SystemStabilityDiagnostics.App
         private int sampleInProgress;
         private int isSampling;
         private int sampleCount;
+        private System.Threading.Timer liveMetricsTimer;
+        private int liveMetricsInProgress;
+        private int liveMetricsClosing;
+        private int liveUsageReaderDisposed;
 
         public DiagnosticsForm(WindowsResourceCollector collector, DiagnosticLogStore store)
         {
@@ -86,7 +92,7 @@ namespace SystemStabilityDiagnostics.App
             Controls.Add(root);
 
             root.Controls.Add(BuildHeader(), 0, 0);
-            root.Controls.Add(BuildMetricCards(out cpuValue, out memoryValue, out samplingValue), 0, 1);
+            root.Controls.Add(BuildMetricCards(out cpuValue, out gpuValue, out memoryValue, out samplingValue), 0, 1);
             root.Controls.Add(BuildActionPanel(out samplingButton, out samplingDescription, out symptomPicker, out noteBox), 0, 2);
 
             var tabs = new TabControl { Dock = DockStyle.Fill, Padding = new Point(18, 6) };
@@ -134,7 +140,7 @@ namespace SystemStabilityDiagnostics.App
                 ForeColor = Muted,
                 TextAlign = ContentAlignment.MiddleLeft,
                 AutoEllipsis = true,
-                Text = "记录保存在：" + store.LogDirectory + "　·　只采样和读取事件，不会关闭应用或修改系统设置"
+                Text = "CPU/GPU/内存实时值每 2 秒刷新且不写历史　·　记录保存在：" + store.LogDirectory
             };
             root.Controls.Add(footerLabel, 0, 4);
 
@@ -154,13 +160,85 @@ namespace SystemStabilityDiagnostics.App
                 resourceSplit.SplitterDistance = Math.Max(resourceSplit.Panel1MinSize,
                     Math.Min(240, resourceSplit.Height - resourceSplit.Panel2MinSize - resourceSplit.SplitterWidth));
             }
+            StartLiveUsageMonitoring();
             RefreshSystemEvents();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            StopLiveUsageMonitoring();
             StopSampling();
             base.OnFormClosing(e);
+        }
+
+        private void StartLiveUsageMonitoring()
+        {
+            if (liveMetricsTimer != null) { return; }
+            liveMetricsTimer = new System.Threading.Timer(LiveUsageTick, null,
+                TimeSpan.Zero, TimeSpan.FromSeconds(2));
+        }
+
+        private void StopLiveUsageMonitoring()
+        {
+            Interlocked.Exchange(ref liveMetricsClosing, 1);
+            System.Threading.Timer timer = liveMetricsTimer;
+            liveMetricsTimer = null;
+            if (timer != null) { timer.Dispose(); }
+            DisposeLiveUsageReaderIfIdle();
+        }
+
+        private void LiveUsageTick(object state)
+        {
+            if (Interlocked.Exchange(ref liveMetricsInProgress, 1) != 0) { return; }
+            try
+            {
+                if (Interlocked.CompareExchange(ref liveMetricsClosing, 0, 0) == 1) { return; }
+                SystemUsageSnapshot snapshot = liveUsageReader.Capture();
+                PostToUi(delegate
+                {
+                    if (!IsDisposed) { UpdateLiveUsage(snapshot); }
+                });
+            }
+            catch (Exception)
+            {
+                PostToUi(delegate
+                {
+                    if (IsDisposed) { return; }
+                    cpuValue.Text = "读取失败";
+                    gpuValue.Text = "不可用";
+                    memoryValue.Text = "读取失败";
+                });
+            }
+            finally
+            {
+                Interlocked.Exchange(ref liveMetricsInProgress, 0);
+                DisposeLiveUsageReaderIfIdle();
+            }
+        }
+
+        private void DisposeLiveUsageReaderIfIdle()
+        {
+            if (Interlocked.CompareExchange(ref liveMetricsClosing, 0, 0) != 1
+                || Interlocked.CompareExchange(ref liveMetricsInProgress, 0, 0) != 0)
+            {
+                return;
+            }
+
+            if (Interlocked.Exchange(ref liveUsageReaderDisposed, 1) == 0)
+            {
+                liveUsageReader.Dispose();
+            }
+        }
+
+        private void UpdateLiveUsage(SystemUsageSnapshot snapshot)
+        {
+            cpuValue.Text = snapshot.CpuPercent.ToString("0.0", CultureInfo.InvariantCulture) + "%";
+            gpuValue.Text = snapshot.GpuPercent.HasValue
+                ? snapshot.GpuPercent.Value.ToString("0.0", CultureInfo.InvariantCulture) + "%"
+                : snapshot.GpuCounterAvailable ? "读取中…" : "不可用";
+            memoryValue.Text = snapshot.TotalMemoryMb > 0
+                ? FormatMemory(snapshot.UsedMemoryMb) + " / " + FormatMemory(snapshot.TotalMemoryMb)
+                : "不可用";
         }
 
         private Control BuildHeader()
@@ -187,22 +265,24 @@ namespace SystemStabilityDiagnostics.App
             return panel;
         }
 
-        private Control BuildMetricCards(out Label cpu, out Label memory, out Label sampling)
+        private Control BuildMetricCards(out Label cpu, out Label gpu, out Label memory, out Label sampling)
         {
             var row = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                ColumnCount = 3,
+                ColumnCount = 4,
                 RowCount = 1,
                 BackColor = Background,
                 Margin = new Padding(0, 0, 0, 8)
             };
-            row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-            row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-            row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34F));
-            row.Controls.Add(BuildMetric("整体 CPU", "—", out cpu), 0, 0);
-            row.Controls.Add(BuildMetric("可用物理内存", "—", out memory), 1, 0);
-            row.Controls.Add(BuildMetric("采样状态", "未开始", out sampling), 2, 0);
+            row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            row.Controls.Add(BuildMetric("整体 CPU", "读取中…", out cpu), 0, 0);
+            row.Controls.Add(BuildMetric("GPU 使用率", "读取中…", out gpu), 1, 0);
+            row.Controls.Add(BuildMetric("内存使用", "读取中…", out memory), 2, 0);
+            row.Controls.Add(BuildMetric("采样状态", "未开始", out sampling), 3, 0);
             return row;
         }
 
@@ -271,7 +351,7 @@ namespace SystemStabilityDiagnostics.App
             {
                 Dock = DockStyle.Top,
                 Height = 36,
-                Text = "每 5 秒记录一次，单次最多 10 分钟。",
+                Text = "实时值每 2 秒刷新；点击开始后才记录历史。",
                 ForeColor = Muted,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point)
             };
@@ -563,7 +643,8 @@ namespace SystemStabilityDiagnostics.App
         private void UpdateSnapshot(ResourceSnapshot snapshot)
         {
             cpuValue.Text = snapshot.CpuPercent.ToString("0.0", CultureInfo.InvariantCulture) + "%";
-            memoryValue.Text = FormatMemory(snapshot.AvailableMemoryMb) + " / " + FormatMemory(snapshot.TotalMemoryMb);
+            memoryValue.Text = FormatMemory(Math.Max(0, snapshot.TotalMemoryMb - snapshot.AvailableMemoryMb)) +
+                " / " + FormatMemory(snapshot.TotalMemoryMb);
             if (Interlocked.CompareExchange(ref isSampling, 0, 0) == 1)
             {
                 samplingValue.Text = "采样中 · " + sampleCount.ToString(CultureInfo.InvariantCulture) + " 点";
