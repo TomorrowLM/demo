@@ -1,0 +1,9 @@
+# Development files
+.vscode/
+test/
+scripts/
+*.test.js
+*.vsix
+
+# Local visual brainstorming artifacts
+docs/

@@ -1,0 +1,83 @@
+{
+  "name": "lm-md",
+  "displayName": "LM Markdown Copilot Preview",
+  "description": "Selectable Markdown preview that syncs source ranges to native Copilot Chat.",
+  "version": "0.2.20",
+  "publisher": "local",
+  "engines": {
+    "vscode": ">=1.95.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onCommand:lmMd.openPreview",
+    "onCommand:lmMd.openCopilotForSelection",
+    "onCommand:lmMd.togglePreviewToolbar",
+    "onCustomEditor:lmMd.previewEditor"
+  ],
+  "scripts": {
+    "build:mermaid": "node scripts/build-mermaid.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.11",
+    "mermaid": "12.2.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "lmMd.openPreview",
+        "title": "LM Markdown: Open Selectable Preview"
+      },
+      {
+        "command": "lmMd.openCopilotForSelection",
+        "title": "LM Markdown: Sync Selection to Copilot"
+      },
+      {
+        "command": "lmMd.togglePreviewToolbar",
+        "title": "LM Markdown: Toggle Preview Toolbar"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "lmMd.togglePreviewToolbar",
+        "key": "ctrl+f",
+        "when": "webviewFocus"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "lmMd.previewEditor",
+        "displayName": "LM Markdown Preview",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "configurationDefaults": {
+      "workbench.editorAssociations": {
+        "*.md": "lmMd.previewEditor"
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "lmMd.openPreview",
+          "when": "editorLangId == markdown",
+          "group": "navigation@9"
+        },
+        {
+          "command": "lmMd.openCopilotForSelection",
+          "when": "editorLangId == markdown && editorHasSelection",
+          "group": "navigation@10"
+        }
+      ]
+    }
+  }
+}

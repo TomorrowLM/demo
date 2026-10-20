@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 internal static class WorkspaceSwitcherAppTests
 {
@@ -110,6 +111,33 @@ internal static class WorkspaceSwitcherAppTests
             Assert(bounds.Left == 1300 && bounds.Top == 0, "Floating panel is placed at the top-right");
         }
 
+        MethodInfo keepWithinWorkingArea = layoutType.GetMethod("KeepWithinWorkingArea", BindingFlags.Public | BindingFlags.Static);
+        Assert(keepWithinWorkingArea != null, "DPI repositioning has a reusable working-area clamp");
+        if (keepWithinWorkingArea != null)
+        {
+            Rectangle bounds = (Rectangle)keepWithinWorkingArea.Invoke(null, new object[]
+            {
+                new Rectangle(-1900, -40, 300, 200),
+                new Size(700, 600),
+                new Rectangle(-1920, 30, 1600, 850)
+            });
+            Assert(bounds == new Rectangle(-1900, 30, 700, 600), "DPI repositioning preserves the suggested position on a negative-origin display");
+        }
+
+        MethodInfo mapWindowBounds = formType.GetMethod("MapWindowBoundsToDisplay", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert(mapWindowBounds != null, "Cross-display window movement exposes a reusable bounds mapping");
+        if (mapWindowBounds != null)
+        {
+            Rectangle mapped = (Rectangle)mapWindowBounds.Invoke(null, new object[]
+            {
+                new Rectangle(960, 100, 600, 600),
+                new Rectangle(0, 0, 1920, 1080),
+                new Rectangle(-1280, 0, 1280, 720)
+            });
+            Assert(mapped.Left >= -1280 && mapped.Right <= 0 && mapped.Top >= 0 && mapped.Bottom <= 720,
+                "Cross-display window bounds remain inside a negative-origin monitor");
+        }
+
         MethodInfo exitAndRestore = formType.GetMethod("ExitAndRestore", BindingFlags.NonPublic | BindingFlags.Instance);
         Assert(exitAndRestore != null, "Panel provides a restore-before-exit path");
 
@@ -121,6 +149,30 @@ internal static class WorkspaceSwitcherAppTests
         Type nativeType = application.GetType("WorkspaceSwitcher.App.NativeMethods");
         Assert(nativeType != null && nativeType.GetMethod("SetWinEventHook", BindingFlags.NonPublic | BindingFlags.Static) != null, "Native foreground event hook is available");
         Assert(nativeType != null && nativeType.GetMethod("PrintWindow", BindingFlags.NonPublic | BindingFlags.Static) != null, "Preview uses window rendering instead of desktop capture");
+        Type windowPlacementType = nativeType == null ? null : nativeType.GetNestedType("WindowPlacement", BindingFlags.NonPublic);
+        Assert(windowPlacementType != null && Marshal.SizeOf(windowPlacementType) == 44, "Native window placement layout matches the Windows structure size");
+        MethodInfo readSuggestedDpiBounds = formType.GetMethod("GetSuggestedDpiBounds", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert(readSuggestedDpiBounds != null, "Panel can read the suggested rectangle from WM_DPICHANGED");
+        if (readSuggestedDpiBounds != null && nativeType != null)
+        {
+            Type rectType = nativeType.GetNestedType("Rect", BindingFlags.NonPublic);
+            IntPtr rectangleMemory = Marshal.AllocHGlobal(Marshal.SizeOf(rectType));
+            try
+            {
+                object nativeRect = Activator.CreateInstance(rectType, true);
+                rectType.GetField("Left", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(nativeRect, -1920);
+                rectType.GetField("Top", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(nativeRect, 40);
+                rectType.GetField("Right", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(nativeRect, -1000);
+                rectType.GetField("Bottom", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(nativeRect, 840);
+                Marshal.StructureToPtr(nativeRect, rectangleMemory, false);
+                Rectangle suggested = (Rectangle)readSuggestedDpiBounds.Invoke(null, new object[] { rectangleMemory });
+                Assert(suggested == new Rectangle(-1920, 40, 920, 800), "DPI suggested rectangle preserves negative monitor coordinates");
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(rectangleMemory);
+            }
+        }
         FieldInfo minimizeStartEvent = nativeType == null ? null : nativeType.GetField("EVENT_SYSTEM_MINIMIZESTART", BindingFlags.NonPublic | BindingFlags.Static);
         FieldInfo minimizeEndEvent = nativeType == null ? null : nativeType.GetField("EVENT_SYSTEM_MINIMIZEEND", BindingFlags.NonPublic | BindingFlags.Static);
         Assert(minimizeStartEvent != null && Convert.ToUInt32(minimizeStartEvent.GetRawConstantValue()) == 0x0016, "Windows minimize-start event is configured");
@@ -219,6 +271,9 @@ internal static class WorkspaceSwitcherAppTests
             Assert(source.Contains("AutoScaleMode = AutoScaleMode.None"), "Custom pixel panel disables WinForms automatic size scaling");
             Assert(source.Contains("WM_DPICHANGED"), "Panel handles monitor DPI changes explicitly");
             Assert(source.Contains("KeepPanelSizeOnDpiChange"), "Panel preserves its physical size when crossing monitors");
+            Assert(source.Contains("GetSuggestedDpiBounds(message.LParam)"), "DPI handling uses Windows' suggested position for the new monitor");
+            Assert(source.Contains("Screen.FromRectangle(preferredBounds).WorkingArea"), "DPI handling selects the monitor from the suggested bounds");
+            Assert(source.Contains("WorkspacePanelLayout.KeepWithinWorkingArea"), "DPI handling clamps the panel without losing its suggested anchor");
             Assert(source.Contains("savedPanelLogicalSize"), "DPI changes prefer the persisted logical panel size");
             Assert(source.Contains("savedPanelLogicalSize"), "Panel persists a DPI-independent logical size");
             Assert(source.Contains("DpiLayoutPolicy.ScaleValue"), "Panel scales its physical bounds from the logical size");
@@ -311,8 +366,8 @@ internal static class WorkspaceSwitcherAppTests
             Assert(source.Contains("SignalShowRequest"), "A second workspace process signals the existing instance");
             Assert(source.Contains("WM_SHOW_PANEL"), "Workspace switcher has a private show-panel message");
             Assert(source.Contains("ShowPanelFromExternalRequest"), "The existing workspace instance handles an external show request");
-            Assert(wallpaperSource.Contains("FindNewestAccessibleWallpaper"), "Wallpaper glass can find an accessible runtime wallpaper cache");
-            Assert(wallpaperSource.Contains("Wallpaper-GUI"), "Wallpaper glass searches the deployed wallpaper cache");
+            Assert(wallpaperSource.Contains("SystemParametersInfo"), "Wallpaper glass reads the desktop wallpaper through the Windows system API");
+            Assert(wallpaperSource.Contains("GetWallpaperPath"), "Wallpaper glass resolves the current desktop wallpaper path");
             Assert(source.Contains("TryResolveWorkspaceWindow"), "App clicks can recover windows whose handles changed after restart");
             Assert(source.Contains("NativeMethods.EnumWindows"), "Window recovery scans current top-level windows");
             Assert(source.Contains("NativeMethods.IsWindowVisible"), "Window recovery ignores stale hidden handles");
@@ -369,6 +424,9 @@ internal static class WorkspaceSwitcherAppTests
             Assert(source.Contains("Screen.AllScreens"), "Panel enumerates every connected Windows display");
             Assert(source.Contains("DisplayFilterPolicy.ShouldHighlight"), "App styling follows the selected display filter");
             Assert(source.Contains("MoveWorkspaceItemToDisplay"), "App context actions can move a single window across displays");
+            Assert(source.Contains("MoveMinimizedWindowToDisplay"), "Moving a minimized app updates its restore position without flashing it");
+            Assert(source.Contains("targetScreen.Bounds"), "Moving a maximized app targets the full destination monitor");
+            Assert(source.Contains("NativeMethods.RedrawWindow"), "Moved app windows receive a full frame and child repaint request");
             Assert(source.Contains("WorkspaceCardClickPolicy.ShouldActivate"), "Workspace activation uses the recorded press and release targets");
             Assert(source.Contains("applicationClickTimer.Interval = Math.Max(1, SystemInformation.DoubleClickTime)"), "Application clicks use the system double-click interval");
             Assert(!source.Contains("QueueWorkspaceItemClick(selectedItem)"), "Single application clicks are not deferred behind double-click detection");

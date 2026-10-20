@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Web.Script.Serialization;
 
 namespace SystemStabilityDiagnostics.Core
@@ -367,6 +368,358 @@ namespace SystemStabilityDiagnostics.Core
 
             [DllImport("kernel32.dll", SetLastError = true)]
             public static extern bool GlobalMemoryStatusEx(ref MemoryStatusEx buffer);
+        }
+    }
+
+    public sealed class SystemUsageSnapshot
+    {
+        public SystemUsageSnapshot(DateTime timestampUtc, double cpuPercent, double? gpuPercent,
+            bool gpuCounterAvailable, long totalMemoryMb, long availableMemoryMb)
+        {
+            TimestampUtc = timestampUtc.ToUniversalTime();
+            CpuPercent = Math.Max(0, Math.Min(100, cpuPercent));
+            GpuPercent = gpuPercent.HasValue
+                ? (double?)Math.Max(0, Math.Min(100, gpuPercent.Value))
+                : null;
+            GpuCounterAvailable = gpuCounterAvailable;
+            TotalMemoryMb = Math.Max(0, totalMemoryMb);
+            AvailableMemoryMb = Math.Max(0, Math.Min(TotalMemoryMb, availableMemoryMb));
+        }
+
+        public DateTime TimestampUtc { get; private set; }
+        public double CpuPercent { get; private set; }
+        public double? GpuPercent { get; private set; }
+        public bool GpuCounterAvailable { get; private set; }
+        public long TotalMemoryMb { get; private set; }
+        public long AvailableMemoryMb { get; private set; }
+        public long UsedMemoryMb { get { return Math.Max(0, TotalMemoryMb - AvailableMemoryMb); } }
+    }
+
+    public sealed class WindowsSystemUsageReader : IDisposable
+    {
+        private const uint PdhSuccess = 0;
+        private const uint PdhNewData = 1;
+        private const uint PdhMoreData = 0x800007D2;
+        private static readonly TimeSpan GpuRetryInterval = TimeSpan.FromSeconds(30);
+
+        private IntPtr gpuQuery;
+        private IntPtr gpuCounter;
+        private DateTime nextGpuRetryUtc = DateTime.MinValue;
+        private int consecutiveGpuEmptySamples;
+        private ulong previousIdle;
+        private ulong previousKernel;
+        private ulong previousUser;
+        private bool hasCpuBaseline;
+        private int disposed;
+
+        public SystemUsageSnapshot Capture()
+        {
+            if (Interlocked.CompareExchange(ref disposed, 0, 0) == 1)
+            {
+                throw new ObjectDisposedException("WindowsSystemUsageReader");
+            }
+
+            DateTime timestampUtc = DateTime.UtcNow;
+            double cpuPercent = ReadCpuPercent();
+            long totalMemoryMb;
+            long availableMemoryMb;
+            ReadMemory(out totalMemoryMb, out availableMemoryMb);
+            bool gpuCounterAvailable;
+            double? gpuPercent = ReadGpuPercent(timestampUtc, out gpuCounterAvailable);
+            return new SystemUsageSnapshot(timestampUtc, cpuPercent, gpuPercent, gpuCounterAvailable,
+                totalMemoryMb, availableMemoryMb);
+        }
+
+        public static double? AggregateGpuUtilization(IEnumerable<KeyValuePair<string, double>> engineSamples)
+        {
+            if (engineSamples == null) { return null; }
+
+            var utilizationByEngine = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+            foreach (KeyValuePair<string, double> sample in engineSamples)
+            {
+                string engineKey;
+                if (!TryGetGpuEngineKey(sample.Key, out engineKey)
+                    || double.IsNaN(sample.Value) || double.IsInfinity(sample.Value))
+                {
+                    continue;
+                }
+
+                double value = Math.Max(0, Math.Min(100, sample.Value));
+                double current;
+                utilizationByEngine.TryGetValue(engineKey, out current);
+                utilizationByEngine[engineKey] = Math.Min(100, current + value);
+            }
+
+            if (utilizationByEngine.Count == 0) { return null; }
+            return utilizationByEngine.Values.Max();
+        }
+
+        public void Dispose()
+        {
+            if (Interlocked.Exchange(ref disposed, 1) != 0) { return; }
+            CloseGpuQuery();
+        }
+
+        private double ReadCpuPercent()
+        {
+            FileTime idle;
+            FileTime kernel;
+            FileTime user;
+            if (!NativeMethods.GetSystemTimes(out idle, out kernel, out user)) { return 0; }
+
+            ulong currentIdle = idle.ToUInt64();
+            ulong currentKernel = kernel.ToUInt64();
+            ulong currentUser = user.ToUInt64();
+            double result = 0;
+            if (hasCpuBaseline && currentIdle >= previousIdle
+                && currentKernel >= previousKernel && currentUser >= previousUser)
+            {
+                ulong idleDelta = currentIdle - previousIdle;
+                ulong totalDelta = (currentKernel - previousKernel) + (currentUser - previousUser);
+                if (totalDelta > 0 && idleDelta <= totalDelta)
+                {
+                    result = (double)(totalDelta - idleDelta) * 100.0 / totalDelta;
+                }
+            }
+
+            previousIdle = currentIdle;
+            previousKernel = currentKernel;
+            previousUser = currentUser;
+            hasCpuBaseline = true;
+            return Math.Round(result, 1);
+        }
+
+        private static void ReadMemory(out long totalMemoryMb, out long availableMemoryMb)
+        {
+            var status = new MemoryStatusEx();
+            status.Length = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
+            if (!NativeMethods.GlobalMemoryStatusEx(ref status))
+            {
+                totalMemoryMb = 0;
+                availableMemoryMb = 0;
+                return;
+            }
+
+            totalMemoryMb = (long)(status.TotalPhysical / (1024UL * 1024UL));
+            availableMemoryMb = (long)(status.AvailablePhysical / (1024UL * 1024UL));
+        }
+
+        private double? ReadGpuPercent(DateTime timestampUtc, out bool counterAvailable)
+        {
+            counterAvailable = false;
+            if (gpuQuery == IntPtr.Zero)
+            {
+                counterAvailable = TryOpenGpuQuery(timestampUtc);
+                return null;
+            }
+
+            try
+            {
+                if (NativeMethods.PdhCollectQueryData(gpuQuery) != PdhSuccess)
+                {
+                    CloseGpuQuery();
+                    nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                    counterAvailable = false;
+                    return null;
+                }
+                counterAvailable = true;
+
+                uint bufferBytes = 0;
+                uint itemCount = 0;
+                uint status = NativeMethods.PdhGetFormattedCounterArrayW(gpuCounter, 0x200,
+                    ref bufferBytes, ref itemCount, IntPtr.Zero);
+                if (status != PdhMoreData || bufferBytes == 0 || bufferBytes > int.MaxValue)
+                {
+                    consecutiveGpuEmptySamples++;
+                    if (consecutiveGpuEmptySamples >= 3)
+                    {
+                        CloseGpuQuery();
+                        nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                        counterAvailable = false;
+                    }
+                    return null;
+                }
+
+                IntPtr buffer = Marshal.AllocHGlobal((int)bufferBytes);
+                try
+                {
+                    status = NativeMethods.PdhGetFormattedCounterArrayW(gpuCounter, 0x200,
+                        ref bufferBytes, ref itemCount, buffer);
+                    if (status != PdhSuccess || itemCount == 0)
+                    {
+                        consecutiveGpuEmptySamples++;
+                        if (consecutiveGpuEmptySamples >= 3)
+                        {
+                            CloseGpuQuery();
+                            nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                            counterAvailable = false;
+                        }
+                        return null;
+                    }
+
+                    int pointerSize = IntPtr.Size;
+                    int itemSize = pointerSize == 8 ? 24 : 16;
+                    int statusOffset = pointerSize;
+                    int valueOffset = pointerSize == 8 ? 16 : 8;
+                    var samples = new List<KeyValuePair<string, double>>((int)itemCount);
+                    for (int index = 0; index < itemCount; index++)
+                    {
+                        IntPtr item = IntPtr.Add(buffer, index * itemSize);
+                        IntPtr namePointer = Marshal.ReadIntPtr(item);
+                        uint counterStatus = unchecked((uint)Marshal.ReadInt32(item, statusOffset));
+                        if (counterStatus != PdhSuccess && counterStatus != PdhNewData) { continue; }
+
+                        string instanceName = Marshal.PtrToStringUni(namePointer);
+                        double value = BitConverter.Int64BitsToDouble(Marshal.ReadInt64(item, valueOffset));
+                        samples.Add(new KeyValuePair<string, double>(instanceName, value));
+                    }
+                    double? utilization = AggregateGpuUtilization(samples);
+                    if (utilization.HasValue)
+                    {
+                        consecutiveGpuEmptySamples = 0;
+                        return utilization;
+                    }
+
+                    consecutiveGpuEmptySamples++;
+                    if (consecutiveGpuEmptySamples >= 3)
+                    {
+                        CloseGpuQuery();
+                        nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                        counterAvailable = false;
+                    }
+                    return null;
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(buffer);
+                }
+            }
+            catch (Exception)
+            {
+                CloseGpuQuery();
+                nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                counterAvailable = false;
+                return null;
+            }
+        }
+
+        private bool TryOpenGpuQuery(DateTime timestampUtc)
+        {
+            if (timestampUtc < nextGpuRetryUtc) { return false; }
+            try
+            {
+                uint status = NativeMethods.PdhOpenQueryW(null, UIntPtr.Zero, out gpuQuery);
+                if (status != PdhSuccess)
+                {
+                    gpuQuery = IntPtr.Zero;
+                    nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                    return false;
+                }
+
+                status = NativeMethods.PdhAddEnglishCounterW(gpuQuery,
+                    @"\GPU Engine(*)\Utilization Percentage", UIntPtr.Zero, out gpuCounter);
+                if (status != PdhSuccess)
+                {
+                    CloseGpuQuery();
+                    nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                    consecutiveGpuEmptySamples = 0;
+                    return false;
+                }
+
+                consecutiveGpuEmptySamples = 0;
+                status = NativeMethods.PdhCollectQueryData(gpuQuery);
+                if (status != PdhSuccess)
+                {
+                    CloseGpuQuery();
+                    nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                CloseGpuQuery();
+                nextGpuRetryUtc = timestampUtc.Add(GpuRetryInterval);
+                return false;
+            }
+        }
+
+        private void CloseGpuQuery()
+        {
+            if (gpuQuery != IntPtr.Zero)
+            {
+                NativeMethods.PdhCloseQuery(gpuQuery);
+                gpuQuery = IntPtr.Zero;
+                gpuCounter = IntPtr.Zero;
+            }
+        }
+
+        private static bool TryGetGpuEngineKey(string instanceName, out string engineKey)
+        {
+            engineKey = null;
+            if (string.IsNullOrWhiteSpace(instanceName)) { return false; }
+
+            int adapterStart = instanceName.IndexOf("luid_", StringComparison.OrdinalIgnoreCase);
+            int engineTypeStart = instanceName.LastIndexOf("_engtype_", StringComparison.OrdinalIgnoreCase);
+            if (adapterStart < 0 || engineTypeStart <= adapterStart) { return false; }
+
+            int engineTypeValueStart = engineTypeStart + "_engtype_".Length;
+            if (engineTypeValueStart >= instanceName.Length) { return false; }
+            string engineType = instanceName.Substring(engineTypeValueStart).Trim('_');
+            if (engineType.Length == 0) { return false; }
+
+            // Drop the PID so the same engine across processes is summed; keep the physical
+            // engine index so parallel engines are compared rather than added together.
+            engineKey = instanceName.Substring(adapterStart, engineTypeStart - adapterStart) + "|" + engineType;
+            return engineKey.IndexOf("_eng_", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct FileTime
+        {
+            public uint LowDateTime;
+            public uint HighDateTime;
+            public ulong ToUInt64() { return ((ulong)HighDateTime << 32) | LowDateTime; }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MemoryStatusEx
+        {
+            public uint Length;
+            public uint MemoryLoad;
+            public ulong TotalPhysical;
+            public ulong AvailablePhysical;
+            public ulong TotalPageFile;
+            public ulong AvailablePageFile;
+            public ulong TotalVirtual;
+            public ulong AvailableVirtual;
+            public ulong AvailableExtendedVirtual;
+        }
+
+        private static class NativeMethods
+        {
+            [DllImport("kernel32.dll", SetLastError = true)]
+            public static extern bool GetSystemTimes(out FileTime idleTime, out FileTime kernelTime, out FileTime userTime);
+
+            [DllImport("kernel32.dll", SetLastError = true)]
+            public static extern bool GlobalMemoryStatusEx(ref MemoryStatusEx buffer);
+
+            [DllImport("pdh.dll", CharSet = CharSet.Unicode, EntryPoint = "PdhOpenQueryW")]
+            public static extern uint PdhOpenQueryW(string dataSource, UIntPtr userData, out IntPtr query);
+
+            [DllImport("pdh.dll", CharSet = CharSet.Unicode, EntryPoint = "PdhAddEnglishCounterW")]
+            public static extern uint PdhAddEnglishCounterW(IntPtr query, string counterPath,
+                UIntPtr userData, out IntPtr counter);
+
+            [DllImport("pdh.dll", EntryPoint = "PdhCollectQueryData")]
+            public static extern uint PdhCollectQueryData(IntPtr query);
+
+            [DllImport("pdh.dll", CharSet = CharSet.Unicode, EntryPoint = "PdhGetFormattedCounterArrayW")]
+            public static extern uint PdhGetFormattedCounterArrayW(IntPtr counter, uint format,
+                ref uint bufferBytes, ref uint itemCount, IntPtr values);
+
+            [DllImport("pdh.dll", EntryPoint = "PdhCloseQuery")]
+            public static extern uint PdhCloseQuery(IntPtr query);
         }
     }
 

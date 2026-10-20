@@ -34,10 +34,10 @@ internal static class ColorFieldTests
             FieldInfo textureAlpha = type.GetField("GlassTextureAlpha", BindingFlags.NonPublic | BindingFlags.Static);
             FieldInfo tintArgb = type.GetField("GlassTintArgb", BindingFlags.NonPublic | BindingFlags.Static);
             FieldInfo blurRadius = type.GetField("WallpaperBlurRadius", BindingFlags.NonPublic | BindingFlags.Static);
-            Check(textureAlpha != null && (int)textureAlpha.GetValue(null) == 220,
+            Check(textureAlpha != null && (int)textureAlpha.GetValue(null) == 174,
                 "Glass keeps the wallpaper texture visible through the tint");
-            Check(tintArgb != null && (int)tintArgb.GetValue(null) == unchecked((int)0x66F5F7FB),
-                "Glass uses a lighter translucent white reference tint");
+            Check(tintArgb != null && (int)tintArgb.GetValue(null) == unchecked((int)0xA6F5F7FB),
+                "Glass uses the current translucent white tint");
             Check(blurRadius != null && (int)blurRadius.GetValue(null) == 48,
                 "Glass uses a strong enough blur radius for the reference material");
             Type shellWallpaper = app.GetType("WorkspaceSwitcher.App.DesktopShellWallpaper", true);
