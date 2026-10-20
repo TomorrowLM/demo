@@ -2,7 +2,7 @@
   "name": "lm-md",
   "displayName": "LM Markdown Copilot Preview",
   "description": "Selectable Markdown preview that syncs source ranges to native Copilot Chat.",
-  "version": "0.2.20",
+  "version": "0.2.23",
   "publisher": "local",
   "engines": {
     "vscode": ">=1.95.0"
@@ -13,6 +13,7 @@
     "onCommand:lmMd.openPreview",
     "onCommand:lmMd.openCopilotForSelection",
     "onCommand:lmMd.togglePreviewToolbar",
+    "onCommand:lmMd.revealPreviewLocation",
     "onCustomEditor:lmMd.previewEditor"
   ],
   "scripts": {
@@ -39,6 +40,10 @@
       {
         "command": "lmMd.togglePreviewToolbar",
         "title": "LM Markdown: Toggle Preview Toolbar"
+      },
+      {
+        "command": "lmMd.revealPreviewLocation",
+        "title": "LM Markdown: Reveal Location in Preview"
       }
     ],
     "keybindings": [
@@ -67,6 +72,11 @@
     },
     "menus": {
       "editor/context": [
+        {
+          "command": "lmMd.revealPreviewLocation",
+          "when": "editorLangId == markdown",
+          "group": "navigation@8"
+        },
         {
           "command": "lmMd.openPreview",
           "when": "editorLangId == markdown",

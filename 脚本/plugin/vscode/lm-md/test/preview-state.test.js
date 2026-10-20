@@ -10,6 +10,7 @@ test("normalizes and returns independent per-document preview fold state", () =>
     tocHidden: true,
     tocDetailsOpen: false,
     changePanelCollapsed: true,
+    changePanelHidden: true,
     tocSearch: "section",
     contentSearch: "match",
   });
@@ -20,6 +21,7 @@ test("normalizes and returns independent per-document preview fold state", () =>
     tocHidden: true,
     tocDetailsOpen: false,
     changePanelCollapsed: true,
+    changePanelHidden: true,
     tocSearch: "section",
     contentSearch: "match",
   });

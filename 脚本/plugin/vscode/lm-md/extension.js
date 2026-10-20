@@ -7,16 +7,23 @@ const { MarkdownCustomEditorProvider } = require("./src/custom-editor");
 const { MarkdownChangeHistory } = require("./src/change-history");
 const { PreviewStateStore } = require("./src/preview-state");
 const { openSourceReview } = require("./src/source-review");
+const { applyMarkdownBold } = require("./src/markdown-bold");
+const {
+  createPreviewNavigationController,
+  resolveManualPreviewTarget,
+  revealPreviewLocation,
+} = require("./src/preview-navigation");
 
 const CUSTOM_EDITOR_VIEW_TYPE = "lmMd.previewEditor";
 
 class PreviewManager {
-  constructor(context, onSelection, changeHistory, onSourceReview, previewStateStore) {
+  constructor(context, onSelection, changeHistory, onSourceReview, previewStateStore, onFormatBold) {
     this.context = context;
     this.onSelection = onSelection;
     this.changeHistory = changeHistory;
     this.onSourceReview = onSourceReview;
     this.previewStateStore = previewStateStore;
+    this.onFormatBold = onFormatBold;
     this.panels = new Map();
   }
 
@@ -38,6 +45,7 @@ class PreviewManager {
       this.onSourceReview,
       this.previewStateStore,
       this.changeHistory,
+      this.onFormatBold,
     );
     this.panels.set(key, panel);
     return panel;
@@ -48,6 +56,13 @@ class PreviewManager {
     if (panel && !panel.disposed) {
       panel.update(document, this.changeHistory.get(document.uri));
     }
+  }
+
+  async revealSourceLine(uri, line) {
+    const panel = this.panels.get(uri.toString());
+    if (!panel || panel.disposed) return false;
+    await panel.revealSourceLine(line);
+    return true;
   }
 
   toggleToolbar() {
@@ -64,13 +79,19 @@ function activate(context) {
     syncSelectionToCopilot(vscode, uri, selection);
   const changeHistory = new MarkdownChangeHistory(vscode.workspace.textDocuments);
   const previewStateStore = new PreviewStateStore();
-  const sourceReview = (uri, range) => openSourceReview(vscode, uri, range);
+  let previewNavigation;
+  const sourceReview = (uri, range) => {
+    previewNavigation?.suppressNextSelectionChange(uri, range.startLine);
+    return openSourceReview(vscode, uri, range);
+  };
+  const formatBold = (uri, segments) => applyMarkdownBold(vscode, uri, segments);
   const previewManager = new PreviewManager(
     context,
     syncSelection,
     changeHistory,
     sourceReview,
     previewStateStore,
+    formatBold,
   );
   const customEditorProvider = new MarkdownCustomEditorProvider(
     vscode,
@@ -79,6 +100,17 @@ function activate(context) {
     changeHistory,
     sourceReview,
     previewStateStore,
+    formatBold,
+  );
+  previewNavigation = createPreviewNavigationController(
+    vscode,
+    (uri, line) => revealPreviewLocation(
+      vscode,
+      uri,
+      line,
+      customEditorProvider,
+      previewManager,
+    ),
   );
 
   context.subscriptions.push(
@@ -142,6 +174,29 @@ function activate(context) {
     vscode.commands.registerCommand("lmMd.togglePreviewToolbar", () => {
       previewManager.toggleToolbar();
       customEditorProvider.toggleToolbar();
+    }),
+
+    vscode.commands.registerCommand("lmMd.revealPreviewLocation", async () => {
+      const target = await resolveManualPreviewTarget(vscode);
+      if (!target) return;
+      const revealed = await revealPreviewLocation(
+        vscode,
+        target.uri,
+        target.line,
+        customEditorProvider,
+        previewManager,
+      );
+      if (!revealed) {
+        vscode.window.showWarningMessage("无法定位到 Markdown 预览位置。");
+      }
+    }),
+
+    vscode.window.onDidChangeTextEditorSelection((event) => {
+      void previewNavigation.handleSelectionChange(event).catch((error) => {
+        vscode.window.showErrorMessage(
+          `预览定位失败：${error instanceof Error ? error.message : String(error)}`,
+        );
+      });
     }),
 
     vscode.workspace.onDidChangeTextDocument((event) => {

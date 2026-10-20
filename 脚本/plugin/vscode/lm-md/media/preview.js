@@ -2,6 +2,7 @@ const vscode = acquireVsCodeApi();
 
 let selected = null;
 let syncing = false;
+let formattingBold = false;
 let contextMenu = null;
 let selectedChangeIndex = -1;
 let lastToolbarToggleAt = 0;
@@ -25,6 +26,7 @@ function currentPreviewSelection() {
 
   const ranges = [];
   const selectedTexts = [];
+  const segments = [];
   for (let index = 0; index < selection.rangeCount; index += 1) {
     const range = selection.getRangeAt(index);
     const text = range.toString().trim();
@@ -49,6 +51,7 @@ function currentPreviewSelection() {
     }
     ranges.push({ startLine, endLine });
     selectedTexts.push(text);
+    segments.push({ text, startLine, endLine });
   }
   if (ranges.length === 0) return null;
 
@@ -56,6 +59,7 @@ function currentPreviewSelection() {
     type: "previewSelection",
     text: selectedTexts.join("\n"),
     ranges,
+    segments,
     startLine: Math.min(...ranges.map((range) => range.startLine)),
     endLine: Math.max(...ranges.map((range) => range.endLine)),
   };
@@ -274,6 +278,7 @@ function collectPreviewState() {
     changePanelCollapsed: Boolean(
       document.getElementById("lm-md-change-history")?.classList.contains("lm-md-change-collapsed"),
     ),
+    changePanelHidden: Boolean(document.getElementById("lm-md-change-history")?.hidden),
     tocSearch: tocSearch?.value || "",
     contentSearch: contentSearch?.value || "",
     toolbarHidden: Boolean(
@@ -338,6 +343,7 @@ function restorePreviewState(previewState) {
     toolbar.classList.toggle("lm-md-toolbar-hidden", previewState.toolbarHidden);
   }
   applyChangePanelCollapsed(Boolean(previewState.changePanelCollapsed));
+  applyChangePanelHidden(Boolean(previewState.changePanelHidden));
   initializeStickyLayout();
   const previousState = vscode.getState() || {};
   vscode.setState({ ...previousState, previewState: collectPreviewState() });
@@ -774,6 +780,47 @@ function blocksForChange(entry) {
   return nearest ? [nearest] : [];
 }
 
+function revealPreviewLine(line) {
+  const sourceLine = Number(line);
+  if (!Number.isInteger(sourceLine) || sourceLine < 1) return false;
+
+  const blocks = Array.from(
+    document.querySelectorAll("article [data-md-start-line][data-md-end-line]"),
+  );
+  const matches = blocks.filter((block) =>
+    Number(block.dataset.mdEndLine) >= sourceLine &&
+    Number(block.dataset.mdStartLine) <= sourceLine,
+  );
+  let targets = matches;
+  if (!targets.length) {
+    let nearest = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    for (const block of blocks) {
+      const start = Number(block.dataset.mdStartLine);
+      const end = Number(block.dataset.mdEndLine);
+      const distance = sourceLine < start ? start - sourceLine : sourceLine > end ? sourceLine - end : 0;
+      if (distance < nearestDistance) {
+        nearest = block;
+        nearestDistance = distance;
+      }
+    }
+    targets = nearest ? [nearest] : [];
+  }
+
+  for (const block of document.querySelectorAll("article .lm-md-reference-current")) {
+    block.classList.remove("lm-md-reference-current");
+  }
+  if (!targets.length) return false;
+
+  activateTocForLine(sourceLine);
+  for (const block of targets) block.classList.add("lm-md-reference-current");
+  targets[0].scrollIntoView({ behavior: "smooth", block: "center" });
+  window.setTimeout(() => {
+    for (const block of targets) block.classList.remove("lm-md-reference-current");
+  }, 3200);
+  return true;
+}
+
 function locateChange(index, shouldScroll = true, syncToc = true) {
   const entries = changeEntries();
   if (!entries.length) return;
@@ -801,13 +848,12 @@ function initializeChangeHistory() {
   const next = document.getElementById("lm-md-change-next");
   const sourceReview = document.getElementById("lm-md-change-source-current");
   const toggle = document.getElementById("lm-md-change-toggle");
+  applyChangePanelCollapsed(false);
   if (toggle && toggle.dataset.bound !== "true") {
     toggle.dataset.bound = "true";
     toggle.addEventListener("click", (event) => {
       event.preventDefault();
-      const panel = document.getElementById("lm-md-change-history");
-      applyChangePanelCollapsed(!panel?.classList.contains("lm-md-change-collapsed"));
-      persistPreviewState();
+      toggleChangePanelVisibility();
     });
   }
   if (list && list.dataset.bound !== "true") {
@@ -883,6 +929,19 @@ function applyChangePanelCollapsed(collapsed) {
   toggle.setAttribute("aria-expanded", String(!collapsed));
   toggle.textContent = collapsed ? "展开改动" : "收起改动";
   toggle.title = collapsed ? "展开改动详情" : "收起改动详情";
+}
+
+function applyChangePanelHidden(hidden) {
+  const panel = document.getElementById("lm-md-change-history");
+  if (!panel) return;
+  panel.hidden = hidden;
+}
+
+function toggleChangePanelVisibility() {
+  const panel = document.getElementById("lm-md-change-history");
+  if (!panel) return;
+  applyChangePanelHidden(!panel.hidden);
+  persistPreviewState();
 }
 
 function updatePreviewContent(message) {
@@ -1014,6 +1073,31 @@ async function copySelected() {
   }
 }
 
+function boldSelected() {
+  selected = combinedSelection();
+  const segments = Array.isArray(selected?.segments)
+    ? selected.segments.filter((segment) => segment?.text)
+    : [];
+  if (!segments.length || formattingBold) return;
+
+  hideContextMenu();
+  formattingBold = true;
+  setStatus("正在将选中文字加粗…");
+  vscode.postMessage({ type: "formatSelectionBold", segments });
+}
+
+function locateSelectionInSource() {
+  selected = combinedSelection();
+  if (!selected) return;
+
+  hideContextMenu();
+  vscode.postMessage({
+    type: "openSourceReview",
+    startLine: selected.startLine,
+    endLine: selected.endLine,
+  });
+}
+
 const syncButton = document.getElementById("lm-md-sync");
 syncButton?.addEventListener("click", syncSelected);
 syncButton?.addEventListener("pointerdown", syncSelected);
@@ -1046,11 +1130,21 @@ document.addEventListener("contextmenu", (event) => {
   copyItem.dataset.action = "copy";
   copyItem.setAttribute("role", "menuitem");
   copyItem.textContent = "复制";
+  const boldItem = document.createElement("button");
+  boldItem.type = "button";
+  boldItem.dataset.action = "bold";
+  boldItem.setAttribute("role", "menuitem");
+  boldItem.textContent = "加粗";
   const syncItem = document.createElement("button");
   syncItem.type = "button";
   syncItem.dataset.action = "sync";
   syncItem.setAttribute("role", "menuitem");
   syncItem.textContent = "同步到 Copilot";
+  const sourceItem = document.createElement("button");
+  sourceItem.type = "button";
+  sourceItem.dataset.action = "source";
+  sourceItem.setAttribute("role", "menuitem");
+  sourceItem.textContent = "源码定位";
   const activateMenuItem = (itemEvent) => {
     const item = elementForNode(itemEvent.target)?.closest?.(
       ".lm-md-context-menu button",
@@ -1060,6 +1154,10 @@ document.addEventListener("contextmenu", (event) => {
     itemEvent.stopPropagation();
     if (item.dataset.action === "copy") {
       void copySelected();
+    } else if (item.dataset.action === "bold") {
+      boldSelected();
+    } else if (item.dataset.action === "source") {
+      locateSelectionInSource();
     } else {
       syncSelected();
     }
@@ -1070,13 +1168,13 @@ document.addEventListener("contextmenu", (event) => {
       activateMenuItem(itemEvent);
     }
   });
-  contextMenu.append(copyItem, syncItem);
+  contextMenu.append(boldItem, copyItem, syncItem, sourceItem);
   document.body.append(contextMenu);
   const left = Math.min(event.clientX, window.innerWidth - contextMenu.offsetWidth - 8);
   const top = Math.min(event.clientY, window.innerHeight - contextMenu.offsetHeight - 8);
   contextMenu.style.left = `${Math.max(8, left)}px`;
   contextMenu.style.top = `${Math.max(8, top)}px`;
-  copyItem.focus();
+  boldItem.focus();
 });
 
 document.addEventListener("click", (event) => {
@@ -1089,6 +1187,14 @@ document.addEventListener("keydown", (event) => {
     event.preventDefault();
     event.stopPropagation();
     toggleToolbarVisibility();
+  }
+  const target = elementForNode(event.target);
+  const isEditable = target?.closest?.("input, textarea, select, [contenteditable='true']");
+  if (event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey &&
+      event.key.toLowerCase() === "h" && !event.isComposing && !event.repeat && !isEditable) {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleChangePanelVisibility();
   }
   if (event.key === "Escape") hideContextMenu();
 });
@@ -1105,8 +1211,19 @@ window.addEventListener("message", (event) => {
   if (event.data?.type === "updatePreviewContent") {
     updatePreviewContent(event.data);
   }
+  if (event.data?.type === "revealPreviewLine") {
+    revealPreviewLine(event.data.line);
+  }
   if (event.data?.type === "updateChangeHistory") {
     updateChangeHistory(event.data);
+  }
+  if (event.data?.type === "boldFormatCompleted") {
+    formattingBold = false;
+    setStatus("已将选中文字加粗");
+  }
+  if (event.data?.type === "boldFormatFailed") {
+    formattingBold = false;
+    setStatus(`加粗失败：${event.data.message}`, true);
   }
   if (event.data?.type === "sourceReviewCompleted") {
     setStatus("已在源码编辑器中定位，可使用 Copilot 原生控件审阅");

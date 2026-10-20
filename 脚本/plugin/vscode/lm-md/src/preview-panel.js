@@ -36,6 +36,24 @@ function normalizeSyncSelection(message) {
   });
 }
 
+function normalizeBoldSegments(message) {
+  if (message?.type !== "formatSelectionBold" || !Array.isArray(message.segments)) {
+    return null;
+  }
+  const segments = [];
+  for (const segment of message.segments) {
+    const text = String(segment?.text || "").trim();
+    const startLine = Number(segment?.startLine);
+    const endLine = Number(segment?.endLine);
+    if (!text || !Number.isInteger(startLine) || !Number.isInteger(endLine) ||
+        startLine < 1 || endLine < startLine) {
+      return null;
+    }
+    segments.push({ text, startLine, endLine });
+  }
+  return segments.length > 0 ? segments : null;
+}
+
 function normalizeSourceReview(message) {
   if (!message || message.type !== "openSourceReview") return null;
   const startLine = Number(message.startLine);
@@ -53,6 +71,7 @@ function createPreviewMessageHandler(
   onReady,
   onPreviewStateChanged,
   onRefreshChangeHistory,
+  onFormatBold,
 ) {
   return async (message) => {
     if (message?.type === "previewStateChanged") {
@@ -67,6 +86,23 @@ function createPreviewMessageHandler(
 
     if (message?.type === "previewReady") {
       await onReady?.();
+      return;
+    }
+
+    const boldSegments = normalizeBoldSegments(message);
+    if (boldSegments) {
+      try {
+        if (typeof onFormatBold !== "function") {
+          throw new Error("加粗操作不可用");
+        }
+        await onFormatBold(documentUri, boldSegments);
+        await webview.postMessage({ type: "boldFormatCompleted" });
+      } catch (error) {
+        await webview.postMessage({
+          type: "boldFormatFailed",
+          message: error instanceof Error ? error.message : String(error),
+        });
+      }
       return;
     }
 
@@ -126,6 +162,7 @@ function createMarkdownPreviewPanel(
   onSourceReview,
   previewStateStore,
   changeHistoryStore,
+  onFormatBold,
 ) {
   const vscode = require("vscode");
   return new MarkdownPreviewPanel(
@@ -138,6 +175,7 @@ function createMarkdownPreviewPanel(
     onSourceReview,
     previewStateStore,
     changeHistoryStore,
+    onFormatBold,
   );
 }
 
@@ -220,6 +258,7 @@ class MarkdownPreviewPanel {
     onSourceReview,
     previewStateStore,
     changeHistoryStore,
+    onFormatBold,
   ) {
     this.vscode = vscode;
     this.extensionUri = extensionUri;
@@ -228,10 +267,12 @@ class MarkdownPreviewPanel {
     this.onSourceReview = onSourceReview;
     this.previewStateStore = previewStateStore;
     this.changeHistoryStore = changeHistoryStore;
+    this.onFormatBold = onFormatBold;
     this.changeRecords = changeRecords;
     this.initialHtmlSet = false;
     this.webviewReady = false;
     this.pendingUpdate = null;
+    this.pendingRevealLine = null;
     this.panel = vscode.window.createWebviewPanel(
       "lmMdPreview",
       `Preview: ${vscode.workspace.asRelativePath(document.uri)}`,
@@ -264,10 +305,16 @@ class MarkdownPreviewPanel {
               ? this.previewStateStore.get(this.document.uri)
               : null,
           });
-          if (!this.pendingUpdate) return;
-          const update = this.pendingUpdate;
-          this.pendingUpdate = null;
-          await this.panel.webview.postMessage({ type: "updatePreviewContent", ...update });
+          if (this.pendingUpdate) {
+            const update = this.pendingUpdate;
+            this.pendingUpdate = null;
+            const sent = await this.panel.webview.postMessage({ type: "updatePreviewContent", ...update });
+            if (!sent) {
+              this.webviewReady = false;
+              this.pendingUpdate = update;
+            }
+          }
+          await this.flushPendingRevealLine();
         },
         (uri, state) => this.previewStateStore?.set(uri, state),
         async (uri) => {
@@ -283,6 +330,7 @@ class MarkdownPreviewPanel {
             ),
           });
         },
+        this.onFormatBold,
       ),
       null,
       context.subscriptions,
@@ -356,6 +404,22 @@ class MarkdownPreviewPanel {
     });
   }
 
+  async revealSourceLine(line) {
+    if (!Number.isInteger(line) || line < 1 || this.disposed) return false;
+    this.panel.reveal(this.panel.viewColumn, false);
+    this.pendingRevealLine = line;
+    await this.flushPendingRevealLine();
+    return true;
+  }
+
+  async flushPendingRevealLine() {
+    if (!this.webviewReady || this.pendingRevealLine === null || this.disposed) return;
+    const line = this.pendingRevealLine;
+    const sent = await this.panel.webview.postMessage({ type: "revealPreviewLine", line });
+    if (sent) this.pendingRevealLine = null;
+    else this.webviewReady = false;
+  }
+
   setExtensionUri(extensionUri) {
     this.extensionUri = extensionUri;
     this.update(this.document);
@@ -424,7 +488,7 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     body { margin: 0; overflow-x: hidden; color: var(--vscode-editor-foreground); background: var(--vscode-editor-background); font-family: var(--vscode-font-family); line-height: 1.65; }
     .lm-md-layout { display: flex; align-items: flex-start; gap: 16px; width: 100%; max-width: none; box-sizing: border-box; margin: 0; padding: 24px 0 56px 32px; }
     .lm-md-main { min-width: 0; flex: 1 1 auto; max-width: none; }
-    .lm-md-toc { position: sticky; top: 18px; align-self: flex-start; display: flex; flex-direction: column; flex: 0 0 clamp(240px, 24vw, 340px); width: clamp(240px, 24vw, 340px); min-width: 0; height: calc(100vh - 36px); max-height: calc(100vh - 36px); overflow: hidden; order: 2; }
+    .lm-md-toc { position: sticky; top: 18px; align-self: flex-start; display: flex; flex-direction: column; flex: 0 0 clamp(260px, 24vw, 360px); width: clamp(260px, 24vw, 360px); min-width: 0; height: calc(100vh - 36px); max-height: calc(100vh - 36px); overflow: hidden; order: 2; }
     .lm-md-toc.lm-md-toc-hidden { display: none !important; }
     .lm-md-toc details { display: flex; flex: 1 1 auto; flex-direction: column; width: 100%; height: auto; min-height: 0; max-height: none; box-sizing: border-box; padding: 10px 12px; overflow: hidden; border: 1px solid var(--vscode-panel-border); border-radius: 6px; background: color-mix(in srgb, var(--vscode-editor-background) 94%, var(--vscode-editor-foreground)); }
     .lm-md-toc > details[open] { display: flex; flex: 1 1 auto; min-height: 0; }
@@ -436,7 +500,7 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     .lm-md-toc-search input { min-width: 0; flex: 1 1 auto; box-sizing: border-box; padding: 5px 7px; color: var(--vscode-input-foreground); background: var(--vscode-input-background); border: 1px solid var(--vscode-input-border, var(--vscode-panel-border)); border-radius: 4px; }
     .lm-md-toc-search button { flex: 0 0 auto; padding: 5px 7px; color: var(--vscode-button-secondaryForeground, var(--vscode-button-foreground)); background: var(--vscode-button-secondaryBackground, var(--vscode-button-background)); }
     .lm-md-toc-result { min-height: 16px; color: var(--vscode-descriptionForeground); font-size: 11px; }
-    .lm-md-toc-scroll { display: block; flex: 0 1 auto; height: calc(100vh - 190px); max-height: calc(100vh - 190px); min-height: 120px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+    .lm-md-toc-scroll { display: block; flex: 1 1 0; height: auto; max-height: none; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
     .lm-md-toc-list, .lm-md-toc-children { list-style: none; margin: 6px 0 0; padding: 0; }
     .lm-md-toc-children { margin: 1px 0 3px 8px; padding-left: 10px; border-left: 1px solid var(--vscode-tree-indentGuidesStroke); }
     .lm-md-toc-row { display: flex; align-items: flex-start; min-width: 0; }
@@ -474,6 +538,7 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     .lm-md-collapse:hover { background: var(--vscode-toolbar-hoverBackground); }
     .lm-md-content-current { outline: 2px solid var(--vscode-focusBorder); outline-offset: 3px; background: color-mix(in srgb, var(--vscode-editor-selectionBackground) 35%, transparent); }
     .lm-md-change-history { position: sticky; top: calc(var(--lm-md-toolbar-height, 0px) + 8px); z-index: 1; margin: 0 0 14px; padding: 8px 10px; border: 1px solid var(--vscode-panel-border); border-radius: 6px; background: color-mix(in srgb, var(--vscode-editor-background) 97%, var(--vscode-editor-foreground)); box-shadow: 0 4px 16px color-mix(in srgb, black 22%, transparent); backdrop-filter: blur(8px); }
+    .lm-md-change-history[hidden] { display: none; }
     .lm-md-change-header { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
     .lm-md-change-header strong { flex: 0 0 auto; }
     .lm-md-change-file { min-width: 0; flex: 1 1 180px; overflow: hidden; color: var(--vscode-textLink-foreground); text-overflow: ellipsis; white-space: nowrap; }
@@ -495,6 +560,7 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     .lm-md-change-source { margin-top: 5px; }
     .lm-md-change-mark { box-shadow: inset 3px 0 0 color-mix(in srgb, var(--vscode-focusBorder) 55%, transparent); }
     .lm-md-change-current { outline: 2px solid var(--vscode-focusBorder); outline-offset: 3px; border-radius: 2px; background: color-mix(in srgb, var(--vscode-editor-selectionBackground) 35%, transparent); }
+    .lm-md-reference-current { outline: 2px solid var(--vscode-focusBorder); outline-offset: 4px; border-radius: 3px; background: color-mix(in srgb, var(--vscode-editor-selectionBackground) 28%, transparent); transition: background-color 180ms ease; }
     pre { overflow: auto; padding: 12px 14px; background: var(--vscode-textCodeBlock-background); }
     .lm-md-mermaid { max-width: 100%; margin: 1em 0; overflow: auto; text-align: center; }
     .lm-md-mermaid svg { max-width: 100%; height: auto; }
@@ -509,7 +575,7 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     .lm-md-context-menu button { display: block; width: 100%; text-align: left; color: var(--vscode-menu-foreground, var(--vscode-editor-foreground)); background: transparent; border: 0; }
     .lm-md-context-menu button:hover { background: var(--vscode-menu-selectionBackground, var(--vscode-list-hoverBackground)); color: var(--vscode-menu-selectionForeground, var(--vscode-editor-foreground)); }
     @media (max-width: 1100px) { .lm-md-toolbar { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "status sync" "toc theme" "search search"; row-gap: 8px; } .lm-md-content-search-toolbar { justify-self: stretch; } }
-    @media (max-width: 900px) { .lm-md-layout { gap: 12px; padding: 18px 0 40px 20px; } .lm-md-toc { flex-basis: min(240px, 28vw); width: min(240px, 28vw); } }
+    @media (max-width: 900px) { .lm-md-layout { gap: 12px; padding: 18px 0 40px 20px; } .lm-md-toc { flex-basis: 260px; width: 260px; } }
     @media (max-width: 700px) { .lm-md-toolbar { grid-template-columns: 1fr; grid-template-areas: "status" "theme" "toc" "search" "sync"; } .lm-md-selection-group { flex-wrap: wrap; } .lm-md-toc-toggle, .lm-md-theme-toggle, #lm-md-sync, .lm-md-content-search-toolbar { justify-self: stretch; } .lm-md-content-search-toolbar input { flex: 1 1 auto; width: auto; } }
   </style>
 </head>
@@ -623,7 +689,7 @@ function renderChangeHistory(changeRecords, fileName, changeEvents = []) {
     <button id="lm-md-change-refresh" type="button" title="刷新改动列表">刷新</button>
     <button id="lm-md-change-prev" type="button" title="上一处改动" ${entries.length ? "" : "disabled"}>上一处</button>
     <button id="lm-md-change-next" type="button" title="下一处改动" ${entries.length ? "" : "disabled"}>下一处</button>
-    <button id="lm-md-change-toggle" type="button" aria-expanded="true">收起改动</button>
+    <button id="lm-md-change-toggle" type="button" aria-expanded="true" title="收起改动详情">收起改动</button>
   </div><div id="lm-md-change-body" class="lm-md-change-body"><p class="lm-md-change-note">前后内容优先展示最近一次文档编辑事件；点击刷新会以磁盘保存内容重新计算净变化。记录来源不区分 Copilot 与手动编辑，也不等同于 Copilot 原生待审清单。</p><div id="lm-md-change-list-scroll" class="lm-md-change-list-scroll">${list}${eventHistory}</div></div>`;
 }
 

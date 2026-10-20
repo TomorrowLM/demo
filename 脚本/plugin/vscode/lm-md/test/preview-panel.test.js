@@ -46,6 +46,8 @@ test("builds a directory and Copilot sync controls into the preview", () => {
   assert.match(html, /id="lm-md-change-next"/);
   assert.match(html, /id="lm-md-change-refresh"/);
   assert.match(html, /id="lm-md-change-toggle"/);
+  assert.match(html, /title="收起改动详情"/);
+  assert.match(html, /\.lm-md-change-history\[hidden\] \{ display: none; \}/);
   assert.match(html, /id="lm-md-change-body"/);
   assert.match(html, /\.lm-md-toc-link\.lm-md-toc-active/);
   assert.match(html, /\.lm-md-change-history \{ position: sticky; top: calc\(var\(--lm-md-toolbar-height, 0px\) \+ 8px\)/);
@@ -58,13 +60,14 @@ test("builds a directory and Copilot sync controls into the preview", () => {
   assert.match(html, /lm-md-toc-children/);
   assert.match(html, /max-width: none/);
   assert.match(html, /padding: 24px 0 56px 32px/);
-  assert.match(html, /flex: 0 0 clamp\(240px, 24vw, 340px\)/);
+  assert.match(html, /flex: 0 0 clamp\(260px, 24vw, 360px\)/);
+  assert.match(html, /\.lm-md-toc-scroll \{[^}]*flex: 1 1 0;[^}]*min-height: 0;[^}]*overflow-y: auto/);
   assert.match(html, /overflow-x: hidden/);
   assert.match(html, /overflow-y: auto/);
   assert.match(html, /box-shadow: 0 4px 16px/);
   assert.match(html, /height: calc\(100vh - 36px\)/);
-  assert.match(html, /height: calc\(100vh - 190px\)/);
-  assert.match(html, /max-height: calc\(100vh - 190px\)/);
+  assert.match(html, /height: auto; max-height: none; min-height: 0/);
+  assert.match(html, /flex-basis: 260px; width: 260px/);
   assert.match(html, /class="lm-md-toc-scroll"/);
   assert.match(html, /img-src vscode-resource: https: http: data:/);
   assert.match(html, /article img \{ max-width: 100%; height: auto; \}/);
@@ -198,6 +201,15 @@ test("preview script supports section controls and content search", () => {
   assert.match(script, /ArrowDown/);
   assert.match(script, /:scope > \.lm-md-toc-list/);
   assert.match(script, /copySelected/);
+  assert.match(script, /boldSelected/);
+  assert.match(script, /textContent = "加粗"/);
+  assert.match(script, /formatSelectionBold/);
+  assert.match(script, /boldFormatFailed/);
+  assert.match(script, /changePanelHidden: Boolean\([\s\S]*?\.hidden/);
+  assert.match(script, /function applyChangePanelHidden\(hidden\) \{\s*const panel = document\.getElementById\("lm-md-change-history"\);\s*if \(!panel\) return;\s*panel\.hidden = hidden;/);
+  assert.match(script, /function toggleChangePanelVisibility\(\) \{\s*const panel = document\.getElementById\("lm-md-change-history"\);\s*if \(!panel\) return;\s*applyChangePanelHidden\(!panel\.hidden\);\s*persistPreviewState\(\);/);
+  assert.match(script, /applyChangePanelHidden\(Boolean\(previewState\.changePanelHidden\)\)/);
+  assert.match(script, /toggleChangePanelVisibility/);
   assert.match(script, /navigator\.clipboard/);
   assert.match(script, /execCommand\("copy"\)/);
   assert.match(script, /textContent = "复制"/);
@@ -206,7 +218,7 @@ test("preview script supports section controls and content search", () => {
   assert.match(script, /data-md-start-line/);
   assert.match(script, /index < selection\.rangeCount/);
   assert.match(script, /selectedTexts\.join\("\\n"\)/);
-  assert.match(script, /ranges,\s*startLine: Math\.min\(\.\.\.ranges/);
+  assert.match(script, /ranges,\s*segments,\s*startLine: Math\.min\(\.\.\.ranges/);
   assert.match(script, /describeSelectionRanges/);
   assert.doesNotMatch(script, /queuedSelections|selectionCandidate|addCurrentSelection|lm-md-add-selection/);
   assert.match(script, /selected = next;/);
@@ -237,6 +249,18 @@ test("preview script supports section controls and content search", () => {
   assert.match(script, /persistPreviewState\(\)/);
 });
 
+test("preview context menu routes selected source lines to split source review", () => {
+  const script = fs.readFileSync(
+    path.join(__dirname, "..", "media", "preview.js"),
+    "utf8",
+  );
+
+  assert.match(script, /sourceItem\.textContent = "源码定位"/);
+  assert.match(script, /else if \(item\.dataset\.action === "source"\) \{\s*locateSelectionInSource\(\);/);
+  assert.match(script, /function locateSelectionInSource\(\) \{\s*selected = combinedSelection\(\);\s*if \(!selected\) return;\s*hideContextMenu\(\);\s*vscode\.postMessage\(\{\s*type: "openSourceReview",\s*startLine: selected\.startLine,\s*endLine: selected\.endLine,\s*\}\);/);
+  assert.match(script, /contextMenu\.append\(boldItem, copyItem, syncItem, sourceItem\)/);
+});
+
 test("routes refresh and fold-state messages from the preview to the host", async () => {
   const posted = [];
   const changed = [];
@@ -262,6 +286,77 @@ test("routes refresh and fold-state messages from the preview to the host", asyn
     state: { collapsedTocIds: ["section"], tocHidden: true },
   }]);
   assert.deepEqual(refreshed, ["file:///docs/guide.md"]);
+});
+
+test("routes bold-format requests and reports completion to the preview", async () => {
+  const posted = [];
+  const formatted = [];
+  const handler = createPreviewMessageHandler(
+    { postMessage: async (message) => posted.push(message) },
+    "file:///docs/guide.md",
+    async () => {},
+    async () => {},
+    async () => {},
+    async () => {},
+    async () => {},
+    async (uri, segments) => formatted.push({ uri, segments }),
+  );
+
+  const segments = [
+    { text: "selected text", startLine: 3, endLine: 3 },
+    { text: "another", startLine: 8, endLine: 8 },
+  ];
+  await handler({ type: "formatSelectionBold", segments });
+
+  assert.deepEqual(formatted, [{ uri: "file:///docs/guide.md", segments }]);
+  assert.deepEqual(posted, [{ type: "boldFormatCompleted" }]);
+});
+
+test("rejects invalid bold-format segments before calling the host", async () => {
+  const posted = [];
+  const formatted = [];
+  const handler = createPreviewMessageHandler(
+    { postMessage: async (message) => posted.push(message) },
+    "file:///docs/guide.md",
+    async () => {},
+    async () => {},
+    async () => {},
+    async () => {},
+    async () => {},
+    async (...args) => formatted.push(args),
+  );
+
+  await handler({
+    type: "formatSelectionBold",
+    segments: [{ text: "", startLine: 0, endLine: 1 }],
+  });
+
+  assert.deepEqual(formatted, []);
+  assert.deepEqual(posted, []);
+});
+
+test("returns bold-format errors to the preview", async () => {
+  const posted = [];
+  const handler = createPreviewMessageHandler(
+    { postMessage: async (message) => posted.push(message) },
+    "file:///docs/guide.md",
+    async () => {},
+    async () => {},
+    async () => {},
+    async () => {},
+    async () => {},
+    async () => { throw new Error("无法唯一定位"); },
+  );
+
+  await handler({
+    type: "formatSelectionBold",
+    segments: [{ text: "selected", startLine: 3, endLine: 3 }],
+  });
+
+  assert.deepEqual(posted, [{
+    type: "boldFormatFailed",
+    message: "无法唯一定位",
+  }]);
 });
 
 test("passes every selected range through the preview sync protocol", async () => {

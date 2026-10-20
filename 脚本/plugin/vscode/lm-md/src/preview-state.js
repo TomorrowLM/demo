@@ -16,6 +16,7 @@ function normalizePreviewState(state) {
     tocHidden: Boolean(state?.tocHidden),
     tocDetailsOpen: state?.tocDetailsOpen !== false,
     changePanelCollapsed: Boolean(state?.changePanelCollapsed),
+    changePanelHidden: Boolean(state?.changePanelHidden),
     tocSearch: typeof state?.tocSearch === "string" ? state.tocSearch.slice(0, 1000) : "",
     contentSearch: typeof state?.contentSearch === "string" ? state.contentSearch.slice(0, 1000) : "",
   };
