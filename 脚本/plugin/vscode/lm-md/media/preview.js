@@ -256,7 +256,7 @@ function allHeadings() {
 
 function collectPreviewState() {
   const toc = document.getElementById("lm-md-toc");
-  const tocDetails = toc?.querySelector("details");
+  const tocSummary = document.getElementById("lm-md-toc-summary");
   const tocSearch = document.getElementById("lm-md-toc-search");
   const contentSearch = document.getElementById("lm-md-content-search");
   const collapsedTocIds = [];
@@ -274,7 +274,7 @@ function collectPreviewState() {
       .filter(Boolean),
     collapsedTocIds,
     tocHidden: Boolean(toc?.classList.contains("lm-md-toc-hidden")),
-    tocDetailsOpen: tocDetails?.open !== false,
+    tocDetailsOpen: tocSummary?.getAttribute("aria-expanded") !== "false",
     changePanelCollapsed: Boolean(
       document.getElementById("lm-md-change-history")?.classList.contains("lm-md-change-collapsed"),
     ),
@@ -317,7 +317,6 @@ function restorePreviewState(previewState) {
     }
   }
   const toc = document.getElementById("lm-md-toc");
-  const tocDetails = toc?.querySelector("details");
   if (typeof previewState.tocHidden === "boolean") {
     toc?.classList.toggle("lm-md-toc-hidden", previewState.tocHidden);
     if (toc) toc.hidden = previewState.tocHidden;
@@ -327,8 +326,8 @@ function restorePreviewState(previewState) {
       toggle.textContent = previewState.tocHidden ? "显示目录" : "隐藏目录";
     }
   }
-  if (tocDetails && typeof previewState.tocDetailsOpen === "boolean") {
-    tocDetails.open = previewState.tocDetailsOpen;
+  if (typeof previewState.tocDetailsOpen === "boolean") {
+    setTocPanelOpen(previewState.tocDetailsOpen);
   }
   const tocSearch = document.getElementById("lm-md-toc-search");
   if (tocSearch && typeof previewState.tocSearch === "string") {
@@ -633,7 +632,29 @@ function initializeTableOfContentsToggle() {
     apply(!aside.classList.contains("lm-md-toc-hidden"));
     persistPreviewState();
   });
-  aside.querySelector("details")?.addEventListener("toggle", persistPreviewState);
+}
+
+function setTocPanelOpen(open) {
+  const panel = document.getElementById("lm-md-toc-panel");
+  const content = document.getElementById("lm-md-toc-content");
+  const button = document.getElementById("lm-md-toc-summary");
+  const disclosure = document.getElementById("lm-md-toc-disclosure");
+  const expanded = Boolean(open);
+  if (content) content.hidden = !expanded;
+  panel?.classList.toggle("lm-md-toc-collapsed", !expanded);
+  button?.setAttribute("aria-expanded", String(expanded));
+  if (disclosure) disclosure.textContent = expanded ? "▾" : "▸";
+}
+
+function initializeTocPanelToggle() {
+  const button = document.getElementById("lm-md-toc-summary");
+  if (!button) return;
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setTocPanelOpen(button.getAttribute("aria-expanded") !== "true");
+    persistPreviewState();
+  });
 }
 
 function initializeThemeToggle() {
@@ -719,8 +740,7 @@ function activateTocForLine(line) {
     tocToggle?.setAttribute("aria-expanded", "true");
     if (tocToggle) tocToggle.textContent = "隐藏目录";
   }
-  const tocDetails = aside?.querySelector("details");
-  if (tocDetails) tocDetails.open = true;
+  setTocPanelOpen(true);
 
   const search = document.getElementById("lm-md-toc-search");
   if (search?.value) {
@@ -998,6 +1018,7 @@ initializeTocCollapsing();
 initializeSectionControls();
 initializeTableOfContents();
 initializeTableOfContentsToggle();
+initializeTocPanelToggle();
 initializeThemeToggle();
   initializeStickyLayout();
 restorePreviewState(vscode.getState()?.previewState);

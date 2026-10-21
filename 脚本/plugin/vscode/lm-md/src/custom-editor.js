@@ -8,6 +8,8 @@ const {
   renderPreviewDocument,
   readSavedDocumentText,
 } = require("./preview-panel");
+const { getDocumentUriKey } = require("./document-uri");
+const { createCoalescedTask } = require("./coalesced-task");
 
 class MarkdownCustomEditorProvider {
   constructor(vscode, context, onSelection, changeHistory, onSourceReview, previewStateStore, onFormatBold) {
@@ -27,7 +29,7 @@ class MarkdownCustomEditorProvider {
     const { vscode, context } = this;
     const webview = webviewPanel.webview;
     this.webviewPanels.set(webviewPanel, webview);
-    const documentKey = document.uri.toString();
+    const documentKey = getDocumentUriKey(document.uri);
     const previewRecord = {
       panel: webviewPanel,
       webview,
@@ -108,6 +110,7 @@ class MarkdownCustomEditorProvider {
         }
       });
     };
+    const renderTask = createCoalescedTask(render, 150);
     const flushPendingReveal = async () => {
       if (!webviewReady || previewRecord.pendingLine === null) return;
       const line = previewRecord.pendingLine;
@@ -165,19 +168,22 @@ class MarkdownCustomEditorProvider {
     const messageSubscription = webview.onDidReceiveMessage(messageHandler);
     const documentSubscription = vscode.workspace.onDidChangeTextDocument(
       (event) => {
-        if (event.document.uri.toString() === document.uri.toString()) {
-          render(event.document);
+        if (getDocumentUriKey(event.document.uri) === documentKey) {
+          latestDocument = event.document;
+          renderTask.schedule(event.document);
         }
       },
     );
     const saveSubscription = vscode.workspace.onDidSaveTextDocument((savedDocument) => {
-      if (savedDocument.uri.toString() !== document.uri.toString()) return;
-      render(savedDocument);
+      if (getDocumentUriKey(savedDocument.uri) !== documentKey) return;
+      renderTask.schedule(savedDocument);
+      renderTask.flush();
     });
     const panelSubscription = webviewPanel.onDidDispose(() => {
       messageSubscription.dispose();
       documentSubscription.dispose();
       saveSubscription.dispose();
+      renderTask.dispose();
       this.webviewPanels.delete(webviewPanel);
       if (this.previewPanels.get(documentKey) === previewRecord) {
         this.previewPanels.delete(documentKey);
@@ -200,7 +206,7 @@ class MarkdownCustomEditorProvider {
 
   async revealSourceLine(uri, line) {
     if (!uri || !Number.isInteger(line) || line < 1) return false;
-    const record = this.previewPanels.get(uri.toString());
+    const record = this.previewPanels.get(getDocumentUriKey(uri));
     if (!record) return false;
 
     record.panel.reveal(record.panel.viewColumn, false);

@@ -1,3 +1,5 @@
+const { getDocumentUriKey, normalizeDocumentUri } = require("./document-uri");
+
 function isMarkdownDocument(document) {
   return document?.languageId === "markdown" || /\.md$/i.test(document?.uri?.fsPath || document?.uri?.path || "");
 }
@@ -17,15 +19,67 @@ function getPreviewLineTarget(editor, selections) {
 
 function createPreviewNavigationController(vscode, revealPreviewLine) {
   const suppressedSelections = new Map();
+  const openedCitationTabs = new Map();
   const commandKind = vscode.TextEditorSelectionChangeKind?.Command;
 
+  function getTextTabUri(tab) {
+    const TextTabInput = vscode.TabInputText;
+    return TextTabInput && tab?.input instanceof TextTabInput ? tab.input.uri : null;
+  }
+
+  function takeOpenedCitationTab(uri) {
+    const key = getDocumentUriKey(uri);
+    const pending = openedCitationTabs.get(key);
+    if (!pending) return null;
+    openedCitationTabs.delete(key);
+    return pending.expiresAt >= Date.now() ? pending.tab : null;
+  }
+
+  async function routeNewCitationEditor(editor) {
+    const target = getPreviewLineTarget(editor);
+    if (!target) return false;
+    const openedCitationTab = takeOpenedCitationTab(target.uri);
+    if (!openedCitationTab) return false;
+    return revealPreviewLine(target.uri, target.line, { openedCitationTab });
+  }
+
   return {
+    handleTabsChange(event) {
+      for (const tab of event?.closed || []) {
+        const uri = getTextTabUri(tab);
+        if (!uri) continue;
+        const key = getDocumentUriKey(uri);
+        if (openedCitationTabs.get(key)?.tab === tab) openedCitationTabs.delete(key);
+      }
+
+      for (const tab of event?.opened || []) {
+        const uri = getTextTabUri(tab);
+        if (!uri || !isMarkdownDocument({ uri })) continue;
+        if (findOpenTextEditorColumn(vscode, uri, { excludeTab: tab }) === undefined) continue;
+        // TODO(review): VS Code does not expose the opener for a tab; URI duplication is best-effort citation detection.
+        const key = getDocumentUriKey(uri);
+        openedCitationTabs.set(key, { tab, expiresAt: Date.now() + 5000 });
+      }
+    },
+
+    async handleActiveTextEditorChange(editor) {
+      return routeNewCitationEditor(editor);
+    },
+
     async handleSelectionChange(event) {
-      if (commandKind === undefined || event?.kind !== commandKind) return false;
       const target = getPreviewLineTarget(event.textEditor, event.selections);
       if (!target) return false;
 
-      const key = target.uri?.toString?.() || String(target.uri);
+      const openedCitationTab = takeOpenedCitationTab(target.uri);
+      if (openedCitationTab) {
+        return revealPreviewLine(target.uri, target.line, { openedCitationTab });
+      }
+      // TODO(review): Some native jumps omit kind; keep this fallback until VS Code exposes a narrower origin signal.
+      if (commandKind !== undefined && event?.kind !== undefined && event.kind !== commandKind) {
+        return false;
+      }
+
+      const key = getDocumentUriKey(target.uri);
       const suppressed = suppressedSelections.get(key);
       if (suppressed) {
         suppressedSelections.delete(key);
@@ -45,7 +99,7 @@ function createPreviewNavigationController(vscode, revealPreviewLine) {
 
     suppressNextSelectionChange(uri, line) {
       if (!Number.isInteger(line) || line < 1) return;
-      const key = uri?.toString?.() || String(uri);
+      const key = getDocumentUriKey(uri);
       suppressedSelections.set(key, { line, expiresAt: Date.now() + 2000 });
     },
   };
@@ -65,7 +119,7 @@ async function resolveManualPreviewTarget(vscode) {
   }
 
   const uniqueCandidates = Array.from(
-    new Map(candidates.map((uri) => [uri?.toString?.() || String(uri), uri])).values(),
+    new Map(candidates.map((uri) => [getDocumentUriKey(uri), uri])).values(),
   );
   if (uniqueCandidates.length === 0) return null;
 
@@ -105,21 +159,98 @@ async function revealPreviewLocation(
   line,
   customEditorProvider,
   previewManager,
+  options = {},
 ) {
   if (!uri || !Number.isInteger(line) || line < 1) return false;
+  const documentUri = normalizeDocumentUri(uri);
+  const openedCitationTab = options.openedCitationTab;
 
-  if (await customEditorProvider?.revealSourceLine?.(uri, line)) return true;
-  if (await previewManager?.revealSourceLine?.(uri, line)) return true;
+  if (await customEditorProvider?.revealSourceLine?.(documentUri, line)) {
+    await closeOpenedCitationTab(vscode, openedCitationTab);
+    return true;
+  }
+  if (await previewManager?.revealSourceLine?.(documentUri, line)) {
+    await closeOpenedCitationTab(vscode, openedCitationTab);
+    return true;
+  }
 
-  const document = await vscode.workspace.openTextDocument(uri);
+  const document = await vscode.workspace.openTextDocument(documentUri);
+  if (options.reuseOpenSourceEditor === true) {
+    const viewColumn = findOpenTextEditorColumn(vscode, uri, {
+      excludeTab: openedCitationTab,
+    });
+    if (viewColumn !== undefined && typeof vscode.window?.showTextDocument === "function") {
+      const selection = new vscode.Range(line - 1, 0, line - 1, 0);
+      options.suppressNextSelectionChange?.(documentUri, line);
+      await vscode.window.showTextDocument(document, {
+        viewColumn,
+        preserveFocus: false,
+        selection,
+      });
+      await closeOpenedCitationTab(vscode, openedCitationTab);
+      return true;
+    }
+  }
+
+  if (openedCitationTab) return false;
+
   const preview = previewManager?.open(document);
   if (typeof preview?.revealSourceLine !== "function") return false;
   await preview.revealSourceLine(line);
   return true;
 }
 
+function findOpenTextEditorColumn(vscode, uri, options = {}) {
+  const key = getDocumentUriKey(uri);
+  const window = vscode.window;
+  const TextTabInput = vscode.TabInputText;
+  if (options.excludeTab && TextTabInput) {
+    for (const group of window?.tabGroups?.all || []) {
+      for (const tab of group.tabs || []) {
+        if (
+          tab !== options.excludeTab
+          && tab.input instanceof TextTabInput
+          && getDocumentUriKey(tab.input.uri) === key
+        ) {
+          return group.viewColumn;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  const visibleEditors = window?.visibleTextEditors || [];
+  const matchingEditor = [window?.activeTextEditor, ...visibleEditors].find(
+    (editor) => editor?.document && getDocumentUriKey(editor.document.uri) === key,
+  );
+  if (matchingEditor) {
+    return matchingEditor.viewColumn
+      ?? window?.tabGroups?.activeTabGroup?.viewColumn
+      ?? vscode.ViewColumn?.Active;
+  }
+
+  if (!TextTabInput) return undefined;
+  for (const group of window?.tabGroups?.all || []) {
+    for (const tab of group.tabs || []) {
+      if (
+        tab.input instanceof TextTabInput
+        && getDocumentUriKey(tab.input.uri) === key
+      ) {
+        return group.viewColumn;
+      }
+    }
+  }
+  return undefined;
+}
+
+async function closeOpenedCitationTab(vscode, tab) {
+  if (!tab || tab.isDirty || typeof vscode.window?.tabGroups?.close !== "function") return;
+  await vscode.window.tabGroups.close(tab, true);
+}
+
 module.exports = {
   createPreviewNavigationController,
+  findOpenTextEditorColumn,
   getPreviewLineTarget,
   resolveManualPreviewTarget,
   revealPreviewLocation,

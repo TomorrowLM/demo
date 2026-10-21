@@ -8,6 +8,7 @@ const { MarkdownChangeHistory } = require("./src/change-history");
 const { PreviewStateStore } = require("./src/preview-state");
 const { openSourceReview } = require("./src/source-review");
 const { applyMarkdownBold } = require("./src/markdown-bold");
+const { getDocumentUriKey } = require("./src/document-uri");
 const {
   createPreviewNavigationController,
   resolveManualPreviewTarget,
@@ -28,11 +29,11 @@ class PreviewManager {
   }
 
   open(document) {
-    const key = document.uri.toString();
+    const key = getDocumentUriKey(document.uri);
     const existing = this.panels.get(key);
     if (existing && !existing.disposed) {
       existing.panel.reveal(vscode.ViewColumn.Beside);
-      existing.update(document);
+      existing.update(document, this.changeHistory.get(document.uri), { immediate: true });
       return existing;
     }
 
@@ -51,15 +52,15 @@ class PreviewManager {
     return panel;
   }
 
-  update(document) {
-    const panel = this.panels.get(document.uri.toString());
+  update(document, { immediate = false } = {}) {
+    const panel = this.panels.get(getDocumentUriKey(document.uri));
     if (panel && !panel.disposed) {
-      panel.update(document, this.changeHistory.get(document.uri));
+      panel.update(document, this.changeHistory.get(document.uri), { immediate });
     }
   }
 
   async revealSourceLine(uri, line) {
-    const panel = this.panels.get(uri.toString());
+    const panel = this.panels.get(getDocumentUriKey(uri));
     if (!panel || panel.disposed) return false;
     await panel.revealSourceLine(line);
     return true;
@@ -104,12 +105,19 @@ function activate(context) {
   );
   previewNavigation = createPreviewNavigationController(
     vscode,
-    (uri, line) => revealPreviewLocation(
+    (uri, line, navigationContext) => revealPreviewLocation(
       vscode,
       uri,
       line,
       customEditorProvider,
       previewManager,
+      {
+        reuseOpenSourceEditor: true,
+        suppressNextSelectionChange(targetUri, targetLine) {
+          previewNavigation?.suppressNextSelectionChange(targetUri, targetLine);
+        },
+        ...navigationContext,
+      },
     ),
   );
 
@@ -199,6 +207,18 @@ function activate(context) {
       });
     }),
 
+    vscode.window.tabGroups.onDidChangeTabs((event) => {
+      previewNavigation.handleTabsChange(event);
+    }),
+
+    vscode.window.onDidChangeActiveTextEditor((editor) => {
+      void previewNavigation.handleActiveTextEditorChange(editor).catch((error) => {
+        vscode.window.showErrorMessage(
+          `预览定位失败：${error instanceof Error ? error.message : String(error)}`,
+        );
+      });
+    }),
+
     vscode.workspace.onDidChangeTextDocument((event) => {
       if (event.document.languageId === "markdown") {
         changeHistory.record(event);
@@ -211,7 +231,7 @@ function activate(context) {
     vscode.workspace.onDidSaveTextDocument((document) => {
       if (document.languageId !== "markdown") return;
       changeHistory.markSaved(document);
-      previewManager.update(document);
+      previewManager.update(document, { immediate: true });
     }),
     { dispose: () => changeHistory.dispose() },
     { dispose: () => previewStateStore.dispose() },

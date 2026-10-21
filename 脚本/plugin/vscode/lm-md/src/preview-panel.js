@@ -1,4 +1,5 @@
 const { normalizeSourceRanges } = require("./selection-range");
+const { createCoalescedTask } = require("./coalesced-task");
 
 function normalizePreviewSelection(message) {
   if (!message || message.type !== "previewSelection") return null;
@@ -273,6 +274,7 @@ class MarkdownPreviewPanel {
     this.webviewReady = false;
     this.pendingUpdate = null;
     this.pendingRevealLine = null;
+    this.refreshTask = createCoalescedTask(() => this.render(), 150);
     this.panel = vscode.window.createWebviewPanel(
       "lmMdPreview",
       `Preview: ${vscode.workspace.asRelativePath(document.uri)}`,
@@ -338,15 +340,28 @@ class MarkdownPreviewPanel {
 
     this.panel.onDidDispose(() => {
       this.disposed = true;
+      this.refreshTask.dispose();
     }, null, context.subscriptions);
 
     this.update(document);
   }
 
-  update(document, changeRecords = this.changeRecords) {
+  update(document, changeRecords = this.changeRecords, { immediate = false } = {}) {
     if (this.disposed) return;
     this.document = document;
     this.changeRecords = changeRecords;
+    if (this.initialHtmlSet) {
+      this.refreshTask.schedule();
+      if (immediate) this.refreshTask.flush();
+      return;
+    }
+    this.render();
+  }
+
+  render() {
+    if (this.disposed) return;
+    const document = this.document;
+    const changeRecords = this.changeRecords;
     const rendered = renderPreviewDocument(document.getText(), {
       resolveImageSource: createMarkdownImageResolver(
         this.vscode,
@@ -488,19 +503,22 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     body { margin: 0; overflow-x: hidden; color: var(--vscode-editor-foreground); background: var(--vscode-editor-background); font-family: var(--vscode-font-family); line-height: 1.65; }
     .lm-md-layout { display: flex; align-items: flex-start; gap: 16px; width: 100%; max-width: none; box-sizing: border-box; margin: 0; padding: 24px 0 56px 32px; }
     .lm-md-main { min-width: 0; flex: 1 1 auto; max-width: none; }
-    .lm-md-toc { position: sticky; top: 18px; align-self: flex-start; display: flex; flex-direction: column; flex: 0 0 clamp(260px, 24vw, 360px); width: clamp(260px, 24vw, 360px); min-width: 0; height: calc(100vh - 36px); max-height: calc(100vh - 36px); overflow: hidden; order: 2; }
+    .lm-md-toc { position: sticky; top: 18px; align-self: flex-start; flex: 0 0 clamp(260px, 24vw, 360px); width: clamp(260px, 24vw, 360px); min-width: 0; height: calc(100vh - 36px); max-height: calc(100vh - 36px); min-height: 0; overflow: hidden; order: 2; }
     .lm-md-toc.lm-md-toc-hidden { display: none !important; }
-    .lm-md-toc details { display: flex; flex: 1 1 auto; flex-direction: column; width: 100%; height: auto; min-height: 0; max-height: none; box-sizing: border-box; padding: 10px 12px; overflow: hidden; border: 1px solid var(--vscode-panel-border); border-radius: 6px; background: color-mix(in srgb, var(--vscode-editor-background) 94%, var(--vscode-editor-foreground)); }
-    .lm-md-toc > details[open] { display: flex; flex: 1 1 auto; min-height: 0; }
-    .lm-md-toc summary { cursor: pointer; font-weight: 600; user-select: none; }
-    .lm-md-toc-tools { display: grid; gap: 8px; margin-top: 8px; }
+    .lm-md-toc-panel { display: grid; grid-template-rows: auto minmax(0, 1fr); width: 100%; height: 100%; min-height: 0; box-sizing: border-box; padding: 8px 10px; overflow: hidden; border: 1px solid var(--vscode-panel-border); border-radius: 6px; background: color-mix(in srgb, var(--vscode-editor-background) 94%, var(--vscode-editor-foreground)); }
+    .lm-md-toc-panel.lm-md-toc-collapsed { height: auto; }
+    .lm-md-toc-summary { display: flex; width: 100%; align-items: center; gap: 6px; padding: 0 0 5px; text-align: left; font-weight: 600; color: var(--vscode-editor-foreground); background: transparent; border: 0; cursor: pointer; }
+    .lm-md-toc-summary:hover { background: var(--vscode-toolbar-hoverBackground); }
+    .lm-md-toc-content { display: grid; grid-template-rows: auto minmax(0, 1fr); min-height: 0; overflow: hidden; }
+    .lm-md-toc-content[hidden] { display: none; }
+    .lm-md-toc-tools { display: grid; gap: 8px; min-height: 0; margin-top: 4px; }
     .lm-md-toc-actions { display: flex; gap: 6px; }
     .lm-md-toc-actions button { flex: 1 1 0; min-width: 0; padding: 3px 6px; font-size: 11px; color: var(--vscode-button-secondaryForeground, var(--vscode-button-foreground)); background: var(--vscode-button-secondaryBackground, var(--vscode-button-background)); }
     .lm-md-toc-search { display: flex; gap: 6px; align-items: center; }
     .lm-md-toc-search input { min-width: 0; flex: 1 1 auto; box-sizing: border-box; padding: 5px 7px; color: var(--vscode-input-foreground); background: var(--vscode-input-background); border: 1px solid var(--vscode-input-border, var(--vscode-panel-border)); border-radius: 4px; }
     .lm-md-toc-search button { flex: 0 0 auto; padding: 5px 7px; color: var(--vscode-button-secondaryForeground, var(--vscode-button-foreground)); background: var(--vscode-button-secondaryBackground, var(--vscode-button-background)); }
     .lm-md-toc-result { min-height: 16px; color: var(--vscode-descriptionForeground); font-size: 11px; }
-    .lm-md-toc-scroll { display: block; flex: 1 1 0; height: auto; max-height: none; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+    .lm-md-toc-scroll { display: block; min-width: 0; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
     .lm-md-toc-list, .lm-md-toc-children { list-style: none; margin: 6px 0 0; padding: 0; }
     .lm-md-toc-children { margin: 1px 0 3px 8px; padding-left: 10px; border-left: 1px solid var(--vscode-tree-indentGuidesStroke); }
     .lm-md-toc-row { display: flex; align-items: flex-start; min-width: 0; }
@@ -537,7 +555,7 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     .lm-md-collapse { margin-right: 6px; padding: 0 4px; color: var(--vscode-descriptionForeground); background: transparent; border: 0; font-size: .75em; vertical-align: middle; }
     .lm-md-collapse:hover { background: var(--vscode-toolbar-hoverBackground); }
     .lm-md-content-current { outline: 2px solid var(--vscode-focusBorder); outline-offset: 3px; background: color-mix(in srgb, var(--vscode-editor-selectionBackground) 35%, transparent); }
-    .lm-md-change-history { position: sticky; top: calc(var(--lm-md-toolbar-height, 0px) + 8px); z-index: 1; margin: 0 0 14px; padding: 8px 10px; border: 1px solid var(--vscode-panel-border); border-radius: 6px; background: color-mix(in srgb, var(--vscode-editor-background) 97%, var(--vscode-editor-foreground)); box-shadow: 0 4px 16px color-mix(in srgb, black 22%, transparent); backdrop-filter: blur(8px); }
+    .lm-md-change-history { position: sticky; top: calc(var(--lm-md-toolbar-height, 0px) + 8px); z-index: 1; margin: 0 0 14px; padding: 8px 10px; border: 1px solid var(--vscode-panel-border); border-radius: 6px; background: color-mix(in srgb, var(--vscode-editor-background) 97%, var(--vscode-editor-foreground)); box-shadow: 0 4px 16px color-mix(in srgb, black 22%, transparent); }
     .lm-md-change-history[hidden] { display: none; }
     .lm-md-change-header { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
     .lm-md-change-header strong { flex: 0 0 auto; }
@@ -566,6 +584,7 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
     .lm-md-mermaid svg { max-width: 100%; height: auto; }
     .lm-md-mermaid-error { color: var(--vscode-errorForeground); font-size: 12px; }
     article img { max-width: 100%; height: auto; }
+    article > * { content-visibility: auto; contain-intrinsic-size: auto 56px; }
     code { font-family: var(--vscode-editor-font-family); }
     blockquote { border-left: 3px solid var(--vscode-textBlockQuote-border); padding-left: 14px; color: var(--vscode-textBlockQuote-foreground); }
     a { color: var(--vscode-textLink-foreground); }
@@ -582,21 +601,25 @@ function buildPreviewHtml(body, cspSource, scriptUri, headings = [], options = {
 <body>
   <div class="lm-md-layout">
     <aside id="lm-md-toc" class="lm-md-toc" aria-label="Markdown 目录">
-      <details open>
-        <summary>目录</summary>
-        <div class="lm-md-toc-tools">
-          <div class="lm-md-toc-actions" role="toolbar" aria-label="目录折叠操作">
-            <button id="lm-md-collapse-all" type="button" title="折叠所有目录项">全部折叠</button>
-            <button id="lm-md-expand-all" type="button" title="展开所有目录项">全部展开</button>
+      <div id="lm-md-toc-panel" class="lm-md-toc-panel">
+        <button id="lm-md-toc-summary" class="lm-md-toc-summary" type="button" aria-expanded="true" aria-controls="lm-md-toc-content">
+          <span id="lm-md-toc-disclosure" aria-hidden="true">▾</span><span>目录</span>
+        </button>
+        <div id="lm-md-toc-content" class="lm-md-toc-content">
+          <div class="lm-md-toc-tools">
+            <div class="lm-md-toc-actions" role="toolbar" aria-label="目录折叠操作">
+              <button id="lm-md-collapse-all" type="button" title="折叠所有目录项">全部折叠</button>
+              <button id="lm-md-expand-all" type="button" title="展开所有目录项">全部展开</button>
+            </div>
+            <div class="lm-md-toc-search">
+              <input id="lm-md-toc-search" type="search" placeholder="搜索目录" aria-label="搜索目录" autocomplete="off">
+              <button id="lm-md-toc-search-clear" type="button" title="清除搜索">清除</button>
+            </div>
+            <div id="lm-md-toc-result" class="lm-md-toc-result" aria-live="polite"></div>
           </div>
-          <div class="lm-md-toc-search">
-            <input id="lm-md-toc-search" type="search" placeholder="搜索目录" aria-label="搜索目录" autocomplete="off">
-            <button id="lm-md-toc-search-clear" type="button" title="清除搜索">清除</button>
-          </div>
-          <div id="lm-md-toc-result" class="lm-md-toc-result" aria-live="polite"></div>
+          <nav id="lm-md-toc-list" class="lm-md-toc-scroll">${toc}</nav>
         </div>
-        <nav id="lm-md-toc-list" class="lm-md-toc-scroll">${toc}</nav>
-      </details>
+      </div>
     </aside>
     <main class="lm-md-main">
       <div class="lm-md-toolbar">

@@ -9,6 +9,7 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+.gitnexus
 
 # Log files
 npm-debug.log*
